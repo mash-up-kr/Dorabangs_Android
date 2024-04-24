@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/git,android,androidstudio,kotlin,java
-# Edit at https://www.toptal.com/developers/gitignore?templates=git,android,androidstudio,kotlin,java
+# Created by https://www.toptal.com/developers/gitignore/api/androidstudio,android,macos,kotlin,java,gradle,git
+# Edit at https://www.toptal.com/developers/gitignore?templates=androidstudio,android,macos,kotlin,java,gradle,git
 
 ### Android ###
 # Gradle files
@@ -95,6 +95,65 @@ replay_pid*
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### macOS Patch ###
+# iCloud generated files
+*.icloud
+
+### Gradle ###
+.gradle
+**/build/
+!src/**/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Avoid ignore Gradle wrappper properties
+!gradle-wrapper.properties
+
+# Cache of project
+.gradletasknamecache
+
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+### Gradle Patch ###
+# Java heap dump
+
 ### AndroidStudio ###
 # Covers files to be ignored for android development using Android Studio.
 
@@ -113,7 +172,6 @@ gen/
 out/
 
 # Gradle files
-.gradle
 
 # Signing files
 .signing/
@@ -180,8 +238,6 @@ obj/
 .idea/navEditor.xml
 
 # Legacy Eclipse project files
-.classpath
-.project
 .cproject
 .settings/
 
@@ -212,4 +268,4 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
-# End of https://www.toptal.com/developers/gitignore/api/git,android,androidstudio,kotlin,java
+# End of https://www.toptal.com/developers/gitignore/api/androidstudio,android,macos,kotlin,java,gradle,git
