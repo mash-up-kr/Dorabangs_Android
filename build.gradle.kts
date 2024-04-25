@@ -5,5 +5,25 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android) apply false
     alias(libs.plugins.com.android.library) apply false
     alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.spotless) apply true
+}
+
+subprojects {
+    apply(plugin = "com.diffplug.spotless")
+    spotless {
+        kotlin {
+            target("**/*.kt")
+            targetExclude("$buildDir/**/*.kt")
+            targetExclude("bin/**/*.kt")
+            ktlint()
+            trimTrailingWhitespace()
+            indentWithSpaces()
+            endWithNewline()
+        }
+        kotlinGradle {
+            target("*.gradle.kts")
+            ktlint()
+        }
+    }
 }
 true // Needed to make the Suppress annotation work for the plugins block
