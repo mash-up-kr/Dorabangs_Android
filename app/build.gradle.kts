@@ -48,6 +48,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    apply(from = "${rootDir}/gradle/jacoco/project.gradle")
 }
 
 dependencies {
