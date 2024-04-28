@@ -6,6 +6,6 @@ class SampleUseCaseTest {
 
     @Test
     fun test() {
-        test.baboTest()
+        test.baboTest(true)
     }
 }

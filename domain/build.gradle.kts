@@ -16,3 +16,9 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
 }
+
+tasks.register("dorabangs") {
+    group = "verification"
+    description = "Run tests and generate jacoco report"
+    dependsOn("test", "jacocoTestReport")
+}
