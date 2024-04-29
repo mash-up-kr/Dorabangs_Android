@@ -14,7 +14,7 @@
 | 💉 DI (Android) | Hilt|
 | 🌊 Async | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) |
 | 🌐 Networking | [Retrofit](https://square.github.io/retrofit/),|
-| 😎 TestCode ||
+| 😎 Test |jacoco|
 
 
 <br/><br/>
