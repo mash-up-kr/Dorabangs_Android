@@ -13,8 +13,12 @@ material = "1.11.0"
 org-jetbrains-kotlin-jvm = "1.8.10"
 spotless = "6.19.0"
 mockk = "1.13.10"
+kotlin = "1.8.0"
 
 [libraries]
+kotlin-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin" }
+kotlin-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin" }
+kotlin-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlin" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
