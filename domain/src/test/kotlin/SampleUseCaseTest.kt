@@ -8,4 +8,9 @@ class SampleUseCaseTest {
     fun test() {
         test.baboTest(true)
     }
+
+    @Test
+    fun test2() {
+        test.baboTest(false)
+    }
 }
