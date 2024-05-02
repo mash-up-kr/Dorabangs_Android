@@ -13,8 +13,10 @@ java {
 }
 
 dependencies {
+    implementation(libs.kotlin.core)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+    testImplementation(libs.kotlin.test)
 }
 
 tasks.register("dorabangs") {
