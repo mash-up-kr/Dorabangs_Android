@@ -1,5 +1,3 @@
-import kotlin.Suppress
-
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     id("java-library")
@@ -14,6 +12,8 @@ java {
 
 dependencies {
     implementation(libs.kotlin.core)
+    implementation(libs.javax.inject)
+
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlin.test)

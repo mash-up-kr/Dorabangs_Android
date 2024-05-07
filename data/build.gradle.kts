@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -19,8 +21,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
             )
         }
     }
@@ -34,9 +36,17 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.kotlin.core)
     implementation(libs.kotlin.android)
+
+    implementation(libs.bundles.okhttp)
+    implementation(libs.retrofit)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
