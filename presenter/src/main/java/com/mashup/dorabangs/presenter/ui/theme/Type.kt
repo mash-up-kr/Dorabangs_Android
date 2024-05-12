@@ -1,4 +1,4 @@
-package com.mashup.dorabangs.ui.theme
+package com.mashup.dorabangs.presenter.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
