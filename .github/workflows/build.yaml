@@ -2,7 +2,7 @@ name: Android CI
 
 on:
   pull_request:
-    branches: [ "feature**", "hotfix**", "release**" ]
+    branches: [ "feature**", "hotfix**", "release**", "develop" ]
 
 jobs:
   build:
