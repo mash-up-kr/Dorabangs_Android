@@ -24,7 +24,6 @@ kotlin-serialization = "1.9.22"
 json-serialization = "1.6.3"
 flipper = "0.250.0"
 soloader = "0.10.5"
-noop = "0.252.0"
 
 
 [libraries]
@@ -46,7 +45,6 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 flipper = { group = "com.facebook.flipper", name = "flipper", version.ref = "flipper" }
 soloader = { group = "com.facebook.soloader", name = "soloader", version.ref = "soloader" }
-noop = { group = "com.facebook.flipper", name = "flipper-noop", version.ref = "flipper" }
 flipper-network = { group = "com.facebook.flipper", name = "flipper-network-plugin", version.ref = "flipper" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
