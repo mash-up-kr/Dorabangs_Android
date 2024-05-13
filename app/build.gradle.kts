@@ -23,9 +23,21 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
-        release {
+        debug {
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
             isMinifyEnabled = false
+            buildConfigField("Boolean", "DEBUG_MODE", "true")
+        }
+        release {
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -61,4 +73,8 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    debugImplementation(libs.flipper)
+    debugImplementation(libs.soloader)
+    debugImplementation(libs.flipper.network)
+    releaseImplementation(libs.noop)
 }
