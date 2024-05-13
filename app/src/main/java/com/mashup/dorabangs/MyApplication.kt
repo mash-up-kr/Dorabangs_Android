@@ -23,8 +23,8 @@ class MyApplication : Application() {
                 addPlugin(
                     InspectorFlipperPlugin(
                         this@MyApplication,
-                        DescriptorMapping.withDefaults()
-                    )
+                        DescriptorMapping.withDefaults(),
+                    ),
                 )
                 addPlugin(CrashReporterPlugin.getInstance())
 //                addPlugin(flipperNetworkPlugin)
