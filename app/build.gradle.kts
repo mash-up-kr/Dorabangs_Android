@@ -35,6 +35,7 @@ android {
             buildConfigField("Boolean", "DEBUG_MODE", "true")
         }
         release {
+            isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
