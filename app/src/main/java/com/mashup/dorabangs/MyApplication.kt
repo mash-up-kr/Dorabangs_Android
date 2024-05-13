@@ -20,13 +20,13 @@ class MyApplication : Application() {
 
         if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(this)) {
             val client = AndroidFlipperClient.getInstance(this).apply {
-                addPlugin(
+                    addPlugin(
                     InspectorFlipperPlugin(
                         this@MyApplication,
                         DescriptorMapping.withDefaults()
                     )
                 )
-                addPlugin(CrashReporterPlugin.getInstance())
+                    addPlugin(CrashReporterPlugin.getInstance())
 //                addPlugin(flipperNetworkPlugin)
                 addPlugin(SharedPreferencesFlipperPlugin(this@MyApplication))
             }
