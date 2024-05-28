@@ -69,11 +69,12 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesFlipperOkHttpPlugin(
-        networkFlipperPlugin: NetworkFlipperPlugin
+        networkFlipperPlugin: NetworkFlipperPlugin,
     ): FlipperOkhttpInterceptor =
         FlipperOkhttpInterceptor(networkFlipperPlugin)
 
     @Provides
     @Singleton
     fun providesNetworkFlipperPlugin() = NetworkFlipperPlugin()
+
 }

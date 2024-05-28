@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class MyApplication : Application() {
-        @Inject
-        lateinit var flipperNetworkPlugin: NetworkFlipperPlugin
+    @Inject
+    lateinit var flipperNetworkPlugin: NetworkFlipperPlugin
     override fun onCreate() {
         super.onCreate()
         SoLoader.init(this, false)
