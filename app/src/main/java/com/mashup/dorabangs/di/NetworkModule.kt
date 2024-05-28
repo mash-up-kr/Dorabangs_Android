@@ -76,5 +76,4 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesNetworkFlipperPlugin() = NetworkFlipperPlugin()
-
 }
