@@ -24,6 +24,7 @@ kotlin-serialization = "1.9.22"
 json-serialization = "1.6.3"
 flipper = "0.250.0"
 soloader = "0.10.5"
+retrofitConverter = "1.0.0"
 
 
 [libraries]
@@ -59,6 +60,7 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 okhttp = { module = "com.squareup.okhttp3:okhttp" }
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitConverter" }
 serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "json-serialization"}
 
 #hilt
@@ -76,7 +78,7 @@ org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-kotlinx-serialization = { id = "kotlinx-serialization", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 
 [bundles]

@@ -6,14 +6,16 @@ import com.facebook.flipper.android.utils.FlipperUtils
 import com.facebook.flipper.plugins.crashreporter.CrashReporterPlugin
 import com.facebook.flipper.plugins.inspector.DescriptorMapping
 import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
 import com.facebook.soloader.SoLoader
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
 class MyApplication : Application() {
-    //    @Inject
-    //    lateinit var flipperNetworkPlugin: NetworkFlipperPlugin
+    @Inject
+    lateinit var flipperNetworkPlugin: NetworkFlipperPlugin
     override fun onCreate() {
         super.onCreate()
         SoLoader.init(this, false)
@@ -27,7 +29,7 @@ class MyApplication : Application() {
                     ),
                 )
                 addPlugin(CrashReporterPlugin.getInstance())
-//                addPlugin(flipperNetworkPlugin)
+                addPlugin(flipperNetworkPlugin)
                 addPlugin(SharedPreferencesFlipperPlugin(this@MyApplication))
             }
             client.start()
