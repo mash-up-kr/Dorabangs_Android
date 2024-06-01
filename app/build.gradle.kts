@@ -61,7 +61,7 @@ android {
 
 dependencies {
 
-    implementation(project(":presenter"))
+    implementation(project(":feature"))
     implementation(project(":domain"))
     implementation(project(":data"))
 

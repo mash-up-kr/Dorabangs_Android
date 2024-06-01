@@ -17,4 +17,6 @@ rootProject.name = "Dorabangs"
 include(":app")
 include(":data")
 include(":domain")
-include(":presenter")
+include(":feature")
+include(":core")
+include(":feature:home")
