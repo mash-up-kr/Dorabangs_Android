@@ -7,7 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mashup.dorabangs.feature.home.HomeRoute
 
 private enum class Screen(val route: String) {
-    Home("home")
+    Home("home"),
 }
 
 @Composable
@@ -15,7 +15,7 @@ fun MainNavGraph() {
     val navController = rememberNavController()
     NavHost(
         navController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.Home.route,
     ) {
         composable(Screen.Home.route) {
             HomeRoute()
