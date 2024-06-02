@@ -67,6 +67,7 @@ dependencies {
     implementation(project(":feature:home"))
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":core"))
 
     implementation(libs.core.ktx)
     implementation(libs.kotlin.android)
