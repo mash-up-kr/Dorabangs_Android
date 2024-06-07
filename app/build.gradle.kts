@@ -26,6 +26,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
 
     buildTypes {
@@ -49,6 +50,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_18
         targetCompatibility = JavaVersion.VERSION_18
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.4"
+    }
     kotlinOptions {
         jvmTarget = "18"
     }
@@ -60,10 +64,10 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":feature"))
+    implementation(project(":feature:home"))
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":core"))
 
     implementation(libs.core.ktx)
     implementation(libs.kotlin.android)
@@ -71,6 +75,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Compose
+    implementation(libs.activity.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.material3)
 
     // Flipper
     implementation(libs.flipper)
