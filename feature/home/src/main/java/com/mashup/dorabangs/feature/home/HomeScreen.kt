@@ -13,13 +13,14 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun HomeRoute(
-    viewModel: HomeViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     HomeScreen(
         state = viewModel.collectAsState().value,
         modifier = modifier,
         onClickAddButton = { viewModel.add(1) },
+        onClickTestButton = { viewModel.test() },
     )
 }
 
@@ -28,6 +29,7 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     onClickAddButton: () -> Unit = {},
+    onClickTestButton: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -37,6 +39,9 @@ fun HomeScreen(
         Text("홈텍스: ${state.number}")
         Button(onClick = onClickAddButton) {
             Text("Add Button")
+        }
+        Button(onClick = onClickTestButton) {
+            Text("도라방스")
         }
     }
 }

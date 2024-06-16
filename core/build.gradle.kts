@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.mashup.dorabangs.core"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -37,7 +37,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "18"
     }
 }
 
