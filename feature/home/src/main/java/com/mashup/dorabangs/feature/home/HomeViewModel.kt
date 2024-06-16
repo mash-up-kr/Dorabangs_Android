@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-): ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
+) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
 
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 

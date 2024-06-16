@@ -19,7 +19,7 @@ fun HomeRoute(
     HomeScreen(
         state = viewModel.collectAsState().value,
         modifier = modifier,
-        onClickAddButton = { viewModel.add(1) }
+        onClickAddButton = { viewModel.add(1) },
     )
 }
 
@@ -32,7 +32,7 @@ fun HomeScreen(
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text("홈텍스: ${state.number}")
         Button(onClick = onClickAddButton) {
