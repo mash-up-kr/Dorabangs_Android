@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.home
 
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
 /**
