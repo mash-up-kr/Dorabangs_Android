@@ -44,7 +44,8 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":core"))
+    implementation(project(":core:coroutine"))
+    implementation(project(":core:designsystem"))
 
     // Compose
     implementation(libs.ui)
