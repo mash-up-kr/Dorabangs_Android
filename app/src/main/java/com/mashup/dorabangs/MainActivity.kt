@@ -3,7 +3,7 @@ package com.mashup.dorabangs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.mashup.dorabangs.core.designsystem.DorabangsTheme
+import com.mashup.dorabangs.core.designsystem.theme.DorabangsTheme
 import com.mashup.dorabangs.navigation.MainNavGraph
 import dagger.hilt.android.AndroidEntryPoint
 
