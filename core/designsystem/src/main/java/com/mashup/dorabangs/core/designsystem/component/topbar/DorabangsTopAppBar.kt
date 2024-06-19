@@ -51,9 +51,9 @@ fun DorabangsTopAppBar(
             if (actionIcon != null) {
                 Icon(
                     modifier =
-                        Modifier
-                            .padding(end = 20.dp)
-                            .clickable { onClickActonIcon() },
+                    Modifier
+                        .padding(end = 20.dp)
+                        .clickable { onClickActonIcon() },
                     painter = painterResource(id = actionIcon),
                     contentDescription = null,
                 )
@@ -63,9 +63,9 @@ fun DorabangsTopAppBar(
             if (isEnableBackNavigation) {
                 Icon(
                     modifier =
-                        Modifier
-                            .padding(start = 20.dp)
-                            .clickable { onClickBackIcon() },
+                    Modifier
+                        .padding(start = 20.dp)
+                        .clickable { onClickBackIcon() },
                     painter = painterResource(id = R.drawable.ic_back),
                     contentDescription = null,
                 )
