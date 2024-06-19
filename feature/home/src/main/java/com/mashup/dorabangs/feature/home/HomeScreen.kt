@@ -44,7 +44,7 @@ fun HomeScreen(
         Button(onClick = onClickTestButton) {
             Text("도라방스")
         }
-        
+
         Text(text = "H3 Bold", style = DoraTypoTokens.H3Bold)
         Text(text = "H3 Medium", style = DoraTypoTokens.H3Medium)
         Text(text = "H3 Normal", style = DoraTypoTokens.H3Normal)

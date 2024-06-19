@@ -27,7 +27,6 @@ object BtnMaxColorTokens {
     val OnContainerColor2 = DoraColorTokens.G9
 }
 
-
 object TopBarColorTokens {
     val isDarkMode = false // 임시 다크모드 체크
     val ContainerColor
