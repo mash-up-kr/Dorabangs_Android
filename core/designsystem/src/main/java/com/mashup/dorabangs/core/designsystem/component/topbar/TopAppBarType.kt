@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
-object DorabangsTopBar : TopAppBarType {
+object DoraTopBar : TopAppBarType {
     @Composable
     override fun HomeTopBar(
         modifier: Modifier,
@@ -12,7 +12,7 @@ object DorabangsTopBar : TopAppBarType {
         actionIcon: Int,
         onClickActonIcon: () -> Unit,
     ) {
-        DorabangsTopAppBar(
+        DoraTopAppBar(
             modifier = modifier,
             title = title,
             titleAlignment = Alignment.CenterStart,
@@ -28,7 +28,7 @@ object DorabangsTopBar : TopAppBarType {
         titleAlignment: Alignment,
         onClickBackIcon: () -> Unit,
     ) {
-        DorabangsTopAppBar(
+        DoraTopAppBar(
             modifier = modifier,
             title = title,
             titleAlignment = titleAlignment,
@@ -45,7 +45,7 @@ object DorabangsTopBar : TopAppBarType {
         onClickBackIcon: () -> Unit,
         onClickActonIcon: () -> Unit,
     ) {
-        DorabangsTopAppBar(
+        DoraTopAppBar(
             modifier = modifier,
             title = title,
             titleAlignment = Alignment.CenterStart,
@@ -61,7 +61,7 @@ object DorabangsTopBar : TopAppBarType {
         modifier: Modifier,
         title: String,
     ) {
-        DorabangsTopAppBar(
+        DoraTopAppBar(
             modifier = modifier,
             title = title,
             titleAlignment = Alignment.Center,

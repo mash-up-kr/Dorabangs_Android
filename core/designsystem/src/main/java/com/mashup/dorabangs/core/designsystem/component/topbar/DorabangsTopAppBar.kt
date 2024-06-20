@@ -22,7 +22,7 @@ import com.mashup.dorabangs.core.designsystem.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DorabangsTopAppBar(
+fun DoraTopAppBar(
     modifier: Modifier = Modifier,
     title: String,
     titleAlignment: Alignment = Alignment.Center,
@@ -50,24 +50,22 @@ fun DorabangsTopAppBar(
         actions = {
             if (actionIcon != null) {
                 Icon(
-                    modifier =
-                    Modifier
+                    modifier = Modifier
                         .padding(end = 20.dp)
                         .clickable { onClickActonIcon() },
                     painter = painterResource(id = actionIcon),
-                    contentDescription = null,
+                    contentDescription = "action",
                 )
             }
         },
         navigationIcon = {
             if (isEnableBackNavigation) {
                 Icon(
-                    modifier =
-                    Modifier
+                    modifier = Modifier
                         .padding(start = 20.dp)
                         .clickable { onClickBackIcon() },
                     painter = painterResource(id = R.drawable.ic_back),
-                    contentDescription = null,
+                    contentDescription = "navigation",
                 )
             }
         },
@@ -77,7 +75,7 @@ fun DorabangsTopAppBar(
 @Preview
 @Composable
 fun PreviewHomeTopAppBar() {
-    DorabangsTopBar.HomeTopBar(
+    DoraTopBar.HomeTopBar(
         modifier = Modifier.fillMaxWidth(),
         title = "Dorabangs",
         actionIcon = R.drawable.ic_plus,
@@ -87,7 +85,7 @@ fun PreviewHomeTopAppBar() {
 @Preview
 @Composable
 fun PreviewBackNavigationTopBar() {
-    DorabangsTopBar.BackNavigationTopBar(
+    DoraTopBar.BackNavigationTopBar(
         modifier = Modifier.fillMaxWidth(),
         title = "Dorabangs",
         titleAlignment = Alignment.CenterStart,
@@ -97,7 +95,7 @@ fun PreviewBackNavigationTopBar() {
 @Preview
 @Composable
 fun PreviewBackWithActionIconTopBar() {
-    DorabangsTopBar.BackWithActionIconTopBar(
+    DoraTopBar.BackWithActionIconTopBar(
         modifier = Modifier.fillMaxWidth(),
         title = "Dorabangs",
         actionIcon = R.drawable.ic_plus,
@@ -109,7 +107,7 @@ fun PreviewBackWithActionIconTopBar() {
 @Preview
 @Composable
 fun PreviewTitleTopAppBar() {
-    DorabangsTopBar.TitleTopAppBar(
+    DoraTopBar.TitleTopAppBar(
         modifier = Modifier.fillMaxWidth(),
         title = "Dorabangs",
     )
