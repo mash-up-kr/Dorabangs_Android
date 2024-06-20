@@ -21,6 +21,7 @@ object DoraFontSizeTokens {
     val Caption2 = 13.sp
     val Caption1 = 12.sp
     val S = 11.sp
+    val XS = 10.sp
 }
 
 object DoraLineHeightTokens {
@@ -37,6 +38,7 @@ object DoraLineHeightTokens {
     val Caption2 = 22.sp
     val Caption1 = 22.sp
     val S = 14.sp
+    val XS = 14.sp
 }
 
 object DoraTypoTokens {
@@ -317,5 +319,26 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W400,
         fontSize = DoraFontSizeTokens.S,
         lineHeight = DoraLineHeightTokens.S,
+    )
+
+    val XSBold = TextStyle(
+        fontFamily = doraFontFamily,
+        fontWeight = FontWeight.W700,
+        fontSize = DoraFontSizeTokens.XS,
+        lineHeight = DoraLineHeightTokens.XS,
+    )
+
+    val XSMedium = TextStyle(
+        fontFamily = doraFontFamily,
+        fontWeight = FontWeight.W500,
+        fontSize = DoraFontSizeTokens.XS,
+        lineHeight = DoraLineHeightTokens.XS,
+    )
+
+    val XSNormal = TextStyle(
+        fontFamily = doraFontFamily,
+        fontWeight = FontWeight.W400,
+        fontSize = DoraFontSizeTokens.XS,
+        lineHeight = DoraLineHeightTokens.XS,
     )
 }
