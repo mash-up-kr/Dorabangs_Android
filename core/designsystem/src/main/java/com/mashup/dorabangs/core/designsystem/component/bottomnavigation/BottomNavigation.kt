@@ -26,10 +26,10 @@ fun DoraBottomNavigation(
 ) {
     Box(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(Color.Transparent)
-                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+        Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent)
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
     ) {
         NavigationBar(
             modifier = modifier,
@@ -60,11 +60,11 @@ fun RowScope.BottomNavigationItems(
         },
         alwaysShowLabel = true,
         colors =
-            NavigationBarItemDefaults.colors(
-                selectedIconColor = selectedColor,
-                unselectedIconColor = unSelectedColor,
-                indicatorColor = contentColor,
-            ),
+        NavigationBarItemDefaults.colors(
+            selectedIconColor = selectedColor,
+            unselectedIconColor = unSelectedColor,
+            indicatorColor = contentColor,
+        ),
     )
 }
 
