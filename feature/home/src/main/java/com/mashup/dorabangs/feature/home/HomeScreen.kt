@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -43,5 +44,9 @@ fun HomeScreen(
         Button(onClick = onClickTestButton) {
             Text("도라방스")
         }
+
+        Text(text = "H3 Bold", style = DoraTypoTokens.H3Bold)
+        Text(text = "H3 Medium", style = DoraTypoTokens.H3Medium)
+        Text(text = "H3 Normal", style = DoraTypoTokens.H3Normal)
     }
 }
