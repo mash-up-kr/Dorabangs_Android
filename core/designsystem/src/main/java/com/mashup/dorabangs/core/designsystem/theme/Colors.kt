@@ -20,11 +20,11 @@ object DoraColorTokens {
 
 object BtnMaxColorTokens {
     val ContainerColor1 = DoraColorTokens.G9
-    val OnContainerColor1 = DoraColorTokens.G1
+    val ContentColor1 = DoraColorTokens.G1
     val ContainerColor1_Off = DoraColorTokens.G2
-    val OnContainerColor_1Off = DoraColorTokens.G4
+    val ContentColor_1Off = DoraColorTokens.G4
     val ContainerColor2 = DoraColorTokens.G1
-    val OnContainerColor2 = DoraColorTokens.G9
+    val ContentColor2 = DoraColorTokens.G9
 }
 
 object TopBarColorTokens {
