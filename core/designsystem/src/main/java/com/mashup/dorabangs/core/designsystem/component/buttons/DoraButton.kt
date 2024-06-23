@@ -68,7 +68,7 @@ fun PreviewDisabledDoraBtnMax() {
 @Preview
 @Composable
 fun PreviewMediumPositiveBtn() {
-    DoraButtons.DoraMediumPositiveBtn(
+    DoraButtons.DoraMediumConfirmBtn(
         modifier = Modifier.fillMaxWidth(0.5f),
         buttonText = "버튼",
         onClickButton = {},
@@ -78,7 +78,7 @@ fun PreviewMediumPositiveBtn() {
 @Preview
 @Composable
 fun PreviewMediumNegativeBtn() {
-    DoraButtons.DoraMediumNegativeBtn(
+    DoraButtons.DoraMediumDismissBtn(
         modifier = Modifier.fillMaxWidth(0.5f),
         buttonText = "버튼",
         onClickButton = {},

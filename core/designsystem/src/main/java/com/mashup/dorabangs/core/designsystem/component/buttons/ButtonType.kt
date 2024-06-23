@@ -28,7 +28,7 @@ object DoraButtons : ButtonType {
     )
 
     @Composable
-    override fun DoraMediumPositiveBtn(
+    override fun DoraMediumConfirmBtn(
         modifier: Modifier,
         buttonText: String,
         onClickButton: () -> Unit,
@@ -46,7 +46,7 @@ object DoraButtons : ButtonType {
     )
 
     @Composable
-    override fun DoraMediumNegativeBtn(
+    override fun DoraMediumDismissBtn(
         modifier: Modifier,
         buttonText: String,
         onClickButton: () -> Unit,
@@ -75,14 +75,14 @@ sealed interface ButtonType {
     )
 
     @Composable
-    fun DoraMediumPositiveBtn(
+    fun DoraMediumConfirmBtn(
         modifier: Modifier,
         buttonText: String,
         onClickButton: () -> Unit,
     )
 
     @Composable
-    fun DoraMediumNegativeBtn(
+    fun DoraMediumDismissBtn(
         modifier: Modifier,
         buttonText: String,
         onClickButton: () -> Unit,

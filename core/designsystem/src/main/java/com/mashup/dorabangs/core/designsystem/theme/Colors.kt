@@ -13,7 +13,7 @@ object DoraColorTokens {
     val G3 = Color(0xFFDEE2E6)
     val G2 = Color(0xFFE9ECEF)
     val G1 = Color(0xFFF4F6F8)
-    val White = Color(0xFF000000)
+    val White = Color(0xFFFFFFFF)
     val Alert = Color(0xFFFF5D47)
     val Dimend = Color(0xB2121212)
 }
@@ -25,6 +25,12 @@ object BtnMaxColorTokens {
     val ContentColor_1Off = DoraColorTokens.G4
     val ContainerColor2 = DoraColorTokens.G1
     val ContentColor2 = DoraColorTokens.G9
+}
+
+object DialogColorTokens {
+    val BackgroundColor = DoraColorTokens.P1
+    val TitleColor = DoraColorTokens.G8
+    val ContentColor = DoraColorTokens.G5
 }
 
 object TopBarColorTokens {
