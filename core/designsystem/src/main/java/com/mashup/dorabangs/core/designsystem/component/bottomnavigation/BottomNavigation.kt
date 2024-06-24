@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.core.designsystem.component.bottomnavigation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
 @Composable
 fun DoraBottomNavigation(
@@ -29,11 +32,13 @@ fun DoraBottomNavigation(
         Modifier
             .fillMaxWidth()
             .background(Color.Transparent)
+            .border(width = 1.dp, color = DoraColorTokens.G2, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
     ) {
         NavigationBar(
             modifier = modifier,
-            contentColor = Color.White, // designsystem 후 수정 필요
+            containerColor = DoraColorTokens.P1,
+            contentColor = DoraColorTokens.P1,
             content = content,
         )
     }
@@ -56,11 +61,14 @@ fun RowScope.BottomNavigationItems(
         icon = icon,
         modifier = modifier,
         label = {
-            Text(stringResource(label))
+            Text(
+                text = stringResource(label),
+                style = DoraTypoTokens.XSMedium,
+                color = if (selected) DoraColorTokens.G9 else DoraColorTokens.G4,
+            )
         },
         alwaysShowLabel = true,
-        colors =
-        NavigationBarItemDefaults.colors(
+        colors = NavigationBarItemDefaults.colors(
             selectedIconColor = selectedColor,
             unselectedIconColor = unSelectedColor,
             indicatorColor = contentColor,
