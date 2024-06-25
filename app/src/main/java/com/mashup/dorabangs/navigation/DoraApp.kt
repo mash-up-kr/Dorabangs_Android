@@ -46,15 +46,15 @@ fun DoraApp(appState: DoraAppState = rememberDoraAppState()) {
 private fun DoraBottomBar(
     destinations: List<BottomNavigationDestination>,
     onNavigateToDestination: (BottomNavigationDestination) -> Unit,
-    currentDestination: NavDestination?,
+    currentDestination: NavDestination,
     modifier: Modifier = Modifier,
 ) {
     DoraBottomNavigation {
         destinations.forEach { destination ->
-            val selected = currentDestination.isBottomDestinationInHierarchy(destination)
+            val isSelected = currentDestination.isSelectedBottomNaviPage(destination)
             BottomNavigationItems(
                 modifier = modifier,
-                selected = selected,
+                selected = isSelected,
                 onClick = { onNavigateToDestination(destination) },
                 icon = {
                     Icon(
@@ -68,7 +68,7 @@ private fun DoraBottomBar(
     }
 }
 
-private fun NavDestination?.isBottomDestinationInHierarchy(destination: BottomNavigationDestination) =
-    this?.hierarchy?.any {
+private fun NavDestination.isSelectedBottomNaviPage(destination: BottomNavigationDestination) =
+    this.hierarchy.any {
         it.route?.contains(destination.name, true) ?: false
-    } ?: false
+    }

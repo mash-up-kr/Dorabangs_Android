@@ -26,8 +26,8 @@ fun rememberDoraAppState(navController: NavHostController = rememberNavControlle
 class DoraAppState(
     val navController: NavHostController,
 ) {
-    val currentDestination: NavDestination?
-        @Composable get() = navController.currentBackStackEntryAsState().value?.destination
+    val currentDestination: NavDestination
+        @Composable get() = navController.currentBackStackEntryAsState().value?.destination ?: error("not found destination")
 
     fun navigateToBottomNavigationDestination(bottomNavigationDestination: BottomNavigationDestination) {
         val bottomNavigationOption =
