@@ -63,9 +63,6 @@ private fun DoraBottomBar(
                     )
                 },
                 label = destination.routeName,
-                contentColor = Color.Transparent,
-                selectedColor = DoraColorTokens.G9,
-                unSelectedColor = DoraColorTokens.G2,
             )
         }
     }
