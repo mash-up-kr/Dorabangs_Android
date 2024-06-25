@@ -50,8 +50,7 @@ fun DoraTopAppBar(
         actions = {
             if (actionIcon != null) {
                 Icon(
-                    modifier =
-                    Modifier
+                    modifier = Modifier
                         .padding(end = 20.dp)
                         .clickable { onClickActonIcon() },
                     painter = painterResource(id = actionIcon),
@@ -62,8 +61,7 @@ fun DoraTopAppBar(
         navigationIcon = {
             if (isEnableBackNavigation) {
                 Icon(
-                    modifier =
-                    Modifier
+                    modifier = Modifier
                         .padding(start = 20.dp)
                         .clickable { onClickBackIcon() },
                     painter = painterResource(id = R.drawable.ic_back),
