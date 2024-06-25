@@ -27,7 +27,7 @@ fun DoraApp(appState: DoraAppState = rememberDoraAppState()) {
                 currentDestination = appState.currentDestination,
             )
         },
-        content = { paddingValues: PaddingValues ->
+        content = { paddingValues ->
             Column(
                 modifier =
                 Modifier
