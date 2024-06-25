@@ -47,9 +47,6 @@ fun DoraBottomNavigation(
 @Composable
 fun RowScope.BottomNavigationItems(
     selected: Boolean,
-    contentColor: Color,
-    selectedColor: Color,
-    unSelectedColor: Color,
     label: Int,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
@@ -69,9 +66,9 @@ fun RowScope.BottomNavigationItems(
         },
         alwaysShowLabel = true,
         colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = selectedColor,
-            unselectedIconColor = unSelectedColor,
-            indicatorColor = contentColor,
+            selectedIconColor = DoraColorTokens.G9,
+            unselectedIconColor = DoraColorTokens.G2,
+            indicatorColor = Color.Transparent,
         ),
     )
 }
@@ -92,9 +89,6 @@ fun PreviewBottomNavigation() {
                     )
                 },
                 label = destination.routeName,
-                contentColor = Color.Transparent,
-                selectedColor = Color.Black,
-                unSelectedColor = Color.Gray,
             )
         }
     }
