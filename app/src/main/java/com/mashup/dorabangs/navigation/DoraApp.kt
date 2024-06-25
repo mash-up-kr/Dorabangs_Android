@@ -1,21 +1,18 @@
 package com.mashup.dorabangs.navigation
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.BottomNavigationDestination
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.BottomNavigationItems
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.DoraBottomNavigation
-import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 
 @Composable
 fun DoraApp(appState: DoraAppState = rememberDoraAppState()) {
