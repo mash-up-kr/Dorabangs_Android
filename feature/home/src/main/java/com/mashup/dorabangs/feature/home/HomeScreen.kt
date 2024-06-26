@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.mashup.dorabangs.core.designsystem.component.snackbar.DoraSnackBar
@@ -59,7 +60,10 @@ fun HomeRoute(
                     .align(Alignment.BottomCenter),
                 text = copiedText,
                 action = actionSnackBar,
-                dismissAction = { shouldSnackBarShown = false },
+                dismissAction = {
+                    clipboardManager.setText(AnnotatedString(""))
+                    shouldSnackBarShown = false
+                },
             )
         }
     }
