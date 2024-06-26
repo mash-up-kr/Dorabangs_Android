@@ -25,9 +25,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconarrow.DoraIconArrow
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconarrow.RightArrow
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
@@ -90,7 +92,7 @@ fun SnackBarContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "클립보드에 복사한 링크 저장",
+                    text = stringResource(id = R.string.snack_bar_title),
                     maxLines = 2,
                     style = DoraTypoTokens.caption1Medium,
                     color = ClipBoardColorTokens.UrlLinkSubColor1,
@@ -119,7 +121,7 @@ fun SnackBarContent(
         ) {
             Icon(
                 imageVector = DoraIconClose.CloseCircle,
-                contentDescription = "스낵바 취소",
+                contentDescription = stringResource(id = R.string.snack_bar_cancel_description),
                 tint = ClipBoardColorTokens.UrlLinkSubColor1,
             )
         }
