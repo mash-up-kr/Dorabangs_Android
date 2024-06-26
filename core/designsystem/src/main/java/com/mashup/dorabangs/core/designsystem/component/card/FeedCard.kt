@@ -34,12 +34,13 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 @Composable
 fun FeedCard(
     cardInfo: FeedCardUiModel,
+    modifier: Modifier = Modifier,
     onClickCardItem: () -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(DoraColorTokens.P1, shape = RectangleShape)
             .fillMaxWidth()
             .padding(20.dp)
