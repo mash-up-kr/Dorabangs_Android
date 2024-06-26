@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.mashup.core.navigation.NavigationRoute
-import com.mashup.dorabangs.feature.navigation.HomeNavigation
 import com.mashup.dorabangs.feature.navigation.homeNavigation
 
 @Composable
