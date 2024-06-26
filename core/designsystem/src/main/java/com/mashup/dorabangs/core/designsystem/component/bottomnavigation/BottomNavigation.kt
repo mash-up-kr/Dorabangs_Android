@@ -48,8 +48,8 @@ fun DoraBottomNavigation(
 fun RowScope.BottomNavigationItems(
     selected: Boolean,
     label: Int,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     icon: @Composable () -> Unit,
 ) {
     NavigationBarItem(
