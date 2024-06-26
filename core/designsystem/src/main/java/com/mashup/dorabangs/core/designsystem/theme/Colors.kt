@@ -37,6 +37,7 @@ object ClipBoardColorTokens {
     val ContainerColor1 = DoraColorTokens.G9
     val UrlLinkMainColor1 = DoraColorTokens.White
     val UrlLinkSubColor1 = DoraColorTokens.G3
+    val ArrowColor = DoraColorTokens.G3
 }
 
 object TopBarColorTokens {

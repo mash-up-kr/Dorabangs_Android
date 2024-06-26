@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarDuration
@@ -28,7 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconarrow.DoraIconArrow
+import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconarrow.RightArrow
+import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
+import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
 import com.mashup.dorabangs.core.designsystem.theme.ClipBoardColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -83,12 +86,21 @@ fun SnackBarContent(
         Column(
             modifier = Modifier.weight(1f),
         ) {
-            Text(
-                text = "클립보드에 복사한 링크 저장",
-                maxLines = 2,
-                style = DoraTypoTokens.caption1Medium,
-                color = ClipBoardColorTokens.UrlLinkSubColor1,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "클립보드에 복사한 링크 저장",
+                    maxLines = 2,
+                    style = DoraTypoTokens.caption1Medium,
+                    color = ClipBoardColorTokens.UrlLinkSubColor1,
+                )
+                Icon(
+                    imageVector = DoraIconArrow.RightArrow,
+                    tint = ClipBoardColorTokens.ArrowColor,
+                    contentDescription = null,
+                )
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = text,
@@ -106,10 +118,19 @@ fun SnackBarContent(
             onClick = { dismissAction.invoke() },
         ) {
             Icon(
-                imageVector = Icons.Default.Call,
+                imageVector = DoraIconClose.CloseCircle,
                 contentDescription = "스낵바 취소",
                 tint = ClipBoardColorTokens.UrlLinkSubColor1,
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun SnackBarContentPreview() {
+    SnackBarContent(
+        text = "www.naver.com",
+        dismissAction = {},
+    )
 }
