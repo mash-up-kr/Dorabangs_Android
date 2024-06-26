@@ -44,7 +44,7 @@ fun DoraSnackBar(
     action: () -> Unit,
     dismissAction: () -> Unit,
     modifier: Modifier = Modifier,
-    doraDuration: SnackbarDuration = SnackbarDuration.Short,
+    doraDuration: SnackbarDuration = SnackbarDuration.Indefinite,
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
