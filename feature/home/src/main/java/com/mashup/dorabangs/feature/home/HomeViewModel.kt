@@ -13,20 +13,23 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class HomeViewModel
+@Inject
+constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
-
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
-    fun add(number: Int) = intent {
-        reduce {
-            state.copy(number = state.number + number)
+    fun add(number: Int) =
+        intent {
+            reduce {
+                state.copy(state.number + number)
+            }
         }
-    }
 
-    fun test() = viewModelScope.doraLaunch {
-        delay(1000L)
-        println("tjrwn 현재 쓰레드 name ${Thread.currentThread().name}")
-    }
+    fun test() =
+        viewModelScope.doraLaunch {
+            delay(1000L)
+            println("tjrwn 현재 쓰레드 name ${Thread.currentThread().name}")
+        }
 }

@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core:coroutine"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:navigation"))
 
     // Compose
     implementation(libs.ui)

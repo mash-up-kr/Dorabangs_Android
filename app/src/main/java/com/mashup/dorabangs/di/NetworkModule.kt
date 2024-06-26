@@ -19,7 +19,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     @Provides
     @Singleton
     fun providesDorabangsRetrofit(
@@ -48,29 +47,24 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesConverterFactory(
-        json: Json,
-    ): Converter.Factory =
-        json.asConverterFactory("application/json".toMediaType())
+    fun providesConverterFactory(json: Json): Converter.Factory = json.asConverterFactory("application/json".toMediaType())
 
     @Provides
     @Singleton
-    fun providesJsonBuilder(): Json = Json {
-        isLenient = true
-        ignoreUnknownKeys = true
-        coerceInputValues = true
-    }
+    fun providesJsonBuilder(): Json =
+        Json {
+            isLenient = true
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+        }
 
     @Provides
     @Singleton
-    fun providesLoggingInterceptor(): HttpLoggingInterceptor =
-        HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+    fun providesLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
     @Provides
     @Singleton
-    fun providesFlipperOkHttpPlugin(
-        networkFlipperPlugin: NetworkFlipperPlugin,
-    ): FlipperOkhttpInterceptor =
+    fun providesFlipperOkHttpPlugin(networkFlipperPlugin: NetworkFlipperPlugin): FlipperOkhttpInterceptor =
         FlipperOkhttpInterceptor(networkFlipperPlugin)
 
     @Provides

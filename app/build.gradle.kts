@@ -69,6 +69,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core:coroutine"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:navigation"))
 
     implementation(libs.core.ktx)
     implementation(libs.kotlin.android)

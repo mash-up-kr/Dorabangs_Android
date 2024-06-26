@@ -16,22 +16,24 @@ import javax.inject.Inject
 class MyApplication : Application() {
     @Inject
     lateinit var flipperNetworkPlugin: NetworkFlipperPlugin
+
     override fun onCreate() {
         super.onCreate()
         SoLoader.init(this, false)
 
         if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(this)) {
-            val client = AndroidFlipperClient.getInstance(this).apply {
-                addPlugin(
-                    InspectorFlipperPlugin(
-                        this@MyApplication,
-                        DescriptorMapping.withDefaults(),
-                    ),
-                )
-                addPlugin(CrashReporterPlugin.getInstance())
-                addPlugin(flipperNetworkPlugin)
-                addPlugin(SharedPreferencesFlipperPlugin(this@MyApplication))
-            }
+            val client =
+                AndroidFlipperClient.getInstance(this).apply {
+                    addPlugin(
+                        InspectorFlipperPlugin(
+                            this@MyApplication,
+                            DescriptorMapping.withDefaults(),
+                        ),
+                    )
+                    addPlugin(CrashReporterPlugin.getInstance())
+                    addPlugin(flipperNetworkPlugin)
+                    addPlugin(SharedPreferencesFlipperPlugin(this@MyApplication))
+                }
             client.start()
         }
     }
