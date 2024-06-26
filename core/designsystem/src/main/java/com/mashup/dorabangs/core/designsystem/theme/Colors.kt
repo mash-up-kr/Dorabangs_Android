@@ -33,6 +33,12 @@ object DialogColorTokens {
     val ContentColor = DoraColorTokens.G5
 }
 
+object ClipBoardColorTokens {
+    val ContainerColor1 = DoraColorTokens.G9
+    val UrlLinkMainColor1 = DoraColorTokens.White
+    val UrlLinkSubColor1 = DoraColorTokens.G3
+}
+
 object TopBarColorTokens {
     val isDarkMode = false // 임시 다크모드 체크
     val ContainerColor

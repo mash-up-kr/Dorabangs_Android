@@ -21,7 +21,7 @@ class HomeViewModel @Inject constructor(
 
     fun add(number: Int) = intent {
         reduce {
-            state.copy(state.number + number)
+            state.copy(number = state.number + number)
         }
     }
 
