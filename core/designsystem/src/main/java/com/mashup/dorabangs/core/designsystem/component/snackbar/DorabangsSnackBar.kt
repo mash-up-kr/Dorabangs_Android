@@ -1,29 +1,21 @@
 package com.mashup.dorabangs.core.designsystem.component.snackbar
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -35,26 +27,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ClipboardManager
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.theme.ClipBoardColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import com.mashup.dorabangs.core.designsystem.theme.DorabangsTheme
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DoraSnackBar(
     text: String,
-    modifier: Modifier = Modifier,
-    doraDuration: SnackbarDuration = SnackbarDuration.Short,
     action: () -> Unit,
     dismissAction: () -> Unit,
+    modifier: Modifier = Modifier,
+    doraDuration: SnackbarDuration = SnackbarDuration.Short,
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -69,7 +56,7 @@ fun DoraSnackBar(
         modifier = modifier
             .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
             .clip(shape = DoraRoundTokens.Round12),
-        hostState = snackBarHostState
+        hostState = snackBarHostState,
     ) {
         SnackBarContent(
             modifier = Modifier.clickable { action.invoke() },
@@ -80,10 +67,10 @@ fun DoraSnackBar(
 }
 
 @Composable
-private fun SnackBarContent(
+fun SnackBarContent(
     text: String,
-    modifier: Modifier = Modifier,
     dismissAction: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -100,7 +87,7 @@ private fun SnackBarContent(
                 text = "클립보드에 복사한 링크 저장",
                 maxLines = 2,
                 style = DoraTypoTokens.caption1Medium,
-                color = ClipBoardColorTokens.UrlLinkSubColor1
+                color = ClipBoardColorTokens.UrlLinkSubColor1,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
@@ -112,11 +99,11 @@ private fun SnackBarContent(
             )
         }
         Spacer(
-            modifier = Modifier.width(16.dp)
+            modifier = Modifier.width(16.dp),
         )
         IconButton(
             modifier = Modifier.size(24.dp),
-            onClick = { dismissAction.invoke() }
+            onClick = { dismissAction.invoke() },
         ) {
             Icon(
                 imageVector = Icons.Default.Call,

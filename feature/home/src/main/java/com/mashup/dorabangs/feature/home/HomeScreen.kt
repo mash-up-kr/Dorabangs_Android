@@ -59,7 +59,7 @@ fun HomeRoute(
                     .align(Alignment.BottomCenter),
                 text = copiedText,
                 action = actionSnackBar,
-                dismissAction = { shouldSnackBarShown = false }
+                dismissAction = { shouldSnackBarShown = false },
             )
         }
     }
