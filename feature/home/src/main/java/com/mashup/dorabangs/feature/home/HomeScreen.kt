@@ -36,7 +36,7 @@ fun HomeRoute(
     var shouldSnackBarShown by remember { mutableStateOf(false) }
 
     LifecycleResumeEffect(key1 = clipboardManager) {
-        kotlin.runCatching {
+        runCatching {
             view.post {
                 copiedText = clipboardManager.getText()?.text.orEmpty()
                 shouldSnackBarShown = copiedText.isNotBlank()
