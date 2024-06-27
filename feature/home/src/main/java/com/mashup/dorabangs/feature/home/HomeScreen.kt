@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.feature.home
 
 import android.view.View
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,6 +23,7 @@ import clipboard.isValidUrl
 import com.mashup.dorabangs.core.designsystem.component.snackbar.DoraSnackBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeRoute(
@@ -30,7 +33,20 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
     actionSnackBar: () -> Unit = {},
 ) {
+    val context = LocalContext.current
     val state by viewModel.collectAsState()
+    viewModel.collectSideEffect {
+        when (it) {
+            HomeSideEffect.HideSnackBar -> {
+                // 여기서
+            }
+            is HomeSideEffect.ShowSnackBar -> {
+                // 해줄게 없다 ,,
+                Toast.makeText(context, "이런건 괜찮은데", Toast.LENGTH_SHORT).show()
+                // 커스텀 스낵바 (박스) 라서 여기서 스낵바를 보여주고 말고 하기가 좀 그럼!
+            }
+        }
+    }
 
     LifecycleResumeEffect(key1 = clipboardManager) {
         runCatching {
