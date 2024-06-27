@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -33,37 +29,38 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
     actionSnackBar: () -> Unit = {},
 ) {
-    var copiedText by remember { mutableStateOf("") }
-    var shouldSnackBarShown by remember { mutableStateOf(false) }
+    val state = viewModel.collectAsState().value
 
     LifecycleResumeEffect(key1 = clipboardManager) {
         runCatching {
             view.post {
-                copiedText = clipboardManager.getText()?.text.orEmpty()
-                shouldSnackBarShown = copiedText.isNotBlank() && copiedText.isValidUrl()
+                val clipboardText = clipboardManager.getText()?.text.orEmpty()
+                if (clipboardText.isNotBlank() && clipboardText.isValidUrl()) {
+                    viewModel.showSnackBar(clipboardText)
+                }
             }
         }
         onPauseOrDispose {
-            shouldSnackBarShown = false
+            viewModel.hideSnackBar()
         }
     }
 
     Box {
         HomeScreen(
-            state = viewModel.collectAsState().value,
+            state = state,
             modifier = modifier,
             onClickAddButton = { viewModel.add(1) },
             onClickTestButton = { viewModel.test() },
         )
-        if (shouldSnackBarShown) {
+        if (state.shouldSnackBarShown) {
             DoraSnackBar(
                 modifier = Modifier
                     .align(Alignment.BottomCenter),
-                text = copiedText,
+                text = state.copiedText,
                 action = actionSnackBar,
                 dismissAction = {
                     clipboardManager.setText(AnnotatedString(""))
-                    shouldSnackBarShown = false
+                    viewModel.hideSnackBar()
                 },
             )
         }

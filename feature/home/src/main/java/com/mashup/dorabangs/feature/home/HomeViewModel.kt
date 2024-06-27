@@ -23,7 +23,7 @@ constructor(
     fun add(number: Int) =
         intent {
             reduce {
-                state.copy(state.number + number)
+                state.copy(number = state.number + number)
             }
         }
 
@@ -32,4 +32,17 @@ constructor(
             delay(1000L)
             println("tjrwn 현재 쓰레드 name ${Thread.currentThread().name}")
         }
+
+    fun hideSnackBar() =
+        intent {
+            reduce {
+                state.copy(shouldSnackBarShown = false)
+            }
+        }
+
+    fun showSnackBar(clipboardText: String) = intent {
+        reduce {
+            state.copy(copiedText = clipboardText, shouldSnackBarShown = true)
+        }
+    }
 }
