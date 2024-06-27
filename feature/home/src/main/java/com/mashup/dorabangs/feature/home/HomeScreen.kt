@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import clipboard.isValidUrl
 import com.mashup.dorabangs.core.designsystem.component.snackbar.DoraSnackBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import org.orbitmvi.orbit.compose.collectAsState
@@ -39,7 +40,7 @@ fun HomeRoute(
         runCatching {
             view.post {
                 copiedText = clipboardManager.getText()?.text.orEmpty()
-                shouldSnackBarShown = copiedText.isNotBlank()
+                shouldSnackBarShown = copiedText.isNotBlank() && copiedText.isValidUrl()
             }
         }
         onPauseOrDispose {
