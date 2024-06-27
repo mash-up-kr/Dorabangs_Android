@@ -36,13 +36,22 @@ constructor(
     fun hideSnackBar() =
         intent {
             reduce {
-                state.copy(shouldSnackBarShown = false)
+                state.copy(
+                    clipBoardState = state.clipBoardState.copy(
+                        shouldSnackBarShown = false,
+                    ),
+                )
             }
         }
 
     fun showSnackBar(clipboardText: String) = intent {
         reduce {
-            state.copy(copiedText = clipboardText, shouldSnackBarShown = true)
+            state.copy(
+                clipBoardState = state.clipBoardState.copy(
+                    copiedText = clipboardText,
+                    shouldSnackBarShown = true,
+                ),
+            )
         }
     }
 }

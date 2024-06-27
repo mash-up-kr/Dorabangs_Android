@@ -53,11 +53,11 @@ fun HomeRoute(
             onClickAddButton = { viewModel.add(1) },
             onClickTestButton = { viewModel.test() },
         )
-        if (state.shouldSnackBarShown) {
+        if (state.clipBoardState.shouldSnackBarShown) {
             DoraSnackBar(
                 modifier = Modifier
                     .align(Alignment.BottomCenter),
-                text = state.copiedText,
+                text = state.clipBoardState.copiedText,
                 action = actionSnackBar,
                 dismissAction = {
                     clipboardManager.setText(AnnotatedString(""))
