@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -21,6 +22,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -29,20 +31,21 @@ fun HomeRoute(
     modifier: Modifier = Modifier,
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
-    viewModel: HomeViewModel = hiltViewModel(key = "tjrwn"),
+    viewModel: HomeViewModel = hiltViewModel(),
     actionSnackBar: () -> Unit = {},
 ) {
-    println("tjrwn viewModel = $viewModel")
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
+    val scope = rememberCoroutineScope()
     viewModel.collectSideEffect {
-        println("tjrwn collectLatest $it")
         when (it) {
             is HomeSideEffect.ShowSnackBar -> {
-                snackBarHostState.showSnackbar(
-                    message = it.copiedText,
-                    duration = SnackbarDuration.Indefinite,
-                )
+                scope.launch {
+                    snackBarHostState.showSnackbar(
+                        message = it.copiedText,
+                        duration = SnackbarDuration.Indefinite,
+                    )
+                }
             }
 
             HomeSideEffect.HideSnackBar -> {
