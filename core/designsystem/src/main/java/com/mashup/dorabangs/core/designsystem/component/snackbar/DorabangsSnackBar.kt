@@ -46,28 +46,34 @@ fun DoraSnackBar(
     action: () -> Unit,
     dismissAction: () -> Unit,
     modifier: Modifier = Modifier,
+    isSnackBarShown: Boolean = false,
     doraDuration: SnackbarDuration = SnackbarDuration.Indefinite,
 ) {
-    val scope = rememberCoroutineScope()
-    val snackBarHostState = remember { SnackbarHostState() }
+    if (isSnackBarShown) {
+        val scope = rememberCoroutineScope()
+        val snackBarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(key1 = Unit) {
-        scope.launch {
-            snackBarHostState.showSnackbar(text, duration = doraDuration)
+        LaunchedEffect(key1 = Unit) {
+            scope.launch {
+                snackBarHostState.showSnackbar(text, duration = doraDuration)
+            }
         }
-    }
 
-    SnackbarHost(
-        modifier = modifier
-            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-            .clip(shape = DoraRoundTokens.Round12),
-        hostState = snackBarHostState,
-    ) {
-        SnackBarContent(
-            modifier = Modifier.clickable { action.invoke() },
-            text = text,
-            dismissAction = dismissAction,
-        )
+        SnackbarHost(
+            modifier = modifier
+                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+                .clip(shape = DoraRoundTokens.Round12),
+            hostState = snackBarHostState,
+        ) {
+            SnackBarContent(
+                modifier = Modifier.clickable { action.invoke() },
+                text = text,
+                dismissAction = {
+                    dismissAction.invoke()
+                    snackBarHostState.currentSnackbarData?.dismiss()
+                },
+            )
+        }
     }
 }
 
