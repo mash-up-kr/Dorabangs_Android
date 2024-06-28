@@ -14,14 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,7 +33,6 @@ import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.D
 import com.mashup.dorabangs.core.designsystem.theme.ClipBoardColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -45,35 +40,20 @@ fun DoraSnackBar(
     text: String,
     action: () -> Unit,
     dismissAction: () -> Unit,
+    snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    isSnackBarShown: Boolean = false,
-    doraDuration: SnackbarDuration = SnackbarDuration.Indefinite,
 ) {
-    if (isSnackBarShown) {
-        val scope = rememberCoroutineScope()
-        val snackBarHostState = remember { SnackbarHostState() }
-
-        LaunchedEffect(key1 = Unit) {
-            scope.launch {
-                snackBarHostState.showSnackbar(text, duration = doraDuration)
-            }
-        }
-
-        SnackbarHost(
-            modifier = modifier
-                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-                .clip(shape = DoraRoundTokens.Round12),
-            hostState = snackBarHostState,
-        ) {
-            SnackBarContent(
-                modifier = Modifier.clickable { action.invoke() },
-                text = text,
-                dismissAction = {
-                    dismissAction.invoke()
-                    snackBarHostState.currentSnackbarData?.dismiss()
-                },
-            )
-        }
+    SnackbarHost(
+        modifier = modifier
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+            .clip(shape = DoraRoundTokens.Round12),
+        hostState = snackBarHostState,
+    ) {
+        SnackBarContent(
+            modifier = Modifier.clickable { action.invoke() },
+            text = text,
+            dismissAction = dismissAction,
+        )
     }
 }
 
@@ -123,7 +103,7 @@ fun SnackBarContent(
         )
         IconButton(
             modifier = Modifier.size(24.dp),
-            onClick = { dismissAction.invoke() },
+            onClick = dismissAction,
         ) {
             Icon(
                 imageVector = DoraIconClose.CloseCircle,

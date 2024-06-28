@@ -1,6 +1,6 @@
 package com.mashup.dorabangs.feature.home
 
 sealed class HomeSideEffect {
-    object ShowSnackBar : HomeSideEffect()
+    data class ShowSnackBar(val copiedText: String) : HomeSideEffect()
     object HideSnackBar : HomeSideEffect()
 }

@@ -34,29 +34,24 @@ constructor(
             println("tjrwn 현재 쓰레드 name ${Thread.currentThread().name}")
         }
 
-    fun hideSnackBar() =
-        intent {
-            reduce {
-                state.copy(
-                    clipBoardState = state.clipBoardState.copy(
-                        shouldSnackBarShown = false,
+    fun hideSnackBar() = intent {
+        postSideEffect(HomeSideEffect.HideSnackBar)
+    }
+
+    fun showSnackBar(clipboardText: String) = intent {
+        state.copy(
+            clipBoardState = state.clipBoardState.copy(
+                copiedText = clipboardText,
+            ),
+        ).also { newState ->
+            if (newState.clipBoardState.isValidUrl) {
+                reduce { newState }
+                postSideEffect(
+                    HomeSideEffect.ShowSnackBar(
+                        copiedText = newState.clipBoardState.copiedText,
                     ),
                 )
             }
-            postSideEffect(HomeSideEffect.HideSnackBar)
         }
-
-    fun showSnackBar(clipboardText: String) = intent {
-        reduce {
-            state.copy(
-                clipBoardState = state.clipBoardState.copy(
-                    copiedText = clipboardText,
-                    shouldSnackBarShown = true,
-                ),
-            )
-        }
-        postSideEffect(
-            HomeSideEffect.ShowSnackBar,
-        )
     }
 }

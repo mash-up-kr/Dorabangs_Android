@@ -1,26 +1,25 @@
 package com.mashup.dorabangs.feature.home
 
 import android.view.View
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LifecycleResumeEffect
-import clipboard.isValidUrl
-import com.mashup.dorabangs.core.designsystem.component.snackbar.DoraSnackBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -30,35 +29,26 @@ fun HomeRoute(
     modifier: Modifier = Modifier,
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(key = "tjrwn"),
     actionSnackBar: () -> Unit = {},
 ) {
-    val context = LocalContext.current
+    println("tjrwn viewModel = $viewModel")
+    val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     viewModel.collectSideEffect {
+        println("tjrwn collectLatest $it")
         when (it) {
-            HomeSideEffect.HideSnackBar -> {
-                // 여기서
-            }
             is HomeSideEffect.ShowSnackBar -> {
-                // 해줄게 없다 ,,
-                Toast.makeText(context, "이런건 괜찮은데", Toast.LENGTH_SHORT).show()
-                // 커스텀 스낵바 (박스) 라서 여기서 스낵바를 보여주고 말고 하기가 좀 그럼!
+                snackBarHostState.showSnackbar(
+                    message = it.copiedText,
+                    duration = SnackbarDuration.Indefinite,
+                )
             }
-        }
-    }
 
-    LifecycleResumeEffect(key1 = clipboardManager) {
-        runCatching {
-            view.post {
-                val clipboardText = clipboardManager.getText()?.text.orEmpty()
-                if (clipboardText.isNotBlank() && clipboardText.isValidUrl()) {
-                    viewModel.showSnackBar(clipboardText)
-                }
+            HomeSideEffect.HideSnackBar -> {
+                clipboardManager.setText(AnnotatedString(""))
+                snackBarHostState.currentSnackbarData?.dismiss()
             }
-        }
-        onPauseOrDispose {
-            viewModel.hideSnackBar()
         }
     }
 
@@ -69,18 +59,18 @@ fun HomeRoute(
             onClickAddButton = { viewModel.add(1) },
             onClickTestButton = { viewModel.test() },
         )
-        if (state.clipBoardState.shouldSnackBarShown) {
-            DoraSnackBar(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter),
-                text = state.clipBoardState.copiedText,
-                action = actionSnackBar,
-                dismissAction = {
-                    clipboardManager.setText(AnnotatedString(""))
-                    viewModel.hideSnackBar()
-                },
-            )
-        }
+
+        HomeDoraSnackBar(
+            modifier = Modifier
+                .align(Alignment.BottomCenter),
+            text = state.clipBoardState.copiedText,
+            action = actionSnackBar,
+            snackBarHostState = snackBarHostState,
+            view = view,
+            viewModel = viewModel,
+            clipboardManager = clipboardManager,
+            dismissAction = viewModel::hideSnackBar,
+        )
     }
 }
 
