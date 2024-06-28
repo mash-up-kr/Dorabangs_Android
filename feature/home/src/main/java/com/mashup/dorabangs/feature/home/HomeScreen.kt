@@ -1,18 +1,29 @@
 package com.mashup.dorabangs.feature.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopAppBar
@@ -30,31 +41,74 @@ fun HomeRoute(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        DoraTopAppBar(
-            modifier = Modifier.fillMaxWidth(),
-            title = "Logo",
-            titleAlignment = Alignment.CenterStart,
-            actionIcon = R.drawable.ic_plus
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(310.dp)
-                .background(DoraColorTokens.G5)
-        )
-        DoraChips(
-            modifier = Modifier.fillMaxWidth(),
-            chipList = state.tapElements
-        )
+        item {
+            DoraTopAppBar(
+                modifier = Modifier.fillMaxWidth(),
+                title = "Logo",
+                titleAlignment = Alignment.CenterStart,
+                actionIcon = R.drawable.ic_plus
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(310.dp)
+                    .background(DoraColorTokens.G5)
+            )
+        }
+
+        stickyHeader {
+            DoraChips(
+                modifier = Modifier.fillMaxWidth(),
+                chipList = state.tapElements
+            )
+        }
+
+        item {
+            Feeds(
+                modifier = Modifier,
+                feeds = state.feedCards
+            )
+        }
+    }
+}
+
+@Composable
+private fun Feeds(
+    feeds: List<FeedCardUiModel>,
+    modifier: Modifier = Modifier
+) {
+    if (feeds.isEmpty()) {
+        Column(
+            modifier = modifier.fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_android_white_24dp),
+                contentDescription = ""
+            )
+            Text(
+                modifier = Modifier.padding(top = 12.dp),
+                text = stringResource(id = R.string.home_empty_feed)
+            )
+        }
+    } else {
+        Column(modifier = modifier) {
+            feeds.forEach { 
+                FeedCard(cardInfo = it)
+            }
+        }
     }
 }
 
