@@ -37,12 +37,12 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
-    viewModel.collectSideEffect {
-        when (it) {
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
             is HomeSideEffect.ShowSnackBar -> {
                 scope.launch {
                     snackBarHostState.showSnackbar(
-                        message = it.copiedText,
+                        message = sideEffect.copiedText,
                         duration = SnackbarDuration.Indefinite,
                     )
                 }
@@ -70,8 +70,9 @@ fun HomeRoute(
             action = actionSnackBar,
             snackBarHostState = snackBarHostState,
             view = view,
-            viewModel = viewModel,
             clipboardManager = clipboardManager,
+            hideSnackBar = viewModel::hideSnackBar,
+            showSnackBarWithText = viewModel::showSnackBar,
             dismissAction = viewModel::hideSnackBar,
         )
     }

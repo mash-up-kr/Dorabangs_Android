@@ -12,9 +12,10 @@ import com.mashup.dorabangs.core.designsystem.component.snackbar.DoraSnackBar
 fun HomeDoraSnackBar(
     view: View,
     text: String,
-    viewModel: HomeViewModel,
     clipboardManager: ClipboardManager,
     snackBarHostState: SnackbarHostState,
+    showSnackBarWithText: (String) -> Unit,
+    hideSnackBar: () -> Unit,
     action: () -> Unit,
     dismissAction: () -> Unit,
     modifier: Modifier = Modifier,
@@ -23,11 +24,11 @@ fun HomeDoraSnackBar(
         runCatching {
             view.post {
                 val clipboardText = clipboardManager.getText()?.text.orEmpty()
-                viewModel.showSnackBar(clipboardText)
+                showSnackBarWithText(clipboardText)
             }
         }
         onPauseOrDispose {
-            viewModel.hideSnackBar()
+            hideSnackBar()
         }
     }
 
