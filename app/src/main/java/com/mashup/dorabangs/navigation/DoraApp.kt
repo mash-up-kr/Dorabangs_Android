@@ -43,7 +43,7 @@ fun DoraApp(appState: DoraAppState = rememberDoraAppState()) {
 private fun DoraBottomBar(
     destinations: List<BottomNavigationDestination>,
     onNavigateToDestination: (BottomNavigationDestination) -> Unit,
-    currentDestination: NavDestination,
+    currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
 ) {
     DoraBottomNavigation {
@@ -65,7 +65,7 @@ private fun DoraBottomBar(
     }
 }
 
-private fun NavDestination.isSelectedBottomNaviPage(destination: BottomNavigationDestination) =
-    this.hierarchy.any {
+private fun NavDestination?.isSelectedBottomNaviPage(destination: BottomNavigationDestination) =
+    this?.hierarchy?.any {
         it.route?.contains(destination.name, true) ?: false
-    }
+    } ?: false

@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.material3)
     implementation(platform(libs.compose.bom))
     implementation(libs.material)
+    implementation(libs.lifecycle.compose.ktx)
 
     // Test
     androidTestImplementation(libs.androidx.test.ext.junit)
