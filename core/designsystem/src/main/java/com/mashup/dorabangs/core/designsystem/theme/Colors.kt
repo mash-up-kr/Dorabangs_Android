@@ -40,8 +40,12 @@ object TopBarColorTokens {
     val OnContainerColorHome = DoraColorTokens.G5
 }
 
-class ChipsColorTokens(isSelected: Boolean) {
-    val ChipContainerColor = if (isSelected) DoraColorTokens.Black else DoraColorTokens.White
-    val ChipOnContainerColor = if (isSelected) DoraColorTokens.White else DoraColorTokens.G6
-    val ChipBorderColor = if (isSelected) DoraColorTokens.Black else DoraColorTokens.G2
+object ChipsColorTokens {
+    val Containercolor = DoraColorTokens.White
+}
+
+class ChipColorTokens(isSelected: Boolean) {
+    val ContainerColor = if (isSelected) DoraColorTokens.Black else DoraColorTokens.White
+    val OnContainerColor = if (isSelected) DoraColorTokens.White else DoraColorTokens.G6
+    val BorderColor = if (isSelected) DoraColorTokens.Black else DoraColorTokens.G2
 }

@@ -2,10 +2,9 @@ package com.mashup.dorabangs.feature.home
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.mashup.dorabangs.core.coroutine.doraLaunch
+import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -20,16 +19,56 @@ constructor(
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
-    fun add(number: Int) =
+    init {
         intent {
             reduce {
-                state.copy(state.number + number)
+                HomeState(tapElements = listOf(
+                    DoraChipUiModel(
+                        title = "전체 99+",
+                        icon = R.drawable.ic_plus,
+                        isSelected = false
+                    ),
+                    DoraChipUiModel(
+                        title = "하이?",
+                        isSelected = true
+                    ),
+                    DoraChipUiModel(
+                        title = "바이?",
+                        isSelected = false
+                    ),
+                    DoraChipUiModel(
+                        title = "바이?",
+                        isSelected = false
+                    ),
+                    DoraChipUiModel(
+                        title = "바이?",
+                        icon = R.drawable.ic_plus,
+                        isSelected = false
+                    ),
+                    DoraChipUiModel(
+                        title = "전체 99+",
+                        icon = R.drawable.ic_plus,
+                        isSelected = false
+                    ),
+                    DoraChipUiModel(
+                        title = "하이?",
+                        isSelected = true
+                    ),
+                    DoraChipUiModel(
+                        title = "바이?",
+                        isSelected = false
+                    ),
+                    DoraChipUiModel(
+                        title = "바이?",
+                        isSelected = false
+                    ),
+                    DoraChipUiModel(
+                        title = "바이?",
+                        icon = R.drawable.ic_plus,
+                        isSelected = false
+                    )
+                ))
             }
         }
-
-    fun test() =
-        viewModelScope.doraLaunch {
-            delay(1000L)
-            println("tjrwn 현재 쓰레드 name ${Thread.currentThread().name}")
-        }
+    }
 }
