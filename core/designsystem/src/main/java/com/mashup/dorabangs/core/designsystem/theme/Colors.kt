@@ -34,10 +34,7 @@ object DialogColorTokens {
 }
 
 object TopBarColorTokens {
-    val isDarkMode = false // 임시 다크모드 체크
-    val ContainerColor
-        get() = if (isDarkMode) DoraColorTokens.White else DoraColorTokens.G1
-
-    val OnContainerColor
-        get() = if (isDarkMode) DoraColorTokens.G9 else DoraColorTokens.White
+    val ContainerColor = DoraColorTokens.White
+    val OnContainerColor = DoraColorTokens.G9
+    val OnContainerColorHome = DoraColorTokens.G5
 }

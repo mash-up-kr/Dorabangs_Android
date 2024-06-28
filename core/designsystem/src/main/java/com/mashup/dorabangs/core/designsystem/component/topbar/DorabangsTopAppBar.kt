@@ -14,11 +14,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
+import com.mashup.dorabangs.core.designsystem.theme.TopBarColorTokens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,19 +32,22 @@ fun DoraTopAppBar(
     onClickBackIcon: () -> Unit = {},
     onClickActonIcon: () -> Unit = {},
 ) {
+    val isHomeAppBar = titleAlignment == Alignment.CenterStart && !isEnableBackNavigation
     TopAppBar(
         modifier = modifier,
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = TopBarColorTokens.ContainerColor),
         title = {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = titleAlignment,
             ) {
                 val startPadding =
-                    if (titleAlignment == Alignment.CenterStart && isEnableBackNavigation) 16.dp else 0.dp
+                    if (titleAlignment == Alignment.CenterStart && isEnableBackNavigation) 16.dp else 8.dp
                 Text(
                     modifier = Modifier.padding(start = startPadding),
                     text = title,
+                    color = if (isHomeAppBar) TopBarColorTokens.OnContainerColorHome else TopBarColorTokens.OnContainerColor,
+                    style = if (isHomeAppBar) DoraTypoTokens.Subtitle1Bold else DoraTypoTokens.base1Bold
                 )
             }
         },
