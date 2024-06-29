@@ -64,13 +64,13 @@ fun DoraTextField(
     Column(
         modifier = modifier.padding(horizontal = 20.dp),
     ) {
-        DoraLabel(labelText = labelText)
+        DoraTextFieldLabel(labelText = labelText)
         Spacer(modifier = Modifier.height(height = 8.dp))
         Column(
             modifier = Modifier
                 .size(width = 350.dp, height = 48.dp)
                 .clip(DoraRoundTokens.Round8)
-                .background(TextFieldColorTokens.TextFieldBackGroundColor),
+                .background(TextFieldColorTokens.BackGroundColor),
         ) {
             BasicTextField(
                 modifier = Modifier
@@ -93,7 +93,7 @@ fun DoraTextField(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = hintText,
                                 maxLines = 1,
-                                color = TextFieldColorTokens.TextFieldHintTextColor,
+                                color = TextFieldColorTokens.HintTextColor,
                                 style = DoraTypoTokens.caption1Medium,
                                 textAlign = TextAlign.Start,
                             )
@@ -116,7 +116,7 @@ fun DoraTextField(
                                     Icon(
                                         imageVector = DoraIconClose.CloseCircle,
                                         contentDescription = stringResource(id = R.string.url_text_clear),
-                                        tint = TextFieldColorTokens.TextFieldClearButtonColor,
+                                        tint = TextFieldColorTokens.ClearButtonColor,
                                     )
                                 }
                             }
@@ -127,7 +127,7 @@ fun DoraTextField(
         }
         Spacer(modifier = Modifier.height(height = 8.dp))
         if (errorText.isNotBlank()) {
-            DoraErrorLabel(errorText = errorText)
+            DoraTextFieldErrorLabel(errorText = errorText)
         }
     }
 }
