@@ -116,7 +116,9 @@ fun StorageListItem(
             .padding(vertical = 14.dp, horizontal = 12.dp),
     ) {
         Row(
-            modifier = Modifier.align(Alignment.CenterStart).clickable { navigateToStorageDetail() },
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .clickable { navigateToStorageDetail() },
         ) {
             Icon(
                 painter = painterResource(id = androidx.core.R.drawable.ic_call_answer),
