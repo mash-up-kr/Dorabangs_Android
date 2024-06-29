@@ -111,7 +111,7 @@ fun HomeScreen(
             DoraTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Logo",
-                titleAlignment = Alignment.CenterStart,
+                isTitleCenter = false,
                 actionIcon = R.drawable.ic_plus,
             )
 

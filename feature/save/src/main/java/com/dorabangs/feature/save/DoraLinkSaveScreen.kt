@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +30,7 @@ fun DoraLinkSaveScreen(
         DoraTopBar.BackNavigationTopBar(
             modifier = Modifier,
             title = stringResource(id = R.string.link_save_title_text),
-            titleAlignment = Alignment.Center,
+            isTitleCenter = true,
             onClickBackIcon = onClickBackIcon,
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
