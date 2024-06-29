@@ -94,7 +94,7 @@ fun StorageDetailExpandedHeader(
 fun StorageDetailHeaderContent(
     state: StorageDetailState,
     modifier: Modifier = Modifier,
-    ) {
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
