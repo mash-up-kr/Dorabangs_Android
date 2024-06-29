@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -74,39 +76,42 @@ fun HomeScreen(
             )
         }
 
-        item {
-            Feeds(
-                modifier = Modifier,
-                feeds = state.feedCards
-            )
-        }
+        Feeds(
+            modifier = Modifier,
+            feeds = state.feedCards
+        )
     }
 }
 
-@Composable
-private fun Feeds(
+private fun LazyListScope.Feeds(
     feeds: List<FeedCardUiModel>,
     modifier: Modifier = Modifier
 ) {
     if (feeds.isEmpty()) {
-        Column(
-            modifier = modifier.fillMaxHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_android_white_24dp),
-                contentDescription = ""
-            )
-            Text(
-                modifier = Modifier.padding(top = 12.dp),
-                text = stringResource(id = R.string.home_empty_feed)
-            )
+        item {
+            Column(
+                modifier = modifier.fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_android_white_24dp),
+                    contentDescription = ""
+                )
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = stringResource(id = R.string.home_empty_feed)
+                )
+            }
         }
     } else {
-        Column(modifier = modifier) {
-            feeds.forEach { 
-                FeedCard(cardInfo = it)
+        items(feeds.size) {
+            FeedCard(cardInfo = feeds[it])
+            if (it != feeds.lastIndex) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                    thickness = 0.5.dp
+                )
             }
         }
     }
@@ -115,30 +120,32 @@ private fun Feeds(
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(state = HomeState(
-        tapElements = listOf(
-            DoraChipUiModel(
-                title = "전체 99+",
-                icon = R.drawable.ic_plus,
-                isSelected = false
-            ),
-            DoraChipUiModel(
-                title = "하이?",
-                isSelected = true
-            ),
-            DoraChipUiModel(
-                title = "바이?",
-                isSelected = false
-            ),
-            DoraChipUiModel(
-                title = "바이?",
-                isSelected = false
-            ),
-            DoraChipUiModel(
-                title = "바이?",
-                icon = R.drawable.ic_plus,
-                isSelected = false
+    HomeScreen(
+        state = HomeState(
+            tapElements = listOf(
+                DoraChipUiModel(
+                    title = "전체 99+",
+                    icon = R.drawable.ic_plus,
+                    isSelected = false
+                ),
+                DoraChipUiModel(
+                    title = "하이?",
+                    isSelected = true
+                ),
+                DoraChipUiModel(
+                    title = "바이?",
+                    isSelected = false
+                ),
+                DoraChipUiModel(
+                    title = "바이?",
+                    isSelected = false
+                ),
+                DoraChipUiModel(
+                    title = "바이?",
+                    icon = R.drawable.ic_plus,
+                    isSelected = false
+                )
             )
         )
-    ))
+    )
 }
