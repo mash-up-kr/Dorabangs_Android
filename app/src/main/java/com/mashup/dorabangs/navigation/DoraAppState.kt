@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.BottomNavigationDestination
 import com.mashup.dorabangs.feature.navigation.navigateToHome
+import com.mashup.dorabangs.feature.storage.navigation.navigateToStorage
 import okhttp3.internal.toImmutableList
 
 @Composable
@@ -41,7 +42,7 @@ class DoraAppState(
 
         when (bottomNavigationDestination) {
             BottomNavigationDestination.HOME -> navController.navigateToHome(bottomNavigationOption)
-            BottomNavigationDestination.STORAGE -> navController.navigateToHome(bottomNavigationOption)
+            BottomNavigationDestination.STORAGE -> navController.navigateToStorage(bottomNavigationOption)
         }
     }
 
