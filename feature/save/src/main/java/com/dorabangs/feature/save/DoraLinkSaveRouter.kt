@@ -1,41 +1,22 @@
 package com.dorabangs.feature.save
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
-import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 
 @Composable
 fun DoraLinkSaveRouter(
+    onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = LinkSaveColorTokens.ContainerColor),
-    ) {
-        DoraTopBar.BackNavigationTopBar(
-            modifier = Modifier,
-            title = stringResource(id = R.string.link_save_title_text),
-            titleAlignment = Alignment.Center,
-            onClickBackIcon = {},
-        )
-        Spacer(modifier = Modifier.height(height = 24.dp))
-        DoraLinkSaveScreen()
-    }
+    DoraLinkSaveScreen(
+        modifier = modifier,
+        onClickBackIcon = onClickBackIcon,
+    )
 }
 
 @Composable
 @Preview
 fun DoraLinkSaveRouterPreview() {
-    DoraLinkSaveRouter()
+    DoraLinkSaveRouter({})
 }
