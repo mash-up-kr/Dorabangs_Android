@@ -1,11 +1,20 @@
 package com.mashup.dorabangs.feature.home
 
 import android.view.View
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -19,9 +28,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
+import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
+import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopAppBar
+import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -59,8 +78,7 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
-            onClickAddButton = { viewModel.add(1) },
-            onClickTestButton = { viewModel.test() },
+            onClickChip = viewModel::changeSelectedTapIdx,
         )
 
         HomeDoraSnackBar(
@@ -78,28 +96,109 @@ fun HomeRoute(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
-    onClickAddButton: () -> Unit = {},
-    onClickTestButton: () -> Unit = {},
+    onClickChip: (Int) -> Unit = {},
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text("홈텍스: ${state.number}")
-        Button(onClick = onClickAddButton) {
-            Text("Add Button")
-        }
-        Button(onClick = onClickTestButton) {
-            Text("도라방스")
+        item {
+            DoraTopAppBar(
+                modifier = Modifier.fillMaxWidth(),
+                title = "Logo",
+                titleAlignment = Alignment.CenterStart,
+                actionIcon = R.drawable.ic_plus,
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(310.dp)
+                    .background(DoraColorTokens.G5),
+            )
         }
 
-        Text(text = "H3 Bold", style = DoraTypoTokens.H3Bold)
-        Text(text = "H3 Medium", style = DoraTypoTokens.H3Medium)
-        Text(text = "H3 Normal", style = DoraTypoTokens.H3Normal)
+        stickyHeader {
+            DoraChips(
+                modifier = Modifier.fillMaxWidth(),
+                chipList = state.tapElements,
+                selectedIndex = state.selectedIndex,
+                onClickChip = {
+                    onClickChip(it)
+                },
+            )
+        }
+
+        Feeds(
+            modifier = Modifier,
+            feeds = state.feedCards,
+        )
     }
+}
+
+private fun LazyListScope.Feeds(
+    feeds: List<FeedCardUiModel>,
+    modifier: Modifier = Modifier,
+) {
+    if (feeds.isEmpty()) {
+        item {
+            Column(
+                modifier = modifier.fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_android_white_24dp),
+                    contentDescription = "",
+                )
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = stringResource(id = R.string.home_empty_feed),
+                )
+            }
+        }
+    } else {
+        items(feeds.size) {
+            FeedCard(cardInfo = feeds[it])
+            if (it != feeds.lastIndex) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                    thickness = 0.5.dp,
+                )
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen(
+        state = HomeState(
+            tapElements = listOf(
+                DoraChipUiModel(
+                    title = "전체 99+",
+                    icon = R.drawable.ic_plus,
+                ),
+                DoraChipUiModel(
+                    title = "하이?",
+                ),
+                DoraChipUiModel(
+                    title = "바이?",
+                ),
+                DoraChipUiModel(
+                    title = "바이?",
+                ),
+                DoraChipUiModel(
+                    title = "바이?",
+                    icon = R.drawable.ic_plus,
+                ),
+            ),
+        ),
+    )
 }

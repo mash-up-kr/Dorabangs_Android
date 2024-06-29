@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="storage_detail_header_title_later_read">나중에 읽을 링크</string>
+    <string name="storage_detail_header_title_all">모든 링크</string>
+    <string name="storage_detail_header_title_favorite">즐겨찾기</string>
+    <string name="storage_detail_sort_latest">최신순</string>
+    <string name="storage_detail_sort_past">과거순</string>
+    <string name="storage_detail_tab_all">전체</string>
+    <string name="storage_detail_tab_unread">읽지 않은</string>
+    <string name="storage">보관함</string>
+</resources>

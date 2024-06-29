@@ -64,12 +64,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:home"))
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core:coroutine"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:storage"))
 
     implementation(libs.core.ktx)
     implementation(libs.kotlin.android)
