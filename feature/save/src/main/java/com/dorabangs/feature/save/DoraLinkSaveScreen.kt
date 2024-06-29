@@ -29,6 +29,7 @@ fun DoraLinkSaveScreen(
             labelText = stringResource(id = R.string.link_save_label_text),
             helperText = stringResource(id = R.string.link_save_error_text),
             helperEnabled = true, // 서버통신 이후에 알 수 있음
+            counterEnabled = true,
         )
         Spacer(modifier = Modifier.height(20.dp))
         DoraButtons.DoraBtnMaxFull(

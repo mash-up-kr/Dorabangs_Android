@@ -25,8 +25,8 @@ fun DoraTextFieldHelperText(
     } else {
         Spacer(
             modifier = Modifier.height(
-                height = 14.dp
-            )
+                height = 14.dp,
+            ),
         )
     }
 }

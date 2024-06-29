@@ -34,8 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
+import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.TextFieldColorTokens
@@ -46,6 +46,7 @@ fun DoraTextField(
     hintText: String,
     labelText: String,
     helperEnabled: Boolean,
+    counterEnabled: Boolean,
     modifier: Modifier = Modifier,
     helperText: String = "",
 ) {
@@ -82,7 +83,11 @@ fun DoraTextField(
                 singleLine = true,
                 textStyle = DoraTypoTokens.caption1Medium,
                 onValueChange = {
-                    textFieldValue = it
+                    if (counterEnabled) {
+                        if (it.text.length <= 15) textFieldValue = it
+                    } else {
+                        textFieldValue = it
+                    }
                 },
                 decorationBox = { innerTextField ->
                     Box(
@@ -128,7 +133,19 @@ fun DoraTextField(
             )
         }
         Spacer(modifier = Modifier.height(height = 8.dp))
-        DoraTextFieldHelperText(helperText = helperText, enabled = helperEnabled)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            DoraTextFieldHelperText(
+                helperText = helperText,
+                enabled = helperEnabled,
+            )
+            DoraTextCounter(
+                counterEnabled = counterEnabled,
+                textLength = textFieldValue.text.length,
+            )
+        }
     }
 }
 
@@ -140,7 +157,8 @@ fun DoraTextFieldLongPreview() {
         hintText = "URL을 입력해주세요.",
         labelText = "바보",
         helperText = "유효한 링크를 입력해주세요.",
-        helperEnabled = true
+        helperEnabled = true,
+        counterEnabled = true,
     )
 }
 
@@ -152,7 +170,8 @@ fun DoraTextFieldShortPreview() {
         hintText = "URL을 입력해주세요.",
         labelText = "바보",
         helperText = "유효한 링크를 입력해주세요.",
-        helperEnabled = true
+        helperEnabled = true,
+        counterEnabled = true,
     )
 }
 
@@ -164,5 +183,6 @@ fun DoraTextFieldPreviewWithHint() {
         hintText = "URL을 입력해주세요.",
         labelText = "링크",
         helperEnabled = false,
+        counterEnabled = true,
     )
 }

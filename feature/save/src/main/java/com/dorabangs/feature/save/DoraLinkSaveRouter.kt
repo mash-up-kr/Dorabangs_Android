@@ -26,7 +26,7 @@ fun DoraLinkSaveRouter(
             modifier = Modifier,
             title = "링크저장",
             titleAlignment = Alignment.Center,
-            onClickBackIcon = {}
+            onClickBackIcon = {},
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
         DoraLinkSaveScreen()

@@ -46,7 +46,7 @@ object ClipBoardColorTokens {
 object TextFieldColorTokens {
     val BackGroundColor = DoraColorTokens.G1
     val HintTextColor = DoraColorTokens.G4
-    val ClearButtonColor = DoraColorTokens.G4
+    val TextCounterColor = DoraColorTokens.G6
 }
 
 object TextFieldLabelColorTokens {
