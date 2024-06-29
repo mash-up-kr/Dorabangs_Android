@@ -71,6 +71,7 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":feature:home"))
     implementation(project(":feature:storage"))
+    implementation(project(":feature:classification"))
 
     implementation(libs.core.ktx)
     implementation(libs.kotlin.android)
