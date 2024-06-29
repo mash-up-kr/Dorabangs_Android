@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.core.designsystem.component.textfield
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,8 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
+import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.TextFieldColorTokens
@@ -45,8 +45,9 @@ fun DoraTextField(
     text: String,
     hintText: String,
     labelText: String,
+    helperEnabled: Boolean,
     modifier: Modifier = Modifier,
-    errorText: String = "",
+    helperText: String = "",
 ) {
     var textFieldValue by remember {
         mutableStateOf(
@@ -62,13 +63,13 @@ fun DoraTextField(
     }
 
     Column(
-        modifier = modifier.padding(horizontal = 20.dp),
+        modifier = modifier.fillMaxWidth(),
     ) {
         DoraTextFieldLabel(labelText = labelText)
         Spacer(modifier = Modifier.height(height = 8.dp))
         Column(
             modifier = Modifier
-                .size(width = 350.dp, height = 48.dp)
+                .height(height = 48.dp)
                 .clip(DoraRoundTokens.Round8)
                 .background(TextFieldColorTokens.BackGroundColor),
         ) {
@@ -85,38 +86,39 @@ fun DoraTextField(
                 },
                 decorationBox = { innerTextField ->
                     Box(
-                        modifier = Modifier.width(326.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.CenterStart,
                     ) {
-                        if (textFieldValue.text.isBlank()) {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = hintText,
-                                maxLines = 1,
-                                color = TextFieldColorTokens.HintTextColor,
-                                style = DoraTypoTokens.caption1Medium,
-                                textAlign = TextAlign.Start,
-                            )
-                        } else {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween, // 양끝 배치
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Box(
+                                modifier = Modifier.weight(1f),
                             ) {
-                                Box(
-                                    modifier = Modifier.weight(1f), // innerTextField가 가로로 확장되지 않도록 설정
-                                ) {
-                                    innerTextField()
+                                if (textFieldValue.text.isBlank()) {
+                                    Text(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        text = hintText,
+                                        maxLines = 1,
+                                        color = TextFieldColorTokens.HintTextColor,
+                                        style = DoraTypoTokens.caption1Medium,
+                                        textAlign = TextAlign.Start,
+                                    )
                                 }
-                                Spacer(modifier = Modifier.width(width = 4.dp))
+                                innerTextField()
+                            }
+                            Spacer(modifier = Modifier.width(width = 4.dp))
+                            if (textFieldValue.text.isNotBlank()) {
                                 IconButton(
                                     modifier = Modifier.size(size = 24.dp),
                                     onClick = { textFieldValue = TextFieldValue("") },
                                 ) {
-                                    Icon(
+                                    Image(
                                         imageVector = DoraIconClose.CloseCircle,
                                         contentDescription = stringResource(id = R.string.text_field_url_text_clear),
-                                        tint = TextFieldColorTokens.ClearButtonColor,
                                     )
                                 }
                             }
@@ -126,9 +128,7 @@ fun DoraTextField(
             )
         }
         Spacer(modifier = Modifier.height(height = 8.dp))
-        if (errorText.isNotBlank()) {
-            DoraTextFieldErrorLabel(errorText = errorText)
-        }
+        DoraTextFieldHelperText(helperText = helperText, enabled = helperEnabled)
     }
 }
 
@@ -139,7 +139,8 @@ fun DoraTextFieldLongPreview() {
         text = "테스트용 이다 어쩔래  ? ? ? asogihasio gasiofhgaioshgioashgaosighoasihg",
         hintText = "URL을 입력해주세요.",
         labelText = "바보",
-        errorText = "유효한 링크를 입력해주세요.",
+        helperText = "유효한 링크를 입력해주세요.",
+        helperEnabled = true
     )
 }
 
@@ -150,7 +151,8 @@ fun DoraTextFieldShortPreview() {
         text = "테스트용 이다 어쩔래  ? ? ?",
         hintText = "URL을 입력해주세요.",
         labelText = "바보",
-        errorText = "유효한 링크를 입력해주세요.",
+        helperText = "유효한 링크를 입력해주세요.",
+        helperEnabled = true
     )
 }
 
@@ -161,5 +163,6 @@ fun DoraTextFieldPreviewWithHint() {
         text = "",
         hintText = "URL을 입력해주세요.",
         labelText = "링크",
+        helperEnabled = false,
     )
 }

@@ -53,8 +53,12 @@ object TextFieldLabelColorTokens {
     val LabelColor = DoraColorTokens.G9
 }
 
-object TextFieldErrorLabelColorTokens {
+object TextFieldHelperTextColorTokens {
     val LabelColor = DoraColorTokens.Alert
+}
+
+object LinkSaveColorTokens {
+    val ContainerColor = DoraColorTokens.White
 }
 
 object TopBarColorTokens {
