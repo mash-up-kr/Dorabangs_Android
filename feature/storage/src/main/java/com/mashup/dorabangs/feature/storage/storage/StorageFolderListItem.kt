@@ -43,16 +43,14 @@ fun StorageFolderList(
             Spacer(modifier = Modifier.height(20.dp))
         }
         itemsIndexed(customList) { idx, item ->
-            val isFirstItem = idx == 0
-            val isLastItem = idx == customList.lastIndex
             StorageListItem(
                 item = item,
-                isFirstItem = isFirstItem,
-                isLastItem = isLastItem,
+                isFirstItem = idx == 0,
+                isLastItem = idx == customList.lastIndex,
                 navigateToStorageDetail = { navigateToStorageDetail(item) },
                 onClickAddMoreButton = { onClickAddMoreButton(item) },
             )
-            if (!isLastItem) {
+            if (idx != customList.lastIndex) {
                 HorizontalDivider(
                     modifier =
                     Modifier
@@ -77,12 +75,10 @@ fun StorageDefaultFolder(
             .fillMaxWidth(),
     ) {
         list.forEachIndexed { idx, item ->
-            val isFirstItem = idx == 0
-            val isLastItem = idx == list.lastIndex
             StorageListItem(
                 item = item,
-                isFirstItem = isFirstItem,
-                isLastItem = isLastItem,
+                isFirstItem = idx == 0,
+                isLastItem = idx == list.lastIndex,
                 navigateToStorageDetail = { navigateToStorageDetail(item) },
             )
             if (idx != list.lastIndex) {
