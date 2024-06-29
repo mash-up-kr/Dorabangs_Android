@@ -25,7 +25,7 @@ fun CardProgressBar(
     total: Int = 100,
 ) {
     Row(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Box(
             modifier = Modifier
@@ -33,8 +33,8 @@ fun CardProgressBar(
                 .fillMaxHeight()
                 .background(
                     color = completedColor,
-                    shape = DoraRoundTokens.Round99
-                )
+                    shape = DoraRoundTokens.Round99,
+                ),
         )
         Spacer(modifier = Modifier.width(4.dp))
         Box(
@@ -43,8 +43,8 @@ fun CardProgressBar(
                 .fillMaxHeight()
                 .background(
                     color = remainColor,
-                    shape = DoraRoundTokens.Round99
-                )
+                    shape = DoraRoundTokens.Round99,
+                ),
         )
     }
 }
@@ -58,6 +58,6 @@ fun PreviewCardProgressBar() {
             .height(4.dp),
         completedColor = DoraColorTokens.Black,
         remainColor = DoraColorTokens.G4,
-        current = 10
+        current = 10,
     )
 }

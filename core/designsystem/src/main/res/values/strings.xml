@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="home">홈</string>
-    <string name="storage">보관함</string>
-    <string name="snack_bar_title">클립보드에 복사한 링크 저장</string>
-    <string name="snack_bar_cancel_description">스낵바 취소</string>
-</resources>

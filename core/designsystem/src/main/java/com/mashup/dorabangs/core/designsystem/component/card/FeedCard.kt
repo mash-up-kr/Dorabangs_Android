@@ -69,7 +69,7 @@ fun FeedCard(
                     .height(4.dp),
                 completedColor = DoraColorTokens.Black,
                 remainColor = DoraColorTokens.G4,
-                current = 10
+                current = 10,
             )
             FeedCardCategoryAndDayLabel(
                 cardInfo = cardInfo,
@@ -99,7 +99,7 @@ fun FeedCard(
 fun FeedCardContent(
     cardInfo: FeedCardUiModel,
     modifier: Modifier,
-    isLoading: Boolean
+    isLoading: Boolean,
 ) {
     Column(
         modifier = Modifier.then(modifier),
@@ -285,7 +285,7 @@ private fun PreviewLoadingFeedCard() {
             category = "디자인",
             createdAt = 1,
             thumbnail = androidx.core.R.drawable.ic_call_answer,
-            isLoading = true
+            isLoading = true,
         )
     FeedCard(cardInfo = cardInfo)
 }

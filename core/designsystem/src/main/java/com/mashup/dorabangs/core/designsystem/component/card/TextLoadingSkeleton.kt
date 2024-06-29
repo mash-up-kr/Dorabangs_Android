@@ -62,7 +62,7 @@ fun Modifier.animatedGradient(
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1500, easing = LinearEasing),
             repeatMode = RepeatMode.Restart,
-            initialStartOffset = StartOffset(Random().nextInt(1500))
+            initialStartOffset = StartOffset(Random().nextInt(1500)),
         ),
         label = "gradientAnimation",
     )
