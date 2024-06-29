@@ -35,7 +35,7 @@ fun DoraLinkSaveScreen(
         DoraButtons.DoraBtnMaxFull(
             modifier = Modifier
                 .fillMaxWidth(),
-            buttonText = "저장",
+            buttonText = stringResource(R.string.link_save_button_text),
             enabled = true,
             onClickButton = {},
         )

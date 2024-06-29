@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
@@ -24,7 +25,7 @@ fun DoraLinkSaveRouter(
     ) {
         DoraTopBar.BackNavigationTopBar(
             modifier = Modifier,
-            title = "링크저장",
+            title = stringResource(id = R.string.link_save_title_text),
             titleAlignment = Alignment.Center,
             onClickBackIcon = {},
         )
