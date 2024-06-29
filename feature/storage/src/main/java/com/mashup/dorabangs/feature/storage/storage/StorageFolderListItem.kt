@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
@@ -74,13 +75,15 @@ fun StorageDefaultFolder(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(color = DoraColorTokens.P1, shape = DoraRoundTokens.Round12)
-            .padding(horizontal = 12.dp),
+            .fillMaxWidth(),
     ) {
         list.forEachIndexed { idx, item ->
+            val isFirstItem = idx == 0
+            val isLastItem = idx == list.lastIndex
             StorageListItem(
                 item = item,
+                isFirstItem = isFirstItem,
+                isLastItem = isLastItem,
                 navigateToStorageDetail = { navigateToStorageDetail(item) },
             )
             if (idx != list.lastIndex) {
@@ -158,4 +161,10 @@ fun StorageListItem(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewStorageFolderList() {
+    StorageFolderList()
 }
