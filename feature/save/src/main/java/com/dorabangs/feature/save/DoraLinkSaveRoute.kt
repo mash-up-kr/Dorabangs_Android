@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun DoraLinkSaveRouter(
+fun DoraLinkSaveRoute(
     onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -18,5 +18,5 @@ fun DoraLinkSaveRouter(
 @Composable
 @Preview
 fun DoraLinkSaveRouterPreview() {
-    DoraLinkSaveRouter({})
+    DoraLinkSaveRoute({})
 }
