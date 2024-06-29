@@ -126,9 +126,20 @@ fun DoraTextField(
 
 @Composable
 @Preview
-fun DoraTextFieldPreview() {
+fun DoraTextFieldLongPreview() {
     DoraTextField(
         text = "테스트용 이다 어쩔래  ? ? ? asogihasio gasiofhgaioshgioashgaosighoasihg",
+        hintText = "URL을 입력해주세요.",
+        labelText = "바보",
+        errorText = "유효한 링크를 입력해주세요.",
+    )
+}
+
+@Composable
+@Preview
+fun DoraTextFieldShortPreview() {
+    DoraTextField(
+        text = "테스트용 이다 어쩔래  ? ? ?",
         hintText = "URL을 입력해주세요.",
         labelText = "바보",
         errorText = "유효한 링크를 입력해주세요.",
