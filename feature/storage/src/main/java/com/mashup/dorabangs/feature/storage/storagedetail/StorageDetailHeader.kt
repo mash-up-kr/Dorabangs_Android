@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +40,8 @@ fun StorageDetailCollapsingHeader(
 ) {
     Column(
         modifier = modifier.then(
-            Modifier.background(color = DoraColorTokens.White)
+            Modifier
+                .background(color = DoraColorTokens.White)
                 .height(MinToolbarHeight),
         ),
     ) {
@@ -81,6 +83,10 @@ fun StorageDetailExpandedHeader(
             selectedTabIdx = state.selectedIdx,
             onClickTabItem = {},
         )
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 0.5.dp,
+        )
     }
 }
 
@@ -88,7 +94,8 @@ fun StorageDetailExpandedHeader(
 fun StorageDetailHeaderContent(state: StorageDetailState) {
     Row(
         modifier = Modifier
-            .fillMaxWidth().height(64.dp)
+            .fillMaxWidth()
+            .height(64.dp)
             .background(color = DoraColorTokens.P1)
             .padding(horizontal = 20.dp, vertical = 6.dp),
     ) {
@@ -129,8 +136,7 @@ fun StorageDetailHeaderTabBar(
         tabList.forEachIndexed { index, tabItem ->
             val isSelected = index == selectedTabIdx
             Column(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .clickable { onClickTabItem(index) }
                     .padding(vertical = 9.5.dp),
             ) {
@@ -142,10 +148,7 @@ fun StorageDetailHeaderTabBar(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 if (isSelected) {
-                    Canvas(
-                        Modifier
-                            .size(3.dp)
-                            .align(Alignment.CenterHorizontally),
+                    Canvas(Modifier.size(3.dp).align(Alignment.CenterHorizontally),
                     ) {
                         drawCircle(color = Color.Black)
                     }

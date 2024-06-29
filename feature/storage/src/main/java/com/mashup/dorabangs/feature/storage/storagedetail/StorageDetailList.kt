@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
@@ -96,7 +99,9 @@ fun SortButtonRow(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
                     text = stringResource(id = item.btnName),
+                    textAlign = TextAlign.Center,
                     color = Color.Black,
                     style = DoraTypoTokens.caption1Medium,
                 )
@@ -104,4 +109,10 @@ fun SortButtonRow(
             if (index != items.lastIndex) Spacer(modifier = Modifier.width(16.dp))
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewSortRowButton() {
+    SortButtonRow()
 }
