@@ -13,9 +13,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StorageViewModel @Inject constructor() : ViewModel(), ContainerHost<StorageListState, StorageListSideEffect> {
-        override val container = container<StorageListState, StorageListSideEffect>(StorageListState())
+    override val container = container<StorageListState, StorageListSideEffect>(StorageListState())
 
     fun showEditFolderBottomSheet(item: StorageFolderItem) = intent {
         postSideEffect(sideEffect = StorageListSideEffect.ShowEditFolderBottomSheet)
     }
-    }
+}

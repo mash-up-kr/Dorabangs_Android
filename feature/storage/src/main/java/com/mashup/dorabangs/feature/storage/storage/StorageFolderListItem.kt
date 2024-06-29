@@ -55,9 +55,9 @@ fun StorageFolderList(
             if (!isLastItem) {
                 HorizontalDivider(
                     modifier =
-                        Modifier
-                            .height(0.5.dp)
-                            .background(color = DoraColorTokens.G1),
+                    Modifier
+                        .height(0.5.dp)
+                        .background(color = DoraColorTokens.G1),
                 )
             }
         }
@@ -73,11 +73,10 @@ fun StorageDefaultFolder(
     navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
 ) {
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(color = DoraColorTokens.P1, shape = DoraRoundTokens.Round12)
-                .padding(horizontal = 12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = DoraColorTokens.P1, shape = DoraRoundTokens.Round12)
+            .padding(horizontal = 12.dp),
     ) {
         list.forEachIndexed { idx, item ->
             StorageListItem(
@@ -86,10 +85,9 @@ fun StorageDefaultFolder(
             )
             if (idx != list.lastIndex) {
                 HorizontalDivider(
-                    modifier =
-                        Modifier
-                            .height(0.5.dp)
-                            .background(color = DoraColorTokens.G1),
+                    modifier = Modifier
+                        .height(0.5.dp)
+                        .background(color = DoraColorTokens.G1),
                 )
             }
         }
@@ -114,11 +112,10 @@ fun StorageListItem(
             RectangleShape
         }
     Box(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(color = DoraColorTokens.P1, shape = shape)
-                .padding(vertical = 14.dp, horizontal = 12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = DoraColorTokens.P1, shape = shape)
+            .padding(vertical = 14.dp, horizontal = 12.dp),
     ) {
         Row(
             modifier = Modifier.align(Alignment.CenterStart).clickable { navigateToStorageDetail() },
@@ -128,10 +125,9 @@ fun StorageListItem(
                 contentDescription = "folderIcon",
             )
             Text(
-                modifier =
-                    Modifier
-                        .padding(start = 12.dp)
-                        .align(Alignment.CenterVertically),
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .align(Alignment.CenterVertically),
                 textAlign = TextAlign.Center,
                 text = item.folderTitle,
                 color = DoraColorTokens.G9,
@@ -142,10 +138,9 @@ fun StorageListItem(
             modifier = Modifier.align(Alignment.CenterEnd),
         ) {
             Text(
-                modifier =
-                    Modifier
-                        .padding(end = 12.dp)
-                        .align(Alignment.CenterVertically),
+                modifier = Modifier
+                    .padding(end = 12.dp)
+                    .align(Alignment.CenterVertically),
                 text = "${item.postCount}",
                 color = DoraColorTokens.G4,
                 style = DoraTypoTokens.caption3Medium,
@@ -157,7 +152,7 @@ fun StorageListItem(
                     androidx.core.R.drawable.ic_call_answer
                 }
             Icon(
-                modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail()  else onClickAddMoreButton() },
+                modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickAddMoreButton() },
                 painter = painterResource(id = icon),
                 contentDescription = "folderIcon",
             )
