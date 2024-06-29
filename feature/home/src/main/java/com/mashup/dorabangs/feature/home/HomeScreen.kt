@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
@@ -35,16 +36,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopAppBar
+import com.mashup.dorabangs.core.designsystem.theme.BottomSheetColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
@@ -93,6 +97,17 @@ fun HomeRoute(
             showSnackBarWithText = viewModel::showSnackBar,
             dismissAction = viewModel::hideSnackBar,
         )
+
+        DoraBottomSheet(
+            modifier = modifier.height(300.dp),
+            containerColor = BottomSheetColorTokens.FolderMovingColor
+        ) {
+            repeat(10) {
+                Text(
+                    text = "바텀 시트 ~~~"
+                )
+            }
+        }
     }
 }
 
