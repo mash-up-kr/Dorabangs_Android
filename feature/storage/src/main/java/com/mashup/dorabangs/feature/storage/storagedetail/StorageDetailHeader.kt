@@ -49,7 +49,7 @@ fun StorageDetailCollapsingHeader(
             DoraTopBar.BackNavigationTopBar(
                 modifier = Modifier.fillMaxWidth(),
                 title = state.title,
-                titleAlignment = Alignment.Center,
+                isTitleCenter = true,
                 onClickBackIcon = onClickBackIcon,
             )
             StorageDetailHeaderTabBar(
@@ -72,7 +72,7 @@ fun StorageDetailExpandedHeader(
         DoraTopBar.BackNavigationTopBar(
             modifier = Modifier.fillMaxWidth(),
             title = "",
-            titleAlignment = Alignment.CenterStart,
+            isTitleCenter = false,
             onClickBackIcon = onClickBackIcon,
         )
         StorageDetailHeaderContent(

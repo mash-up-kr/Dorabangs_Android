@@ -1,7 +1,6 @@
 package com.mashup.dorabangs.core.designsystem.component.topbar
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 object DoraTopBar : TopAppBarType {
@@ -15,7 +14,7 @@ object DoraTopBar : TopAppBarType {
         DoraTopAppBar(
             modifier = modifier,
             title = title,
-            titleAlignment = Alignment.CenterStart,
+            isTitleCenter = false,
             actionIcon = actionIcon,
             onClickActonIcon = onClickActonIcon,
         )
@@ -25,13 +24,13 @@ object DoraTopBar : TopAppBarType {
     override fun BackNavigationTopBar(
         modifier: Modifier,
         title: String,
-        titleAlignment: Alignment,
-        onClickBackIcon: () -> Unit,
+        isTitleCenter: Boolean,
+        onClickBackIcon: () -> Unit
     ) {
         DoraTopAppBar(
             modifier = modifier,
             title = title,
-            titleAlignment = titleAlignment,
+            isTitleCenter = isTitleCenter,
             isEnableBackNavigation = true,
             onClickBackIcon = onClickBackIcon,
         )
@@ -48,7 +47,7 @@ object DoraTopBar : TopAppBarType {
         DoraTopAppBar(
             modifier = modifier,
             title = title,
-            titleAlignment = Alignment.CenterStart,
+            isTitleCenter = false,
             isEnableBackNavigation = true,
             actionIcon = actionIcon,
             onClickBackIcon = onClickBackIcon,
@@ -64,7 +63,7 @@ object DoraTopBar : TopAppBarType {
         DoraTopAppBar(
             modifier = modifier,
             title = title,
-            titleAlignment = Alignment.Center,
+            isTitleCenter = true,
         )
     }
 }
@@ -82,7 +81,7 @@ sealed interface TopAppBarType {
     fun BackNavigationTopBar(
         modifier: Modifier,
         title: String,
-        titleAlignment: Alignment,
+        isTitleCenter: Boolean,
         onClickBackIcon: () -> Unit,
     )
 
