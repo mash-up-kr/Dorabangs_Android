@@ -9,10 +9,14 @@ import com.mashup.dorabangs.feature.storage.storage.StorageRoute
 
 fun NavController.navigateToStorage(navOptions: NavOptions) = navigate(NavigationRoute.StorageScreen.route, navOptions)
 
-fun NavGraphBuilder.storageNavigation() {
+fun NavGraphBuilder.storageNavigation(navController: NavController) {
     composable(
         route = NavigationRoute.StorageScreen.route,
     ) {
-        StorageRoute()
+        StorageRoute(
+            navigateToStorageDetail = { selectItem  ->
+                navController.navigateToStorageDetail()
+            }
+        )
     }
 }
