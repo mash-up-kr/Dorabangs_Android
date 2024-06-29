@@ -115,7 +115,7 @@ fun DoraTextField(
                                 ) {
                                     Icon(
                                         imageVector = DoraIconClose.CloseCircle,
-                                        contentDescription = stringResource(id = R.string.url_text_clear),
+                                        contentDescription = stringResource(id = R.string.text_field_url_text_clear),
                                         tint = TextFieldColorTokens.ClearButtonColor,
                                     )
                                 }
