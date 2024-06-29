@@ -31,7 +31,7 @@ fun DoraLinkSaveScreen(
         DoraTopBar.BackNavigationTopBar(
             modifier = Modifier,
             title = stringResource(id = R.string.link_save_title_text),
-            titleAlignment = Alignment.Center,
+            isTitleCenter = true,
             onClickBackIcon = onClickBackIcon,
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
