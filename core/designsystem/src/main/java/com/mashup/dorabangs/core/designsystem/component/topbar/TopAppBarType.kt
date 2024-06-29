@@ -25,7 +25,7 @@ object DoraTopBar : TopAppBarType {
         modifier: Modifier,
         title: String,
         isTitleCenter: Boolean,
-        onClickBackIcon: () -> Unit
+        onClickBackIcon: () -> Unit,
     ) {
         DoraTopAppBar(
             modifier = modifier,

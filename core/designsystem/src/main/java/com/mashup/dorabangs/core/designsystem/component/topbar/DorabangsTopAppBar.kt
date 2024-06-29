@@ -37,10 +37,10 @@ fun DoraTopAppBar(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(color = DoraColorTokens.White)
+            .background(color = DoraColorTokens.White),
     ) {
-        val horizontalArrangement = if(isTitleCenter) Arrangement.Center else Arrangement.Start
-        if(isTitleCenter && isEnableBackNavigation) {
+        val horizontalArrangement = if (isTitleCenter) Arrangement.Center else Arrangement.Start
+        if (isTitleCenter && isEnableBackNavigation) {
             Icon(
                 modifier = Modifier.align(Alignment.CenterStart)
                     .padding(start = 20.dp)
@@ -60,9 +60,9 @@ fun DoraTopAppBar(
             Row(
                 modifier = Modifier.fillMaxWidth().align(Alignment.CenterStart),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = horizontalArrangement
+                horizontalArrangement = horizontalArrangement,
             ) {
-                if(isEnableBackNavigation) {
+                if (isEnableBackNavigation) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 20.dp)
@@ -79,7 +79,7 @@ fun DoraTopAppBar(
                 )
             }
         }
-        actionIcon?.let {icon ->
+        actionIcon?.let { icon ->
             Icon(
                 modifier = Modifier.align(Alignment.CenterEnd)
                     .padding(end = 20.dp)
@@ -107,7 +107,7 @@ fun PreviewBackNavigationTopBar() {
     DoraTopBar.BackNavigationTopBar(
         modifier = Modifier.fillMaxWidth(),
         title = "Dorabangs",
-        isTitleCenter = true
+        isTitleCenter = true,
     ) {}
 }
 

@@ -149,7 +149,8 @@ fun StorageDetailHeaderTabBar(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 if (isSelected) {
-                    Canvas(Modifier.size(3.dp).align(Alignment.CenterHorizontally),
+                    Canvas(
+                        Modifier.size(3.dp).align(Alignment.CenterHorizontally),
                     ) {
                         drawCircle(color = Color.Black)
                     }

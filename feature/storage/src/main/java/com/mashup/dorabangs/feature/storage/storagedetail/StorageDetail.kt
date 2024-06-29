@@ -57,7 +57,7 @@ fun StorageDetailScreen(
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     Box(
-        modifier = modifier
+        modifier = modifier,
     ) {
         StorageDetailCollapsingHeader(
             state = state,
