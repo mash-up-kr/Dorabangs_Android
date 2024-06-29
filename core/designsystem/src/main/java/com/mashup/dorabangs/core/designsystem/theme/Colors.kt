@@ -50,6 +50,10 @@ object LabelColorTokens {
     val LabelColor = DoraColorTokens.G9
 }
 
+object ErrorLabelColorTokens {
+    val LabelColor = DoraColorTokens.Alert
+}
+
 object TopBarColorTokens {
     val isDarkMode = false // 임시 다크모드 체크
     val ContainerColor

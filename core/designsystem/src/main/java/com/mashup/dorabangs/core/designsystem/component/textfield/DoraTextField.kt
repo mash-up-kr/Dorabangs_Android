@@ -43,6 +43,7 @@ fun DoraTextField(
     hintText: String,
     labelText: String,
     modifier: Modifier = Modifier,
+    errorText: String = "",
 ) {
     var textFieldValue by remember {
         mutableStateOf(
@@ -54,7 +55,7 @@ fun DoraTextField(
     }
 
     Column(
-        modifier = modifier.padding(horizontal = 20.dp)
+        modifier = modifier.padding(horizontal = 20.dp),
     ) {
         DoraLabel(labelText = labelText)
         Spacer(modifier = Modifier.height(height = 8.dp))
@@ -116,9 +117,11 @@ fun DoraTextField(
                 },
             )
         }
+        Spacer(modifier = Modifier.height(height = 8.dp))
+        if (errorText.isNotBlank()) {
+            DoraErrorLabel(errorText = errorText)
+        }
     }
-
-
 }
 
 @Composable
@@ -128,6 +131,7 @@ fun DoraTextFieldPreview() {
         text = "테스트용 이다 어쩔래  ? ? ? asogihasio gasiofhgaioshgioashgaosighoasihg",
         hintText = "URL을 입력해주세요.",
         labelText = "바보",
+        errorText = "유효한 링크를 입력해주세요.",
     )
 }
 
