@@ -42,7 +42,7 @@ object DoraLineHeightTokens {
 }
 
 object DoraTypoTokens {
-    val doraFontFamily = FontFamily(
+    private val doraFontFamily = FontFamily(
         Font(R.font.nanum_700, FontWeight.W700),
         Font(R.font.nanum_500, FontWeight.W500),
         Font(R.font.nanum_400, FontWeight.W400),

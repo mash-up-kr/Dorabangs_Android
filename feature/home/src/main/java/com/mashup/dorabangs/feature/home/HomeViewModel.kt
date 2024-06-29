@@ -8,6 +8,7 @@ import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
@@ -23,6 +24,27 @@ constructor(
     fun changeSelectedTapIdx(index: Int) = intent {
         reduce {
             state.copy(selectedIndex = index)
+        }
+    }
+
+    fun hideSnackBar() = intent {
+        postSideEffect(HomeSideEffect.HideSnackBar)
+    }
+
+    fun showSnackBar(clipboardText: String) = intent {
+        state.copy(
+            clipBoardState = state.clipBoardState.copy(
+                copiedText = clipboardText,
+            ),
+        ).also { newState ->
+            if (newState.clipBoardState.isValidUrl) {
+                reduce { newState }
+                postSideEffect(
+                    HomeSideEffect.ShowSnackBar(
+                        copiedText = newState.clipBoardState.copiedText,
+                    ),
+                )
+            }
         }
     }
 
