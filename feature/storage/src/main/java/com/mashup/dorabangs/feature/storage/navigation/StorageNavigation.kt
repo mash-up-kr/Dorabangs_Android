@@ -14,9 +14,9 @@ fun NavGraphBuilder.storageNavigation(navController: NavController) {
         route = NavigationRoute.StorageScreen.route,
     ) {
         StorageRoute(
-            navigateToStorageDetail = { selectItem  ->
+            navigateToStorageDetail = { selectItem ->
                 navController.navigateToStorageDetail()
-            }
+            },
         )
     }
 }

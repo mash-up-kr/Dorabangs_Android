@@ -40,8 +40,8 @@ fun StorageDetailCollapsingHeader(
     Column(
         modifier = modifier.then(
             Modifier.background(color = DoraColorTokens.White)
-                    .height(MinToolbarHeight),
-            ),
+                .height(MinToolbarHeight),
+        ),
     ) {
         if (isCollapsed) {
             DoraTopBar.BackNavigationTopBar(
@@ -88,22 +88,22 @@ fun StorageDetailExpandedHeader(
 fun StorageDetailHeaderContent(state: StorageDetailState) {
     Row(
         modifier = Modifier
-                .fillMaxWidth().height(64.dp)
-                .background(color = DoraColorTokens.P1)
-                .padding(horizontal = 20.dp, vertical = 6.dp),
+            .fillMaxWidth().height(64.dp)
+            .background(color = DoraColorTokens.P1)
+            .padding(horizontal = 20.dp, vertical = 6.dp),
     ) {
         Image(
             modifier = Modifier
-                    .size(52.dp)
-                    .aspectRatio(1f),
+                .size(52.dp)
+                .aspectRatio(1f),
             painter = painterResource(id = androidx.core.R.drawable.ic_call_answer),
             contentDescription = "나중에 읽을 링크 아이콘",
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(
             modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .fillMaxWidth(),
+                .align(Alignment.CenterVertically)
+                .fillMaxWidth(),
         ) {
             Text(
                 text = stringResource(id = R.string.storage_detail_header_title_later_read),
@@ -130,9 +130,9 @@ fun StorageDetailHeaderTabBar(
             val isSelected = index == selectedTabIdx
             Column(
                 modifier =
-                    Modifier
-                        .clickable { onClickTabItem(index) }
-                        .padding(vertical = 9.5.dp),
+                Modifier
+                    .clickable { onClickTabItem(index) }
+                    .padding(vertical = 9.5.dp),
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = 24.dp),
@@ -143,9 +143,9 @@ fun StorageDetailHeaderTabBar(
                 Spacer(modifier = Modifier.height(4.dp))
                 if (isSelected) {
                     Canvas(
-                            Modifier
-                                .size(3.dp)
-                                .align(Alignment.CenterHorizontally),
+                        Modifier
+                            .size(3.dp)
+                            .align(Alignment.CenterHorizontally),
                     ) {
                         drawCircle(color = Color.Black)
                     }

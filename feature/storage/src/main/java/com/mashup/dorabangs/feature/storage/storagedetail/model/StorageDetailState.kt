@@ -8,7 +8,7 @@ data class StorageDetailState(
     val tabTitleList: List<StorageDetailTab> = getDefaultTabTitleList(),
     val selectedIdx: Int = 0,
     val isLatestSort: Boolean = false,
-    val postList: List<FeedCardUiModel> = listOf()
+    val postList: List<FeedCardUiModel> = listOf(),
 ) {
     companion object {
         fun getDefaultTabTitleList() = listOf(StorageDetailTab.ALL, StorageDetailTab.UNREAD)

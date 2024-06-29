@@ -42,18 +42,18 @@ fun StorageDetailRoute(
         isCollapsed = isCollapsed,
         onClickBackIcon = onClickBackIcon,
         onClickTabItem = storageDetailViewModel::changeSelectedTabIdx,
-        onClickSortedIcon = storageDetailViewModel::clickFeedSort
+        onClickSortedIcon = storageDetailViewModel::clickFeedSort,
     )
 }
 
 @Composable
 fun StorageDetailScreen(
-    state : StorageDetailState = StorageDetailState(),
+    state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),
     isCollapsed: Boolean = false,
     onClickBackIcon: () -> Unit = {},
-    onClickTabItem : (Int) -> Unit = {},
-    onClickSortedIcon: (StorageDetailSort) -> Unit = {}
+    onClickTabItem: (Int) -> Unit = {},
+    onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     Box {
         StorageDetailCollapsingHeader(
@@ -61,13 +61,13 @@ fun StorageDetailScreen(
             modifier = Modifier.zIndex(2f),
             isCollapsed = isCollapsed,
             onClickBackIcon = onClickBackIcon,
-            onClickTabItem = onClickTabItem
+            onClickTabItem = onClickTabItem,
         )
         StorageDetailList(
             listState = listState,
             state = state,
             onClickBackIcon = onClickBackIcon,
-            onClickSortedIcon = onClickSortedIcon
+            onClickSortedIcon = onClickSortedIcon,
         )
     }
 }

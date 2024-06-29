@@ -18,7 +18,7 @@ import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.DoraBot
 fun DoraApp(appState: DoraAppState = rememberDoraAppState()) {
     Scaffold(
         bottomBar = {
-            if(appState.isBottomBarVisible()) {
+            if (appState.isBottomBarVisible()) {
                 DoraBottomBar(
                     destinations = appState.bottomBarDestination,
                     onNavigateToDestination = appState::navigateToBottomNavigationDestination,
