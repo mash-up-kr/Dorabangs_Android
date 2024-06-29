@@ -42,13 +42,11 @@ import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopAppBar
-import com.mashup.dorabangs.core.designsystem.theme.BottomSheetColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
@@ -83,6 +81,7 @@ fun HomeRoute(
             state = state,
             modifier = modifier,
             onClickChip = viewModel::changeSelectedTapIdx,
+            onClickMoreButton = viewModel::showBottomSheet,
         )
 
         HomeDoraSnackBar(
@@ -98,16 +97,13 @@ fun HomeRoute(
             dismissAction = viewModel::hideSnackBar,
         )
 
-        DoraBottomSheet(
-            modifier = modifier.height(300.dp),
-            containerColor = BottomSheetColorTokens.FolderMovingColor
-        ) {
-            repeat(10) {
-                Text(
-                    text = "바텀 시트 ~~~"
-                )
-            }
-        }
+        DoraBottomSheet.MoreButtonBottomSheet(
+            modifier = Modifier.height(320.dp),
+            isShowSheet = state.isShowSheet,
+            onClickDeleteLinkButton = {},
+            onClickMoveFolderButton = {},
+            onDismissRequest = viewModel::dismissBottomSheet,
+        )
     }
 }
 
@@ -117,6 +113,7 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     onClickChip: (Int) -> Unit = {},
+    onClickMoreButton: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -152,6 +149,7 @@ fun HomeScreen(
         Feeds(
             modifier = Modifier,
             feeds = state.feedCards,
+            onClickMoreButton = onClickMoreButton,
         )
     }
 }
@@ -159,6 +157,7 @@ fun HomeScreen(
 private fun LazyListScope.Feeds(
     feeds: List<FeedCardUiModel>,
     modifier: Modifier = Modifier,
+    onClickMoreButton: () -> Unit = {},
 ) {
     if (feeds.isEmpty()) {
         item {
@@ -179,7 +178,10 @@ private fun LazyListScope.Feeds(
         }
     } else {
         items(feeds.size) {
-            FeedCard(cardInfo = feeds[it])
+            FeedCard(
+                cardInfo = feeds[it],
+                onClickMoreButton = onClickMoreButton,
+            )
             if (it != feeds.lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,28 +26,38 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 fun DoraBottomSheetItems(
     items: List<BottomSheetItemUIModel>,
     modifier: Modifier = Modifier,
-    onClickItem: (Int) -> Unit = {}
+    onClickItem: (Int) -> Unit = {},
 ) {
     Column(modifier) {
         items.forEachIndexed { index, data ->
             DoraBottomSheetItem(
-                modifier = modifier
+                modifier = Modifier
+                    .fillMaxWidth()
                     .clickable { onClickItem(index) }
                     .thenIf(index == 0) {
                         background(
                             color = BottomSheetColorTokens.ItemColor,
-                            shape = DoraRoundTokens.TopRound12
+                            shape = DoraRoundTokens.TopRound12,
                         )
                     }
                     .thenIf(index == items.lastIndex) {
                         background(
                             color = BottomSheetColorTokens.ItemColor,
-                            shape = DoraRoundTokens.BottomRound12
+                            shape = DoraRoundTokens.BottomRound12,
                         )
                     }
                     .padding(16.dp),
-                data = data
+                data = data,
             )
+            if (index != items.lastIndex) {
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    thickness = 0.5.dp,
+                    color = BottomSheetColorTokens.DividerColor,
+                )
+            }
         }
     }
 }
@@ -54,21 +65,21 @@ fun DoraBottomSheetItems(
 @Composable
 fun DoraBottomSheetItem(
     data: BottomSheetItemUIModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painterResource(id = data.icon),
-            contentDescription = ""
+            contentDescription = "",
         )
         Text(
             modifier = Modifier.padding(start = 12.dp),
             text = data.itemName,
             style = DoraTypoTokens.caption3Normal,
-            color = data.color
+            color = data.color,
         )
     }
 }

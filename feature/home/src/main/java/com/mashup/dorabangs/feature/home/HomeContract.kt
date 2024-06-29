@@ -9,6 +9,7 @@ data class HomeState(
     val tapElements: List<DoraChipUiModel> = emptyList(),
     val feedCards: List<FeedCardUiModel> = emptyList(),
     val selectedIndex: Int = 0,
+    val isShowSheet: Boolean = true,
 )
 
 data class ClipBoardState(

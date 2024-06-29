@@ -64,4 +64,5 @@ object BottomSheetColorTokens {
     val FolderMovingColor = DoraColorTokens.White
     val HandleColor = DoraColorTokens.G2
     val ItemColor = DoraColorTokens.White
+    val DividerColor = DoraColorTokens.G3
 }

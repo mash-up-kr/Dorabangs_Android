@@ -7,5 +7,5 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 data class BottomSheetItemUIModel(
     @DrawableRes val icon: Int,
     val itemName: String,
-    val color: Color = DoraColorTokens.Black
+    val color: Color = DoraColorTokens.Black,
 )

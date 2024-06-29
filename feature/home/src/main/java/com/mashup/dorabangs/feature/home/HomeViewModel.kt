@@ -48,6 +48,18 @@ constructor(
         }
     }
 
+    fun showBottomSheet() = intent {
+        reduce {
+            state.copy(isShowSheet = true)
+        }
+    }
+
+    fun dismissBottomSheet() = intent {
+        reduce {
+            state.copy(isShowSheet = false)
+        }
+    }
+
     init {
         intent {
             reduce {
