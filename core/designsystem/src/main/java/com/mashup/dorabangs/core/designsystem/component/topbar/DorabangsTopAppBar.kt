@@ -51,10 +51,10 @@ fun DoraTopAppBar(
             Text(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(start = if (isEnableBackNavigation) 16.dp else 20.dp),
+                    .padding(start = 16.dp),
                 text = title,
-                color = if (isHomeAppBar) TopBarColorTokens.OnContainerColorHome else TopBarColorTokens.OnContainerColor,
-                style = if (isHomeAppBar) DoraTypoTokens.Subtitle1Bold else DoraTypoTokens.base1Bold,
+                color = TopBarColorTokens.OnContainerColor,
+                style = DoraTypoTokens.base1Bold,
             )
         } else {
             Row(
