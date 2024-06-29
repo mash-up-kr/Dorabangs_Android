@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
@@ -41,6 +40,7 @@ import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
+import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopAppBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import kotlinx.coroutines.launch
@@ -81,7 +81,9 @@ fun HomeRoute(
             state = state,
             modifier = modifier,
             onClickChip = viewModel::changeSelectedTapIdx,
-            onClickMoreButton = viewModel::showBottomSheet,
+            onClickMoreButton = {
+                viewModel.showBottomSheet()
+            },
         )
 
         HomeDoraSnackBar(
@@ -100,9 +102,22 @@ fun HomeRoute(
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
             isShowSheet = state.isShowSheet,
-            onClickDeleteLinkButton = {},
+            onClickDeleteLinkButton = {
+                viewModel.dismissBottomSheet()
+                viewModel.showDialog()
+            },
             onClickMoveFolderButton = {},
             onDismissRequest = viewModel::dismissBottomSheet,
+        )
+
+        DoraDialog(
+            isShowDialog = state.isShowDialog,
+            title = stringResource(R.string.remove_dialog_title),
+            content = stringResource(R.string.remove_dialog_content),
+            confirmBtnText = stringResource(R.string.remove_dialog_confirm),
+            disMissBtnText = stringResource(R.string.remove_dialog_cancil),
+            onDisMissRequest = viewModel::dismissDialog,
+            onClickConfirmBtn = viewModel::dismissDialog,
         )
     }
 }
@@ -113,7 +128,7 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     onClickChip: (Int) -> Unit = {},
-    onClickMoreButton: () -> Unit = {},
+    onClickMoreButton: (Int) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -149,7 +164,9 @@ fun HomeScreen(
         Feeds(
             modifier = Modifier,
             feeds = state.feedCards,
-            onClickMoreButton = onClickMoreButton,
+            onClickMoreButton = { index ->
+                onClickMoreButton(index)
+            },
         )
     }
 }
@@ -157,7 +174,7 @@ fun HomeScreen(
 private fun LazyListScope.Feeds(
     feeds: List<FeedCardUiModel>,
     modifier: Modifier = Modifier,
-    onClickMoreButton: () -> Unit = {},
+    onClickMoreButton: (Int) -> Unit = {},
 ) {
     if (feeds.isEmpty()) {
         item {
@@ -177,12 +194,14 @@ private fun LazyListScope.Feeds(
             }
         }
     } else {
-        items(feeds.size) {
+        items(feeds.size) { index ->
             FeedCard(
-                cardInfo = feeds[it],
-                onClickMoreButton = onClickMoreButton,
+                cardInfo = feeds[index],
+                onClickMoreButton = {
+                    onClickMoreButton(index)
+                },
             )
-            if (it != feeds.lastIndex) {
+            if (index != feeds.lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
                     thickness = 0.5.dp,

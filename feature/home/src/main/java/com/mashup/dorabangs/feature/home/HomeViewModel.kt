@@ -60,6 +60,18 @@ constructor(
         }
     }
 
+    fun showDialog() = intent {
+        reduce {
+            state.copy(isShowDialog = true)
+        }
+    }
+
+    fun dismissDialog() = intent {
+        reduce {
+            state.copy(isShowDialog = false)
+        }
+    }
+
     init {
         intent {
             reduce {

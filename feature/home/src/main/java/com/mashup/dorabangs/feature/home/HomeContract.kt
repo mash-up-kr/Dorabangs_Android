@@ -10,6 +10,7 @@ data class HomeState(
     val feedCards: List<FeedCardUiModel> = emptyList(),
     val selectedIndex: Int = 0,
     val isShowSheet: Boolean = true,
+    val isShowDialog: Boolean = false,
 )
 
 data class ClipBoardState(
