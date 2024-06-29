@@ -127,11 +127,12 @@ fun StorageDetailHeaderContent(state: StorageDetailState) {
 @Composable
 fun StorageDetailHeaderTabBar(
     tabList: List<StorageDetailTab>,
+    modifier: Modifier = Modifier,
     selectedTabIdx: Int = 0,
     onClickTabItem: (Int) -> Unit = {},
 ) {
     Row(
-        modifier = Modifier.height(48.dp),
+        modifier = modifier.height(48.dp),
     ) {
         tabList.forEachIndexed { index, tabItem ->
             val isSelected = index == selectedTabIdx

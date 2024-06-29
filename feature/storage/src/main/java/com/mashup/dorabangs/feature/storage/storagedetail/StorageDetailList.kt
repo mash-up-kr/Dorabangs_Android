@@ -39,6 +39,7 @@ import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSta
 fun StorageDetailList(
     listState: LazyListState,
     state: StorageDetailState,
+    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     onClickBackIcon: () -> Unit = {},
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
@@ -46,6 +47,7 @@ fun StorageDetailList(
     LazyColumn(
         state = listState,
         contentPadding = contentPadding,
+        modifier = modifier
     ) {
         item {
             StorageDetailExpandedHeader(

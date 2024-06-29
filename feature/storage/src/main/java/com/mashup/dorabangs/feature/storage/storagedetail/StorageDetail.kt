@@ -17,8 +17,8 @@ import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSor
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import org.orbitmvi.orbit.compose.collectAsState
 
-val MinToolbarHeight = 116.dp
-val MaxToolbarHeight = 180.dp
+val MinToolbarHeight = 96.dp
+val MaxToolbarHeight = 160.dp
 
 @Composable
 fun StorageDetailRoute(
@@ -48,6 +48,7 @@ fun StorageDetailRoute(
 
 @Composable
 fun StorageDetailScreen(
+    modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),
     isCollapsed: Boolean = false,
@@ -55,7 +56,9 @@ fun StorageDetailScreen(
     onClickTabItem: (Int) -> Unit = {},
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
-    Box {
+    Box(
+        modifier = modifier
+    ) {
         StorageDetailCollapsingHeader(
             state = state,
             modifier = Modifier.zIndex(2f),
