@@ -17,6 +17,8 @@ object DoraColorTokens {
     val Black = Color(0xFF000000)
     val Alert = Color(0xFFFF5D47)
     val Dimend = Color(0xB2121212)
+    val Color737373 = Color(0xFF737373)
+    val ColorD9D9D9 = Color(0xFFD9D9D9)
 }
 
 object BtnMaxColorTokens {

@@ -40,7 +40,7 @@ fun HomeRoute(
     HomeScreen(
         modifier = modifier,
         state = viewModel.collectAsState().value,
-        onClickChip = { viewModel.onClickTap(it) },
+        onClickChip = { viewModel.changeSelectedTapIdx(it) },
     )
 }
 

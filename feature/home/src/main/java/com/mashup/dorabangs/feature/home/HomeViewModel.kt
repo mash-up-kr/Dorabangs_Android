@@ -20,7 +20,7 @@ constructor(
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
-    fun onClickTap(index: Int) = intent {
+    fun changeSelectedTapIdx(index: Int) = intent {
         reduce {
             state.copy(selectedIndex = index)
         }
@@ -74,6 +74,7 @@ constructor(
                             category = "디자인",
                             createdAt = 1,
                             thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            isLoading = true
                         ),
                         FeedCardUiModel(
                             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",

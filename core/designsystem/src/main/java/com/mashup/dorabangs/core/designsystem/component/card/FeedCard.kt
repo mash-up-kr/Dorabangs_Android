@@ -52,6 +52,7 @@ fun FeedCard(
             FeedCardContent(
                 modifier = Modifier.weight(3f),
                 cardInfo = cardInfo,
+                isLoading = cardInfo.isLoading,
             )
             Spacer(modifier = Modifier.width(13.dp))
             Image(
@@ -60,29 +61,45 @@ fun FeedCard(
                 contentDescription = "thumbnail",
             )
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        FeedCardKeyword(keywordList = cardInfo.keywordList)
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
+        if (cardInfo.isLoading) {
+            CardProgressBar(
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth()
+                    .height(4.dp),
+                completedColor = DoraColorTokens.Black,
+                remainColor = DoraColorTokens.G4,
+                current = 10
+            )
             FeedCardCategoryAndDayLabel(
-                modifier = Modifier.align(Alignment.CenterVertically),
                 cardInfo = cardInfo,
             )
-            FeedCardMenuItems(
-                onClickBookMarkButton = onClickBookMarkButton,
-                onClickMoreButton = onClickMoreButton,
-            )
+        } else {
+            Spacer(modifier = Modifier.height(12.dp))
+            FeedCardKeyword(keywordList = cardInfo.keywordList)
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                FeedCardCategoryAndDayLabel(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    cardInfo = cardInfo,
+                )
+                FeedCardMenuItems(
+                    onClickBookMarkButton = onClickBookMarkButton,
+                    onClickMoreButton = onClickMoreButton,
+                )
+            }
         }
     }
 }
 
 @Composable
 fun FeedCardContent(
-    modifier: Modifier,
     cardInfo: FeedCardUiModel,
+    modifier: Modifier,
+    isLoading: Boolean
 ) {
     Column(
         modifier = Modifier.then(modifier),
@@ -94,31 +111,70 @@ fun FeedCardContent(
             color = DoraColorTokens.G9,
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Row {
-            Icon(
-                modifier = Modifier.size(12.dp, 16.dp),
-                painter = painterResource(id = R.drawable.ic_plus),
-                contentDescription = "",
-            )
-            Text(
-                text = stringResource(id = R.string.feed_card_content_title),
+        if (isLoading) {
+            Row {
+                Icon(
+                    modifier = Modifier.size(12.dp, 16.dp),
+                    painter = painterResource(id = R.drawable.ic_plus),
+                    contentDescription = "",
+                )
+                Text(
+                    text = stringResource(id = R.string.feed_card_summarizing_content__title),
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(start = 4.dp),
+                    textAlign = TextAlign.Center,
+                    style = DoraTypoTokens.SMedium,
+                    color = DoraColorTokens.G9,
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            repeat(3) {
+                TextLoadingSkeleton(
+                    primaryColor = DoraColorTokens.ColorD9D9D9,
+                    containerColor = DoraColorTokens.Color737373,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
+                        .height(14.dp),
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            TextLoadingSkeleton(
+                primaryColor = DoraColorTokens.ColorD9D9D9,
+                containerColor = DoraColorTokens.Color737373,
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(start = 4.dp),
-                textAlign = TextAlign.Center,
-                style = DoraTypoTokens.SMedium,
-                color = DoraColorTokens.G9,
+                    .padding(vertical = 2.dp)
+                    .width(172.dp)
+                    .height(14.dp),
+            )
+        } else {
+            Row {
+                Icon(
+                    modifier = Modifier.size(12.dp, 16.dp),
+                    painter = painterResource(id = R.drawable.ic_plus),
+                    contentDescription = "",
+                )
+                Text(
+                    text = stringResource(id = R.string.feed_card_content_title),
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(start = 4.dp),
+                    textAlign = TextAlign.Center,
+                    style = DoraTypoTokens.SMedium,
+                    color = DoraColorTokens.G9,
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = cardInfo.content,
+                textAlign = TextAlign.Left,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                style = DoraTypoTokens.caption1Normal,
+                color = DoraColorTokens.G6,
             )
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = cardInfo.content,
-            textAlign = TextAlign.Left,
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis,
-            style = DoraTypoTokens.caption1Normal,
-            color = DoraColorTokens.G6,
-        )
         Spacer(modifier = Modifier.height(12.dp))
     }
 }
@@ -214,6 +270,22 @@ private fun PreviewFeedCard() {
             category = "디자인",
             createdAt = 1,
             thumbnail = androidx.core.R.drawable.ic_call_answer,
+        )
+    FeedCard(cardInfo = cardInfo)
+}
+
+@Preview
+@Composable
+private fun PreviewLoadingFeedCard() {
+    val cardInfo =
+        FeedCardUiModel(
+            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
+            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
+            keywordList = listOf("다연", "호현", "석주"),
+            category = "디자인",
+            createdAt = 1,
+            thumbnail = androidx.core.R.drawable.ic_call_answer,
+            isLoading = true
         )
     FeedCard(cardInfo = cardInfo)
 }

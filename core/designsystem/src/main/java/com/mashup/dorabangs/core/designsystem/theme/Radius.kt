@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.dp
 
 object DoraRoundTokens {
     val Round99 = RoundedCornerShape(99.dp)
+    val Round24 = RoundedCornerShape(24.dp)
     val Round16 = RoundedCornerShape(16.dp)
     val Round12 = RoundedCornerShape(12.dp)
     val Round8 = RoundedCornerShape(8.dp)

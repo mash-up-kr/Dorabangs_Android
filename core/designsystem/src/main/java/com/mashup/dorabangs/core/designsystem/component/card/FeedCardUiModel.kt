@@ -7,5 +7,5 @@ data class FeedCardUiModel(
     val createdAt: Int,
     val keywordList: List<String>,
     val thumbnail: Int, // TODO - url String 변경 필요
-
+    val isLoading: Boolean = false,
 )
