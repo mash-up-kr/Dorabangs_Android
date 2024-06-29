@@ -14,8 +14,11 @@ object DoraColorTokens {
     val G2 = Color(0xFFE9ECEF)
     val G1 = Color(0xFFF4F6F8)
     val White = Color(0xFFFFFFFF)
+    val Black = Color(0xFF000000)
     val Alert = Color(0xFFFF5D47)
     val Dimend = Color(0xB2121212)
+    val Color737373 = Color(0xFF737373)
+    val ColorD9D9D9 = Color(0xFFD9D9D9)
 }
 
 object BtnMaxColorTokens {
@@ -41,10 +44,17 @@ object ClipBoardColorTokens {
 }
 
 object TopBarColorTokens {
-    val isDarkMode = false // 임시 다크모드 체크
-    val ContainerColor
-        get() = if (isDarkMode) DoraColorTokens.White else DoraColorTokens.G1
+    val ContainerColor = DoraColorTokens.White
+    val OnContainerColor = DoraColorTokens.G9
+    val OnContainerColorHome = DoraColorTokens.G5
+}
 
-    val OnContainerColor
-        get() = if (isDarkMode) DoraColorTokens.G9 else DoraColorTokens.White
+object ChipsColorTokens {
+    val Containercolor = DoraColorTokens.White
+}
+
+class ChipColorTokens(isSelected: Boolean) {
+    val ContainerColor = if (isSelected) DoraColorTokens.Black else DoraColorTokens.White
+    val OnContainerColor = if (isSelected) DoraColorTokens.White else DoraColorTokens.G6
+    val BorderColor = if (isSelected) DoraColorTokens.Black else DoraColorTokens.G2
 }

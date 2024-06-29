@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="feed_card_content_title">주요 내용</string>
+    <string name="feed_card_summarizing_content__title">요약중</string>
+    <string name="home">홈</string>
+    <string name="storage">보관함</string>
+    <string name="home_empty_feed">테스트 테스트 테스트 테스트</string>
+    <string name="snack_bar_title">클립보드에 복사한 링크 저장</string>
+    <string name="snack_bar_cancel_description">스낵바 취소</string>
 </resources>
