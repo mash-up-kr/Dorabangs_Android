@@ -40,6 +40,15 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.TextFieldColorTokens
 
+/**
+ * @param text 텍필에 가지고 들어갈 text
+ * @param hintText 텍필에서 text가 없을 때 보여줄 hint text
+ * @param labelText 텍필에 가지고 라벨 텍스트, ex) 링크
+ * @param helperEnabled 헬퍼 텍스트를 보여줄지 말지에 대한 값
+ * @param counterEnabled text counter를 보여줄지 말지에 대한 값
+ * @param modifier 알잖아요
+ * @param helperText 헬퍼텍스트에 대한 값, ex) 유효한 링크를 입력해주세요
+ */
 @Composable
 fun DoraTextField(
     text: String,
