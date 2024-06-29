@@ -67,7 +67,7 @@ fun StorageDetailExpandedHeader(
     onClickBackIcon: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.height(MaxToolbarHeight),
+        modifier = modifier.height(MaxToolbarHeight),
     ) {
         DoraTopBar.BackNavigationTopBar(
             modifier = Modifier.fillMaxWidth(),
@@ -91,9 +91,12 @@ fun StorageDetailExpandedHeader(
 }
 
 @Composable
-fun StorageDetailHeaderContent(state: StorageDetailState) {
+fun StorageDetailHeaderContent(
+    state: StorageDetailState,
+    modifier: Modifier = Modifier,
+    ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(64.dp)
             .background(color = DoraColorTokens.P1)
