@@ -16,6 +16,6 @@ class StorageViewModel @Inject constructor() : ViewModel(), ContainerHost<Storag
         override val container = container<StorageListState, StorageListSideEffect>(StorageListState())
 
     fun showEditFolderBottomSheet(item: StorageFolderItem) = intent {
-        postSideEffect(sideEffect = StorageListSideEffect.showEditFolderBottomSheet)
+        postSideEffect(sideEffect = StorageListSideEffect.ShowEditFolderBottomSheet)
     }
     }
