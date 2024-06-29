@@ -7,34 +7,34 @@ data class StorageListState(
     companion object {
         fun defaultFolderList() =
             listOf(
-                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ.title, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ, postCount = 0),
             )
         fun customFolderList() =
             listOf(
-                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE.title, postCount = 0),
-                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ.title, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.ALL, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.FAVORITE, postCount = 0),
+                StorageFolderItem(folderTitle = StorageDefaultFolder.LATER_READ, postCount = 0),
 
             )
     }
 }
 
 data class StorageFolderItem(
-    val folderTitle: String = "",
+    val folderTitle: StorageDefaultFolder,
     val postCount: Int = 0,
 )
 

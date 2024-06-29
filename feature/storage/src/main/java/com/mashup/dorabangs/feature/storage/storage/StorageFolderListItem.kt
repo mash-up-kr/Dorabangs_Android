@@ -129,7 +129,7 @@ fun StorageListItem(
                     .padding(start = 12.dp)
                     .align(Alignment.CenterVertically),
                 textAlign = TextAlign.Center,
-                text = item.folderTitle,
+                text = item.folderTitle.title,
                 color = DoraColorTokens.G9,
                 style = DoraTypoTokens.caption3Medium,
             )
