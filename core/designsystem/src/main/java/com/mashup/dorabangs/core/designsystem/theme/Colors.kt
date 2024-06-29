@@ -40,6 +40,11 @@ object ClipBoardColorTokens {
     val ArrowColor = DoraColorTokens.G3
 }
 
+object TextFieldColorTokens {
+    val TextFieldBackGroundColor = DoraColorTokens.G1
+    val TextFieldHintTextColor = DoraColorTokens.G4
+}
+
 object TopBarColorTokens {
     val isDarkMode = false // 임시 다크모드 체크
     val ContainerColor
