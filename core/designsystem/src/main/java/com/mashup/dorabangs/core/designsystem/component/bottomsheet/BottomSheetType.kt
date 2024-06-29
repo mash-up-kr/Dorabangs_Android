@@ -1,13 +1,17 @@
 package com.mashup.dorabangs.core.designsystem.component.bottomsheet
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.theme.BottomSheetColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
 object DoraBottomSheet : BottomSheetType {
 
@@ -46,6 +50,26 @@ object DoraBottomSheet : BottomSheetType {
             }
         }
     }
+
+    @Composable
+    override fun MovingFolderBottomSheet(
+        folderList: List<BottomSheetItemUIModel>,
+        modifier: Modifier
+    ) {
+        DoraBaseBottomSheet(
+            modifier = modifier,
+            containerColor = BottomSheetColorTokens.MovingFolderColor,
+            onDismissRequest = {},
+        ) {
+            Column {
+                Text(
+                    text = stringResource(id = R.string.moving_folder_dialog_title),
+                    style = DoraTypoTokens.base2Bold
+                )
+
+            }
+        }
+    }
 }
 
 sealed interface BottomSheetType {
@@ -57,5 +81,11 @@ sealed interface BottomSheetType {
         onClickDeleteLink: () -> Unit,
         onClickMoveFolder: () -> Unit,
         onDismissRequest: () -> Unit,
+    )
+
+    @Composable
+    fun MovingFolderBottomSheet(
+        folderList: List<BottomSheetItemUIModel>,
+        modifier: Modifier,
     )
 }
