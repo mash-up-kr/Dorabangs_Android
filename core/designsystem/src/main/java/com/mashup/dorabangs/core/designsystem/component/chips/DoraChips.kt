@@ -43,11 +43,11 @@ fun DoraChips(
         item {
             Spacer(modifier = Modifier.width(20.dp))
         }
-        items(chipList.size) {
+        items(chipList.size) { index ->
             DoraChip(
-                doraChipUiModel = chipList[it],
-                isSelected = it == selectedIndex,
-                onClickChip = { onClickChip(it) },
+                doraChipUiModel = chipList[index],
+                isSelected = index == selectedIndex,
+                onClickChip = { onClickChip(index) },
             )
         }
         item {

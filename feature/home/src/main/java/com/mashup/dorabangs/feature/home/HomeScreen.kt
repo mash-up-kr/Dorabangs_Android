@@ -82,7 +82,7 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
-            onClickChip = { viewModel.changeSelectedTapIdx(it) },
+            onClickChip = viewModel::changeSelectedTapIdx,
         )
 
         HomeDoraSnackBar(
