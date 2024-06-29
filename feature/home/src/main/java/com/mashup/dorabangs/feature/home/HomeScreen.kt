@@ -40,6 +40,7 @@ fun HomeRoute(
     HomeScreen(
         modifier = modifier,
         state = viewModel.collectAsState().value,
+        onClickChip = { viewModel.onClickTap(it) },
     )
 }
 
@@ -48,6 +49,7 @@ fun HomeRoute(
 fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
+    onClickChip: (Int) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -58,49 +60,53 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Logo",
                 titleAlignment = Alignment.CenterStart,
-                actionIcon = R.drawable.ic_plus
+                actionIcon = R.drawable.ic_plus,
             )
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(310.dp)
-                    .background(DoraColorTokens.G5)
+                    .background(DoraColorTokens.G5),
             )
         }
 
         stickyHeader {
             DoraChips(
                 modifier = Modifier.fillMaxWidth(),
-                chipList = state.tapElements
+                chipList = state.tapElements,
+                selectedIndex = state.selectedIndex,
+                onClickChip = {
+                    onClickChip(it)
+                },
             )
         }
 
         Feeds(
             modifier = Modifier,
-            feeds = state.feedCards
+            feeds = state.feedCards,
         )
     }
 }
 
 private fun LazyListScope.Feeds(
     feeds: List<FeedCardUiModel>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if (feeds.isEmpty()) {
         item {
             Column(
                 modifier = modifier.fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_android_white_24dp),
-                    contentDescription = ""
+                    contentDescription = "",
                 )
                 Text(
                     modifier = Modifier.padding(top = 12.dp),
-                    text = stringResource(id = R.string.home_empty_feed)
+                    text = stringResource(id = R.string.home_empty_feed),
                 )
             }
         }
@@ -110,7 +116,7 @@ private fun LazyListScope.Feeds(
             if (it != feeds.lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                    thickness = 0.5.dp
+                    thickness = 0.5.dp,
                 )
             }
         }
@@ -126,26 +132,21 @@ fun HomeScreenPreview() {
                 DoraChipUiModel(
                     title = "전체 99+",
                     icon = R.drawable.ic_plus,
-                    isSelected = false
                 ),
                 DoraChipUiModel(
                     title = "하이?",
-                    isSelected = true
                 ),
                 DoraChipUiModel(
                     title = "바이?",
-                    isSelected = false
                 ),
                 DoraChipUiModel(
                     title = "바이?",
-                    isSelected = false
                 ),
                 DoraChipUiModel(
                     title = "바이?",
                     icon = R.drawable.ic_plus,
-                    isSelected = false
-                )
-            )
-        )
+                ),
+            ),
+        ),
     )
 }

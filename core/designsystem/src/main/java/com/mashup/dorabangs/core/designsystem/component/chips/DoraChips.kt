@@ -3,14 +3,13 @@ package com.mashup.dorabangs.core.designsystem.component.chips
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,23 +31,28 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 fun DoraChips(
     chipList: List<DoraChipUiModel>,
     modifier: Modifier = Modifier,
-    onClickChip: () -> Unit = {}
+    selectedIndex: Int = 0,
+    onClickChip: (Int) -> Unit = {},
 ) {
-    Row(
+    LazyRow(
         modifier = modifier
             .background(ChipsColorTokens.Containercolor)
-            .padding(vertical = 8.dp)
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Spacer(modifier = Modifier.width(20.dp))
-        chipList.forEach {
+        item {
+            Spacer(modifier = Modifier.width(20.dp))
+        }
+        items(chipList.size) {
             DoraChip(
-                doraChipUiModel = it,
-                onClickChip = onClickChip
+                doraChipUiModel = chipList[it],
+                isSelected = it == selectedIndex,
+                onClickChip = { onClickChip(it) },
             )
         }
-        Spacer(modifier = Modifier.width(20.dp))
+        item {
+            Spacer(modifier = Modifier.width(20.dp))
+        }
     }
 }
 
@@ -56,21 +60,22 @@ fun DoraChips(
 fun DoraChip(
     doraChipUiModel: DoraChipUiModel,
     modifier: Modifier = Modifier,
-    onClickChip: () -> Unit = {}
+    isSelected: Boolean = false,
+    onClickChip: () -> Unit = {},
 ) {
-    val colorToken = ChipColorTokens(doraChipUiModel.isSelected)
+    val colorToken = ChipColorTokens(isSelected)
     Row(
         modifier = modifier
             .clip(DoraRoundTokens.Round99)
             .border(
                 width = 1.dp,
                 color = colorToken.BorderColor,
-                shape = DoraRoundTokens.Round99
+                shape = DoraRoundTokens.Round99,
             )
             .background(color = colorToken.ContainerColor)
             .clickable(onClick = onClickChip)
             .padding(horizontal = 12.dp, vertical = 7.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         if (doraChipUiModel.icon != null) {
             Icon(
@@ -78,7 +83,7 @@ fun DoraChip(
                     .size(20.dp)
                     .padding(end = 4.dp),
                 painter = painterResource(id = doraChipUiModel.icon),
-                contentDescription = ""
+                contentDescription = "",
             )
         }
         Text(
@@ -87,10 +92,10 @@ fun DoraChip(
             style = DoraTypoTokens.caption1Medium.copy(
                 lineHeightStyle = LineHeightStyle(
                     alignment = LineHeightStyle.Alignment.Center,
-                    trim = LineHeightStyle.Trim.None
-                )
+                    trim = LineHeightStyle.Trim.None,
+                ),
             ),
-            color = colorToken.OnContainerColor
+            color = colorToken.OnContainerColor,
         )
     }
 }
@@ -101,7 +106,6 @@ fun SelectedDoraChipPreview() {
     DoraChip(
         doraChipUiModel = DoraChipUiModel(
             title = "하이?",
-            isSelected = true
         ),
     )
 }
@@ -112,8 +116,7 @@ fun UnSelectedDoraChipPreview() {
     DoraChip(
         doraChipUiModel = DoraChipUiModel(
             title = "바이?",
-            isSelected = false
-        )
+        ),
     )
 }
 
@@ -124,7 +127,6 @@ fun SelectedIconDoraChipPreview() {
         doraChipUiModel = DoraChipUiModel(
             title = "하이?",
             icon = R.drawable.ic_android_white_24dp,
-            isSelected = true
         ),
     )
 }
@@ -136,7 +138,6 @@ fun UnSelectedIconDoraChipPreview() {
         doraChipUiModel = DoraChipUiModel(
             title = "바이?",
             icon = R.drawable.ic_plus,
-            isSelected = false
         ),
     )
 }
@@ -149,25 +150,21 @@ fun DoraChipsPreview() {
             DoraChipUiModel(
                 title = "전체 99+",
                 icon = R.drawable.ic_plus,
-                isSelected = false
             ),
             DoraChipUiModel(
                 title = "하이?",
-                isSelected = true
             ),
             DoraChipUiModel(
                 title = "바이?",
-                isSelected = false
             ),
             DoraChipUiModel(
                 title = "바이?",
-                isSelected = false
             ),
             DoraChipUiModel(
                 title = "바이?",
                 icon = R.drawable.ic_plus,
-                isSelected = false
-            )
-        )
+            ),
+        ),
+        selectedIndex = 0,
     )
 }

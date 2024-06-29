@@ -47,7 +47,7 @@ fun DoraTopAppBar(
                     modifier = Modifier.padding(start = startPadding),
                     text = title,
                     color = if (isHomeAppBar) TopBarColorTokens.OnContainerColorHome else TopBarColorTokens.OnContainerColor,
-                    style = if (isHomeAppBar) DoraTypoTokens.Subtitle1Bold else DoraTypoTokens.base1Bold
+                    style = if (isHomeAppBar) DoraTypoTokens.Subtitle1Bold else DoraTypoTokens.base1Bold,
                 )
             }
         },
