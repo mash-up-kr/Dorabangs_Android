@@ -18,11 +18,13 @@ import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.DoraBot
 fun DoraApp(appState: DoraAppState = rememberDoraAppState()) {
     Scaffold(
         bottomBar = {
-            DoraBottomBar(
-                destinations = appState.bottomBarDestination,
-                onNavigateToDestination = appState::navigateToBottomNavigationDestination,
-                currentDestination = appState.currentDestination,
-            )
+            if (appState.isBottomBarVisible()) {
+                DoraBottomBar(
+                    destinations = appState.bottomBarDestination,
+                    onNavigateToDestination = appState::navigateToBottomNavigationDestination,
+                    currentDestination = appState.currentDestination,
+                )
+            }
         },
         content = { paddingValues ->
             Column(

@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.feature.navigation.homeNavigation
+import com.mashup.dorabangs.feature.storage.navigation.storageDetailNavigation
+import com.mashup.dorabangs.feature.storage.navigation.storageNavigation
 
 @Composable
 fun MainNavHost(
@@ -18,5 +20,7 @@ fun MainNavHost(
         startDestination = startDestination,
     ) {
         homeNavigation()
+        storageNavigation(appState.navController)
+        storageDetailNavigation(appState.navController)
     }
 }
