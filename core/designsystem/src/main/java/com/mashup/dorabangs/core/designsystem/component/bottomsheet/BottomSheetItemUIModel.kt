@@ -13,5 +13,5 @@ data class BottomSheetItemUIModel(
 data class SelectableBottomSheetItemUIModel(
     @DrawableRes val icon: Int,
     val itemName: String,
-    val isSelected: Boolean
+    val isSelected: Boolean,
 )

@@ -61,7 +61,7 @@ fun DoraDialog(
                         text = content,
                         style = DoraTypoTokens.caption3Medium,
                         color = DialogColorTokens.ContentColor,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
                 Row(

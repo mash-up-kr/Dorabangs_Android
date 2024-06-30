@@ -118,7 +118,7 @@ fun HomeRoute(
             modifier = Modifier.height(441.dp),
             isShowSheet = state.isShowMovingFolderSheet,
             folderList = testFolderListData,
-            onDismissRequest = viewModel::dismissMovingFolderBottomSheet
+            onDismissRequest = viewModel::dismissMovingFolderBottomSheet,
         )
 
         DoraDialog(
@@ -254,21 +254,21 @@ val testFolderListData = listOf(
     SelectableBottomSheetItemUIModel(
         R.drawable.ic_plus,
         "폴더이름",
-        false
+        false,
     ),
     SelectableBottomSheetItemUIModel(
         R.drawable.ic_plus,
         "폴더이름",
-        false
+        false,
     ),
     SelectableBottomSheetItemUIModel(
         R.drawable.ic_plus,
         "폴더이름",
-        true
+        true,
     ),
     SelectableBottomSheetItemUIModel(
         R.drawable.ic_plus,
         "폴더이름",
-        false
-    )
+        false,
+    ),
 )

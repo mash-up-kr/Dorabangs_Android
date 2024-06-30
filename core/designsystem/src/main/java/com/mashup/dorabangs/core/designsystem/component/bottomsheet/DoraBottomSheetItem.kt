@@ -92,25 +92,25 @@ fun DoraBottomSheetItem(
 fun DoraBottomSheetFolderItem(
     data: SelectableBottomSheetItemUIModel,
     modifier: Modifier = Modifier,
-    background: Color = BottomSheetColorTokens.MovingFolderColor
+    background: Color = BottomSheetColorTokens.MovingFolderColor,
 ) {
     Row(
         modifier = modifier
             .background(background)
             .padding(vertical = 14.dp, horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         DoraBottomSheetItem(
             BottomSheetItemUIModel(
                 icon = data.icon,
-                itemName = data.itemName
-            )
+                itemName = data.itemName,
+            ),
         )
         if (data.isSelected) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_plus),
-                contentDescription = ""
+                contentDescription = "",
             )
         } else {
             Box(modifier = Modifier.size(24.dp))
@@ -138,7 +138,7 @@ fun PreivewDoraBottomSheetFolderItem() {
         data = SelectableBottomSheetItemUIModel(
             icon = R.drawable.ic_plus,
             itemName = "폴더이름",
-            isSelected = true
-        )
+            isSelected = true,
+        ),
     )
 }

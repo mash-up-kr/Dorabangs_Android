@@ -40,11 +40,11 @@ object DoraBottomSheet : BottomSheetType {
                         BottomSheetItemUIModel(
                             icon = R.drawable.ic_plus,
                             itemName = stringResource(id = R.string.more_button_bottom_sheet_remove_link),
-                            color = DoraColorTokens.Alert
+                            color = DoraColorTokens.Alert,
                         ),
                         BottomSheetItemUIModel(
-                            icon = R.drawable.ic_plus, 
-                            itemName = stringResource(id = R.string.more_button_bottom_sheet_moving_folder)
+                            icon = R.drawable.ic_plus,
+                            itemName = stringResource(id = R.string.more_button_bottom_sheet_moving_folder),
                         ),
                     ),
                     onClickItem = { index ->
@@ -81,7 +81,7 @@ object DoraBottomSheet : BottomSheetType {
                                 .padding(vertical = 16.dp),
                             textAlign = TextAlign.Center,
                             text = stringResource(id = R.string.moving_folder_dialog_title),
-                            style = DoraTypoTokens.base2Bold
+                            style = DoraTypoTokens.base2Bold,
                         )
                     }
 
@@ -91,15 +91,15 @@ object DoraBottomSheet : BottomSheetType {
                             data = SelectableBottomSheetItemUIModel(
                                 icon = R.drawable.ic_plus,
                                 itemName = stringResource(id = R.string.moving_folder_dialog_add_folder),
-                                isSelected = false
-                            )
+                                isSelected = false,
+                            ),
                         )
                     }
 
                     items(folderList.size) { index ->
                         DoraBottomSheetFolderItem(
                             modifier = Modifier.fillMaxWidth(),
-                            data = folderList[index]
+                            data = folderList[index],
                         )
                     }
 
@@ -110,7 +110,7 @@ object DoraBottomSheet : BottomSheetType {
                                 .padding(horizontal = 20.dp, vertical = 16.dp),
                             buttonText = stringResource(id = R.string.moving_folder_bottom_sheet_complete),
                             enabled = true,
-                            onClickButton = onDismissRequest
+                            onClickButton = onDismissRequest,
                         )
                     }
                 }
