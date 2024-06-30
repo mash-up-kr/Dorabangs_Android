@@ -95,20 +95,23 @@ constructor(
                         ),
                         DoraChipUiModel(
                             title = "하이?",
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "바이?",
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "바이?",
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "바이?",
-                            icon = R.drawable.ic_plus,
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "전체 99+",
-                            icon = R.drawable.ic_plus,
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "하이?",
@@ -121,7 +124,7 @@ constructor(
                         ),
                         DoraChipUiModel(
                             title = "바이?",
-                            icon = R.drawable.ic_plus,
+                            icon = R.drawable.link_icon,
                         ),
                     ),
                     feedCards = listOf(
