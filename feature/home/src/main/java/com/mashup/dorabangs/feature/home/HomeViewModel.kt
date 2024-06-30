@@ -48,15 +48,15 @@ constructor(
         }
     }
 
-    fun showBottomSheet() = intent {
+    fun showMoreButtonBottomSheet() = intent {
         reduce {
-            state.copy(isShowSheet = true)
+            state.copy(isShowMoreButtonSheet = true)
         }
     }
 
-    fun dismissBottomSheet() = intent {
+    fun dismissMoreButtonBottomSheet() = intent {
         reduce {
-            state.copy(isShowSheet = false)
+            state.copy(isShowMoreButtonSheet = false)
         }
     }
 
@@ -69,6 +69,18 @@ constructor(
     fun dismissDialog() = intent {
         reduce {
             state.copy(isShowDialog = false)
+        }
+    }
+
+    fun showMovingFolderBottomSheet() = intent {
+        reduce {
+            state.copy(isShowMovingFolderSheet = true)
+        }
+    }
+
+    fun dismissMovingFolderBottomSheet() = intent {
+        reduce {
+            state.copy(isShowMovingFolderSheet = false)
         }
     }
 

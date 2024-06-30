@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
+import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
@@ -82,7 +83,7 @@ fun HomeRoute(
             modifier = modifier,
             onClickChip = viewModel::changeSelectedTapIdx,
             onClickMoreButton = {
-                viewModel.showBottomSheet()
+                viewModel.showMoreButtonBottomSheet()
             },
         )
 
@@ -101,13 +102,23 @@ fun HomeRoute(
 
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
-            isShowSheet = state.isShowSheet,
+            isShowSheet = state.isShowMoreButtonSheet,
             onClickDeleteLinkButton = {
-                viewModel.dismissBottomSheet()
+                viewModel.dismissMoreButtonBottomSheet()
                 viewModel.showDialog()
             },
-            onClickMoveFolderButton = {},
-            onDismissRequest = viewModel::dismissBottomSheet,
+            onClickMoveFolderButton = {
+                viewModel.dismissMoreButtonBottomSheet()
+                viewModel.showMovingFolderBottomSheet()
+            },
+            onDismissRequest = viewModel::dismissMoreButtonBottomSheet,
+        )
+
+        DoraBottomSheet.MovingFolderBottomSheet(
+            modifier = Modifier.height(441.dp),
+            isShowSheet = state.isShowMovingFolderSheet,
+            folderList = testFolderListData,
+            onDismissRequest = viewModel::dismissMovingFolderBottomSheet
         )
 
         DoraDialog(
@@ -238,3 +249,26 @@ fun HomeScreenPreview() {
         ),
     )
 }
+
+val testFolderListData = listOf(
+    SelectableBottomSheetItemUIModel(
+        R.drawable.ic_plus,
+        "폴더이름",
+        false
+    ),
+    SelectableBottomSheetItemUIModel(
+        R.drawable.ic_plus,
+        "폴더이름",
+        false
+    ),
+    SelectableBottomSheetItemUIModel(
+        R.drawable.ic_plus,
+        "폴더이름",
+        true
+    ),
+    SelectableBottomSheetItemUIModel(
+        R.drawable.ic_plus,
+        "폴더이름",
+        false
+    )
+)

@@ -13,4 +13,7 @@
     <string name="remove_dialog_cancil">취소</string>
     <string name="moving_folder_dialog_title">폴더 이동</string>
     <string name="moving_folder_dialog_add_folder">새 폴더 추가</string>
+    <string name="more_button_bottom_sheet_remove_link">링크 삭제</string>
+    <string name="more_button_bottom_sheet_moving_folder">폴더 이동</string>
+    <string name="moving_folder_bottom_sheet_complete">완료</string>
 </resources>
