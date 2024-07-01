@@ -3,6 +3,8 @@ package com.mashup.dorabangs.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import com.dorabangs.feature.navigation.navigateToSaveLink
+import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.feature.navigation.homeNavigation
 import com.mashup.dorabangs.feature.storage.navigation.storageDetailNavigation
@@ -19,8 +21,11 @@ fun MainNavHost(
         navController = appState.navController,
         startDestination = startDestination,
     ) {
-        homeNavigation()
+        homeNavigation {
+            appState.navController.navigateToSaveLink()
+        }
         storageNavigation(appState.navController)
         storageDetailNavigation(appState.navController)
+        saveLinkNavigation(appState.navController)
     }
 }
