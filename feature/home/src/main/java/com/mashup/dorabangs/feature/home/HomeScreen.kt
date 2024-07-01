@@ -53,7 +53,7 @@ fun HomeRoute(
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
     actionSnackBar: () -> Unit = {},
-    navigateToClassification: () -> Unit = {}
+    navigateToClassification: () -> Unit = {},
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -81,7 +81,7 @@ fun HomeRoute(
             state = state,
             modifier = modifier,
             onClickChip = viewModel::changeSelectedTapIdx,
-            navigateToClassification = navigateToClassification
+            navigateToClassification = navigateToClassification,
         )
 
         HomeDoraSnackBar(
@@ -105,7 +105,7 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     onClickChip: (Int) -> Unit = {},
-    navigateToClassification: () -> Unit = {}
+    navigateToClassification: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),

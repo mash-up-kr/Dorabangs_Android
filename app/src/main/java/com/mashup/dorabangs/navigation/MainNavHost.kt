@@ -22,7 +22,7 @@ fun MainNavHost(
         startDestination = startDestination,
     ) {
         homeNavigation(
-            navigateToClassification = { appState.navController.navigateToClassification() }
+            navigateToClassification = { appState.navController.navigateToClassification() },
         )
         storageNavigation(appState.navController)
         storageDetailNavigation(appState.navController)

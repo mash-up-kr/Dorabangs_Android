@@ -2,7 +2,6 @@ package com.mashup.dorabangs.core.designsystem.component.buttons
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.mashup.dorabangs.core.designsystem.theme.BtnMaxColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.BtnMaxRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -68,7 +67,7 @@ object DoraButtons : ButtonType {
     override fun DoraSmallConfirmBtn(
         modifier: Modifier,
         buttonText: String,
-        onClickButton: () -> Unit
+        onClickButton: () -> Unit,
     ) = DoraButton(
         modifier = modifier,
         buttonText = buttonText,
@@ -87,7 +86,7 @@ object DoraButtons : ButtonType {
         modifier: Modifier,
         buttonText: String,
         enabled: Boolean,
-        onClickButton: () -> Unit
+        onClickButton: () -> Unit,
     ) = DoraButton(
         modifier = modifier,
         buttonText = buttonText,

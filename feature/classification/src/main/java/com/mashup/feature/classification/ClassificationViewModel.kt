@@ -9,7 +9,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class ClassificationViewModel @Inject constructor(): ViewModel(), ContainerHost<ClassificationState, ClassificationSideEffect> {
+class ClassificationViewModel @Inject constructor() : ViewModel(), ContainerHost<ClassificationState, ClassificationSideEffect> {
     override val container = container<ClassificationState, ClassificationSideEffect>(ClassificationState())
 
     fun changeCategory() = intent {}

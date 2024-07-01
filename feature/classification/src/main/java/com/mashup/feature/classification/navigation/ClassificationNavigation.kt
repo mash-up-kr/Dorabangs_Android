@@ -13,7 +13,7 @@ fun NavGraphBuilder.classificationNavigation(navController: NavController) {
         route = NavigationRoute.ClassificationScreen.route,
     ) {
         ClassificationRoute(
-            onClickBackIcon = { navController.popBackStack() }
+            onClickBackIcon = { navController.popBackStack() },
         )
     }
 }

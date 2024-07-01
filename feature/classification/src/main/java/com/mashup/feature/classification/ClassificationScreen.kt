@@ -17,7 +17,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun ClassificationRoute(
     classificationViewModel: ClassificationViewModel = hiltViewModel(),
-    onClickBackIcon: () -> Unit
+    onClickBackIcon: () -> Unit,
 ) {
     val state by classificationViewModel.collectAsState()
 
@@ -27,7 +27,7 @@ fun ClassificationRoute(
         onClickDeleteButton = classificationViewModel::deleteSelectedItem,
         onClickMoveButton = classificationViewModel::moveSelectedItem,
         onClickAllItemMoveButton = classificationViewModel::moveAllItems,
-        onClickBackIcon = onClickBackIcon
+        onClickBackIcon = onClickBackIcon,
     )
 }
 
@@ -39,10 +39,10 @@ fun ClassificationScreen(
     onClickDeleteButton: (Int) -> Unit = {},
     onClickMoveButton: (Int) -> Unit = {},
     onClickAllItemMoveButton: () -> Unit = {},
-    onClickBackIcon: () -> Unit
+    onClickBackIcon: () -> Unit,
 ) {
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         DoraTopBar.BackNavigationTopBar(
             modifier = Modifier.fillMaxWidth(),
@@ -52,22 +52,24 @@ fun ClassificationScreen(
         )
         DoraChips(
             modifier = modifier.fillMaxWidth(),
-            chipList = listOf(  DoraChipUiModel(
-                title = "전체 99+",
-                icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_plus,
-            ),
+            chipList = listOf(
                 DoraChipUiModel(
                     title = "전체 99+",
                     icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_plus,
-                ),),
-            selectedIndex = 0 ,
-            onClickChip = {onClickChip()},
+                ),
+                DoraChipUiModel(
+                    title = "전체 99+",
+                    icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_plus,
+                ),
+            ),
+            selectedIndex = 0,
+            onClickChip = { onClickChip() },
         )
         ClassificationListScreen(
             state = state,
             onClickDeleteButton = onClickDeleteButton,
             onClickMoveButton = onClickMoveButton,
-            onClickAllItemMoveButton = onClickAllItemMoveButton
+            onClickAllItemMoveButton = onClickAllItemMoveButton,
         )
     }
 }
@@ -77,4 +79,3 @@ fun ClassificationScreen(
 fun PreviewClassificationScreen() {
     ClassificationScreen(state = ClassificationState(), onClickBackIcon = {})
 }
-

@@ -3,7 +3,6 @@ package com.mashup.dorabangs.core.designsystem.component.buttons
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -14,8 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mashup.dorabangs.core.designsystem.theme.BtnMaxColorTokens
-import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 
 @Composable
 internal fun DoraButton(
@@ -90,7 +87,6 @@ fun PreviewMediumNegativeBtn() {
         onClickButton = {},
     )
 }
-
 
 @Preview
 @Composable

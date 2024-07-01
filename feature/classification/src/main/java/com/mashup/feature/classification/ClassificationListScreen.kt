@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -36,15 +34,15 @@ fun ClassificationListScreen(
     modifier: Modifier = Modifier,
     onClickDeleteButton: (Int) -> Unit = {},
     onClickMoveButton: (Int) -> Unit = {},
-    onClickAllItemMoveButton: () -> Unit = {}
+    onClickAllItemMoveButton: () -> Unit = {},
 ) {
     LazyColumn(
-        modifier = modifier.background(color = DoraColorTokens.White)
+        modifier = modifier.background(color = DoraColorTokens.White),
     ) {
         item {
             ClassificationFolderMove(
                 selectedFolder = state.selectedFolder,
-                onClickAllItemMoveButton = onClickAllItemMoveButton
+                onClickAllItemMoveButton = onClickAllItemMoveButton,
             )
             HorizontalDivider(thickness = 0.5.dp)
         }
@@ -55,7 +53,7 @@ fun ClassificationListScreen(
                 cardItemList = state.cardInfoList,
                 selectedFolder = state.selectedFolder,
                 onClickDeleteButton = onClickDeleteButton,
-                onClickMoveButton = onClickMoveButton
+                onClickMoveButton = onClickMoveButton,
             )
         }
     }
@@ -66,27 +64,27 @@ fun ClassificationFolderMove(
     selectedFolder: String,
     modifier: Modifier = Modifier,
     count: Int = 0,
-    onClickAllItemMoveButton: () -> Unit
+    onClickAllItemMoveButton: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .background(color = DoraColorTokens.White)
             .fillMaxWidth()
-            .padding(vertical = 32.dp, horizontal = 23.dp)
+            .padding(vertical = 32.dp, horizontal = 23.dp),
 
     ) {
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             text = selectedFolder,
             style = DoraTypoTokens.TitleBold,
-            color = DoraColorTokens.Black
+            color = DoraColorTokens.Black,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             text = "분류한 링크 ${count}개",
             style = DoraTypoTokens.caption1Medium,
-            color = DoraColorTokens.Black
+            color = DoraColorTokens.Black,
         )
         Spacer(modifier = Modifier.height(20.dp))
         DoraButtons.DoraSmallConfirmBtn(
@@ -95,7 +93,7 @@ fun ClassificationFolderMove(
                 .padding(horizontal = 30.dp, vertical = 8.dp)
                 .wrapContentWidth(),
             buttonText = stringResource(id = R.string.ai_classification_all_move),
-            onClickButton = {onClickAllItemMoveButton()},
+            onClickButton = { onClickAllItemMoveButton() },
         )
     }
 }
@@ -113,7 +111,7 @@ fun ClassificationCardItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = DoraColorTokens.White)
+            .background(color = DoraColorTokens.White),
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         IconButton(
@@ -134,12 +132,12 @@ fun ClassificationCardItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            buttonText = "${selectedFolder}(으)로 옮기기",
+            buttonText = "$selectedFolder(으)로 옮기기",
             enabled = true,
             onClickButton = { onClickMoveButton(idx) },
         )
         Spacer(modifier = Modifier.height(32.dp))
-        if(idx != cardItemList.lastIndex) {
+        if (idx != cardItemList.lastIndex) {
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -156,4 +154,3 @@ fun ClassificationCardItem(
 fun PreviewClassificationFolderMove() {
     ClassificationListScreen(state = ClassificationState())
 }
-
