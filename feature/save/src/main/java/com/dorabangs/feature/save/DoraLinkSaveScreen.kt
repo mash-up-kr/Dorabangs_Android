@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
-import com.mashup.dorabangs.core.designsystem.theme.BtnMaxColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 
 @Composable
