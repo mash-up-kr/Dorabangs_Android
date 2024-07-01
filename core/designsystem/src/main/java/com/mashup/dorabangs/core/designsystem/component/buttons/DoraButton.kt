@@ -1,6 +1,9 @@
 package com.mashup.dorabangs.core.designsystem.component.buttons
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -10,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.mashup.dorabangs.core.designsystem.theme.BtnMaxColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 
 @Composable
 internal fun DoraButton(
@@ -80,6 +86,17 @@ fun PreviewMediumPositiveBtn() {
 fun PreviewMediumNegativeBtn() {
     DoraButtons.DoraMediumDismissBtn(
         modifier = Modifier.fillMaxWidth(0.5f),
+        buttonText = "버튼",
+        onClickButton = {},
+    )
+}
+
+
+@Preview
+@Composable
+fun PreviewSmallConfrimBtn() {
+    DoraButtons.DoraSmallConfirmBtn(
+        modifier = Modifier.padding(horizontal = 30.dp, vertical = 8.dp).width(108.dp),
         buttonText = "버튼",
         onClickButton = {},
     )
