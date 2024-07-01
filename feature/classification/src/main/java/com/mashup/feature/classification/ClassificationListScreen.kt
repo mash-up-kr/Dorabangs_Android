@@ -33,12 +33,13 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 @Composable
 fun ClassificationListScreen(
     state: ClassificationState,
+    modifier: Modifier = Modifier,
     onClickDeleteButton: (Int) -> Unit = {},
     onClickMoveButton: (Int) -> Unit = {},
     onClickAllItemMoveButton: () -> Unit = {}
 ) {
     LazyColumn(
-        modifier = Modifier.background(color = DoraColorTokens.White)
+        modifier = modifier.background(color = DoraColorTokens.White)
     ) {
         item {
             ClassificationFolderMove(
@@ -62,8 +63,8 @@ fun ClassificationListScreen(
 
 @Composable
 fun ClassificationFolderMove(
-    modifier: Modifier = Modifier,
     selectedFolder: String,
+    modifier: Modifier = Modifier,
     count: Int = 0,
     onClickAllItemMoveButton: () -> Unit
 ) {
@@ -105,11 +106,12 @@ fun ClassificationCardItem(
     cardItem: FeedCardUiModel,
     cardItemList: List<FeedCardUiModel>,
     selectedFolder: String,
+    modifier: Modifier = Modifier,
     onClickDeleteButton: (Int) -> Unit,
     onClickMoveButton: (Int) -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(color = DoraColorTokens.White)
     ) {

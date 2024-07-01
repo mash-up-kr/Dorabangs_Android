@@ -34,6 +34,7 @@ fun ClassificationRoute(
 @Composable
 fun ClassificationScreen(
     state: ClassificationState,
+    modifier: Modifier = Modifier,
     onClickChip: () -> Unit = {},
     onClickDeleteButton: (Int) -> Unit = {},
     onClickMoveButton: (Int) -> Unit = {},
@@ -41,16 +42,16 @@ fun ClassificationScreen(
     onClickBackIcon: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         DoraTopBar.BackNavigationTopBar(
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(id = R.string.ai_classification_title),
             isTitleCenter = true,
-            onClickBackIcon = {},
+            onClickBackIcon = { onClickBackIcon() },
         )
         DoraChips(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             chipList = listOf(  DoraChipUiModel(
                 title = "전체 99+",
                 icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_plus,
