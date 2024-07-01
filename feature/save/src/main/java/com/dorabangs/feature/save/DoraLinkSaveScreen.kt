@@ -55,7 +55,6 @@ fun DoraLinkSaveScreen(
                     .padding(vertical = 20.dp),
                 buttonText = stringResource(R.string.link_save_button_text),
                 enabled = true,
-                color = BtnMaxColorTokens.ContainerColor1,
                 onClickButton = {
                     // TODO: 버튼 연결
                 },
