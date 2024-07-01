@@ -3,6 +3,7 @@ package com.mashup.dorabangs.feature.home
 import android.view.View
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,6 +53,7 @@ fun HomeRoute(
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
     actionSnackBar: () -> Unit = {},
+    navigateToClassification: () -> Unit = {}
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -79,6 +81,7 @@ fun HomeRoute(
             state = state,
             modifier = modifier,
             onClickChip = viewModel::changeSelectedTapIdx,
+            navigateToClassification = navigateToClassification
         )
 
         HomeDoraSnackBar(
@@ -102,6 +105,7 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     onClickChip: (Int) -> Unit = {},
+    navigateToClassification: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -119,7 +123,8 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(310.dp)
-                    .background(DoraColorTokens.G5),
+                    .background(DoraColorTokens.G5)
+                    .clickable { navigateToClassification() },
             )
         }
 
