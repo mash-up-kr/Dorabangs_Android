@@ -27,14 +27,14 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
 @Composable
-fun DoraBottomSheetItems(
+fun DoraFolderListItems(
     items: List<BottomSheetItemUIModel>,
     modifier: Modifier = Modifier,
     onClickItem: (Int) -> Unit = {},
 ) {
     Column(modifier) {
         items.forEachIndexed { index, data ->
-            DoraBottomSheetItem(
+            DoraFolderListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onClickItem(index) }
@@ -67,7 +67,7 @@ fun DoraBottomSheetItems(
 }
 
 @Composable
-fun DoraBottomSheetItem(
+fun DoraFolderListItem(
     data: BottomSheetItemUIModel,
     modifier: Modifier = Modifier,
 ) {
@@ -101,7 +101,7 @@ fun DoraBottomSheetFolderItem(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        DoraBottomSheetItem(
+        DoraFolderListItem(
             BottomSheetItemUIModel(
                 icon = data.icon,
                 itemName = data.itemName,
@@ -120,8 +120,8 @@ fun DoraBottomSheetFolderItem(
 
 @Preview
 @Composable
-fun PreviewDoraBottomSheetItems() {
-    DoraBottomSheetItems(
+fun PreviewDoraFolderListItems() {
+    DoraFolderListItems(
         modifier = Modifier.fillMaxWidth(),
         items = listOf(
             BottomSheetItemUIModel(R.drawable.ic_plus, "폴더 삭제", color = DoraColorTokens.Alert),
@@ -132,7 +132,7 @@ fun PreviewDoraBottomSheetItems() {
 
 @Preview
 @Composable
-fun PreivewDoraBottomSheetFolderItem() {
+fun PreviewDoraFolderListItem() {
     DoraBottomSheetFolderItem(
         modifier = Modifier.fillMaxWidth(),
         data = SelectableBottomSheetItemUIModel(

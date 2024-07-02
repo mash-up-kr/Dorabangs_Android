@@ -31,7 +31,7 @@ object DoraBottomSheet : BottomSheetType {
                 containerColor = BottomSheetColorTokens.MoreViewBackgroundColor,
                 onDismissRequest = onDismissRequest,
             ) {
-                DoraBottomSheetItems(
+                DoraFolderListItems(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
