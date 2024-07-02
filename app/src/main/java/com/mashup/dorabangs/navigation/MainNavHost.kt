@@ -25,13 +25,13 @@ fun MainNavHost(
         navController = appState.navController,
         startDestination = startDestination,
     ) {
-        homeNavigation {
-            appState.navController.navigateToSaveLink()
+        homeNavigation { copiedUrl ->
+            appState.navController.navigateToSaveLink(copiedUrl = copiedUrl)
         }
-        storageNavigation(appState.navController)
-        storageDetailNavigation(appState.navController)
-        saveLinkNavigation(appState.navController)
-        saveLinkSelectFolder(appState.navController) {
+        storageNavigation(navController = appState.navController)
+        storageDetailNavigation(navController = appState.navController)
+        saveLinkNavigation(navController = appState.navController)
+        saveLinkSelectFolder(navController = appState.navController) {
             // TODO 다하고 저장누르면 서버에 정보 날리고 홈으로 이동
             val bottomNavigationOption =
                 navOptions {

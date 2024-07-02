@@ -10,7 +10,7 @@ import com.mashup.dorabangs.feature.home.HomeRoute
 fun NavController.navigateToHome(navOptions: NavOptions) =
     navigate(NavigationRoute.HomeScreen.route, navOptions)
 
-fun NavGraphBuilder.homeNavigation(action: () -> Unit) {
+fun NavGraphBuilder.homeNavigation(action: (String) -> Unit) {
     composable(
         route = NavigationRoute.HomeScreen.route,
     ) {
