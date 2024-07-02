@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.feature.onboarding
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
+import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -70,7 +72,7 @@ fun OnBoardingScreen(
                 .fillMaxWidth()
                 .padding(vertical = 20.dp),
             buttonText = "확인",
-            enabled = false,
+            enabled = state.selectedIndex.isNotEmpty(),
             onClickButton = {}
         )
     }
@@ -89,6 +91,13 @@ private fun KeywordChip(
                 color = DoraColorTokens.G1,
                 shape = DoraRoundTokens.Round99,
             )
+            .thenIf(isSelected) {
+                border(
+                    width = 1.5.dp,
+                    color = DoraColorTokens.Color737373,
+                    shape = DoraRoundTokens.Round99
+                )
+            }
             .clickable(onClick = onClickKeyword)
             .padding(horizontal = 20.dp, vertical = 6.dp),
     ) {
@@ -126,7 +135,8 @@ fun PreviewOnBoardingScreen() {
                 "빨아야함",
                 "이거",
                 "실화냐!!!!!!"
-            )
+            ),
+            selectedIndex = setOf(4,9)
         )
     )
 }
