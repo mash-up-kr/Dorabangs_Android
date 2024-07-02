@@ -19,6 +19,7 @@ import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 
 @Composable
 fun DoraLinkSaveScreen(
+    onClickSaveButton: () -> Unit,
     onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -44,7 +45,7 @@ fun DoraLinkSaveScreen(
                 hintText = stringResource(id = R.string.link_save_hint_text),
                 labelText = stringResource(id = R.string.link_save_label_text),
                 helperText = stringResource(id = R.string.link_save_error_text),
-                helperEnabled = true, // 서버통신 이후에 알 수 있음
+                helperEnabled = true, // TODO 서버통신 이후에 알 수 있음
                 counterEnabled = true,
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -54,9 +55,7 @@ fun DoraLinkSaveScreen(
                     .padding(vertical = 20.dp),
                 buttonText = stringResource(R.string.link_save_button_text),
                 enabled = true,
-                onClickButton = {
-                    // TODO: 버튼 연결
-                },
+                onClickButton = onClickSaveButton,
             )
             Spacer(modifier = Modifier.height(20.dp))
         }
@@ -66,5 +65,8 @@ fun DoraLinkSaveScreen(
 @Composable
 @Preview
 fun DoraLinkSaveScreenPreview() {
-    DoraLinkSaveScreen({})
+    DoraLinkSaveScreen(
+        onClickBackIcon = {},
+        onClickSaveButton = {},
+    )
 }
