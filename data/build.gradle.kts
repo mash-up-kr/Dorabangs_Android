@@ -56,4 +56,16 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlin.test)
+
+    // Network
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter)
+    implementation(libs.serialization)
+
+    // Flipper
+    implementation(libs.flipper)
+    implementation(libs.soloader)
+    implementation(libs.flipper.network)
 }

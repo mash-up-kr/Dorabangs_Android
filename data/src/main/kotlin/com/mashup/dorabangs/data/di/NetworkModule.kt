@@ -1,4 +1,4 @@
-package com.mashup.dorabangs.di
+package com.mashup.dorabangs.data.di
 
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
