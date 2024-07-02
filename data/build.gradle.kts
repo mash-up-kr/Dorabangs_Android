@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.library)
@@ -20,6 +22,7 @@ android {
     buildTypes {
         debug {
             isMinifyEnabled = false
+            buildConfigField("String", "SERVER_BASE_URL", "\"${gradleLocalProperties(rootDir).getProperty("server_base_url") ?: ""}\"")
         }
         release {
             isMinifyEnabled = true
@@ -27,6 +30,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            buildConfigField("String", "SERVER_BASE_URL", getSeverBaseUrl("server_base_url"))
         }
     }
     compileOptions {
@@ -35,6 +39,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = "18"
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
@@ -70,4 +78,8 @@ dependencies {
     implementation(libs.flipper.network)
 
     implementation(libs.androidx.datastore)
+}
+
+fun getSeverBaseUrl(propertyKey: String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
