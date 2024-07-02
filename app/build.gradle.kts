@@ -69,6 +69,7 @@ dependencies {
     implementation(project(":core:coroutine"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
+    implementation(project(":feature:onboarding"))
     implementation(project(":feature:home"))
     implementation(project(":feature:storage"))
     implementation(project(":feature:save"))

@@ -6,5 +6,5 @@ data class OnBoardingState(
 )
 
 sealed class OnBoardingSideEffect {
-
+    object NavigateToHome : OnBoardingSideEffect()
 }

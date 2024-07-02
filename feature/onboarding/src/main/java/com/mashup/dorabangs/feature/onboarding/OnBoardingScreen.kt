@@ -28,6 +28,7 @@ fun OnBoardingScreen(
     state: OnBoardingState,
     modifier: Modifier = Modifier,
     onClickKeyword: (Int) -> Unit = {},
+    onClickOkButton: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -73,7 +74,7 @@ fun OnBoardingScreen(
                 .padding(vertical = 20.dp),
             buttonText = "확인",
             enabled = state.selectedIndex.isNotEmpty(),
-            onClickButton = {}
+            onClickButton = onClickOkButton
         )
     }
 }
