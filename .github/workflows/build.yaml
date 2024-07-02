@@ -31,3 +31,9 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew assembleDebug
+      - name: Access SERVER_BASE_URL
+        run:  |
+          echo server_base_url=\"$API_KEY\" > local.properties
+        shell: bash
+        env: 
+          API_KEY: ${{ secrets.SERVER_BASE_URL }}
