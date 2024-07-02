@@ -36,10 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
+import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
+import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopAppBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import kotlinx.coroutines.launch
@@ -82,6 +85,9 @@ fun HomeRoute(
             modifier = modifier,
             onClickChip = viewModel::changeSelectedTapIdx,
             navigateToClassification = navigateToClassification,
+            onClickMoreButton = {
+                viewModel.setVisibleMoreButtonBottomSheet(true)
+            },
         )
 
         HomeDoraSnackBar(
@@ -96,6 +102,37 @@ fun HomeRoute(
             showSnackBarWithText = viewModel::showSnackBar,
             dismissAction = viewModel::hideSnackBar,
         )
+
+        DoraBottomSheet.MoreButtonBottomSheet(
+            modifier = Modifier.height(320.dp),
+            isShowSheet = state.isShowMoreButtonSheet,
+            onClickDeleteLinkButton = {
+                viewModel.setVisibleMoreButtonBottomSheet(false)
+                viewModel.setVisibleDialog(true)
+            },
+            onClickMoveFolderButton = {
+                viewModel.setVisibleMoreButtonBottomSheet(false)
+                viewModel.setVisibleMovingFolderBottomSheet(true)
+            },
+            onDismissRequest = { viewModel.setVisibleMoreButtonBottomSheet(false) },
+        )
+
+        DoraBottomSheet.MovingFolderBottomSheet(
+            modifier = Modifier.height(441.dp),
+            isShowSheet = state.isShowMovingFolderSheet,
+            folderList = testFolderListData,
+            onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
+        )
+
+        DoraDialog(
+            isShowDialog = state.isShowDialog,
+            title = stringResource(R.string.remove_dialog_title),
+            content = stringResource(R.string.remove_dialog_content),
+            confirmBtnText = stringResource(R.string.remove_dialog_confirm),
+            disMissBtnText = stringResource(R.string.remove_dialog_cancil),
+            onDisMissRequest = { viewModel.setVisibleDialog(false) },
+            onClickConfirmBtn = { viewModel.setVisibleDialog(false) },
+        )
     }
 }
 
@@ -106,6 +143,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onClickChip: (Int) -> Unit = {},
     navigateToClassification: () -> Unit = {},
+    onClickMoreButton: (Int) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -142,6 +180,9 @@ fun HomeScreen(
         Feeds(
             modifier = Modifier,
             feeds = state.feedCards,
+            onClickMoreButton = { index ->
+                onClickMoreButton(index)
+            },
         )
     }
 }
@@ -149,6 +190,7 @@ fun HomeScreen(
 private fun LazyListScope.Feeds(
     feeds: List<FeedCardUiModel>,
     modifier: Modifier = Modifier,
+    onClickMoreButton: (Int) -> Unit = {},
 ) {
     if (feeds.isEmpty()) {
         item {
@@ -168,9 +210,14 @@ private fun LazyListScope.Feeds(
             }
         }
     } else {
-        items(feeds.size) {
-            FeedCard(cardInfo = feeds[it])
-            if (it != feeds.lastIndex) {
+        items(feeds.size) { index ->
+            FeedCard(
+                cardInfo = feeds[index],
+                onClickMoreButton = {
+                    onClickMoreButton(index)
+                },
+            )
+            if (index != feeds.lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
                     thickness = 0.5.dp,
@@ -207,3 +254,26 @@ fun HomeScreenPreview() {
         ),
     )
 }
+
+val testFolderListData = listOf(
+    SelectableBottomSheetItemUIModel(
+        R.drawable.ic_plus,
+        "폴더이름",
+        false,
+    ),
+    SelectableBottomSheetItemUIModel(
+        R.drawable.ic_plus,
+        "폴더이름",
+        false,
+    ),
+    SelectableBottomSheetItemUIModel(
+        R.drawable.ic_plus,
+        "폴더이름",
+        true,
+    ),
+    SelectableBottomSheetItemUIModel(
+        R.drawable.ic_plus,
+        "폴더이름",
+        false,
+    ),
+)

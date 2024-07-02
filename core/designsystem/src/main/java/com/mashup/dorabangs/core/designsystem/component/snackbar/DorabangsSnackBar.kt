@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.core.designsystem.component.snackbar
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -105,10 +106,9 @@ fun SnackBarContent(
             modifier = Modifier.size(24.dp),
             onClick = dismissAction,
         ) {
-            Icon(
+            Image(
                 imageVector = DoraIconClose.CloseCircle,
                 contentDescription = stringResource(id = R.string.snack_bar_cancel_description),
-                tint = ClipBoardColorTokens.UrlLinkSubColor1,
             )
         }
     }

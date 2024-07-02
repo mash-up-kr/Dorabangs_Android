@@ -76,3 +76,11 @@ class ChipColorTokens(isSelected: Boolean) {
     val OnContainerColor = if (isSelected) DoraColorTokens.White else DoraColorTokens.G6
     val BorderColor = if (isSelected) DoraColorTokens.Black else DoraColorTokens.G2
 }
+
+object BottomSheetColorTokens {
+    val MoreViewBackgroundColor = DoraColorTokens.G1
+    val MovingFolderColor = DoraColorTokens.White
+    val HandleColor = DoraColorTokens.G2
+    val ItemColor = DoraColorTokens.White
+    val DividerColor = DoraColorTokens.G3
+}
