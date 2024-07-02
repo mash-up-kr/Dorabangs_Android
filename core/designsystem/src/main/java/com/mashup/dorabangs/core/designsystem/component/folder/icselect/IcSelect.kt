@@ -15,11 +15,22 @@ public val ImgSelect.IcSelect: ImageVector
         if (_icSelect != null) {
             return _icSelect!!
         }
-        _icSelect = Builder(name = "IcSelect", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
-                viewportWidth = 24.0f, viewportHeight = 24.0f).apply {
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+        _icSelect = Builder(
+            name = "IcSelect",
+            defaultWidth = 24.0.dp,
+            defaultHeight = 24.0.dp,
+            viewportWidth = 24.0f,
+            viewportHeight = 24.0f,
+        ).apply {
+            path(
+                fill = SolidColor(Color(0xFF000000)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
+            ) {
                 moveTo(10.0f, 17.0f)
                 lineTo(9.2929f, 17.7071f)
                 lineTo(10.0f, 18.4142f)
@@ -46,7 +57,7 @@ public val ImgSelect.IcSelect: ImageVector
                 close()
             }
         }
-        .build()
+            .build()
         return _icSelect!!
     }
 

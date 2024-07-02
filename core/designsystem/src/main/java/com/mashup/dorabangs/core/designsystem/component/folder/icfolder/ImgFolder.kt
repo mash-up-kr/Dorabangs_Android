@@ -16,13 +16,20 @@ public val Folder.ImgFolder: ImageVector
             return _imgFolder!!
         }
         _imgFolder = Builder(
-            name = "ImgFolder", defaultWidth = 24.0.dp, defaultHeight = 24.0.dp,
-            viewportWidth = 24.0f, viewportHeight = 24.0f
+            name = "ImgFolder",
+            defaultWidth = 24.0.dp,
+            defaultHeight = 24.0.dp,
+            viewportWidth = 24.0f,
+            viewportHeight = 24.0f,
         ).apply {
             path(
-                fill = SolidColor(Color(0xFF4B4C4E)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFF4B4C4E)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(2.0f, 5.5f)
                 curveTo(2.0f, 4.6716f, 2.6716f, 4.0f, 3.5f, 4.0f)
@@ -33,9 +40,13 @@ public val Folder.ImgFolder: ImageVector
                 close()
             }
             path(
-                fill = SolidColor(Color(0xFFADB5BD)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFFADB5BD)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(2.0f, 6.501f)
                 horizontalLineTo(20.0f)
