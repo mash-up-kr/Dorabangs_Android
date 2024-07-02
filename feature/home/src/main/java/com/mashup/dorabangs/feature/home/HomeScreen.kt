@@ -83,7 +83,7 @@ fun HomeRoute(
             modifier = modifier,
             onClickChip = viewModel::changeSelectedTapIdx,
             onClickMoreButton = {
-                viewModel.showMoreButtonBottomSheet()
+                viewModel.setVisibleMoreButtonBottomSheet(true)
             },
         )
 
@@ -104,21 +104,21 @@ fun HomeRoute(
             modifier = Modifier.height(320.dp),
             isShowSheet = state.isShowMoreButtonSheet,
             onClickDeleteLinkButton = {
-                viewModel.dismissMoreButtonBottomSheet()
-                viewModel.showDialog()
+                viewModel.setVisibleMoreButtonBottomSheet(false)
+                viewModel.setVisibleDialog(true)
             },
             onClickMoveFolderButton = {
-                viewModel.dismissMoreButtonBottomSheet()
-                viewModel.showMovingFolderBottomSheet()
+                viewModel.setVisibleMoreButtonBottomSheet(false)
+                viewModel.setVisibleMovingFolderBottomSheet(true)
             },
-            onDismissRequest = viewModel::dismissMoreButtonBottomSheet,
+            onDismissRequest = { viewModel.setVisibleMoreButtonBottomSheet(false) },
         )
 
         DoraBottomSheet.MovingFolderBottomSheet(
             modifier = Modifier.height(441.dp),
             isShowSheet = state.isShowMovingFolderSheet,
             folderList = testFolderListData,
-            onDismissRequest = viewModel::dismissMovingFolderBottomSheet,
+            onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
         )
 
         DoraDialog(
@@ -127,8 +127,8 @@ fun HomeRoute(
             content = stringResource(R.string.remove_dialog_content),
             confirmBtnText = stringResource(R.string.remove_dialog_confirm),
             disMissBtnText = stringResource(R.string.remove_dialog_cancil),
-            onDisMissRequest = viewModel::dismissDialog,
-            onClickConfirmBtn = viewModel::dismissDialog,
+            onDisMissRequest = { viewModel.setVisibleDialog(false) },
+            onClickConfirmBtn = { viewModel.setVisibleDialog(false) },
         )
     }
 }

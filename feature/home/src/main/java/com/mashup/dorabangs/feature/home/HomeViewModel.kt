@@ -48,39 +48,21 @@ constructor(
         }
     }
 
-    fun showMoreButtonBottomSheet() = intent {
+    fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
         reduce {
-            state.copy(isShowMoreButtonSheet = true)
+            state.copy(isShowMoreButtonSheet = visible)
         }
     }
 
-    fun dismissMoreButtonBottomSheet() = intent {
+    fun setVisibleDialog(visible: Boolean) = intent {
         reduce {
-            state.copy(isShowMoreButtonSheet = false)
+            state.copy(isShowDialog = visible)
         }
     }
 
-    fun showDialog() = intent {
+    fun setVisibleMovingFolderBottomSheet(visible: Boolean) = intent {
         reduce {
-            state.copy(isShowDialog = true)
-        }
-    }
-
-    fun dismissDialog() = intent {
-        reduce {
-            state.copy(isShowDialog = false)
-        }
-    }
-
-    fun showMovingFolderBottomSheet() = intent {
-        reduce {
-            state.copy(isShowMovingFolderSheet = true)
-        }
-    }
-
-    fun dismissMovingFolderBottomSheet() = intent {
-        reduce {
-            state.copy(isShowMovingFolderSheet = false)
+            state.copy(isShowMovingFolderSheet = visible)
         }
     }
 
@@ -134,7 +116,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                             isLoading = true,
                         ),
                         FeedCardUiModel(
@@ -143,7 +125,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                         ),
                         FeedCardUiModel(
                             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
@@ -151,7 +133,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                         ),
                         FeedCardUiModel(
                             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
@@ -159,7 +141,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                         ),
                         FeedCardUiModel(
                             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
@@ -167,7 +149,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                         ),
                     ),
                 )
