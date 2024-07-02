@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,7 +23,7 @@ import com.mashup.dorabangs.core.designsystem.component.folder.icfolder.ImgFolde
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 
-val sampleList = listOf(
+var sampleList = listOf(
     DoraSelectableFolderItem(
         Folder.ImgFolder,
         itemName = "새 폴더",
@@ -89,6 +93,12 @@ fun DoraLinkSaveSelectFolderScreen(
     onClickSaveButton: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // 테스트용 임시 값입니다
+    var list by remember {
+        mutableStateOf(
+            sampleList,
+        )
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -107,7 +117,15 @@ fun DoraLinkSaveSelectFolderScreen(
             DoraLinkSaveTitleAndLinkScreen(url = url)
             DoraSelectableFolderListItems(
                 modifier = Modifier,
-                items = sampleList,
+                items = list,
+                onClickItem = { searchIndex ->
+                    // TODO 임시 로직입니다
+                    list = sampleList.mapIndexed { index, doraSelectableFolderItem ->
+                        if (index == searchIndex) {
+                            doraSelectableFolderItem.copy(isSelected = true)
+                        } else doraSelectableFolderItem.copy(isSelected = false)
+                    }
+                },
             )
         }
         Column {
