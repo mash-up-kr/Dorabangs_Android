@@ -22,7 +22,7 @@ android {
     buildTypes {
         debug {
             isMinifyEnabled = false
-            buildConfigField("String", "SERVER_BASE_URL", "\"${gradleLocalProperties(rootDir).getProperty("server_base_url") ?: ""}\"")
+            buildConfigField("String", "SERVER_BASE_URL", getSeverBaseUrl("server_base_url"))
         }
         release {
             isMinifyEnabled = true
