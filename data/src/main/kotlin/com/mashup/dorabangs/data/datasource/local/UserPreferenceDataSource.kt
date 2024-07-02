@@ -1,4 +1,4 @@
-package com.mashup.dorabangs.data.datasource
+package com.mashup.dorabangs.data.datasource.local
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class UserPreferenceDataSource @Inject constructor(
     private val dataStore: DataStore<Preferences>) {
 
-    suspend fun setUserToken(accessToken: String) {
+    suspend fun setUserAccessToken(accessToken: String) {
         setDataStore(stringPreferencesKey(ACCESS_TOKEN), accessToken)
     }
 
@@ -23,10 +23,10 @@ class UserPreferenceDataSource @Inject constructor(
         setDataStore(booleanPreferencesKey(FIRST_ENTRY), isFirst)
     }
 
-    fun getUserToken(): Flow<String> {
+    fun getUserAccessToken(): Flow<String> {
         return getDataStore(stringPreferencesKey(ACCESS_TOKEN), "")
     }
-    
+
     fun getIsFirstEntry(): Flow<Boolean> {
         return getDataStore(booleanPreferencesKey(FIRST_ENTRY), false)
     }
