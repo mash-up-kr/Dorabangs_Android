@@ -48,6 +48,24 @@ constructor(
         }
     }
 
+    fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
+        reduce {
+            state.copy(isShowMoreButtonSheet = visible)
+        }
+    }
+
+    fun setVisibleDialog(visible: Boolean) = intent {
+        reduce {
+            state.copy(isShowDialog = visible)
+        }
+    }
+
+    fun setVisibleMovingFolderBottomSheet(visible: Boolean) = intent {
+        reduce {
+            state.copy(isShowMovingFolderSheet = visible)
+        }
+    }
+
     init {
         intent {
             reduce {
@@ -59,20 +77,23 @@ constructor(
                         ),
                         DoraChipUiModel(
                             title = "하이?",
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "바이?",
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "바이?",
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "바이?",
-                            icon = R.drawable.ic_plus,
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "전체 99+",
-                            icon = R.drawable.ic_plus,
+                            icon = R.drawable.link_icon,
                         ),
                         DoraChipUiModel(
                             title = "하이?",
@@ -85,7 +106,7 @@ constructor(
                         ),
                         DoraChipUiModel(
                             title = "바이?",
-                            icon = R.drawable.ic_plus,
+                            icon = R.drawable.link_icon,
                         ),
                     ),
                     feedCards = listOf(
@@ -95,7 +116,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                             isLoading = true,
                         ),
                         FeedCardUiModel(
@@ -104,7 +125,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                         ),
                         FeedCardUiModel(
                             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
@@ -112,7 +133,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                         ),
                         FeedCardUiModel(
                             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
@@ -120,7 +141,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                         ),
                         FeedCardUiModel(
                             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
@@ -128,7 +149,7 @@ constructor(
                             keywordList = listOf("다연", "호현", "석주"),
                             category = "디자인",
                             createdAt = 1,
-                            thumbnail = androidx.core.R.drawable.ic_call_answer,
+                            thumbnail = R.drawable.ic_plus,
                         ),
                     ),
                 )
