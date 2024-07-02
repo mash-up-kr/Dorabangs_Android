@@ -15,9 +15,15 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildFeatures {
         compose = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_18
         targetCompatibility = JavaVersion.VERSION_18
@@ -28,6 +34,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":core:coroutine"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:navigation"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)

@@ -13,5 +13,9 @@ fun OnBoardingRoute(
 ) {
     val state by viewModel.collectAsState()
 
-    OnBoardingScreen(modifier)
+    OnBoardingScreen(
+        modifier = modifier,
+        state = state,
+        onClickKeyword = {}
+    )
 }
