@@ -6,9 +6,9 @@ import repository.UserDataStoreRepository
 import javax.inject.Inject
 
 class UserDataStoreRepositoryImpl @Inject constructor(
-    private val dataSource: UserPreferenceDataSource
+    private val dataSource: UserPreferenceDataSource,
 
-): UserDataStoreRepository {
+) : UserDataStoreRepository {
     override suspend fun setUserAccessToken(accessToken: String) {
         dataSource.setUserAccessToken(accessToken = accessToken)
     }

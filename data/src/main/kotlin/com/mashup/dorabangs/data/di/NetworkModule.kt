@@ -88,5 +88,5 @@ object NetworkModule {
     @Singleton
     fun providesNetworkFlipperPlugin() = NetworkFlipperPlugin()
 
-    const val AUTHORIZATION = "Authorization"
+    private const val AUTHORIZATION = "Authorization"
 }

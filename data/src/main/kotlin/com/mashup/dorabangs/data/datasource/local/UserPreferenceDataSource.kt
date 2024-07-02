@@ -13,7 +13,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class UserPreferenceDataSource @Inject constructor(
-    private val dataStore: DataStore<Preferences>) {
+    private val dataStore: DataStore<Preferences>,
+) {
 
     suspend fun setUserAccessToken(accessToken: String) {
         setDataStore(stringPreferencesKey(ACCESS_TOKEN), accessToken)
@@ -54,5 +55,4 @@ class UserPreferenceDataSource @Inject constructor(
         private const val ACCESS_TOKEN = "ACCESS_TOKEN"
         private const val FIRST_ENTRY = "FIRST_ENTRY"
     }
-
 }
