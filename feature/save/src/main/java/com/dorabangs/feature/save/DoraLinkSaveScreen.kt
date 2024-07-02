@@ -19,7 +19,6 @@ import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 
 @Composable
 fun DoraLinkSaveScreen(
-    copiedUrl: String,
     onClickSaveButton: () -> Unit,
     onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
@@ -42,7 +41,7 @@ fun DoraLinkSaveScreen(
                 .padding(horizontal = 20.dp),
         ) {
             DoraTextField(
-                text = copiedUrl,
+                text = "",
                 hintText = stringResource(id = R.string.link_save_hint_text),
                 labelText = stringResource(id = R.string.link_save_label_text),
                 helperText = stringResource(id = R.string.link_save_error_text),
@@ -67,7 +66,6 @@ fun DoraLinkSaveScreen(
 @Preview
 fun DoraLinkSaveScreenPreview() {
     DoraLinkSaveScreen(
-        copiedUrl = "",
         onClickBackIcon = {},
         onClickSaveButton = {},
     )

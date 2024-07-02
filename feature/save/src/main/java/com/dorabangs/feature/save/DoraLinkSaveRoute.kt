@@ -6,13 +6,11 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun DoraLinkSaveRoute(
-    copiedUrl: String,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     DoraLinkSaveScreen(
-        copiedUrl = copiedUrl,
         modifier = modifier,
         onClickBackIcon = onClickBackIcon,
         onClickSaveButton = onClickSaveButton,
@@ -23,7 +21,6 @@ fun DoraLinkSaveRoute(
 @Preview
 fun DoraLinkSaveRouterPreview() {
     DoraLinkSaveRoute(
-        copiedUrl = "",
         onClickBackIcon = {},
         onClickSaveButton = {},
     )

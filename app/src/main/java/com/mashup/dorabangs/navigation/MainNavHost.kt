@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import com.dorabangs.feature.navigation.navigateToSaveLink
+import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
@@ -26,7 +26,7 @@ fun MainNavHost(
         startDestination = startDestination,
     ) {
         homeNavigation { copiedUrl ->
-            appState.navController.navigateToSaveLink(copiedUrl = copiedUrl)
+            appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = copiedUrl)
         }
         storageNavigation(navController = appState.navController)
         storageDetailNavigation(navController = appState.navController)

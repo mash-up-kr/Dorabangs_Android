@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +28,7 @@ import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 
 @Composable
 fun DoraLinkSaveTitleAndLinkScreen(
+    url: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -64,8 +66,9 @@ fun DoraLinkSaveTitleAndLinkScreen(
             )
 
             Text(
-                modifier = Modifier,
-                text = "https://www.naver.com/articale 길면 넌 바보다",
+                modifier = Modifier.fillMaxWidth(),
+                text = url,
+                textAlign = TextAlign.Start,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DoraTypoTokens.SMedium,
@@ -78,5 +81,11 @@ fun DoraLinkSaveTitleAndLinkScreen(
 @Composable
 @Preview
 fun DoraLinkSaveTitleAndLinkScreenPreview() {
-    DoraLinkSaveTitleAndLinkScreen()
+    DoraLinkSaveTitleAndLinkScreen(url = "https://www.naver.com/articale 길면 넌 바보다")
+}
+
+@Composable
+@Preview
+fun DoraLinkSaveTitleAndLinkScreenPreviewShort() {
+    DoraLinkSaveTitleAndLinkScreen(url = "https://youtube.com")
 }

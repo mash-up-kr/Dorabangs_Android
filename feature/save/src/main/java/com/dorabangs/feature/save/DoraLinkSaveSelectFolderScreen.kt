@@ -84,6 +84,7 @@ val sampleList = listOf(
 
 @Composable
 fun DoraLinkSaveSelectFolderScreen(
+    url: String,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
     modifier: Modifier = Modifier,
@@ -103,7 +104,7 @@ fun DoraLinkSaveSelectFolderScreen(
                 isTitleCenter = true,
                 onClickBackIcon = onClickBackIcon,
             )
-            DoraLinkSaveTitleAndLinkScreen()
+            DoraLinkSaveTitleAndLinkScreen(url = url)
             DoraSelectableFolderListItems(
                 modifier = Modifier,
                 items = sampleList,
@@ -126,6 +127,7 @@ fun DoraLinkSaveSelectFolderScreen(
 @Preview
 fun DoraLinkSaveSelectFolderScreenPreview() {
     DoraLinkSaveSelectFolderScreen(
+        url = "https://www.naver.com/articale 길면 넌 바보다",
         onClickBackIcon = {},
         onClickSaveButton = {},
     )
