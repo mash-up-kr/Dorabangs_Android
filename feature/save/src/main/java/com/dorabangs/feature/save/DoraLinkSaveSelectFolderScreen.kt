@@ -85,6 +85,7 @@ val sampleList = listOf(
 @Composable
 fun DoraLinkSaveSelectFolderScreen(
     onClickBackIcon: () -> Unit,
+    onClickSaveButton: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -115,9 +116,7 @@ fun DoraLinkSaveSelectFolderScreen(
                     .padding(all = 20.dp),
                 buttonText = "저장",
                 enabled = sampleList.any { it.isSelected },
-                onClickButton = {
-                    TODO("저장했더잉")
-                },
+                onClickButton = onClickSaveButton,
             )
         }
     }
@@ -127,6 +126,7 @@ fun DoraLinkSaveSelectFolderScreen(
 @Preview
 fun DoraLinkSaveSelectFolderScreenPreview() {
     DoraLinkSaveSelectFolderScreen(
-        {},
+        onClickBackIcon = {},
+        onClickSaveButton = {},
     )
 }
