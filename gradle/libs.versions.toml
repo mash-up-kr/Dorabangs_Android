@@ -1,6 +1,15 @@
 [versions]
+
+#project
+compile-sdk = "34"
+min-sdk = "24"
+target-sdk = "33"
+version-code = "1"
+versionName = "1.0"
+
 agp = "8.1.3"
 org-jetbrains-kotlin-android = "1.8.10"
+coil = "2.6.0"
 core-ktx = "1.13.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
@@ -80,6 +89,9 @@ orbit-core = { group = "org.orbit-mvi", name = "orbit-core", version.ref = "orbi
 orbit-viewmodel = { group = "org.orbit-mvi", name = "orbit-viewmodel", version.ref = "orbit" }
 orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref = "orbit" }
 orbit-test = { group = "org.orbit-mvi", name = "orbit-test", version.ref = "orbit" }
+
+#image
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
