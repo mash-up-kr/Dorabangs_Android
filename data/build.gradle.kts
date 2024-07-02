@@ -68,4 +68,6 @@ dependencies {
     implementation(libs.flipper)
     implementation(libs.soloader)
     implementation(libs.flipper.network)
+
+    implementation(libs.androidx.datastore)
 }

@@ -27,6 +27,7 @@ flipper = "0.250.0"
 soloader = "0.10.5"
 retrofitConverter = "1.0.0"
 orbit = "8.0.0"
+datastore = "1.1.1"
 
 
 [libraries]
@@ -52,6 +53,7 @@ soloader = { group = "com.facebook.soloader", name = "soloader", version.ref = "
 flipper-network = { group = "com.facebook.flipper", name = "flipper-network-plugin", version.ref = "flipper" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 #test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
