@@ -17,6 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
@@ -98,7 +100,15 @@ private fun KeywordChip(
             .thenIf(isSelected) {
                 border(
                     width = 1.5.dp,
-                    color = DoraColorTokens.Color737373,
+                    brush = Brush.sweepGradient(
+                        colors = listOf(
+                            Color(0xFFA698FF),
+                            Color(0xFFE4EDFF),
+                            Color(0xFF77C6FF),
+                            Color(0xFFABBDFF),
+                            Color(0xFFD796FF),
+                        )
+                    ),
                     shape = DoraRoundTokens.Round99
                 )
             }
@@ -144,7 +154,7 @@ fun PreviewOnBoardingScreen() {
                 "이거",
                 "실화냐!!!!!!"
             ),
-            selectedIndex = setOf(4,9)
+            selectedIndex = setOf(4, 9)
         )
     )
 }

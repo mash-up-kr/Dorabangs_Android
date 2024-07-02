@@ -33,7 +33,7 @@ class OnBoardingViewModel @Inject constructor(
     init {
         intent {
             reduce {
-                OnBoardingState(
+                state.copy(
                     keywords = listOf(
                         "테스트",
                         "입니다",
@@ -56,8 +56,7 @@ class OnBoardingViewModel @Inject constructor(
                         "빨아야함",
                         "이거",
                         "실화냐!!!!!!"
-                    ),
-                    selectedIndex = setOf(4,9)
+                    )
                 )
             }
         }
