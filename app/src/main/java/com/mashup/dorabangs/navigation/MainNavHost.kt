@@ -24,7 +24,7 @@ fun MainNavHost(
         startDestination = startDestination,
     ) {
         onBoardingNavigation(
-            navigateToHome = { appState.navController.navigateToHome() }
+            navigateToHome = { appState.navController.navigateToHome() },
         )
         homeNavigation {
             appState.navController.navigateToSaveLink()

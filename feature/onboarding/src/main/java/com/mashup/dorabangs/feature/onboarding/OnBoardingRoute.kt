@@ -11,7 +11,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun OnBoardingRoute(
     modifier: Modifier = Modifier,
     viewModel: OnBoardingViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit = {}
+    navigateToHome: () -> Unit = {},
 ) {
     val state by viewModel.collectAsState()
 
@@ -27,6 +27,6 @@ fun OnBoardingRoute(
         modifier = modifier,
         state = state,
         onClickKeyword = { index -> viewModel.onClickKeyword(index) },
-        onClickOkButton = viewModel::onClickOkButton
+        onClickOkButton = viewModel::onClickOkButton,
     )
 }

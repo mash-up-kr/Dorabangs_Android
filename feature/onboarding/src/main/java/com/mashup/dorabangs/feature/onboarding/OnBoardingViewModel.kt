@@ -55,8 +55,8 @@ class OnBoardingViewModel @Inject constructor(
                         "다시",
                         "빨아야함",
                         "이거",
-                        "실화냐!!!!!!"
-                    )
+                        "실화냐!!!!!!",
+                    ),
                 )
             }
         }

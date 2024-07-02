@@ -1,6 +1,5 @@
 package com.mashup.dorabangs.feature.onboarding
 
-import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -38,19 +37,19 @@ fun OnBoardingScreen(
     Column(
         modifier = modifier
             .padding(horizontal = 20.dp)
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         Text(
             modifier = Modifier.padding(top = 104.dp),
             text = "어떤 유형의 URL 카테고리를\n저장하시나요?",
             style = DoraTypoTokens.TitleBold,
-            color = DoraColorTokens.G9
+            color = DoraColorTokens.G9,
         )
         Text(
             modifier = Modifier.padding(top = 10.dp),
             text = "1개 이상을 선택해주세요.\n선택하신 키워드로 자동으로 폴더가 생성돼요.",
             style = DoraTypoTokens.caption2Normal,
-            color = DoraColorTokens.G4
+            color = DoraColorTokens.G4,
         )
 
         FlowRow(
@@ -68,7 +67,7 @@ fun OnBoardingScreen(
                         .padding(horizontal = 8.dp),
                     keyword = keyword,
                     isSelected = index in state.selectedIndex,
-                    onClickKeyword = { onClickKeyword(index) }
+                    onClickKeyword = { onClickKeyword(index) },
                 )
             }
         }
@@ -79,7 +78,7 @@ fun OnBoardingScreen(
                 .padding(vertical = 20.dp),
             buttonText = "확인",
             enabled = state.selectedIndex.isNotEmpty(),
-            onClickButton = onClickOkButton
+            onClickButton = onClickOkButton,
         )
     }
 }
@@ -89,7 +88,7 @@ private fun KeywordChip(
     keyword: String,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    onClickKeyword: () -> Unit = {}
+    onClickKeyword: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -107,21 +106,21 @@ private fun KeywordChip(
                             Color(0xFF77C6FF),
                             Color(0xFFABBDFF),
                             Color(0xFFD796FF),
-                        )
+                        ),
                     ),
-                    shape = DoraRoundTokens.Round99
+                    shape = DoraRoundTokens.Round99,
                 )
             }
             .clickable(
                 onClick = onClickKeyword,
                 indication = null,
-                interactionSource = remember { MutableInteractionSource() }
+                interactionSource = remember { MutableInteractionSource() },
             )
             .padding(horizontal = 20.dp, vertical = 6.dp),
     ) {
         Text(
             text = keyword,
-            style = DoraTypoTokens.caption2Medium
+            style = DoraTypoTokens.caption2Medium,
         )
     }
 }
@@ -152,9 +151,9 @@ fun PreviewOnBoardingScreen() {
                 "다시",
                 "빨아야함",
                 "이거",
-                "실화냐!!!!!!"
+                "실화냐!!!!!!",
             ),
-            selectedIndex = setOf(4, 9)
-        )
+            selectedIndex = setOf(4, 9),
+        ),
     )
 }
