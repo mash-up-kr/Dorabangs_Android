@@ -20,7 +20,7 @@ class UserPreferenceDataSource @Inject constructor(
         setDataStore(stringPreferencesKey(ACCESS_TOKEN), accessToken)
     }
 
-    suspend fun setIsFirstEntry(isFirst: Boolean = true) {
+    suspend fun setIsFirstEntry(isFirst: Boolean) {
         setDataStore(booleanPreferencesKey(FIRST_ENTRY), isFirst)
     }
 
