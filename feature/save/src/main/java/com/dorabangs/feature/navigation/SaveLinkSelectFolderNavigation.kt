@@ -22,7 +22,7 @@ fun NavController.navigateToSaveLinkSelectFolder(
 }
 
 fun NavGraphBuilder.saveLinkSelectFolder(
-    navController: NavHostController,
+    onClickBackButton: () -> Unit,
     onClickSaveButton: () -> Unit,
 ) {
     composable(
@@ -38,9 +38,7 @@ fun NavGraphBuilder.saveLinkSelectFolder(
             modifier = Modifier,
             url = entry.arguments?.getString("copiedUrl").orEmpty(),
             onClickSaveButton = onClickSaveButton,
-            onClickBackIcon = {
-                navController.popBackStack()
-            },
+            onClickBackIcon = onClickBackButton,
         )
     }
 }

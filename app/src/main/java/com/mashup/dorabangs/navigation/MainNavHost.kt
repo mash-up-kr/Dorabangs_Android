@@ -30,19 +30,27 @@ fun MainNavHost(
         }
         storageNavigation(navController = appState.navController)
         storageDetailNavigation(navController = appState.navController)
-        saveLinkNavigation(navController = appState.navController)
-        saveLinkSelectFolder(navController = appState.navController) {
-            // TODO 다하고 저장누르면 서버에 정보 날리고 홈으로 이동
-            val bottomNavigationOption =
-                navOptions {
-                    popUpTo(appState.navController.graph.findStartDestination().id) {
-                        saveState = true
+        saveLinkNavigation(
+            onClickBackIcon = { appState.navController.popBackStack() },
+            onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = "") }
+        )
+        saveLinkSelectFolder(
+            onClickBackButton = {
+                appState.navController.popBackStack()
+            },
+            onClickSaveButton = {
+                // TODO 다하고 저장누르면 서버에 정보 날리고 홈으로 이동
+                val bottomNavigationOption =
+                    navOptions {
+                        popUpTo(appState.navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
-                }
 
-            appState.navController.navigateToHome(navOptions = bottomNavigationOption)
-        }
+                appState.navController.navigateToHome(navOptions = bottomNavigationOption)
+            },
+        )
     }
 }

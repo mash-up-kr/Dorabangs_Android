@@ -12,17 +12,16 @@ fun NavController.navigateToSaveLink(navOptions: NavOptions? = null) {
     navigate(NavigationRoute.SaveLink.route, navOptions)
 }
 
-fun NavGraphBuilder.saveLinkNavigation(navController: NavHostController) {
+fun NavGraphBuilder.saveLinkNavigation(
+    onClickBackIcon: () -> Unit,
+    onClickSaveButton: () -> Unit,
+) {
     composable(
         route = NavigationRoute.SaveLink.route,
-    ) { entry ->
+    ) {
         DoraLinkSaveRoute(
-            onClickBackIcon = {
-                navController.popBackStack()
-            },
-            onClickSaveButton = {
-                navController.navigateToSaveLinkSelectFolder(copiedUrl = "")
-            },
+            onClickBackIcon = onClickBackIcon,
+            onClickSaveButton = onClickSaveButton,
         )
     }
 }
