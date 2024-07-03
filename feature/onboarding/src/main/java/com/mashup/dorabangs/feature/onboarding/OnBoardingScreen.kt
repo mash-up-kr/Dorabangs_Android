@@ -18,8 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
@@ -41,13 +43,13 @@ fun OnBoardingScreen(
     ) {
         Text(
             modifier = Modifier.padding(top = 104.dp),
-            text = "어떤 유형의 URL 카테고리를\n저장하시나요?",
+            text = stringResource(id = R.string.onboarding_screen_title),
             style = DoraTypoTokens.TitleBold,
             color = DoraColorTokens.G9,
         )
         Text(
             modifier = Modifier.padding(top = 10.dp),
-            text = "1개 이상을 선택해주세요.\n선택하신 키워드로 자동으로 폴더가 생성돼요.",
+            text = stringResource(id = R.string.onboarding_screen_sub_title),
             style = DoraTypoTokens.caption2Normal,
             color = DoraColorTokens.G4,
         )
@@ -76,7 +78,7 @@ fun OnBoardingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 20.dp),
-            buttonText = "확인",
+            buttonText = stringResource(id = R.string.onboarding_screen_ok_button),
             enabled = state.selectedIndex.isNotEmpty(),
             onClickButton = onClickOkButton,
         )
@@ -121,6 +123,7 @@ private fun KeywordChip(
         Text(
             text = keyword,
             style = DoraTypoTokens.caption2Medium,
+            color = DoraColorTokens.Black,
         )
     }
 }

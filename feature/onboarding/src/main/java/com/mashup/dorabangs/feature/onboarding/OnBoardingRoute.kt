@@ -26,7 +26,7 @@ fun OnBoardingRoute(
     OnBoardingScreen(
         modifier = modifier,
         state = state,
-        onClickKeyword = { index -> viewModel.onClickKeyword(index) },
+        onClickKeyword = viewModel::onClickKeyword,
         onClickOkButton = viewModel::onClickOkButton,
     )
 }
