@@ -1,7 +1,7 @@
 package com.mashup.dorabangs.domain.clipboard.usecase.user
 
-import kotlinx.coroutines.flow.Flow
 import com.mashup.dorabangs.domain.clipboard.repository.UserDataStoreRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetIsFirstEntryUseCase @Inject constructor(

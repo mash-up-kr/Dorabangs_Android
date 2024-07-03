@@ -1,8 +1,8 @@
 package com.mashup.dorabangs.feature.home
 
-import com.mashup.dorabangs.domain.clipboard.isValidUrl
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.domain.clipboard.isValidUrl
 
 data class HomeState(
     val clipBoardState: ClipBoardState = ClipBoardState(),

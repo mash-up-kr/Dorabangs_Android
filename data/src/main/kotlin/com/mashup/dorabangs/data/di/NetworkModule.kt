@@ -4,6 +4,7 @@ import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.mashup.dorabangs.data.BuildConfig
+import com.mashup.dorabangs.domain.clipboard.usecase.user.GetUserAccessTokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +17,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
-import com.mashup.dorabangs.domain.clipboard.usecase.user.GetUserAccessTokenUseCase
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
