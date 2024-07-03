@@ -40,16 +40,14 @@ fun MainNavHost(
             },
             onClickSaveButton = {
                 // TODO 다하고 저장누르면 서버에 정보 날리고 홈으로 이동
-                val bottomNavigationOption =
-                    navOptions {
-                        popUpTo(appState.navController.graph.findStartDestination().id) {
-                            saveState = true
+                // TODO 클릭 때 데이터 스토어에 저장해서 다시 클립보드 안뜨게 하기
+                appState.navController.navigateToHome(
+                    navOptions = navOptions {
+                        popUpTo(appState.navController.graph.id) {
+                            inclusive = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-
-                appState.navController.navigateToHome(navOptions = bottomNavigationOption)
+                    },
+                )
             },
         )
     }
