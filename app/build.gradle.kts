@@ -9,14 +9,14 @@ plugins {
 
 android {
     namespace = "com.mashup.dorabangs"
-    compileSdk = 34
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.mashup.dorabangs"
-        minSdk = 24
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = libs.versions.min.sdk.get().toInt()
+        targetSdk = libs.versions.target.sdk.get().toInt()
+        versionCode = libs.versions.version.code.get().toInt()
+        versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -69,6 +69,7 @@ dependencies {
     implementation(project(":core:coroutine"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
+    implementation(project(":feature:onboarding"))
     implementation(project(":feature:home"))
     implementation(project(":feature:storage"))
     implementation(project(":feature:classification"))

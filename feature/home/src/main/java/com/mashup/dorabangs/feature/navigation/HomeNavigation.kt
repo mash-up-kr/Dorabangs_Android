@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.feature.home.HomeRoute
 
-fun NavController.navigateToHome(navOptions: NavOptions) =
+fun NavController.navigateToHome(navOptions: NavOptions? = null) =
     navigate(NavigationRoute.HomeScreen.route, navOptions)
 
 fun NavGraphBuilder.homeNavigation(

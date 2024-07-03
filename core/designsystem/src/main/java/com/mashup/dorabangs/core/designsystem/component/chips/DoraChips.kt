@@ -74,7 +74,7 @@ fun DoraChip(
             )
             .background(color = colorToken.ContainerColor)
             .clickable(onClick = onClickChip)
-            .padding(horizontal = 12.dp, vertical = 7.dp),
+            .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (doraChipUiModel.icon != null) {
