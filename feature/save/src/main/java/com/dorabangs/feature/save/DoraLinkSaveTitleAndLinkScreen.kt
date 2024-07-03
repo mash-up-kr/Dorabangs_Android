@@ -51,6 +51,7 @@ fun DoraLinkSaveTitleAndLinkScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
+            // TODO(외부 API? 통해서 url로 제목 알아와야함)
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),

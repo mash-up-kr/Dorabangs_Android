@@ -133,7 +133,7 @@ fun DoraLinkSaveSelectFolderScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = 20.dp),
-                buttonText = "저장",
+                buttonText = stringResource(id = R.string.link_save_button_text),
                 enabled = sampleList.any { it.isSelected },
                 onClickButton = onClickSaveButton,
             )
