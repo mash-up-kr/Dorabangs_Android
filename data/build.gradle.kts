@@ -80,5 +80,5 @@ dependencies {
 }
 
 fun getSeverBaseUrl(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey) ?: ""
+    return gradleLocalProperties(rootDir).getProperty(propertyKey).orEmpty()
 }
