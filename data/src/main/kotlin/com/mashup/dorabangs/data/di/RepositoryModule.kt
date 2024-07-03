@@ -5,7 +5,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import repository.UserDataStoreRepository
+import com.mashup.dorabangs.domain.clipboard.repository.UserDataStoreRepository
 import javax.inject.Singleton
 
 @Module

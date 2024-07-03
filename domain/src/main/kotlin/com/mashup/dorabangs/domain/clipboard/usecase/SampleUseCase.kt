@@ -1,4 +1,4 @@
-package usecase
+package com.mashup.dorabangs.domain.clipboard.usecase
 
 class SampleUseCase {
     fun baboTest(bool: Boolean) {

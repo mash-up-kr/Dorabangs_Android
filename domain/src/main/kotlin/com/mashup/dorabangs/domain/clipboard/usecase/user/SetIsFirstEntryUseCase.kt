@@ -1,6 +1,6 @@
-package usecase.user
+package com.mashup.dorabangs.domain.clipboard.usecase.user
 
-import repository.UserDataStoreRepository
+import com.mashup.dorabangs.domain.clipboard.repository.UserDataStoreRepository
 import javax.inject.Inject
 
 class SetIsFirstEntryUseCase @Inject constructor(
