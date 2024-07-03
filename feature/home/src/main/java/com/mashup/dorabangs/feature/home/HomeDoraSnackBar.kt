@@ -16,7 +16,7 @@ fun HomeDoraSnackBar(
     snackBarHostState: SnackbarHostState,
     showSnackBarWithText: (String) -> Unit,
     hideSnackBar: () -> Unit,
-    action: (String) -> Unit,
+    onAction: (String) -> Unit,
     dismissAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -36,7 +36,7 @@ fun HomeDoraSnackBar(
         modifier = modifier,
         text = text,
         snackBarHostState = snackBarHostState,
-        action = action,
+        onAction = onAction,
         dismissAction = dismissAction,
     )
 }

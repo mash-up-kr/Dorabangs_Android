@@ -39,7 +39,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 @Composable
 fun DoraSnackBar(
     text: String,
-    action: (String) -> Unit,
+    onAction: (String) -> Unit,
     dismissAction: () -> Unit,
     snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
@@ -51,7 +51,7 @@ fun DoraSnackBar(
         hostState = snackBarHostState,
     ) {
         SnackBarContent(
-            modifier = Modifier.clickable { action.invoke(text) },
+            modifier = Modifier.clickable { onAction.invoke(text) },
             text = text,
             dismissAction = dismissAction,
         )

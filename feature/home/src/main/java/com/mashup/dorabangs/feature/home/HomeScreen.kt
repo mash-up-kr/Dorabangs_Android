@@ -91,7 +91,7 @@ fun HomeRoute(
             modifier = Modifier
                 .align(Alignment.BottomCenter),
             text = state.clipBoardState.copiedText,
-            action = actionSnackBar,
+            onAction = actionSnackBar,
             snackBarHostState = snackBarHostState,
             view = view,
             clipboardManager = clipboardManager,
