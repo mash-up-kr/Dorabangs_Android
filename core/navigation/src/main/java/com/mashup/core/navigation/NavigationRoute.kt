@@ -6,5 +6,6 @@ sealed class NavigationRoute(val route: String) {
     object StorageScreen : NavigationRoute("storage") {
         object StorageDetailScreen : NavigationRoute("storage/detail")
     }
+    object ClassificationScreen : NavigationRoute("classification")
     object SaveLink : NavigationRoute("save")
 }

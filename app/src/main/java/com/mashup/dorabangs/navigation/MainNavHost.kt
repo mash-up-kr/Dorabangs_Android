@@ -11,6 +11,8 @@ import com.mashup.dorabangs.feature.navigation.navigateToHome
 import com.mashup.dorabangs.feature.navigation.onBoardingNavigation
 import com.mashup.dorabangs.feature.storage.navigation.storageDetailNavigation
 import com.mashup.dorabangs.feature.storage.navigation.storageNavigation
+import com.mashup.feature.classification.navigation.classificationNavigation
+import com.mashup.feature.classification.navigation.navigateToClassification
 
 @Composable
 fun MainNavHost(
@@ -23,6 +25,10 @@ fun MainNavHost(
         navController = appState.navController,
         startDestination = startDestination,
     ) {
+        homeNavigation(
+            navigateToClassification = { appState.navController.navigateToClassification() },
+            action = { appState.navController.navigateToSaveLink() },
+        )
         onBoardingNavigation(
             navigateToHome = { appState.navController.navigateToHome() },
         )
@@ -31,6 +37,7 @@ fun MainNavHost(
         }
         storageNavigation(appState.navController)
         storageDetailNavigation(appState.navController)
+        classificationNavigation(appState.navController)
         saveLinkNavigation(appState.navController)
     }
 }

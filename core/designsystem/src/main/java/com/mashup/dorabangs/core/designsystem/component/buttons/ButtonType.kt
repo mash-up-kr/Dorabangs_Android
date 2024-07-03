@@ -62,6 +62,43 @@ object DoraButtons : ButtonType {
         disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
         onClickButton = onClickButton,
     )
+
+    @Composable
+    override fun DoraSmallConfirmBtn(
+        modifier: Modifier,
+        buttonText: String,
+        onClickButton: () -> Unit,
+    ) = DoraButton(
+        modifier = modifier,
+        buttonText = buttonText,
+        textStyle = DoraTypoTokens.caption3Medium,
+        enabled = true,
+        radius = BtnMaxRoundTokens.FullButtonWidthRadius,
+        containerColor = BtnMaxColorTokens.ContainerColor1,
+        contentColor = BtnMaxColorTokens.ContentColor1,
+        disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
+        disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
+        onClickButton = onClickButton,
+    )
+
+    @Composable
+    override fun DoraColorFullMaxBtn(
+        modifier: Modifier,
+        buttonText: String,
+        enabled: Boolean,
+        onClickButton: () -> Unit,
+    ) = DoraButton(
+        modifier = modifier,
+        buttonText = buttonText,
+        textStyle = DoraTypoTokens.caption1Medium,
+        enabled = enabled,
+        radius = BtnMaxRoundTokens.FullButtonWidthRadius,
+        containerColor = BtnMaxColorTokens.ContainerColor1,
+        contentColor = BtnMaxColorTokens.ContentColor1,
+        disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
+        disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
+        onClickButton = onClickButton,
+    )
 }
 
 sealed interface ButtonType {
@@ -85,6 +122,21 @@ sealed interface ButtonType {
     fun DoraMediumDismissBtn(
         modifier: Modifier,
         buttonText: String,
+        onClickButton: () -> Unit,
+    )
+
+    @Composable
+    fun DoraSmallConfirmBtn(
+        modifier: Modifier,
+        buttonText: String,
+        onClickButton: () -> Unit,
+    )
+
+    @Composable
+    fun DoraColorFullMaxBtn(
+        modifier: Modifier,
+        buttonText: String,
+        enabled: Boolean,
         onClickButton: () -> Unit,
     )
 }

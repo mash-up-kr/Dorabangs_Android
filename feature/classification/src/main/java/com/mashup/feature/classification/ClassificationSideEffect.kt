@@ -1,0 +1,2 @@
+package com.mashup.feature.classification
+sealed class ClassificationSideEffect
