@@ -1,7 +1,7 @@
 package com.mashup.dorabangs.data.repository
 
 import com.mashup.dorabangs.data.datasource.local.UserPreferenceDataSource
-import com.mashup.dorabangs.domain.clipboard.repository.UserDataStoreRepository
+import com.mashup.dorabangs.domain.repository.UserDataStoreRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

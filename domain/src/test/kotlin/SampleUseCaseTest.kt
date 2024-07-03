@@ -1,4 +1,4 @@
-import com.mashup.dorabangs.domain.clipboard.usecase.SampleUseCase
+import com.mashup.dorabangs.domain.usecase.SampleUseCase
 import io.mockk.spyk
 import org.junit.Test
 

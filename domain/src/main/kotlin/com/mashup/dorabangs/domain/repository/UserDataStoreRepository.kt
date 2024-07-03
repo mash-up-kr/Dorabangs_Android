@@ -1,4 +1,4 @@
-package com.mashup.dorabangs.domain.clipboard.repository
+package com.mashup.dorabangs.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 
