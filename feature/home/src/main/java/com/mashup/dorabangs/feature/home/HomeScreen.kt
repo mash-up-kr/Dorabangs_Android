@@ -55,7 +55,7 @@ fun HomeRoute(
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
-    actionSnackBar: () -> Unit = {},
+    navigateToSaveLink: (String) -> Unit = {},
     navigateToClassification: () -> Unit = {},
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
@@ -94,7 +94,7 @@ fun HomeRoute(
             modifier = Modifier
                 .align(Alignment.BottomCenter),
             text = state.clipBoardState.copiedText,
-            action = actionSnackBar,
+            onAction = navigateToSaveLink,
             snackBarHostState = snackBarHostState,
             view = view,
             clipboardManager = clipboardManager,
