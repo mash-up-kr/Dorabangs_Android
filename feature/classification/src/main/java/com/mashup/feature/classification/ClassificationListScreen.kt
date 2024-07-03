@@ -62,9 +62,9 @@ fun ClassificationListScreen(
 @Composable
 fun ClassificationFolderMove(
     selectedFolder: String,
+    onClickAllItemMoveButton: () -> Unit,
     modifier: Modifier = Modifier,
     count: Int = 0,
-    onClickAllItemMoveButton: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -104,9 +104,9 @@ fun ClassificationCardItem(
     cardItem: FeedCardUiModel,
     cardItemList: List<FeedCardUiModel>,
     selectedFolder: String,
-    modifier: Modifier = Modifier,
     onClickDeleteButton: (Int) -> Unit,
     onClickMoveButton: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier

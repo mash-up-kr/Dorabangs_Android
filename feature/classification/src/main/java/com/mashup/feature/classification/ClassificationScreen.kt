@@ -16,8 +16,8 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun ClassificationRoute(
-    classificationViewModel: ClassificationViewModel = hiltViewModel(),
     onClickBackIcon: () -> Unit,
+    classificationViewModel: ClassificationViewModel = hiltViewModel(),
 ) {
     val state by classificationViewModel.collectAsState()
 
