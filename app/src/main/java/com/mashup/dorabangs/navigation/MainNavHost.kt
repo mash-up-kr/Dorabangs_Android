@@ -34,12 +34,8 @@ fun MainNavHost(
                 appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = copiedUrl)
             },
         )
-        onBoardingNavigation(
-            navigateToHome = { appState.navController.navigateToHome() },
-        )
-        homeNavigation {
-            appState.navController.navigateToSaveLink()
-        }
+        onBoardingNavigation { appState.navController.navigateToHome() }
+        homeNavigation { appState.navController.navigateToSaveLink() }
         storageNavigation(appState.navController)
         storageDetailNavigation(appState.navController)
         classificationNavigation(appState.navController)
