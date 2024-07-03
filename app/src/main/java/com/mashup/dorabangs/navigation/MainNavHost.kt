@@ -2,7 +2,6 @@ package com.mashup.dorabangs.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
@@ -32,7 +31,7 @@ fun MainNavHost(
         storageDetailNavigation(navController = appState.navController)
         saveLinkNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
-            onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = "") }
+            onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = "") },
         )
         saveLinkSelectFolder(
             onClickBackButton = {
