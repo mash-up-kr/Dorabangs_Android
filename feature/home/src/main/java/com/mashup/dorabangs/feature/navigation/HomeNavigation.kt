@@ -12,14 +12,14 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) =
 
 fun NavGraphBuilder.homeNavigation(
     navigateToClassification: () -> Unit = {},
-    action: (String) -> Unit,
+    navigateToSaveLink: (String) -> Unit,
 ) {
     composable(
         route = NavigationRoute.HomeScreen.route,
     ) {
         HomeRoute(
             navigateToClassification = navigateToClassification,
-            actionSnackBar = action,
+            navigateToSaveLink = navigateToSaveLink,
         )
     }
 }

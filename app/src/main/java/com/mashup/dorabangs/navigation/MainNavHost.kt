@@ -30,7 +30,7 @@ fun MainNavHost(
     ) {
         homeNavigation(
             navigateToClassification = { appState.navController.navigateToClassification() },
-            action = { copiedUrl ->
+            navigateToSaveLink = { copiedUrl ->
                 appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = copiedUrl)
             },
         )
