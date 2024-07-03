@@ -1,3 +1,5 @@
+package com.mashup.dorabangs.domain.usecase
+
 class SampleUseCase {
     fun baboTest(bool: Boolean) {
         if (bool) {
