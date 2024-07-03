@@ -1,3 +1,5 @@
+package usecase
+
 class SampleUseCase {
     fun baboTest(bool: Boolean) {
         if (bool) {
