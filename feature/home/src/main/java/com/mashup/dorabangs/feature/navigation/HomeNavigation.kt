@@ -7,14 +7,18 @@ import androidx.navigation.compose.composable
 import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.feature.home.HomeRoute
 
-fun NavController.navigateToHome(navOptions: NavOptions) =
+fun NavController.navigateToHome(navOptions: NavOptions? = null) =
     navigate(NavigationRoute.HomeScreen.route, navOptions)
 
-fun NavGraphBuilder.homeNavigation(action: (String) -> Unit) {
+fun NavGraphBuilder.homeNavigation(
+    navigateToClassification: () -> Unit = {},
+    action: (String) -> Unit,
+) {
     composable(
         route = NavigationRoute.HomeScreen.route,
     ) {
         HomeRoute(
+            navigateToClassification = navigateToClassification,
             actionSnackBar = action,
         )
     }

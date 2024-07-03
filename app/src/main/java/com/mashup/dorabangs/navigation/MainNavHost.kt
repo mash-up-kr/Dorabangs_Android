@@ -4,31 +4,45 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.dorabangs.feature.navigation.navigateToSaveLink
 import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.feature.navigation.homeNavigation
 import com.mashup.dorabangs.feature.navigation.navigateToHome
+import com.mashup.dorabangs.feature.navigation.onBoardingNavigation
 import com.mashup.dorabangs.feature.storage.navigation.storageDetailNavigation
 import com.mashup.dorabangs.feature.storage.navigation.storageNavigation
+import com.mashup.feature.classification.navigation.classificationNavigation
+import com.mashup.feature.classification.navigation.navigateToClassification
 
 @Composable
 fun MainNavHost(
     modifier: Modifier = Modifier,
     appState: DoraAppState,
-    startDestination: String = NavigationRoute.HomeScreen.route,
+    startDestination: String = NavigationRoute.OnBoardingScreen.route,
 ) {
     NavHost(
         modifier = modifier,
         navController = appState.navController,
         startDestination = startDestination,
     ) {
-        homeNavigation { copiedUrl ->
-            appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = copiedUrl)
+        homeNavigation(
+            navigateToClassification = { appState.navController.navigateToClassification() },
+            action = { copiedUrl ->
+                appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = copiedUrl)
+            },
+        )
+        onBoardingNavigation(
+            navigateToHome = { appState.navController.navigateToHome() },
+        )
+        homeNavigation {
+            appState.navController.navigateToSaveLink()
         }
-        storageNavigation(navController = appState.navController)
-        storageDetailNavigation(navController = appState.navController)
+        storageNavigation(appState.navController)
+        storageDetailNavigation(appState.navController)
+        classificationNavigation(appState.navController)
         saveLinkNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
             onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = "") },
