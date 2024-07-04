@@ -22,7 +22,8 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesFolderService(
+    fun provideFolderService(
         retrofit: Retrofit,
-    ): FolderService = retrofit.create()
+    ): FolderService =
+        retrofit.create(FolderService::class.java)
 }

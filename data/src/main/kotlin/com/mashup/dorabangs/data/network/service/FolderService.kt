@@ -4,6 +4,7 @@ import com.mashup.dorabangs.data.model.DoraResponse
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface FolderService {
@@ -13,4 +14,11 @@ interface FolderService {
 
     @GET("folders/{id}")
     suspend fun getFolderById(@Path("id") folderId: String): DoraResponse<FolderResponseModel>
+
+    @POST("folders")
+    suspend fun createFolder(
+        @Body createFolderRequest: CreateFolderRequest,
+    ): CreateFolderResponse
+
+
 }
