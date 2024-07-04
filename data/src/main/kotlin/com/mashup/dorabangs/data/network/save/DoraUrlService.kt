@@ -20,9 +20,9 @@ class DoraUrlService @Inject constructor() {
             var response = connection.execute()
 
             // 리다이렉션이 발생한 경우 Location 헤더 가져오기
-            val location = response.header("Location")
-            if (location != null) {
-                connection = Jsoup.connect(location).followRedirects(true)
+            val longUrlLink = response.header("Location")
+            if (longUrlLink != null) {
+                connection = Jsoup.connect(longUrlLink).followRedirects(true)
                 response = connection.execute()
             }
 
@@ -37,10 +37,10 @@ class DoraUrlService @Inject constructor() {
             val thumbnailUrl = thumbnailElement?.attr("content")
 
             DoraUrlCheckResponse(
-                urlLink = urlLink,
+                urlLink = longUrlLink ?: urlLink,
                 title = title,
                 thumbnailUrl = thumbnailUrl,
-                isShortLink = location == null,
+                isShortLink = longUrlLink == null,
             )
         }.getOrDefault(
             DoraUrlCheckResponse(
