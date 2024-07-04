@@ -1,7 +1,6 @@
 package com.dorabangs.feature.save.screen
 
 import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dorabangs.feature.save.DoraSaveState
-import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
@@ -95,7 +92,7 @@ fun DoraLinkSaveTitleAndLinkScreenPreview() {
             thumbnailUrl = "https://www.naver.com/articale",
             title = "넌 바보",
             isShortLink = false,
-        )
+        ),
     )
 }
 
@@ -108,6 +105,6 @@ fun DoraLinkSaveTitleAndLinkScreenPreviewShort() {
             thumbnailUrl = "https://www.naver.com/articale",
             title = "넌 바보",
             isShortLink = false,
-        )
+        ),
     )
 }

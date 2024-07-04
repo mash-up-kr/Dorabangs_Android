@@ -1,11 +1,11 @@
 package com.mashup.dorabangs.data.network.save
 
 import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckResponse
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import javax.inject.Inject
 
 class DoraUrlService @Inject constructor() {
     /**
@@ -48,7 +48,7 @@ class DoraUrlService @Inject constructor() {
                 title = "",
                 thumbnailUrl = "",
                 isShortLink = false,
-            )
+            ),
         )
     }
 }

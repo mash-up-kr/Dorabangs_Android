@@ -14,6 +14,6 @@ abstract class DataSourceModule {
     @Binds
     @Reusable
     abstract fun bindsUrlCheckDataSource(
-        repository: DoraUrlCheckDataSourceImpl
+        repository: DoraUrlCheckDataSourceImpl,
     ): DoraUrlCheckDataSource
 }

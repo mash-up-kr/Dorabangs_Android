@@ -7,5 +7,5 @@ fun DoraUrlCheckResponse.toDataModel() = DoraSaveLinkDataModel(
     urlLink = urlLink.orEmpty(),
     title = title.orEmpty(),
     thumbnailUrl = thumbnailUrl.orEmpty(),
-    isShortLink = isShortLink ?: true
+    isShortLink = isShortLink ?: true,
 )
