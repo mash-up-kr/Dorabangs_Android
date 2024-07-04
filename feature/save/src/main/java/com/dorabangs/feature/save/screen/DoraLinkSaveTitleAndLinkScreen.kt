@@ -44,6 +44,7 @@ fun DoraLinkSaveTitleAndLinkScreen(
             .clip(DoraRoundTokens.Round12),
     ) {
         AsyncImage(
+            modifier = Modifier.size(size = 88.dp),
             model = ImageRequest.Builder(context)
                 .data(state.thumbnailUrl)
                 .crossfade(false)
@@ -90,7 +91,10 @@ fun DoraLinkSaveTitleAndLinkScreen(
 fun DoraLinkSaveTitleAndLinkScreenPreview() {
     DoraLinkSaveTitleAndLinkScreen(
         state = DoraSaveState(
-            urlLink = "https://www.naver.com/articale 길면 넌 바보다",
+            urlLink = "https://www.naver.com/articale",
+            thumbnailUrl = "https://www.naver.com/articale",
+            title = "넌 바보",
+            isShortLink = false,
         )
     )
 }
@@ -100,7 +104,10 @@ fun DoraLinkSaveTitleAndLinkScreenPreview() {
 fun DoraLinkSaveTitleAndLinkScreenPreviewShort() {
     DoraLinkSaveTitleAndLinkScreen(
         state = DoraSaveState(
-            urlLink = "https://www.naver.com/articale 길면 넌 바보다",
+            urlLink = "https://www.naver.com/articale",
+            thumbnailUrl = "https://www.naver.com/articale",
+            title = "넌 바보",
+            isShortLink = false,
         )
     )
 }
