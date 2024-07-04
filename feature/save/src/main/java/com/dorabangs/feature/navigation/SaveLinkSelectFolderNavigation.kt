@@ -32,10 +32,9 @@ fun NavGraphBuilder.saveLinkSelectFolder(
                 defaultValue = ""
             },
         ),
-    ) { entry ->
+    ) {
         DoraLinkSaveSelectFolderRoute(
             modifier = Modifier,
-            url = entry.arguments?.getString("copiedUrl").orEmpty(),
             onClickSaveButton = onClickSaveButton,
             onClickBackIcon = onClickBackButton,
         )

@@ -91,7 +91,7 @@ orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref =
 orbit-test = { group = "org.orbit-mvi", name = "orbit-test", version.ref = "orbit" }
 
 #image
-coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 #html
 jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
