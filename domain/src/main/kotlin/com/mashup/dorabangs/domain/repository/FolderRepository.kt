@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.domain.repository
 
+import com.mashup.dorabangs.domain.model.CreateFolder
+import com.mashup.dorabangs.domain.model.CreateFolderInfo
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 

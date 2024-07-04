@@ -1,8 +1,11 @@
 package com.mashup.dorabangs.data.network.service
 
+import com.mashup.dorabangs.data.model.CreateFolderRequest
+import com.mashup.dorabangs.data.model.CreateFolderResponse
 import com.mashup.dorabangs.data.model.DoraResponse
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
