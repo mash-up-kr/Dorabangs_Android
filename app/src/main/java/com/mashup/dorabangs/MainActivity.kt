@@ -1,6 +1,8 @@
 package com.mashup.dorabangs
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -15,8 +17,12 @@ class MainActivity : ComponentActivity() {
 
     private val splashViewModel: SplashViewModel by viewModels()
 
+    @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val userId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        splashViewModel.checkUserToken(userId)
 
         installSplashScreen().apply {
             setKeepOnScreenCondition { splashViewModel.isSplashShow.value }
