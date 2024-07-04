@@ -1,4 +1,4 @@
-package com.dorabangs.feature.save
+package com.dorabangs.feature.save.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dorabangs.feature.save.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar

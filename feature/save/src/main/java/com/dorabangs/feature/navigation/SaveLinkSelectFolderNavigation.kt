@@ -7,7 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.dorabangs.feature.save.DoraLinkSaveSelectFolderRoute
+import com.dorabangs.feature.save.screen.DoraLinkSaveSelectFolderRoute
 import com.mashup.core.navigation.NavigationRoute
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets

@@ -1,4 +1,4 @@
-package com.dorabangs.feature.save
+package com.dorabangs.feature.save.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
