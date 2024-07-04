@@ -3,6 +3,7 @@ package com.mashup.dorabangs.feature.home
 import android.view.View
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,7 +55,8 @@ fun HomeRoute(
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
-    actionSnackBar: () -> Unit = {},
+    navigateToSaveLink: (String) -> Unit = {},
+    navigateToClassification: () -> Unit = {},
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -82,6 +84,7 @@ fun HomeRoute(
             state = state,
             modifier = modifier,
             onClickChip = viewModel::changeSelectedTapIdx,
+            navigateToClassification = navigateToClassification,
             onClickMoreButton = {
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
@@ -91,7 +94,7 @@ fun HomeRoute(
             modifier = Modifier
                 .align(Alignment.BottomCenter),
             text = state.clipBoardState.copiedText,
-            action = actionSnackBar,
+            onAction = navigateToSaveLink,
             snackBarHostState = snackBarHostState,
             view = view,
             clipboardManager = clipboardManager,
@@ -139,6 +142,7 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     onClickChip: (Int) -> Unit = {},
+    navigateToClassification: () -> Unit = {},
     onClickMoreButton: (Int) -> Unit = {},
 ) {
     LazyColumn(
@@ -157,7 +161,8 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(310.dp)
-                    .background(DoraColorTokens.G5),
+                    .background(DoraColorTokens.G5)
+                    .clickable { navigateToClassification() },
             )
         }
 

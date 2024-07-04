@@ -59,6 +59,9 @@ object TextFieldHelperTextColorTokens {
 
 object LinkSaveColorTokens {
     val ContainerColor = DoraColorTokens.White
+    val TitleTextColor = DoraColorTokens.G9
+    val LinkTextColor = DoraColorTokens.G4
+    val LinkContainerBackgroundColor = DoraColorTokens.G1
 }
 
 object TopBarColorTokens {

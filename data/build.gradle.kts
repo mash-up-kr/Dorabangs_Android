@@ -25,10 +25,6 @@ android {
         }
         release {
             isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
             buildConfigField("String", "SERVER_BASE_URL", getSeverBaseUrl("server_base_url"))
         }
     }
@@ -80,5 +76,5 @@ dependencies {
 }
 
 fun getSeverBaseUrl(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey) ?: ""
+    return gradleLocalProperties(rootDir).getProperty(propertyKey).orEmpty()
 }

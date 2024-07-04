@@ -1,8 +1,8 @@
 package com.mashup.dorabangs.data.repository
 
 import com.mashup.dorabangs.data.datasource.local.UserPreferenceDataSource
+import com.mashup.dorabangs.domain.repository.UserDataStoreRepository
 import kotlinx.coroutines.flow.Flow
-import repository.UserDataStoreRepository
 import javax.inject.Inject
 
 class UserDataStoreRepositoryImpl @Inject constructor(

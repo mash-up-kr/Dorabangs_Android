@@ -72,6 +72,7 @@ dependencies {
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:home"))
     implementation(project(":feature:storage"))
+    implementation(project(":feature:classification"))
     implementation(project(":feature:save"))
 
     implementation(libs.core.ktx)

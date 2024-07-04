@@ -1,7 +1,7 @@
-package usecase.user
+package com.mashup.dorabangs.domain.usecase.user
 
+import com.mashup.dorabangs.domain.repository.UserDataStoreRepository
 import kotlinx.coroutines.flow.Flow
-import repository.UserDataStoreRepository
 import javax.inject.Inject
 
 class GetIsFirstEntryUseCase @Inject constructor(
