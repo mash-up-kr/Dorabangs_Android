@@ -1,10 +1,14 @@
-package com.mashup.dorabangs.domain.repository
+package com.mashup.dorabangs.data.datasource.local.api
 
 import kotlinx.coroutines.flow.Flow
 
-interface UserDataStoreRepository {
+interface UserLocalDataSource {
+
     suspend fun setUserAccessToken(accessToken: String)
-    fun getUserAccessToken(): Flow<String>
+
     suspend fun setIsFirstEntry(isFirst: Boolean)
+
+    fun getUserAccessToken(): Flow<String>
+
     fun getIsFirstEntry(): Flow<Boolean>
 }

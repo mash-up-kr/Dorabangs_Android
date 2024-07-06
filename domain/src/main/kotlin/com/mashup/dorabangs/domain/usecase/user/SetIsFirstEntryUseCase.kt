@@ -1,12 +1,12 @@
 package com.mashup.dorabangs.domain.usecase.user
 
-import com.mashup.dorabangs.domain.repository.UserDataStoreRepository
+import com.mashup.dorabangs.domain.repository.UserRepository
 import javax.inject.Inject
 
 class SetIsFirstEntryUseCase @Inject constructor(
-    private val userDataStoreRepository: UserDataStoreRepository,
+    private val userRepository: UserRepository,
 ) {
     suspend operator fun invoke(isFirst: Boolean) {
-        userDataStoreRepository.setIsFirstEntry(isFirst = isFirst)
+        userRepository.setIsFirstEntry(isFirst = isFirst)
     }
 }
