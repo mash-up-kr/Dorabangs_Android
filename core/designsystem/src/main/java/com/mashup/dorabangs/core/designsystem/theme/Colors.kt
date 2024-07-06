@@ -47,6 +47,7 @@ object TextFieldColorTokens {
     val BackGroundColor = DoraColorTokens.G1
     val HintTextColor = DoraColorTokens.G4
     val TextCounterColor = DoraColorTokens.G6
+    val HelperRoundedColor = DoraColorTokens.Alert
 }
 
 object TextFieldLabelColorTokens {

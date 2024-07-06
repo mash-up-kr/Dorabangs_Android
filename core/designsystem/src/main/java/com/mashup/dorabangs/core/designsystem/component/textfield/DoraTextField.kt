@@ -2,6 +2,7 @@ package com.mashup.dorabangs.core.designsystem.component.textfield
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
+import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.TextFieldColorTokens
@@ -91,7 +93,14 @@ fun DoraTextField(
             modifier = Modifier
                 .height(height = 48.dp)
                 .clip(DoraRoundTokens.Round8)
-                .background(TextFieldColorTokens.BackGroundColor),
+                .background(TextFieldColorTokens.BackGroundColor)
+                .thenIf(helperEnabled) {
+                    border(
+                        width = 1.dp,
+                        color = TextFieldColorTokens.HelperRoundedColor,
+                        shape = DoraRoundTokens.Round8,
+                    )
+                },
         ) {
             BasicTextField(
                 modifier = Modifier
