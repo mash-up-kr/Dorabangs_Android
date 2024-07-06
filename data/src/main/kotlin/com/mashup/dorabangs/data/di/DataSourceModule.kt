@@ -1,7 +1,7 @@
 package com.mashup.dorabangs.data.di
 
-import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckRemoteDataSource
-import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckRemoteDataSourceImpl
+import com.mashup.dorabangs.data.datasource.remote.api.DoraUrlCheckRemoteDataSource
+import com.mashup.dorabangs.data.datasource.remote.impl.DoraUrlCheckRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Reusable

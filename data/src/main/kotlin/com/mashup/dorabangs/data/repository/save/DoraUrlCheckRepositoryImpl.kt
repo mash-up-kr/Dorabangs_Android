@@ -1,6 +1,6 @@
 package com.mashup.dorabangs.data.repository.save
 
-import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckRemoteDataSource
+import com.mashup.dorabangs.data.datasource.remote.api.DoraUrlCheckRemoteDataSource
 import com.mashup.dorabangs.domain.repository.save.DoraUrlCheckRepository
 import com.mashup.dorabangs.domain.usecase.save.DoraSaveLinkDataModel
 import javax.inject.Inject

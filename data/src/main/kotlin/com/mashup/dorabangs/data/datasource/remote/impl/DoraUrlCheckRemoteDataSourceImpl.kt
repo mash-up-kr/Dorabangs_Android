@@ -1,5 +1,7 @@
-package com.mashup.dorabangs.data.datasource.save
+package com.mashup.dorabangs.data.datasource.remote.impl
 
+import com.mashup.dorabangs.data.datasource.remote.api.DoraUrlCheckRemoteDataSource
+import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckResponse
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
