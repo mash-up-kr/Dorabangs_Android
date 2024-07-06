@@ -1,9 +1,12 @@
 package com.mashup.dorabangs.data.di
 
+import com.mashup.dorabangs.data.repository.FolderRepositoryImpl
 import com.mashup.dorabangs.data.repository.UserRepositoryImpl
+import com.mashup.dorabangs.domain.repository.FolderRepository
 import com.mashup.dorabangs.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
+import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -16,4 +19,10 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         repositoryImpl: UserRepositoryImpl,
     ): UserRepository
+
+    @Binds
+    @Reusable
+    abstract fun bindFolderRepository(
+        repository: FolderRepositoryImpl,
+    ): FolderRepository
 }
