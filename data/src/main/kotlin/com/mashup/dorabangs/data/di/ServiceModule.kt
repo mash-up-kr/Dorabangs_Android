@@ -7,6 +7,7 @@ import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import retrofit2.create
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -16,6 +17,5 @@ object ServiceModule {
     @Reusable
     fun providesUserService(
         retrofit: Retrofit,
-    ): UserService =
-        retrofit.create(UserService::class.java)
+    ): UserService = retrofit.create()
 }

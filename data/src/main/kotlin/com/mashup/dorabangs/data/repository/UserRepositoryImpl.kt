@@ -2,7 +2,7 @@ package com.mashup.dorabangs.data.repository
 
 import com.mashup.dorabangs.data.datasource.local.api.UserLocalDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.UserRemoteDataSource
-import com.mashup.dorabangs.data.model.asData
+import com.mashup.dorabangs.data.model.toData
 import com.mashup.dorabangs.domain.model.DeviceToken
 import com.mashup.dorabangs.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
@@ -29,6 +29,6 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerDeviceToken(deviceToken: DeviceToken): String {
-        return userRemoteDataSource.registerUser(deviceToken.asData())
+        return userRemoteDataSource.registerUser(deviceToken.toData())
     }
 }

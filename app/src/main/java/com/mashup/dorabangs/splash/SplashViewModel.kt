@@ -11,7 +11,7 @@ import com.mashup.dorabangs.domain.usecase.user.SetUserAccessTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
 
@@ -27,12 +27,12 @@ class SplashViewModel @Inject constructor(
 
     fun checkUserToken(userId: String) {
         viewModelScope.doraLaunch {
-            val userAccessToken = getUserAccessTokenUseCase().first()
-                .ifEmpty {
+            val userAccessToken = getUserAccessTokenUseCase().firstOrNull()
+                ?.ifEmpty {
                     val token = registerUserUseCase(DeviceToken(userId))
                     setUserAccessTokenUseCase(token)
                     token
-                }
+                }.orEmpty()
 
             withTimeout(SPLASH_SCREEN_TIME) {
                 if (userAccessToken.isNotEmpty()) {

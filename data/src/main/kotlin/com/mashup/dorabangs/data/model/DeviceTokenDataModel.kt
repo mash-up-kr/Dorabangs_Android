@@ -8,10 +8,10 @@ data class DeviceTokenDataModel(
     val deviceToken: String,
 )
 
-fun DeviceTokenDataModel.asDomain() = DeviceToken(
+fun DeviceTokenDataModel.toDomain() = DeviceToken(
     deviceToken = this.deviceToken,
 )
 
-fun DeviceToken.asData() = DeviceTokenDataModel(
+fun DeviceToken.toData() = DeviceTokenDataModel(
     deviceToken = this.deviceToken,
 )

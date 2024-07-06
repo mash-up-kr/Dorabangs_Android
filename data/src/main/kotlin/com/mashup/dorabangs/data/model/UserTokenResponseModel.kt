@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserAccessTokenResponseModel(
-    val data: AccessTokenDataModel,
-    val success: Boolean,
+    val data: AccessTokenDataModel = AccessTokenDataModel(),
+    val success: Boolean = false,
 )
 
 @Serializable
 data class AccessTokenDataModel(
-    val accessToken: String,
+    val accessToken: String = "",
 )
