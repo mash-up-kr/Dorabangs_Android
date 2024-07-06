@@ -4,7 +4,6 @@ import com.mashup.dorabangs.data.network.service.FolderService
 import com.mashup.dorabangs.data.network.service.UserService
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
@@ -22,7 +21,7 @@ object ServiceModule {
     ): UserService = retrofit.create()
 
     @Provides
-    @Reusable
+    @Singleton
     fun providesFolderService(
         retrofit: Retrofit,
     ): FolderService = retrofit.create()

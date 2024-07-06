@@ -6,7 +6,6 @@ import com.mashup.dorabangs.domain.repository.FolderRepository
 import com.mashup.dorabangs.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -21,7 +20,7 @@ abstract class RepositoryModule {
     ): UserRepository
 
     @Binds
-    @Reusable
+    @Singleton
     abstract fun bindFolderRepository(
         repository: FolderRepositoryImpl,
     ): FolderRepository

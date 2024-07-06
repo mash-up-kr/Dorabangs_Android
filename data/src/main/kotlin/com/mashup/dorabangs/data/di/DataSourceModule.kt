@@ -8,7 +8,6 @@ import com.mashup.dorabangs.data.datasource.remote.impl.FolderRemoteDataSourceIm
 import com.mashup.dorabangs.data.datasource.remote.impl.UserRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
-import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -30,7 +29,7 @@ abstract class DataSourceModule {
     ): UserRemoteDataSource
 
     @Binds
-    @Reusable
+    @Singleton
     abstract fun bindFolderRemoteDataSource(
         dataSource: FolderRemoteDataSourceImpl,
     ): FolderRemoteDataSource
