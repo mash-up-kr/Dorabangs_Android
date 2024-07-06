@@ -8,7 +8,11 @@ interface UserLocalDataSource {
 
     suspend fun setIsFirstEntry(isFirst: Boolean)
 
+    suspend fun setLastCopiedUrl(url: String)
+
     fun getUserAccessToken(): Flow<String>
 
     fun getIsFirstEntry(): Flow<Boolean>
+
+    fun getLastCopiedUrl(): Flow<String>
 }

@@ -31,7 +31,6 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -73,7 +72,6 @@ fun HomeRoute(
             }
 
             HomeSideEffect.HideSnackBar -> {
-                clipboardManager.setText(AnnotatedString(""))
                 snackBarHostState.currentSnackbarData?.dismiss()
             }
         }
@@ -94,13 +92,20 @@ fun HomeRoute(
             modifier = Modifier
                 .align(Alignment.BottomCenter),
             text = state.clipBoardState.copiedText,
-            onAction = navigateToSaveLink,
+            onAction = { url ->
+                viewModel.setLocalCopiedUrl(url = url)
+                navigateToSaveLink.invoke(url)
+            },
             snackBarHostState = snackBarHostState,
             view = view,
             clipboardManager = clipboardManager,
+            lastCopiedText = { viewModel.getLocalCopiedUrl().orEmpty() },
             hideSnackBar = viewModel::hideSnackBar,
             showSnackBarWithText = viewModel::showSnackBar,
-            dismissAction = viewModel::hideSnackBar,
+            dismissAction = { url ->
+                viewModel.setLocalCopiedUrl(url = url)
+                viewModel.hideSnackBar()
+            },
         )
 
         DoraBottomSheet.MoreButtonBottomSheet(
