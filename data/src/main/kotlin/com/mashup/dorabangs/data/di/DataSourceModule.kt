@@ -1,7 +1,7 @@
 package com.mashup.dorabangs.data.di
 
-import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckDataSource
-import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckDataSourceImpl
+import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckRemoteDataSource
+import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Reusable
@@ -14,6 +14,6 @@ abstract class DataSourceModule {
     @Binds
     @Reusable
     abstract fun bindsUrlCheckDataSource(
-        repository: DoraUrlCheckDataSourceImpl,
-    ): DoraUrlCheckDataSource
+        repository: DoraUrlCheckRemoteDataSourceImpl,
+    ): DoraUrlCheckRemoteDataSource
 }

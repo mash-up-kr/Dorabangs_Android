@@ -1,20 +1,23 @@
-package com.mashup.dorabangs.data.network.save
+package com.mashup.dorabangs.data.datasource.save
 
-import com.mashup.dorabangs.data.datasource.save.DoraUrlCheckResponse
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import javax.inject.Inject
 
-class DoraUrlService @Inject constructor() {
+class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemoteDataSource {
+    override suspend fun checkDataSource(urlLink: String): DoraUrlCheckResponse {
+        return checkUrl(urlLink)
+    }
+
     /**
      * 전달 받은 url을 체크합니다.
      * 리다이렉션이 있는 경우, 특히나 short Link 의 경우 헤더의 Location 값이 원 주소이기 때문에 검사합니다
      * 추가로 short Link 에서는 원 링크가 아닌 이상 title, thumbnail 을 가져올 수 없어서,
      * connection을 원 주소로 다시 연결하여 정보를 가져옴
      */
-    suspend fun checkUrl(urlLink: String): DoraUrlCheckResponse = withContext(Dispatchers.IO) {
+    private suspend fun checkUrl(urlLink: String): DoraUrlCheckResponse = withContext(Dispatchers.IO) {
         return@withContext runCatching {
             var connection = Jsoup.connect(urlLink).followRedirects(false)
             var response = connection.execute()

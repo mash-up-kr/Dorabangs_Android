@@ -1,5 +1,5 @@
 package com.mashup.dorabangs.data.datasource.save
 
-interface DoraUrlCheckDataSource {
+interface DoraUrlCheckRemoteDataSource {
     suspend fun checkDataSource(urlLink: String): DoraUrlCheckResponse
 }
