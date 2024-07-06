@@ -94,7 +94,9 @@ fun HomeRoute(
             text = state.clipBoardState.copiedText,
             onAction = { url ->
                 viewModel.setLocalCopiedUrl(url = url)
-                navigateToSaveLink.invoke(url)
+                if (state.clipBoardState.isValidUrl) {
+                    navigateToSaveLink.invoke(url)
+                }
             },
             snackBarHostState = snackBarHostState,
             view = view,

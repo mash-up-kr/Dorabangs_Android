@@ -36,6 +36,7 @@ class DoraSaveViewModel @Inject constructor(
                     urlLink = checkResult.urlLink,
                     thumbnailUrl = checkResult.thumbnailUrl,
                     isShortLink = checkResult.isShortLink,
+                    isError = checkResult.isError,
                 )
             }
         }

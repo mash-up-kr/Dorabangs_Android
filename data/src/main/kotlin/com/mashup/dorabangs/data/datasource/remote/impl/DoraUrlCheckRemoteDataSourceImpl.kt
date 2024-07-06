@@ -31,6 +31,9 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
                 response = connection.execute()
             }
 
+            val statusCode = response.statusCode()
+            println("tjrwn statusCode is $statusCode")
+
             val doc = response.parse()
 
             // 오픈 그래프 태그에서 타이틀 추출
@@ -53,6 +56,7 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
                 title = "",
                 thumbnailUrl = "",
                 isShortLink = false,
+                isError = true,
             ),
         )
     }
