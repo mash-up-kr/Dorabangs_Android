@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.dorabangs.feature.save.DoraLinkSaveRoute
+import com.dorabangs.feature.save.screen.DoraLinkSaveRoute
 import com.mashup.core.navigation.NavigationRoute
 
 fun NavController.navigateToSaveLink(navOptions: NavOptions? = null) {

@@ -35,7 +35,6 @@ fun MainNavHost(
             },
         )
         onBoardingNavigation { appState.navController.navigateToHome() }
-        homeNavigation { appState.navController.navigateToSaveLink() }
         storageNavigation(appState.navController)
         storageDetailNavigation(appState.navController)
         classificationNavigation(appState.navController)

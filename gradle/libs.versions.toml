@@ -38,7 +38,7 @@ soloader = "0.10.5"
 retrofitConverter = "1.0.0"
 orbit = "8.0.0"
 datastore = "1.1.1"
-
+jsoup = "1.14.3"
 
 [libraries]
 kotlin-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin" }
@@ -93,7 +93,10 @@ orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref =
 orbit-test = { group = "org.orbit-mvi", name = "orbit-test", version.ref = "orbit" }
 
 #image
-coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+#html
+jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
