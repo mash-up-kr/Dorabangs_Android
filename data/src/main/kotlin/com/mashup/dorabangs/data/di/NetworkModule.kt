@@ -7,6 +7,7 @@ import com.mashup.dorabangs.data.BuildConfig
 import com.mashup.dorabangs.domain.usecase.user.GetUserAccessTokenUseCase
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.runBlocking
@@ -18,13 +19,12 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     @Provides
-    @Singleton
+    @Reusable
     fun providesDorabangsRetrofit(
         jsonConverterFactory: Converter.Factory,
         okHttpClient: OkHttpClient,
@@ -36,7 +36,7 @@ object NetworkModule {
             .build()
 
     @Provides
-    @Singleton
+    @Reusable
     fun providesDorabangsOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         flipperOkhttpInterceptor: FlipperOkhttpInterceptor,
@@ -63,11 +63,11 @@ object NetworkModule {
         }.build()
 
     @Provides
-    @Singleton
+    @Reusable
     fun providesConverterFactory(json: Json): Converter.Factory = json.asConverterFactory("application/json".toMediaType())
 
     @Provides
-    @Singleton
+    @Reusable
     fun providesJsonBuilder(): Json =
         Json {
             isLenient = true
@@ -76,16 +76,16 @@ object NetworkModule {
         }
 
     @Provides
-    @Singleton
+    @Reusable
     fun providesLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
     @Provides
-    @Singleton
+    @Reusable
     fun providesFlipperOkHttpPlugin(networkFlipperPlugin: NetworkFlipperPlugin): FlipperOkhttpInterceptor =
         FlipperOkhttpInterceptor(networkFlipperPlugin)
 
     @Provides
-    @Singleton
+    @Reusable
     fun providesNetworkFlipperPlugin() = NetworkFlipperPlugin()
 
     private const val AUTHORIZATION = "Authorization"

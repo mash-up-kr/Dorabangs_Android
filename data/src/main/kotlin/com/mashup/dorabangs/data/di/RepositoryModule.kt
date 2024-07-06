@@ -6,6 +6,7 @@ import com.mashup.dorabangs.domain.repository.UserDataStoreRepository
 import com.mashup.dorabangs.domain.repository.UserRemoteRepository
 import dagger.Binds
 import dagger.Module
+import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -14,13 +15,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
     @Binds
-    @Singleton
+    @Reusable
     abstract fun bindUserDataStoreRepository(
         userDataStoreRepositoryImpl: UserDataStoreRepositoryImpl,
     ): UserDataStoreRepository
 
     @Binds
-    @Singleton
+    @Reusable
     abstract fun bindUserRemoteRepository(
         userRemoteRepositoryImpl: UserRemoteRepositoryImpl,
     ): UserRemoteRepository
