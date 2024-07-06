@@ -4,7 +4,7 @@ import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.mashup.dorabangs.data.BuildConfig
-import com.mashup.dorabangs.domain.usecase.user.GetUserAccessTokenUseCase
+import com.mashup.dorabangs.data.datasource.local.api.UserLocalDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,13 +40,13 @@ object NetworkModule {
     fun providesDorabangsOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         flipperOkhttpInterceptor: FlipperOkhttpInterceptor,
-        getUserAccessTokenUseCase: GetUserAccessTokenUseCase,
+        userLocalDataSource: UserLocalDataSource,
     ): OkHttpClient =
         OkHttpClient.Builder().apply {
             addInterceptor(
                 Interceptor { chain ->
                     val token = runBlocking {
-                        runCatching { getUserAccessTokenUseCase() }.getOrDefault("")
+                        runCatching { userLocalDataSource.getUserAccessToken() }.getOrDefault("")
                     }
                     val request = chain.request().newBuilder()
                         .addHeader(AUTHORIZATION, "Bearer $token")

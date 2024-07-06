@@ -1,7 +1,7 @@
 package com.mashup.dorabangs.data.di
 
-import com.mashup.dorabangs.data.repository.UserDataStoreRepositoryImpl
-import com.mashup.dorabangs.domain.repository.UserDataStoreRepository
+import com.mashup.dorabangs.data.repository.UserRepositoryImpl
+import com.mashup.dorabangs.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindUserDataStoreRepository(
-        userDataStoreRepositoryImpl: UserDataStoreRepositoryImpl,
-    ): UserDataStoreRepository
+    abstract fun bindUserRepository(
+        repositoryImpl: UserRepositoryImpl,
+    ): UserRepository
 }
