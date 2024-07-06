@@ -43,8 +43,8 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
 
             DoraUrlCheckResponse(
                 urlLink = longUrlLink ?: urlLink,
-                title = title,
-                thumbnailUrl = thumbnailUrl,
+                title = title.orEmpty(),
+                thumbnailUrl = thumbnailUrl.orEmpty(),
                 isShortLink = longUrlLink == null,
             )
         }.getOrDefault(
