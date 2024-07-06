@@ -17,16 +17,14 @@ fun DoraTextFieldHelperText(
 ) {
     if (enabled) {
         Text(
-            modifier = modifier,
+            modifier = modifier.height(height = 14.dp),
             text = helperText,
             color = TextFieldHelperTextColorTokens.LabelColor,
             style = DoraTypoTokens.SMedium,
         )
     } else {
         Spacer(
-            modifier = Modifier.height(
-                height = 14.dp,
-            ),
+            modifier = Modifier.height(height = 14.dp),
         )
     }
 }

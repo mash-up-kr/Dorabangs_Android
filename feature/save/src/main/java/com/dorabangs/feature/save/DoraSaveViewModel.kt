@@ -27,7 +27,7 @@ class DoraSaveViewModel @Inject constructor(
     override val container: Container<DoraSaveState, DoraSaveSideEffect> =
         container(DoraSaveState())
 
-    private fun checkUrl(urlLink: String) = viewModelScope.doraLaunch {
+    fun checkUrl(urlLink: String) = viewModelScope.doraLaunch {
         val checkResult = urlCheckUseCase.invoke(urlLink)
         intent {
             reduce {

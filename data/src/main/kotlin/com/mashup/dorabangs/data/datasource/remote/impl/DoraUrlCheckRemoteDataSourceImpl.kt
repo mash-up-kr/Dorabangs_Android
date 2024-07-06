@@ -21,7 +21,7 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
      */
     private suspend fun checkUrl(urlLink: String): DoraUrlCheckResponse = withContext(Dispatchers.IO) {
         return@withContext runCatching {
-            var connection = Jsoup.connect(urlLink).followRedirects(false)
+            var connection = Jsoup.connect(urlLink).followRedirects(false).ignoreContentType(true)
             var response = connection.execute()
 
             // 리다이렉션이 발생한 경우 Location 헤더 가져오기
@@ -30,9 +30,6 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
                 connection = Jsoup.connect(longUrlLink).followRedirects(true)
                 response = connection.execute()
             }
-
-            val statusCode = response.statusCode()
-            println("tjrwn statusCode is $statusCode")
 
             val doc = response.parse()
 

@@ -30,8 +30,11 @@ fun MainNavHost(
     ) {
         homeNavigation(
             navigateToClassification = { appState.navController.navigateToClassification() },
-            navigateToSaveLink = { copiedUrl ->
+            navigateToSaveScreenWithLink = { copiedUrl ->
                 appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = copiedUrl)
+            },
+            navigateToSaveScreenWithoutLink = {
+                appState.navController.navigateToSaveLink()
             },
         )
         onBoardingNavigation { appState.navController.navigateToHome() }
@@ -40,7 +43,7 @@ fun MainNavHost(
         classificationNavigation(appState.navController)
         saveLinkNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
-            onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = "") },
+            onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = it) },
         )
         saveLinkSelectFolder(
             onClickBackButton = {

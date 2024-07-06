@@ -54,8 +54,9 @@ fun HomeRoute(
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToSaveLink: (String) -> Unit = {},
     navigateToClassification: () -> Unit = {},
+    navigateToSaveScreenWithLink: (String) -> Unit = {},
+    navigateToSaveScreenWithoutLink: () -> Unit = {},
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -86,6 +87,7 @@ fun HomeRoute(
             onClickMoreButton = {
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
+            navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
         )
 
         HomeDoraSnackBar(
@@ -95,7 +97,7 @@ fun HomeRoute(
             onAction = { url ->
                 viewModel.setLocalCopiedUrl(url = url)
                 if (state.clipBoardState.isValidUrl) {
-                    navigateToSaveLink.invoke(url)
+                    navigateToSaveScreenWithLink.invoke(url)
                 }
             },
             snackBarHostState = snackBarHostState,
@@ -151,6 +153,7 @@ fun HomeScreen(
     onClickChip: (Int) -> Unit = {},
     navigateToClassification: () -> Unit = {},
     onClickMoreButton: (Int) -> Unit = {},
+    navigateSaveScreenWithoutLink: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -162,6 +165,7 @@ fun HomeScreen(
                 title = "Logo",
                 isTitleCenter = false,
                 actionIcon = R.drawable.ic_plus,
+                onClickActonIcon = navigateSaveScreenWithoutLink,
             )
 
             Box(

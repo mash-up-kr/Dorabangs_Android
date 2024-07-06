@@ -13,7 +13,7 @@ fun NavController.navigateToSaveLink(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.saveLinkNavigation(
     onClickBackIcon: () -> Unit,
-    onClickSaveButton: () -> Unit,
+    onClickSaveButton: (String) -> Unit,
 ) {
     composable(
         route = NavigationRoute.SaveLink.route,

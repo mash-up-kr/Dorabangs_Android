@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +40,10 @@ import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.D
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.TextFieldColorTokens
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * @param text 텍필에 가지고 들어갈 text
@@ -46,6 +51,7 @@ import com.mashup.dorabangs.core.designsystem.theme.TextFieldColorTokens
  * @param labelText 텍필에 가지고 라벨 텍스트, ex) 링크
  * @param helperEnabled 헬퍼 텍스트를 보여줄지 말지에 대한 값
  * @param counterEnabled text counter를 보여줄지 말지에 대한 값
+ * @param onValueChanged text가 변경될 때 위로 값을 던져줍니다 (viewModel에 저장하든 해야해서)
  * @param modifier 알잖아요
  * @param helperText 헬퍼텍스트에 대한 값, ex) 유효한 링크를 입력해주세요
  */
@@ -56,9 +62,13 @@ fun DoraTextField(
     labelText: String,
     helperEnabled: Boolean,
     counterEnabled: Boolean,
+    onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     helperText: String = "",
+    scope: CoroutineScope = rememberCoroutineScope(),
+    debounceTime: Long = 700L,
 ) {
+    var debounceJob by remember { mutableStateOf<Job?>(null) }
     var textFieldValue by remember {
         mutableStateOf(
             TextFieldValue(
@@ -95,6 +105,11 @@ fun DoraTextField(
                     if (counterEnabled) {
                         if (it.text.length <= 15) textFieldValue = it
                     } else {
+                        debounceJob?.cancel()
+                        debounceJob = scope.launch {
+                            delay(debounceTime)
+                            onValueChanged(it.text)
+                        }
                         textFieldValue = it
                     }
                 },
@@ -168,6 +183,7 @@ fun DoraTextFieldLongPreview() {
         helperText = "유효한 링크를 입력해주세요.",
         helperEnabled = true,
         counterEnabled = true,
+        onValueChanged = {},
     )
 }
 
@@ -181,6 +197,7 @@ fun DoraTextFieldShortPreview() {
         helperText = "유효한 링크를 입력해주세요.",
         helperEnabled = true,
         counterEnabled = true,
+        onValueChanged = {},
     )
 }
 
@@ -193,5 +210,6 @@ fun DoraTextFieldPreviewWithHint() {
         labelText = "링크",
         helperEnabled = false,
         counterEnabled = true,
+        onValueChanged = {},
     )
 }
