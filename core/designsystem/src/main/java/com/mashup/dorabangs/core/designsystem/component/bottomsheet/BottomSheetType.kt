@@ -21,6 +21,8 @@ object DoraBottomSheet : BottomSheetType {
     override fun MoreButtonBottomSheet(
         modifier: Modifier,
         isShowSheet: Boolean,
+        firstItemName: Int,
+        secondItemName: Int,
         onClickDeleteLinkButton: () -> Unit,
         onClickMoveFolderButton: () -> Unit,
         onDismissRequest: () -> Unit,
@@ -39,12 +41,12 @@ object DoraBottomSheet : BottomSheetType {
                     items = listOf(
                         BottomSheetItemUIModel(
                             icon = R.drawable.ic_plus,
-                            itemName = stringResource(id = R.string.more_button_bottom_sheet_remove_link),
+                            itemName = stringResource(id = firstItemName),
                             color = DoraColorTokens.Alert,
                         ),
                         BottomSheetItemUIModel(
                             icon = R.drawable.ic_plus,
-                            itemName = stringResource(id = R.string.more_button_bottom_sheet_moving_folder),
+                            itemName = stringResource(id = secondItemName),
                         ),
                     ),
                     onClickItem = { index ->
@@ -129,6 +131,8 @@ sealed interface BottomSheetType {
     fun MoreButtonBottomSheet(
         modifier: Modifier,
         isShowSheet: Boolean,
+        firstItemName: Int,
+        secondItemName: Int,
         onClickDeleteLink: () -> Unit,
         onClickMoveFolder: () -> Unit,
         onDismissRequest: () -> Unit,
