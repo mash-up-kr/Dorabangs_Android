@@ -8,20 +8,34 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
+import com.mashup.dorabangs.feature.folders.model.FolderManageState
 import com.mashup.dorabangs.feature.storage.R
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun StorageFolderManageRoute(
+    folderManageType: String,
     onClickBackIcon: () -> Unit,
+    folderManageViewModel: FolderManageViewModel = hiltViewModel()
 ) {
+    val folderManageState by folderManageViewModel.collectAsState()
+
+    LaunchedEffect(key1 = Unit) {
+        folderManageViewModel.setFolderManageType(folderManageType)
+    }
+
     FolderManageScreen(
+        folderManageState = folderManageState,
         onClickBackIcon = onClickBackIcon,
         onClickSaveButton = { },
     )
@@ -29,6 +43,7 @@ fun StorageFolderManageRoute(
 
 @Composable
 fun FolderManageScreen(
+    folderManageState: FolderManageState,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
     modifier: Modifier = Modifier,
@@ -40,7 +55,7 @@ fun FolderManageScreen(
     ) {
         DoraTopBar.BackNavigationTopBar(
             modifier = Modifier,
-            title = "새 폴더 추가",
+            title = stringResource(id = folderManageState.type.title),
             isTitleCenter = true,
             onClickBackIcon = onClickBackIcon,
         )

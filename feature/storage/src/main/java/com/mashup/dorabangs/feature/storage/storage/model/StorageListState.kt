@@ -3,6 +3,8 @@ package com.mashup.dorabangs.feature.storage.storage.model
 data class StorageListState(
     val defaultStorageFolderList: List<StorageFolderItem> = listOf(),
     val customStorageFolderList: List<StorageFolderItem> = listOf(),
+    val isShowMoreButtonSheet: Boolean = false,
+    val isShowDialog: Boolean = false,
 ) {
     companion object {
         fun defaultFolderList() =

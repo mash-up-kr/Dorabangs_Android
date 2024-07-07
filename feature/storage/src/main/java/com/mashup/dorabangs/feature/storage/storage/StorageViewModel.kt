@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
@@ -15,7 +16,15 @@ import javax.inject.Inject
 class StorageViewModel @Inject constructor() : ViewModel(), ContainerHost<StorageListState, StorageListSideEffect> {
     override val container = container<StorageListState, StorageListSideEffect>(StorageListState())
 
-    fun showEditFolderBottomSheet(item: StorageFolderItem) = intent {
-        postSideEffect(sideEffect = StorageListSideEffect.ShowEditFolderBottomSheet)
+    fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
+        reduce {
+            state.copy(isShowMoreButtonSheet = visible)
+        }
+    }
+
+    fun setVisibleDialog(visible: Boolean) = intent {
+        reduce {
+            state.copy(isShowDialog = visible)
+        }
     }
 }

@@ -116,6 +116,8 @@ fun HomeRoute(
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
             isShowSheet = state.isShowMoreButtonSheet,
+            firstItemName = R.string.more_button_bottom_sheet_remove_link,
+            secondItemName = R.string.more_button_bottom_sheet_moving_folder,
             onClickDeleteLinkButton = {
                 viewModel.setVisibleMoreButtonBottomSheet(false)
                 viewModel.setVisibleDialog(true)
