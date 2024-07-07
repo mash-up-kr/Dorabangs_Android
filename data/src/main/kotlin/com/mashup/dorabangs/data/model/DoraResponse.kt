@@ -1,7 +1,6 @@
 package com.mashup.dorabangs.data.model
 
 import kotlinx.serialization.Serializable
-import java.lang.Exception
 
 @Serializable
 data class DoraResponse<T : Any> (

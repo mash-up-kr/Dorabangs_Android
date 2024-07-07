@@ -2,7 +2,11 @@ package com.mashup.dorabangs.data.di
 
 import com.mashup.dorabangs.data.datasource.local.api.UserLocalDataSource
 import com.mashup.dorabangs.data.datasource.local.impl.UserLocalDataSourceImpl
+import com.mashup.dorabangs.data.datasource.remote.api.DoraUrlCheckRemoteDataSource
+import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.UserRemoteDataSource
+import com.mashup.dorabangs.data.datasource.remote.impl.DoraUrlCheckRemoteDataSourceImpl
+import com.mashup.dorabangs.data.datasource.remote.impl.FolderRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.UserRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module

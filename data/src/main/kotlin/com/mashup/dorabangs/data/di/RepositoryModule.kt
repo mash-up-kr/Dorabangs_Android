@@ -27,8 +27,8 @@ abstract class RepositoryModule {
         repository: FolderRepositoryImpl,
     ): FolderRepository
 
-    @Reusable
     @Binds
+    @Reusable
     abstract fun bindDoraUrlCheckRepository(
         repository: DoraUrlCheckRepositoryImpl,
     ): DoraUrlCheckRepository
