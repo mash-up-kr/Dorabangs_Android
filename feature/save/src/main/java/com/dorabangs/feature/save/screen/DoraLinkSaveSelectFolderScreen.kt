@@ -1,4 +1,4 @@
-package com.dorabangs.feature.save
+package com.dorabangs.feature.save.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dorabangs.feature.save.DoraSaveState
+import com.dorabangs.feature.save.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.folder.DoraSelectableFolderItem
 import com.mashup.dorabangs.core.designsystem.component.folder.DoraSelectableFolderListItems
@@ -88,7 +90,7 @@ var sampleList = listOf(
 
 @Composable
 fun DoraLinkSaveSelectFolderScreen(
-    url: String,
+    state: DoraSaveState,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
     modifier: Modifier = Modifier,
@@ -114,7 +116,7 @@ fun DoraLinkSaveSelectFolderScreen(
                 isTitleCenter = true,
                 onClickBackIcon = onClickBackIcon,
             )
-            DoraLinkSaveTitleAndLinkScreen(url = url)
+            DoraLinkSaveTitleAndLinkScreen(state = state)
             DoraSelectableFolderListItems(
                 modifier = Modifier,
                 items = list,
@@ -145,7 +147,9 @@ fun DoraLinkSaveSelectFolderScreen(
 @Preview
 fun DoraLinkSaveSelectFolderScreenPreview() {
     DoraLinkSaveSelectFolderScreen(
-        url = "https://www.naver.com/articale 길면 넌 바보다",
+        state = DoraSaveState(
+            urlLink = "https://www.naver.com/articale 길면 넌 바보다",
+        ),
         onClickBackIcon = {},
         onClickSaveButton = {},
     )

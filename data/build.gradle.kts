@@ -74,6 +74,9 @@ dependencies {
     implementation(libs.flipper.network)
 
     implementation(libs.androidx.datastore)
+
+    // HTML
+    implementation(libs.jsoup)
 }
 
 fun getSeverBaseUrl(propertyKey: String): String {
