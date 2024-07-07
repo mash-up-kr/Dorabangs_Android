@@ -13,4 +13,15 @@
     <string name="storage_create_folder_label">폴더명</string>
     <string name="storage_create_folder_helper">같은 이름의 폴더 있어요</string>
     <string name="storage_create_folder_save">저장</string>
+    <string name="storage_create_folder_title">새 폴더 추가</string>
+    <string name="storage_edit_folder_title">폴더 이름 변경</string>
+
+    <string name="storage_more_bottom_sheet_folder_remove">폴더 삭제</string>
+    <string name="storage_more_bottom_sheet_folder_name_change">폴더 이름 변경</string>
+
+    <string name="dialog_folder_remove_title">폴더 삭제</string>
+    <string name="dialog_folder_remove_content">폴더를 삭제하면 모든 데이터가 영구적으로\n삭제되어 복구할 수 없어요.\n그래도 삭제하시겠어요?</string>
+    <string name="dialog_folder_remove_button_cancel">취소</string>
+    <string name="dialog_folder_remove_button_remove">삭제</string>
+
 </resources>
