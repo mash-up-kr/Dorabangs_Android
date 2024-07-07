@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.storage.StorageRoute
 import com.mashup.dorabangs.feature.storage.storage.model.StorageFolderItem
 
@@ -12,7 +13,7 @@ fun NavController.navigateToStorage(navOptions: NavOptions) = navigate(Navigatio
 
 fun NavGraphBuilder.storageNavigation(
     navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
-    navigateToCreateFolder: () -> Unit,
+    navigateToFolderManage: (FolderManageType) -> Unit,
 
 ) {
     composable(
@@ -20,7 +21,7 @@ fun NavGraphBuilder.storageNavigation(
     ) {
         StorageRoute(
             navigateToStorageDetail = navigateToStorageDetail,
-            navigateToCreateFolder = navigateToCreateFolder,
+             navigateToFolderManage = navigateToFolderManage,
         )
     }
 }
