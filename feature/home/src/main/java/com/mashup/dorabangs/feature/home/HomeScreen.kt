@@ -31,7 +31,6 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,8 +54,9 @@ fun HomeRoute(
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToSaveLink: (String) -> Unit = {},
     navigateToClassification: () -> Unit = {},
+    navigateToSaveScreenWithLink: (String) -> Unit = {},
+    navigateToSaveScreenWithoutLink: () -> Unit = {},
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -73,7 +73,6 @@ fun HomeRoute(
             }
 
             HomeSideEffect.HideSnackBar -> {
-                clipboardManager.setText(AnnotatedString(""))
                 snackBarHostState.currentSnackbarData?.dismiss()
             }
         }
@@ -88,19 +87,29 @@ fun HomeRoute(
             onClickMoreButton = {
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
+            navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
         )
 
         HomeDoraSnackBar(
             modifier = Modifier
                 .align(Alignment.BottomCenter),
             text = state.clipBoardState.copiedText,
-            onAction = navigateToSaveLink,
+            onAction = { url ->
+                viewModel.setLocalCopiedUrl(url = url)
+                if (state.clipBoardState.isValidUrl) {
+                    navigateToSaveScreenWithLink.invoke(url)
+                }
+            },
             snackBarHostState = snackBarHostState,
             view = view,
             clipboardManager = clipboardManager,
+            lastCopiedText = { viewModel.getLocalCopiedUrl().orEmpty() },
             hideSnackBar = viewModel::hideSnackBar,
             showSnackBarWithText = viewModel::showSnackBar,
-            dismissAction = viewModel::hideSnackBar,
+            dismissAction = { url ->
+                viewModel.setLocalCopiedUrl(url = url)
+                viewModel.hideSnackBar()
+            },
         )
 
         DoraBottomSheet.MoreButtonBottomSheet(
@@ -144,6 +153,7 @@ fun HomeScreen(
     onClickChip: (Int) -> Unit = {},
     navigateToClassification: () -> Unit = {},
     onClickMoreButton: (Int) -> Unit = {},
+    navigateSaveScreenWithoutLink: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -155,6 +165,7 @@ fun HomeScreen(
                 title = "Logo",
                 isTitleCenter = false,
                 actionIcon = R.drawable.ic_plus,
+                onClickActonIcon = navigateSaveScreenWithoutLink,
             )
 
             Box(

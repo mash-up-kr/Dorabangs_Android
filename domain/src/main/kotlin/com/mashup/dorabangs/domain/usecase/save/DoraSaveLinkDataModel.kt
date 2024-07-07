@@ -5,4 +5,5 @@ data class DoraSaveLinkDataModel(
     val title: String = "",
     val thumbnailUrl: String = "",
     val isShortLink: Boolean = false,
+    val isError: Boolean = false,
 )

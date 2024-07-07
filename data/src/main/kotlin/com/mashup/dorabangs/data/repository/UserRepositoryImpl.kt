@@ -31,4 +31,12 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun registerDeviceToken(deviceToken: DeviceToken): String {
         return userRemoteDataSource.registerUser(deviceToken.toData())
     }
+
+    override suspend fun setLastCopiedUrl(url: String) {
+        userLocalDataSource.setLastCopiedUrl(url)
+    }
+
+    override fun getLastCopiedUrl(): Flow<String> {
+        return userLocalDataSource.getLastCopiedUrl()
+    }
 }

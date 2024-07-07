@@ -12,14 +12,16 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) =
 
 fun NavGraphBuilder.homeNavigation(
     navigateToClassification: () -> Unit = {},
-    navigateToSaveLink: (String) -> Unit,
+    navigateToSaveScreenWithLink: (String) -> Unit,
+    navigateToSaveScreenWithoutLink: () -> Unit,
 ) {
     composable(
         route = NavigationRoute.HomeScreen.route,
     ) {
         HomeRoute(
             navigateToClassification = navigateToClassification,
-            navigateToSaveLink = navigateToSaveLink,
+            navigateToSaveScreenWithLink = navigateToSaveScreenWithLink,
+            navigateToSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
         )
     }
 }
