@@ -9,18 +9,18 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
-class FolderManageViewModel @Inject constructor() : ViewModel(),
+class FolderManageViewModel @Inject constructor() :
+    ViewModel(),
     ContainerHost<FolderManageState, FolderManageSideEffect> {
     override val container = container<FolderManageState, FolderManageSideEffect>(FolderManageState())
 
     fun setFolderManageType(name: String) = intent {
         reduce {
-            when(name) {
+            when (name) {
                 FolderManageType.CREATE.name -> state.copy(type = FolderManageType.CREATE)
                 FolderManageType.CHANGE.name -> state.copy(type = FolderManageType.CHANGE)
                 else -> state.copy(type = FolderManageType.CREATE)
             }
         }
     }
-
 }

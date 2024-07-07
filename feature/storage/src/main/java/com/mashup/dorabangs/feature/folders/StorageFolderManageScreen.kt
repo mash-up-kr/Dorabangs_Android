@@ -26,7 +26,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun StorageFolderManageRoute(
     folderManageType: String,
     onClickBackIcon: () -> Unit,
-    folderManageViewModel: FolderManageViewModel = hiltViewModel()
+    folderManageViewModel: FolderManageViewModel = hiltViewModel(),
 ) {
     val folderManageState by folderManageViewModel.collectAsState()
 

@@ -21,7 +21,7 @@ fun NavGraphBuilder.storageNavigation(
     ) {
         StorageRoute(
             navigateToStorageDetail = navigateToStorageDetail,
-             navigateToFolderManage = navigateToFolderManage,
+            navigateToFolderManage = navigateToFolderManage,
         )
     }
 }

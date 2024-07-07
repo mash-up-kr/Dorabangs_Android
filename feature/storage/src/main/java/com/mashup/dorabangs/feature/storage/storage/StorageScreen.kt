@@ -34,7 +34,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun StorageRoute(
     storageViewModel: StorageViewModel = hiltViewModel(),
     navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
-    navigateToFolderManage: (FolderManageType) -> Unit = {}
+    navigateToFolderManage: (FolderManageType) -> Unit = {},
 ) {
     val storageState by storageViewModel.collectAsState()
     Box {
@@ -46,7 +46,7 @@ fun StorageRoute(
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
             isShowSheet = storageState.isShowMoreButtonSheet,
-            firstItemName = R.string.storage_more_bottom_sheet_folder_remove ,
+            firstItemName = R.string.storage_more_bottom_sheet_folder_remove,
             secondItemName = R.string.storage_more_bottom_sheet_folder_name_change,
             onClickDeleteLinkButton = {
                 storageViewModel.setVisibleMoreButtonBottomSheet(false)
@@ -55,7 +55,6 @@ fun StorageRoute(
             onClickMoveFolderButton = {
                 storageViewModel.setVisibleMoreButtonBottomSheet(false)
                 navigateToFolderManage(FolderManageType.CHANGE)
-
             },
             onDismissRequest = { storageViewModel.setVisibleMoreButtonBottomSheet(false) },
         )
