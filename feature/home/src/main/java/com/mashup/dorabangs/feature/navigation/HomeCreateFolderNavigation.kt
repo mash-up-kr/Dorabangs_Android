@@ -17,7 +17,7 @@ fun NavGraphBuilder.homeCreateFolderNavigation(
         route = NavigationRoute.HomeScreen.HomeCreateFolder.route,
     ) {
         HomeCreateFolderRoute(
-            onClickBackIcon = {},
+            onClickBackIcon = onClickBackIcon,
         )
     }
 }
