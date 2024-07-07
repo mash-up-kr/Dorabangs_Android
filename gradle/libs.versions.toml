@@ -39,6 +39,7 @@ retrofitConverter = "1.0.0"
 orbit = "8.0.0"
 datastore = "1.1.1"
 jsoup = "1.14.3"
+haze = "0.7.2"
 
 [libraries]
 kotlin-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin" }
@@ -97,6 +98,9 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 #html
 jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
+
+#blur
+haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze"}
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

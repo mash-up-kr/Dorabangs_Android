@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,

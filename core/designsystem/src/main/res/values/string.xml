@@ -4,7 +4,7 @@
     <string name="feed_card_summarizing_content__title">요약중</string>
     <string name="home">홈</string>
     <string name="storage">보관함</string>
-    <string name="home_empty_feed">테스트 테스트 테스트 테스트</string>
+    <string name="home_empty_feed">생성된 게시글이 없어요</string>
     <string name="snack_bar_title">클립보드에 복사한 링크 저장</string>
     <string name="snack_bar_cancel_description">스낵바 취소</string>
     <string name="text_field_url_text_clear">url 모두 지우기</string>

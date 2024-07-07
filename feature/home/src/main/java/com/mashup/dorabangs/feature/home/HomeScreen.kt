@@ -1,11 +1,11 @@
 package com.mashup.dorabangs.feature.home
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +17,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,10 +30,14 @@ import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
-import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopAppBar
+import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.haze
+import dev.chrisbanes.haze.hazeChild
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     state: HomeState,
@@ -41,28 +46,60 @@ fun HomeScreen(
     navigateToClassification: () -> Unit = {},
     onClickMoreButton: (Int) -> Unit = {},
 ) {
-    LazyColumn(
+    Box(
         modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        item {
-            DoraTopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                title = "Logo",
-                isTitleCenter = false,
-                actionIcon = R.drawable.ic_plus,
-            )
+        val hazeState = remember { HazeState() }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(310.dp)
-                    .background(DoraColorTokens.G5)
-                    .clickable { navigateToClassification() },
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .haze(hazeState),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            item {
+                Spacer(
+                    modifier = Modifier.height(104.dp),
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(310.dp)
+                        .background(DoraColorTokens.G5)
+                        .clickable { navigateToClassification() },
+                )
+            }
+
+            Feeds(
+                modifier = Modifier,
+                feeds = state.feedCards,
+                onClickMoreButton = { index ->
+                    onClickMoreButton(index)
+                },
             )
         }
 
-        stickyHeader {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(104.dp)
+                .hazeChild(
+                    state = hazeState,
+                    style = HazeStyle(blurRadius = 12.dp),
+                ),
+        )
+
+        Column {
+            DoraTopBar.HomeTopBar(
+                modifier = Modifier
+                    .height(48.dp)
+                    .fillMaxWidth(),
+                title = "Logo",
+                actionIcon = R.drawable.ic_add_link,
+                onClickActonIcon = {},
+            )
+
             DoraChips(
                 modifier = Modifier.fillMaxWidth(),
                 chipList = state.tapElements,
@@ -72,14 +109,6 @@ fun HomeScreen(
                 },
             )
         }
-
-        Feeds(
-            modifier = Modifier,
-            feeds = state.feedCards,
-            onClickMoreButton = { index ->
-                onClickMoreButton(index)
-            },
-        )
     }
 }
 
@@ -102,6 +131,8 @@ private fun LazyListScope.Feeds(
                 Text(
                     modifier = Modifier.padding(top = 12.dp),
                     text = stringResource(id = R.string.home_empty_feed),
+                    style = DoraTypoTokens.caption3Medium,
+                    color = DoraColorTokens.G3,
                 )
             }
         }
@@ -130,21 +161,25 @@ fun HomeScreenPreview() {
         state = HomeState(
             tapElements = listOf(
                 DoraChipUiModel(
-                    title = "전체 99+",
+                    title = "전체",
                     icon = R.drawable.ic_plus,
                 ),
                 DoraChipUiModel(
-                    title = "하이?",
-                ),
-                DoraChipUiModel(
-                    title = "바이?",
-                ),
-                DoraChipUiModel(
-                    title = "바이?",
-                ),
-                DoraChipUiModel(
-                    title = "바이?",
+                    title = "즐겨찾기",
                     icon = R.drawable.ic_plus,
+                ),
+                DoraChipUiModel(
+                    title = "나중에 읽을 링크",
+                    icon = R.drawable.ic_plus,
+                ),
+                DoraChipUiModel(
+                    title = "테스트",
+                ),
+                DoraChipUiModel(
+                    title = "테스트",
+                ),
+                DoraChipUiModel(
+                    title = "테스트",
                 ),
             ),
         ),

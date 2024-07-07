@@ -1,7 +1,6 @@
 package com.mashup.dorabangs.core.designsystem.component.topbar
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.TopBarColorTokens
 
@@ -36,8 +34,7 @@ fun DoraTopAppBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .background(color = DoraColorTokens.White),
+            .height(48.dp),
     ) {
         val horizontalArrangement = if (isTitleCenter) Arrangement.Center else Arrangement.Start
         if (isTitleCenter && isEnableBackNavigation) {
