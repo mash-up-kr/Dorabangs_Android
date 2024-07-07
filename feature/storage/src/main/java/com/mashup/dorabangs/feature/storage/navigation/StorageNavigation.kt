@@ -6,17 +6,19 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.feature.storage.storage.StorageRoute
+import com.mashup.dorabangs.feature.storage.storage.model.StorageFolderItem
 
 fun NavController.navigateToStorage(navOptions: NavOptions) = navigate(NavigationRoute.StorageScreen.route, navOptions)
 
-fun NavGraphBuilder.storageNavigation(navController: NavController) {
+fun NavGraphBuilder.storageNavigation(
+    navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
+    onClickAddFolderIcon: () -> Unit,
+) {
     composable(
         route = NavigationRoute.StorageScreen.route,
     ) {
         StorageRoute(
-            navigateToStorageDetail = { selectItem ->
-                navController.navigateToStorageDetail()
-            },
+            navigateToStorageDetail = navigateToStorageDetail
         )
     }
 }

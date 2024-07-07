@@ -66,6 +66,8 @@ object DoraBottomSheet : BottomSheetType {
         isShowSheet: Boolean,
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
+        onClickCreateFolder: () -> Unit,
+        onClickMoveFolder: () -> Unit,
     ) {
         if (isShowSheet) {
             DoraBaseBottomSheet(
@@ -93,6 +95,7 @@ object DoraBottomSheet : BottomSheetType {
                                 itemName = stringResource(id = R.string.moving_folder_dialog_add_folder),
                                 isSelected = false,
                             ),
+                            onClickItem = onClickCreateFolder,
                         )
                     }
 
@@ -100,6 +103,7 @@ object DoraBottomSheet : BottomSheetType {
                         DoraBottomSheetFolderItem(
                             modifier = Modifier.fillMaxWidth(),
                             data = folderList[index],
+                            onClickItem = onClickMoveFolder,
                         )
                     }
 
@@ -136,5 +140,7 @@ sealed interface BottomSheetType {
         isShowSheet: Boolean,
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
+        onClickCreateFolder: () -> Unit,
+        onClickMoveFolder: () -> Unit,
     )
 }

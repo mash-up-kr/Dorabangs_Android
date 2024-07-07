@@ -57,6 +57,7 @@ fun HomeCreateFolderScreen(
                 helperText = stringResource(id = R.string.home_create_folder_helper),
                 helperEnabled = true,
                 counterEnabled = true,
+                onValueChanged = {}
             )
             Spacer(modifier = Modifier.height(20.dp))
             DoraButtons.DoraBtnMaxFull(

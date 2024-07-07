@@ -14,6 +14,7 @@ fun NavGraphBuilder.homeNavigation(
     navigateToClassification: () -> Unit = {},
     navigateToSaveScreenWithLink: (String) -> Unit,
     navigateToSaveScreenWithoutLink: () -> Unit,
+    navigateToCreateFolder: () -> Unit,
 ) {
     composable(
         route = NavigationRoute.HomeScreen.route,
@@ -22,6 +23,7 @@ fun NavGraphBuilder.homeNavigation(
             navigateToClassification = navigateToClassification,
             navigateToSaveScreenWithLink = navigateToSaveScreenWithLink,
             navigateToSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
+            navigateToCreateFolder = navigateToCreateFolder,
         )
     }
 }

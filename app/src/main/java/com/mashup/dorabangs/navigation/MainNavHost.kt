@@ -4,13 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.dorabangs.feature.navigation.navigateToSaveLink
 import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.feature.navigation.homeCreateFolderNavigation
 import com.mashup.dorabangs.feature.navigation.homeNavigation
 import com.mashup.dorabangs.feature.navigation.navigateToHome
+import com.mashup.dorabangs.feature.navigation.navigateToHomeCrateFolder
 import com.mashup.dorabangs.feature.navigation.onBoardingNavigation
+import com.mashup.dorabangs.feature.storage.navigation.navigateToStorageDetail
 import com.mashup.dorabangs.feature.storage.navigation.storageDetailNavigation
 import com.mashup.dorabangs.feature.storage.navigation.storageNavigation
 import com.mashup.feature.classification.navigation.classificationNavigation
@@ -27,6 +31,7 @@ fun MainNavHost(
         navController = appState.navController,
         startDestination = startDestination,
     ) {
+        onBoardingNavigation { appState.navController.navigateToHome() }
         homeNavigation(
             navigateToClassification = { appState.navController.navigateToClassification() },
             navigateToSaveScreenWithLink = { copiedUrl ->
@@ -35,9 +40,16 @@ fun MainNavHost(
             navigateToSaveScreenWithoutLink = {
                 appState.navController.navigateToSaveLink()
             },
+            navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
         )
-        onBoardingNavigation { appState.navController.navigateToHome() }
-        storageNavigation(appState.navController)
+        homeCreateFolderNavigation(
+            onClickBackIcon = { appState.navController.popBackStack() },
+        )
+        storageNavigation(
+            navigateToStorageDetail = { appState.navController.navigateToStorageDetail() },
+            onClickAddFolderIcon = {},
+        )
+
         storageDetailNavigation(appState.navController)
         classificationNavigation(appState.navController)
         saveLinkNavigation(

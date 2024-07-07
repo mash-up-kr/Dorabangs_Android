@@ -57,6 +57,7 @@ fun HomeRoute(
     navigateToClassification: () -> Unit = {},
     navigateToSaveScreenWithLink: (String) -> Unit = {},
     navigateToSaveScreenWithoutLink: () -> Unit = {},
+    navigateToCreateFolder: () -> Unit,
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -131,6 +132,11 @@ fun HomeRoute(
             isShowSheet = state.isShowMovingFolderSheet,
             folderList = testFolderListData,
             onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
+            onClickCreateFolder = {
+                viewModel.setVisibleMovingFolderBottomSheet(false)
+                navigateToCreateFolder()
+            },
+            onClickMoveFolder = {},
         )
 
         DoraDialog(
