@@ -13,10 +13,12 @@ import com.mashup.dorabangs.feature.navigation.homeCreateFolderNavigation
 import com.mashup.dorabangs.feature.navigation.homeNavigation
 import com.mashup.dorabangs.feature.navigation.navigateToHome
 import com.mashup.dorabangs.feature.navigation.navigateToHomeCrateFolder
+import com.mashup.dorabangs.feature.navigation.navigateToStorageDetail
+import com.mashup.dorabangs.feature.navigation.navigateToStorageFolderManage
 import com.mashup.dorabangs.feature.navigation.onBoardingNavigation
-import com.mashup.dorabangs.feature.storage.navigation.navigateToStorageDetail
-import com.mashup.dorabangs.feature.storage.navigation.storageDetailNavigation
-import com.mashup.dorabangs.feature.storage.navigation.storageNavigation
+import com.mashup.dorabangs.feature.navigation.storageDetailNavigation
+import com.mashup.dorabangs.feature.navigation.storageFolderManageNavigation
+import com.mashup.dorabangs.feature.navigation.storageNavigation
 import com.mashup.feature.classification.navigation.classificationNavigation
 import com.mashup.feature.classification.navigation.navigateToClassification
 
@@ -47,9 +49,11 @@ fun MainNavHost(
         )
         storageNavigation(
             navigateToStorageDetail = { appState.navController.navigateToStorageDetail() },
-            onClickAddFolderIcon = {},
+            navigateToCreateFolder = { appState.navController.navigateToStorageFolderManage() },
         )
-
+        storageFolderManageNavigation(
+            onClickBackIcon = { appState.navController.popBackStack() },
+        )
         storageDetailNavigation(appState.navController)
         classificationNavigation(appState.navController)
         saveLinkNavigation(
