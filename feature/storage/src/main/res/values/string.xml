@@ -8,4 +8,9 @@
     <string name="storage_detail_tab_all">전체</string>
     <string name="storage_detail_tab_unread">읽지 않은</string>
     <string name="storage">보관함</string>
+
+    <string name="storage_create_folder_hint">폴더명을 입력해주세요.</string>
+    <string name="storage_create_folder_label">폴더명</string>
+    <string name="storage_create_folder_helper">같은 이름의 폴더 있어요</string>
+    <string name="storage_create_folder_save">저장</string>
 </resources>

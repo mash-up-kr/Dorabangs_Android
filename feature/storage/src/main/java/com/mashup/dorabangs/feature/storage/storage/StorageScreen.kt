@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,10 +28,12 @@ import com.mashup.dorabangs.feature.storage.storage.model.StorageFolderItem
 fun StorageRoute(
     storageViewModel: StorageViewModel = hiltViewModel(),
     navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
+    navigateToCreateFolder: () -> Unit = {},
 ) {
     StorageScreen(
         navigateToStorageDetail = navigateToStorageDetail,
         onClickAddMoreButton = storageViewModel::showEditFolderBottomSheet,
+        onClickAddFolderIcon = navigateToCreateFolder,
     )
 }
 
@@ -38,13 +41,16 @@ fun StorageRoute(
 fun StorageScreen(
     navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
     onClickAddMoreButton: (StorageFolderItem) -> Unit = {},
+    onClickAddFolderIcon: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = DoraColorTokens.G1),
     ) {
-        StorageTopAppBar()
+        StorageTopAppBar(
+            onClickAddFolderIcon = onClickAddFolderIcon,
+        )
         StorageFolderList(
             navigateToStorageDetail = navigateToStorageDetail,
             onClickAddMoreButton = onClickAddMoreButton,
@@ -53,7 +59,10 @@ fun StorageScreen(
 }
 
 @Composable
-fun StorageTopAppBar(modifier: Modifier = Modifier) {
+fun StorageTopAppBar(
+    onClickAddFolderIcon: () -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier =
         modifier
@@ -67,10 +76,14 @@ fun StorageTopAppBar(modifier: Modifier = Modifier) {
             text = stringResource(id = R.string.storage),
             style = DoraTypoTokens.base1Bold,
         )
-        Icon(
-            painter = painterResource(id = com.google.android.material.R.drawable.ic_call_answer),
-            contentDescription = "folderIcon",
-        )
+        IconButton(
+            onClick = { onClickAddFolderIcon() },
+        ) {
+            Icon(
+                painter = painterResource(id = com.google.android.material.R.drawable.ic_call_answer),
+                contentDescription = "folderIcon",
+            )
+        }
     }
 }
 
