@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
@@ -46,7 +47,7 @@ object NetworkModule {
             addInterceptor(
                 Interceptor { chain ->
                     val token = runBlocking {
-                        runCatching { userLocalDataSource.getUserAccessToken() }.getOrDefault("")
+                        runCatching { userLocalDataSource.getUserAccessToken().first() }.getOrDefault("")
                     }
                     val request = chain.request().newBuilder()
                         .addHeader(AUTHORIZATION, "Bearer $token")
