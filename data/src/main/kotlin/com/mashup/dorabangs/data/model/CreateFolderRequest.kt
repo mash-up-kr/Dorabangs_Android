@@ -3,7 +3,7 @@ package com.mashup.dorabangs.data.model
 import com.mashup.dorabangs.domain.model.CreateFolder
 
 data class CreateFolderRequest(
-    val name: String,
+    val names: List<String>,
 )
 
-fun CreateFolder.toData(): CreateFolderRequest = CreateFolderRequest(name = name)
+fun CreateFolder.toData(): CreateFolderRequest = CreateFolderRequest(names = this.names)
