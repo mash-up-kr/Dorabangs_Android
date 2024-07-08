@@ -6,5 +6,5 @@ data class ClassificationState(
     val folderList: List<String> = listOf(),
     val selectedFolder: String = "디자인", // TODO- 수정 예정
     val cardInfoList: List<FeedCardUiModel> = FeedCardUiModel.getDefaultFeedCard(),
-    val isClassificationComplete: Boolean = true,
+    val isClassificationComplete: Boolean = false,
 )
