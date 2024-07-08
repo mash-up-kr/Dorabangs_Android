@@ -2,7 +2,6 @@ package com.mashup.dorabangs
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
@@ -55,7 +54,7 @@ class MainActivity : ComponentActivity() {
     private fun handleSendText() {
         val linkUrl = intent.getStringExtra(Intent.EXTRA_TEXT).orEmpty()
         if (linkUrl.isNotBlank()) {
-            println("tjrwn link url is ${linkUrl}")
+            println("tjrwn link url is $linkUrl")
         }
     }
 }
