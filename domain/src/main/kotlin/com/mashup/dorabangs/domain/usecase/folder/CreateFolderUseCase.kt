@@ -6,8 +6,8 @@ import com.mashup.dorabangs.domain.repository.FolderRepository
 import javax.inject.Inject
 
 class CreateFolderUseCase @Inject constructor(
-    private val folderRepository: FolderRepository
-){
+    private val folderRepository: FolderRepository,
+) {
     suspend operator fun invoke(folderList: CreateFolder): CreateCompleteFolderInfo {
         return folderRepository.createFolder(createFolder = folderList)
     }

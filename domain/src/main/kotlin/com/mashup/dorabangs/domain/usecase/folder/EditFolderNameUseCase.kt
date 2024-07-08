@@ -6,8 +6,8 @@ import com.mashup.dorabangs.domain.repository.FolderRepository
 import javax.inject.Inject
 
 class EditFolderNameUseCase @Inject constructor(
-    private val folderRepository: FolderRepository
-){
+    private val folderRepository: FolderRepository,
+) {
     suspend operator fun invoke(folderName: EditFolder): EditCompleteFolderInfo {
         return folderRepository.editFolderName(editFolder = folderName)
     }

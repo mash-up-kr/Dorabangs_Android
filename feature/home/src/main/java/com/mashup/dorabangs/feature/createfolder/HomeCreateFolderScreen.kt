@@ -25,12 +25,12 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun HomeCreateFolderRoute(
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
-    homeCreateFolderViewModel: HomeCreateFolderViewModel = hiltViewModel()
+    homeCreateFolderViewModel: HomeCreateFolderViewModel = hiltViewModel(),
 ) {
     val state by homeCreateFolderViewModel.collectAsState()
 
-    homeCreateFolderViewModel.collectSideEffect {sideEffect ->
-        when(sideEffect) {
+    homeCreateFolderViewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
             is HomeCreateFolderSideEffect.NavigateToHome -> navigateToHome()
         }
     }
@@ -39,7 +39,7 @@ fun HomeCreateFolderRoute(
         state = state,
         onClickBackIcon = onClickBackIcon,
         onClickSaveButton = { homeCreateFolderViewModel.createFolder(state.folderName) },
-        onValueChanged = homeCreateFolderViewModel::setFolderName
+        onValueChanged = homeCreateFolderViewModel::setFolderName,
     )
 }
 

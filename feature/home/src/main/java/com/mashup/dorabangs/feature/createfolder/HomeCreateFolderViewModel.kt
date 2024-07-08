@@ -15,10 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeCreateFolderViewModel @Inject constructor(
-    private val createFolderUseCase: CreateFolderUseCase
-): ViewModel(), ContainerHost<HomeCreateFolderState, HomeCreateFolderSideEffect> {
+    private val createFolderUseCase: CreateFolderUseCase,
+) : ViewModel(), ContainerHost<HomeCreateFolderState, HomeCreateFolderSideEffect> {
     override val container = container<HomeCreateFolderState, HomeCreateFolderSideEffect>(HomeCreateFolderState())
-
 
     fun createFolder(folderName: String) {
         runCatching {
@@ -31,7 +30,7 @@ class HomeCreateFolderViewModel @Inject constructor(
                 postSideEffect(HomeCreateFolderSideEffect.NavigateToHome)
             }
         }.onFailure { throwable ->
-            //TODO - 에러메세지 넘기기
+            // TODO - 에러메세지 넘기기
             setTextHelperEnable(false)
         }
     }
