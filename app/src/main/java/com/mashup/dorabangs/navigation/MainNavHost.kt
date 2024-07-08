@@ -40,7 +40,10 @@ fun MainNavHost(
         onBoardingNavigation { appState.navController.navigateToHome() }
         storageNavigation(appState.navController)
         storageDetailNavigation(appState.navController)
-        classificationNavigation(appState.navController)
+        classificationNavigation(
+            onClickBackIcon = { appState.navController.popBackStack() },
+            navigateToHome = { appState.navController.popBackStack() },
+        )
         saveLinkNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
             onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = it) },
