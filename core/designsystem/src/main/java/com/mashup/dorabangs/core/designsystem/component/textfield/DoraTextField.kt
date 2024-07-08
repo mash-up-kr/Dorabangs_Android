@@ -112,7 +112,10 @@ fun DoraTextField(
                 textStyle = DoraTypoTokens.caption1Medium,
                 onValueChange = {
                     if (counterEnabled) {
-                        if (it.text.length <= 15) textFieldValue = it
+                        if (it.text.length <= 15) {
+                            textFieldValue = it
+                            onValueChanged(it.text)
+                        }
                     } else {
                         debounceJob?.cancel()
                         debounceJob = scope.launch {
