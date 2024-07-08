@@ -71,10 +71,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setVisibleMovingFolderBottomSheet(visible: Boolean) = intent {
+    fun setVisibleMovingFolderBottomSheet(visible: Boolean, isNavigate: Boolean = false) = intent {
         reduce {
             state.copy(isShowMovingFolderSheet = visible)
         }
+        if(isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
     }
 
     init {
