@@ -21,6 +21,7 @@ import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 import com.mashup.dorabangs.feature.folders.model.FolderManageState
 import com.mashup.dorabangs.feature.storage.R
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun StorageFolderManageRoute(
@@ -30,6 +31,12 @@ fun StorageFolderManageRoute(
 ) {
     val folderManageState by folderManageViewModel.collectAsState()
 
+    folderManageViewModel.collectSideEffect {sideEffect ->
+        when(sideEffect) {
+            is FolderManageSideEffect.NavigateToStorage -> onClickBackIcon()
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         folderManageViewModel.setFolderManageType(folderManageType)
     }
@@ -37,7 +44,13 @@ fun StorageFolderManageRoute(
     FolderManageScreen(
         folderManageState = folderManageState,
         onClickBackIcon = onClickBackIcon,
-        onClickSaveButton = { },
+        onClickSaveButton = {
+            folderManageViewModel.createOrEditFolder(
+                folderName = folderManageState.folderName,
+                folderType = folderManageState.type,
+            )
+        },
+        onValueChanged = folderManageViewModel::setFolderName,
     )
 }
 
@@ -46,6 +59,7 @@ fun FolderManageScreen(
     folderManageState: FolderManageState,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
+    onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -72,7 +86,7 @@ fun FolderManageScreen(
                 helperText = stringResource(id = R.string.storage_create_folder_helper),
                 helperEnabled = true,
                 counterEnabled = true,
-                onValueChanged = {},
+                onValueChanged = onValueChanged,
             )
             Spacer(modifier = Modifier.height(20.dp))
             DoraButtons.DoraBtnMaxFull(
