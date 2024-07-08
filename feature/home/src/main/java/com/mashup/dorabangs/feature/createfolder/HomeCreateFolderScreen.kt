@@ -8,29 +8,47 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 import com.mashup.dorabangs.home.R
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeCreateFolderRoute(
     onClickBackIcon: () -> Unit,
+    navigateToHome: () -> Unit,
+    homeCreateFolderViewModel: HomeCreateFolderViewModel = hiltViewModel()
 ) {
+    val state by homeCreateFolderViewModel.collectAsState()
+
+    homeCreateFolderViewModel.collectSideEffect {sideEffect ->
+        when(sideEffect) {
+            is HomeCreateFolderSideEffect.NavigateToHome -> navigateToHome()
+        }
+    }
+
     HomeCreateFolderScreen(
+        state = state,
         onClickBackIcon = onClickBackIcon,
-        onClickSaveButton = {},
+        onClickSaveButton = { homeCreateFolderViewModel.createFolder(state.folderName) },
+        onValueChanged = homeCreateFolderViewModel::setFolderName
     )
 }
 
 @Composable
 fun HomeCreateFolderScreen(
+    state: HomeCreateFolderState,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
+    onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -55,9 +73,9 @@ fun HomeCreateFolderScreen(
                 hintText = stringResource(id = R.string.home_create_folder_hint),
                 labelText = stringResource(id = R.string.home_create_folder_label),
                 helperText = stringResource(id = R.string.home_create_folder_helper),
-                helperEnabled = true,
+                helperEnabled = state.helperEnable,
                 counterEnabled = true,
-                onValueChanged = {},
+                onValueChanged = onValueChanged,
             )
             Spacer(modifier = Modifier.height(20.dp))
             DoraButtons.DoraBtnMaxFull(
