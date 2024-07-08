@@ -28,7 +28,7 @@ class HomeCreateFolderViewModel @Inject constructor(
             }
         }.onSuccess {
             intent {
-                postSideEffect(HomeCreateFolderSideEffect.navigateToHome)
+                postSideEffect(HomeCreateFolderSideEffect.NavigateToHome)
             }
         }.onFailure { throwable ->
             //TODO - 에러메세지 넘기기
