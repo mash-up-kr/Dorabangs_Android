@@ -20,6 +20,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +51,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeRoute(
+    isVisibleBottomSheet: Boolean,
     modifier: Modifier = Modifier,
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
@@ -62,6 +64,13 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = Unit) {
+        if (isVisibleBottomSheet) {
+            viewModel.setVisibleMovingFolderBottomSheet(true)
+        }
+    }
+
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is HomeSideEffect.ShowSnackBar -> {

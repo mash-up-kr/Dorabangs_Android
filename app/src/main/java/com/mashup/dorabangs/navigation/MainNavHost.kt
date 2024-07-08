@@ -45,7 +45,13 @@ fun MainNavHost(
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
         )
         homeCreateFolderNavigation(
-            onClickBackIcon = { appState.navController.popBackStack() },
+            onClickBackIcon = {
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set(
+                    key = "isVisibleMovingBottomSheet",
+                    value = true,
+                )
+                appState.navController.popBackStack()
+            },
         )
         storageNavigation(
             navigateToStorageDetail = { appState.navController.navigateToStorageDetail() },

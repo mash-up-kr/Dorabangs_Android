@@ -75,7 +75,7 @@ class HomeViewModel @Inject constructor(
         reduce {
             state.copy(isShowMovingFolderSheet = visible)
         }
-        if(isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
+        if (isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
     }
 
     init {
