@@ -12,7 +12,7 @@ import com.mashup.dorabangs.feature.storage.storage.model.StorageFolderItem
 fun NavController.navigateToStorage(navOptions: NavOptions) = navigate(NavigationRoute.StorageScreen.route, navOptions)
 
 fun NavGraphBuilder.storageNavigation(
-    navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
+    navigateToStorageDetail: (StorageFolderItem) -> Unit,
     navigateToFolderManage: (FolderManageType) -> Unit,
 
 ) {

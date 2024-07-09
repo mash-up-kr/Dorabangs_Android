@@ -33,8 +33,8 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun StorageRoute(
     storageViewModel: StorageViewModel = hiltViewModel(),
-    navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
-    navigateToFolderManage: (FolderManageType) -> Unit = {},
+    navigateToStorageDetail: (StorageFolderItem) -> Unit,
+    navigateToFolderManage: (FolderManageType) -> Unit,
 ) {
     val storageState by storageViewModel.collectAsState()
     Box {
@@ -73,8 +73,8 @@ fun StorageRoute(
 
 @Composable
 fun StorageScreen(
-    navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
-    onClickSettingButton: (StorageFolderItem) -> Unit = {},
+    navigateToStorageDetail: (StorageFolderItem) -> Unit,
+    onClickSettingButton: (StorageFolderItem) -> Unit,
     onClickAddFolderIcon: () -> Unit = {},
 ) {
     Column(
@@ -124,5 +124,8 @@ fun StorageTopAppBar(
 @Preview
 @Composable
 fun PreviewStorageScreen() {
-    StorageRoute()
+    StorageRoute(
+        navigateToStorageDetail = {},
+        navigateToFolderManage = {}
+    )
 }
