@@ -36,13 +36,13 @@ fun ClassificationRoute(
 @Composable
 fun ClassificationScreen(
     state: ClassificationState,
-    modifier: Modifier = Modifier,
-    onClickChip: () -> Unit = {},
-    onClickDeleteButton: (Int) -> Unit = {},
-    onClickMoveButton: (Int) -> Unit = {},
-    onClickAllItemMoveButton: () -> Unit = {},
+    onClickChip: () -> Unit,
+    onClickDeleteButton: (Int) -> Unit,
+    onClickMoveButton: (Int) -> Unit,
+    onClickAllItemMoveButton: () -> Unit,
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -84,5 +84,13 @@ fun ClassificationScreen(
 @Preview
 @Composable
 fun PreviewClassificationScreen() {
-    ClassificationScreen(state = ClassificationState(), onClickBackIcon = {}, navigateToHome = {})
+    ClassificationScreen(
+        state = ClassificationState(),
+        onClickChip = {},
+        onClickDeleteButton = {},
+        onClickMoveButton = {},
+        onClickAllItemMoveButton = {},
+        onClickBackIcon = {},
+        navigateToHome = {},
+    )
 }
