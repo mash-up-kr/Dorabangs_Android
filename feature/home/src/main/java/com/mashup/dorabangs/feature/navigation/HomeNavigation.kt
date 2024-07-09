@@ -14,7 +14,7 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) =
     navigate(NavigationRoute.HomeScreen.route, navOptions)
 
 fun NavGraphBuilder.homeNavigation(
-    navigateToClassification: () -> Unit = {},
+    navigateToClassification: () -> Unit,
     navigateToSaveScreenWithLink: (String) -> Unit,
     navigateToSaveScreenWithoutLink: () -> Unit,
     navigateToCreateFolder: () -> Unit,
@@ -27,14 +27,8 @@ fun NavGraphBuilder.homeNavigation(
                 defaultValue = false
             },
         ),
-    ) { backStackEntry ->
-
-        val isVisibleBottomSheet = backStackEntry.savedStateHandle.getStateFlow(
-            "isVisibleMovingBottomSheet",
-            initialValue = false,
-        ).collectAsState().value
+    ) { 
         HomeRoute(
-            isVisibleBottomSheet = isVisibleBottomSheet,
             navigateToClassification = navigateToClassification,
             navigateToSaveScreenWithLink = navigateToSaveScreenWithLink,
             navigateToSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,

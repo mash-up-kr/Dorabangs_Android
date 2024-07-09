@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.feature.home
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,7 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
+import kotlin.math.log
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -25,6 +27,13 @@ class HomeViewModel @Inject constructor(
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
+
+    fun getIsVisibleMoreBottomSheet() {
+        savedStateHandle.get<Boolean>("isVisibleMovingBottomSheet")?.let { isVisible ->
+            Log.d("HomeViewModel", ": ${isVisible} ")
+            setVisibleMovingFolderBottomSheet(isVisible)
+        }
+    }
 
     fun changeSelectedTapIdx(index: Int) = intent {
         reduce {

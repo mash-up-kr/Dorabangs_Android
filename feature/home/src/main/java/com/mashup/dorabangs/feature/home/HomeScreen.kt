@@ -51,7 +51,6 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeRoute(
-    isVisibleBottomSheet: Boolean,
     modifier: Modifier = Modifier,
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
@@ -66,9 +65,7 @@ fun HomeRoute(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = Unit) {
-        if (isVisibleBottomSheet) {
-            viewModel.setVisibleMovingFolderBottomSheet(true)
-        }
+        viewModel.getIsVisibleMoreBottomSheet()
     }
 
     viewModel.collectSideEffect { sideEffect ->
