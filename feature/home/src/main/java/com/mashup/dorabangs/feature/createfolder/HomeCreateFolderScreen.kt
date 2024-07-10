@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.feature.createfolder
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,16 +12,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
+import com.mashup.dorabangs.feature.home.HomeViewModel
 import com.mashup.dorabangs.home.R
 
 @Composable
 fun HomeCreateFolderRoute(
+    homeViewModel: HomeViewModel = hiltViewModel(),
     onClickBackIcon: () -> Unit,
 ) {
+    Log.d("DOAROA", "HomeCreateFolderRoute: $homeViewModel")
     HomeCreateFolderScreen(
         onClickBackIcon = onClickBackIcon,
         onClickSaveButton = {},

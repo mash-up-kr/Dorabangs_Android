@@ -126,6 +126,6 @@ fun StorageTopAppBar(
 fun PreviewStorageScreen() {
     StorageRoute(
         navigateToStorageDetail = {},
-        navigateToFolderManage = {}
+        navigateToFolderManage = {},
     )
 }

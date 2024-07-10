@@ -20,7 +20,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,7 +62,6 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
-
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {

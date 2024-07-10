@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.home
 
-import android.content.ContentValues
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,35 +11,27 @@ import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
-
     init {
-        Log.d(ContentValues.TAG, "homeNavigationViewModel: ${savedStateHandle.hashCode()}")
-        viewModelScope.launch {
+        viewModelScope.doraLaunch {
             savedStateHandle.getStateFlow(
                 "isVisibleMovingBottomSheet",
                 initialValue = false,
-            ).collect { isVisible ->
-                Log.d("dorabangs", "getIsVisibleMoreBottomSheet: $isVisible ")
-                if(isVisible)
-                    setVisibleMoreButtonBottomSheet(visible = true)
-            }
+            ).collect { isVisible -> setVisibleMoreButtonBottomSheet(visible = isVisible) }
         }
     }
 
