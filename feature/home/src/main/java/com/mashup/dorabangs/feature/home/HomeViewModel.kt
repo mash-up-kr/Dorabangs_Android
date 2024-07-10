@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.feature.home
 
+import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -28,10 +30,18 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
-    fun getIsVisibleMoreBottomSheet() {
-        savedStateHandle.get<Boolean>("isVisibleMovingBottomSheet")?.let { isVisible ->
-            Log.d("HomeViewModel", ": ${isVisible} ")
-            setVisibleMovingFolderBottomSheet(isVisible)
+
+    init {
+        Log.d(ContentValues.TAG, "homeNavigationViewModel: ${savedStateHandle.hashCode()}")
+        viewModelScope.launch {
+            savedStateHandle.getStateFlow(
+                "isVisibleMovingBottomSheet",
+                initialValue = false,
+            ).collect { isVisible ->
+                Log.d("dorabangs", "getIsVisibleMoreBottomSheet: $isVisible ")
+                if(isVisible)
+                    setVisibleMoreButtonBottomSheet(visible = true)
+            }
         }
     }
 

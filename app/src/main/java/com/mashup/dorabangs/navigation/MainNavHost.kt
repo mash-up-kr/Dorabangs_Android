@@ -1,7 +1,10 @@
 package com.mashup.dorabangs.navigation
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.dorabangs.feature.navigation.navigateToSaveLink
@@ -9,6 +12,7 @@ import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.feature.home.HomeViewModel
 import com.mashup.dorabangs.feature.navigation.homeCreateFolderNavigation
 import com.mashup.dorabangs.feature.navigation.homeNavigation
 import com.mashup.dorabangs.feature.navigation.navigateToHome
@@ -50,7 +54,21 @@ fun MainNavHost(
                     key = "isVisibleMovingBottomSheet",
                     value = true,
                 )
+                Log.d(TAG, "doradora11: ${ appState.navController.previousBackStackEntry?.savedStateHandle?.get<Boolean>("isVisibleMovingBottomSheet")}")
+                Log.d(TAG, "doradora22: ${ appState.navController.currentBackStackEntry?.savedStateHandle?.get<Boolean>("isVisibleMovingBottomSheet")}")
                 appState.navController.popBackStack()
+                appState.navController.currentBackStackEntry?.savedStateHandle?.get<Boolean>("isVisibleMovingBottomSheet")
+                Log.d(TAG, "doradora33: ${ appState.navController.previousBackStackEntry?.savedStateHandle?.get<Boolean>("isVisibleMovingBottomSheet")}")
+                Log.d(TAG, "doradora44: ${ appState.navController.currentBackStackEntry?.savedStateHandle?.get<Boolean>("isVisibleMovingBottomSheet")}")
+
+//                appState.navController.navigateToHome(
+//                    navOptions = navOptions {
+//                        popUpTo(appState.navController.graph.id) {
+//                            inclusive = true
+//                        }
+//                    },
+//                    isVisibleMovingBottomSheet = true
+//                )
             },
         )
         storageNavigation(

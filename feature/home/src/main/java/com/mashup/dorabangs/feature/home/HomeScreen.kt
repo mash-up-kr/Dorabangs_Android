@@ -64,9 +64,6 @@ fun HomeRoute(
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getIsVisibleMoreBottomSheet()
-    }
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
