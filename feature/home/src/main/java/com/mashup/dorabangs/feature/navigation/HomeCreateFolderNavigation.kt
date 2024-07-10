@@ -19,7 +19,7 @@ fun NavGraphBuilder.homeCreateFolderNavigation(
     composable(
         route = NavigationRoute.HomeScreen.HomeCreateFolder.route,
     ) {
-        navController.currentBackStackEntry?.let { backStackEntry ->
+        navController.previousBackStackEntry?.let { backStackEntry ->
             val homeViewModel: HomeViewModel = hiltViewModel(backStackEntry)
             homeViewModel.savedStateHandle["isVisibleMovingBottomSheet"] = true
 
