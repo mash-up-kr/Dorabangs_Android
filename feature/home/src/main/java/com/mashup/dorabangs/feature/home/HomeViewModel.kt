@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
             savedStateHandle.getStateFlow(
                 "isVisibleMovingBottomSheet",
                 initialValue = false,
-            ).collect { isVisible -> setVisibleMoreButtonBottomSheet(visible = isVisible) }
+            ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
         }
     }
 
