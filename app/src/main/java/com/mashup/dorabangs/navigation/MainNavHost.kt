@@ -45,7 +45,7 @@ fun MainNavHost(
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
         )
         homeCreateFolderNavigation(
-            previousBackStackEntry = appState.navController,
+            navController = appState.navController,
             onClickBackIcon = { appState.navController.popBackStack() },
         )
         storageNavigation(
