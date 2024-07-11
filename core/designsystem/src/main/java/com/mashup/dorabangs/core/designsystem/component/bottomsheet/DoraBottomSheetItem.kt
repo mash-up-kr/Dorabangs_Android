@@ -93,6 +93,7 @@ fun DoraBottomSheetFolderItem(
     data: SelectableBottomSheetItemUIModel,
     modifier: Modifier = Modifier,
     background: Color = BottomSheetColorTokens.MovingFolderColor,
+    onClickItem: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -102,10 +103,11 @@ fun DoraBottomSheetFolderItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DoraFolderListItem(
-            BottomSheetItemUIModel(
+            data = BottomSheetItemUIModel(
                 icon = data.icon,
                 itemName = data.itemName,
             ),
+            modifier = Modifier.clickable { onClickItem() },
         )
         if (data.isSelected) {
             Icon(

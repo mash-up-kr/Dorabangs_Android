@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.core.designsystem.component.bottomsheet
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +22,8 @@ object DoraBottomSheet : BottomSheetType {
     override fun MoreButtonBottomSheet(
         modifier: Modifier,
         isShowSheet: Boolean,
+        firstItemName: Int,
+        secondItemName: Int,
         onClickDeleteLinkButton: () -> Unit,
         onClickMoveFolderButton: () -> Unit,
         onDismissRequest: () -> Unit,
@@ -39,12 +42,12 @@ object DoraBottomSheet : BottomSheetType {
                     items = listOf(
                         BottomSheetItemUIModel(
                             icon = R.drawable.ic_plus,
-                            itemName = stringResource(id = R.string.more_button_bottom_sheet_remove_link),
+                            itemName = stringResource(id = firstItemName),
                             color = DoraColorTokens.Alert,
                         ),
                         BottomSheetItemUIModel(
                             icon = R.drawable.ic_plus,
-                            itemName = stringResource(id = R.string.more_button_bottom_sheet_moving_folder),
+                            itemName = stringResource(id = secondItemName),
                         ),
                     ),
                     onClickItem = { index ->
@@ -66,6 +69,8 @@ object DoraBottomSheet : BottomSheetType {
         isShowSheet: Boolean,
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
+        onClickCreateFolder: () -> Unit,
+        onClickMoveFolder: () -> Unit,
     ) {
         if (isShowSheet) {
             DoraBaseBottomSheet(
@@ -93,6 +98,7 @@ object DoraBottomSheet : BottomSheetType {
                                 itemName = stringResource(id = R.string.moving_folder_dialog_add_folder),
                                 isSelected = false,
                             ),
+                            onClickItem = onClickCreateFolder,
                         )
                     }
 
@@ -100,6 +106,7 @@ object DoraBottomSheet : BottomSheetType {
                         DoraBottomSheetFolderItem(
                             modifier = Modifier.fillMaxWidth(),
                             data = folderList[index],
+                            onClickItem = onClickMoveFolder,
                         )
                     }
 
@@ -125,6 +132,8 @@ sealed interface BottomSheetType {
     fun MoreButtonBottomSheet(
         modifier: Modifier,
         isShowSheet: Boolean,
+        @StringRes firstItemName: Int,
+        @StringRes secondItemName: Int,
         onClickDeleteLink: () -> Unit,
         onClickMoveFolder: () -> Unit,
         onDismissRequest: () -> Unit,
@@ -136,5 +145,7 @@ sealed interface BottomSheetType {
         isShowSheet: Boolean,
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
+        onClickCreateFolder: () -> Unit,
+        onClickMoveFolder: () -> Unit,
     )
 }
