@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.google.gms.service)
 }
 
 android {
@@ -32,7 +33,6 @@ android {
     buildTypes {
         debug {
             isDebuggable = true
-            applicationIdSuffix = ".debug"
             isMinifyEnabled = false
             buildConfigField("Boolean", "DEBUG_MODE", "true")
         }
@@ -96,4 +96,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    //Firebase
+    implementation(platform(libs.firebase.bom))
 }
