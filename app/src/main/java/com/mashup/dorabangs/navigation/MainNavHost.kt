@@ -45,6 +45,7 @@ fun MainNavHost(
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
         )
         homeCreateFolderNavigation(
+            navController = appState.navController,
             onClickBackIcon = { appState.navController.popBackStack() },
             navigateToHome = { appState.navController.popBackStack() },
         )
@@ -56,7 +57,10 @@ fun MainNavHost(
             onClickBackIcon = { appState.navController.popBackStack() },
         )
         storageDetailNavigation(appState.navController)
-        classificationNavigation(appState.navController)
+        classificationNavigation(
+            onClickBackIcon = { appState.navController.popBackStack() },
+            navigateToHome = { appState.navController.popBackStack() },
+        )
         saveLinkNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
             onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = it) },

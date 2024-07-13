@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.core.designsystem.component.bottomsheet
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -131,8 +132,8 @@ sealed interface BottomSheetType {
     fun MoreButtonBottomSheet(
         modifier: Modifier,
         isShowSheet: Boolean,
-        firstItemName: Int,
-        secondItemName: Int,
+        @StringRes firstItemName: Int,
+        @StringRes secondItemName: Int,
         onClickDeleteLink: () -> Unit,
         onClickMoveFolder: () -> Unit,
         onDismissRequest: () -> Unit,

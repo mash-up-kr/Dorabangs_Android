@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.feature.createfolder
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,12 +18,14 @@ import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
+import com.mashup.dorabangs.feature.home.HomeViewModel
 import com.mashup.dorabangs.home.R
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeCreateFolderRoute(
+    homeViewModel: HomeViewModel = hiltViewModel(),
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
     homeCreateFolderViewModel: HomeCreateFolderViewModel = hiltViewModel(),
@@ -35,6 +38,7 @@ fun HomeCreateFolderRoute(
         }
     }
 
+    Log.d("DOAROA", "HomeCreateFolderRoute: $homeViewModel")
     HomeCreateFolderScreen(
         state = state,
         onClickBackIcon = onClickBackIcon,

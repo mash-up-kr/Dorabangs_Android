@@ -62,6 +62,7 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
+
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is HomeSideEffect.ShowSnackBar -> {
@@ -72,10 +73,10 @@ fun HomeRoute(
                     )
                 }
             }
-
-            HomeSideEffect.HideSnackBar -> {
+            is HomeSideEffect.HideSnackBar -> {
                 snackBarHostState.currentSnackbarData?.dismiss()
             }
+            is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
         }
     }
 
@@ -134,10 +135,7 @@ fun HomeRoute(
             isShowSheet = state.isShowMovingFolderSheet,
             folderList = testFolderListData,
             onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
-            onClickCreateFolder = {
-                viewModel.setVisibleMovingFolderBottomSheet(false)
-                navigateToCreateFolder()
-            },
+            onClickCreateFolder = { viewModel.setVisibleMovingFolderBottomSheet(visible = false, isNavigate = true) },
             onClickMoveFolder = {},
         )
 
