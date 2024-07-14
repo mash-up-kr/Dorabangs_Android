@@ -40,6 +40,7 @@ orbit = "8.0.0"
 datastore = "1.1.1"
 jsoup = "1.14.3"
 haze = "0.7.2"
+lottie = "6.4.1"
 
 [libraries]
 kotlin-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin" }
@@ -86,6 +87,8 @@ javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "j
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", name = "hilt-compiler", version.ref = "hilt" }
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
+
+lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 
 #orbit
 orbit-core = { group = "org.orbit-mvi", name = "orbit-core", version.ref = "orbit" }
