@@ -24,10 +24,10 @@ interface FolderService {
     @POST("folders")
     suspend fun createFolder(
         @Body createFolderRequest: CreateFolderRequest,
-    ): DoraResponse<CreateFolderResponse>
+    ): CreateFolderResponse
 
     @PATCH("folders/{folderId}")
     suspend fun editFolderName(
         @Body editFolderNameRequest: EditFolderNameRequest,
-    ): DoraResponse<EditFolderNameResponse>
+    ): EditFolderNameResponse
 }
