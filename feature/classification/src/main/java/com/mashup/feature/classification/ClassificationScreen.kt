@@ -17,6 +17,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun ClassificationRoute(
     onClickBackIcon: () -> Unit,
+    navigateToHome: () -> Unit,
     classificationViewModel: ClassificationViewModel = hiltViewModel(),
 ) {
     val state by classificationViewModel.collectAsState()
@@ -28,18 +29,20 @@ fun ClassificationRoute(
         onClickMoveButton = classificationViewModel::moveSelectedItem,
         onClickAllItemMoveButton = classificationViewModel::moveAllItems,
         onClickBackIcon = onClickBackIcon,
+        navigateToHome = navigateToHome,
     )
 }
 
 @Composable
 fun ClassificationScreen(
     state: ClassificationState,
-    modifier: Modifier = Modifier,
-    onClickChip: () -> Unit = {},
-    onClickDeleteButton: (Int) -> Unit = {},
-    onClickMoveButton: (Int) -> Unit = {},
-    onClickAllItemMoveButton: () -> Unit = {},
+    onClickChip: () -> Unit,
+    onClickDeleteButton: (Int) -> Unit,
+    onClickMoveButton: (Int) -> Unit,
+    onClickAllItemMoveButton: () -> Unit,
     onClickBackIcon: () -> Unit,
+    navigateToHome: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -65,17 +68,29 @@ fun ClassificationScreen(
             selectedIndex = 0,
             onClickChip = { onClickChip() },
         )
-        ClassificationListScreen(
-            state = state,
-            onClickDeleteButton = onClickDeleteButton,
-            onClickMoveButton = onClickMoveButton,
-            onClickAllItemMoveButton = onClickAllItemMoveButton,
-        )
+        if (state.isClassificationComplete) {
+            ClassificationCompleteScreen(navigateToHome = navigateToHome)
+        } else {
+            ClassificationListScreen(
+                state = state,
+                onClickDeleteButton = onClickDeleteButton,
+                onClickMoveButton = onClickMoveButton,
+                onClickAllItemMoveButton = onClickAllItemMoveButton,
+            )
+        }
     }
 }
 
 @Preview
 @Composable
 fun PreviewClassificationScreen() {
-    ClassificationScreen(state = ClassificationState(), onClickBackIcon = {})
+    ClassificationScreen(
+        state = ClassificationState(),
+        onClickChip = {},
+        onClickDeleteButton = {},
+        onClickMoveButton = {},
+        onClickAllItemMoveButton = {},
+        onClickBackIcon = {},
+        navigateToHome = {},
+    )
 }

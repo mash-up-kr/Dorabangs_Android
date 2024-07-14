@@ -32,7 +32,7 @@ import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
 fun StorageFolderList(
     customList: List<StorageFolderItem> = StorageListState.customFolderList(),
     navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
-    onClickAddMoreButton: (StorageFolderItem) -> Unit = {},
+    onClickSettingButton: (StorageFolderItem) -> Unit = {},
 ) {
     LazyColumn(
         modifier = Modifier.padding(horizontal = 20.dp),
@@ -48,7 +48,7 @@ fun StorageFolderList(
                 isFirstItem = idx == 0,
                 isLastItem = idx == customList.lastIndex,
                 navigateToStorageDetail = { navigateToStorageDetail(item) },
-                onClickAddMoreButton = { onClickAddMoreButton(item) },
+                onClickSettingButton = { onClickSettingButton(item) },
             )
             if (idx != customList.lastIndex) {
                 HorizontalDivider(
@@ -99,7 +99,7 @@ fun StorageListItem(
     isFirstItem: Boolean = false,
     isLastItem: Boolean = false,
     navigateToStorageDetail: () -> Unit = {},
-    onClickAddMoreButton: () -> Unit = {},
+    onClickSettingButton: () -> Unit = {},
 ) {
     val shape =
         if (isFirstItem) {
@@ -152,7 +152,7 @@ fun StorageListItem(
                     androidx.core.R.drawable.ic_call_answer
                 }
             Icon(
-                modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickAddMoreButton() },
+                modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickSettingButton() },
                 painter = painterResource(id = icon),
                 contentDescription = "folderIcon",
             )

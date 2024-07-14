@@ -15,6 +15,9 @@ fun DoraLinkSaveSelectFolderRoute(
     viewModel: DoraSaveViewModel = hiltViewModel(),
 ) {
     val state by viewModel.collectAsState()
+    if (state.isError) {
+        onClickBackIcon.invoke()
+    }
 
     DoraLinkSaveSelectFolderScreen(
         modifier = modifier,

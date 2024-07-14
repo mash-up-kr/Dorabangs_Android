@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.data.di
 
+import com.mashup.dorabangs.data.network.service.FolderService
 import com.mashup.dorabangs.data.network.service.UserService
 import dagger.Module
 import dagger.Provides
@@ -18,4 +19,10 @@ object ServiceModule {
     fun providesUserService(
         retrofit: Retrofit,
     ): UserService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun providesFolderService(
+        retrofit: Retrofit,
+    ): FolderService = retrofit.create()
 }

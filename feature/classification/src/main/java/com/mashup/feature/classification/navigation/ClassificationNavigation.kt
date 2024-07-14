@@ -8,12 +8,16 @@ import com.mashup.feature.classification.ClassificationRoute
 
 fun NavController.navigateToClassification() = navigate(NavigationRoute.ClassificationScreen.route)
 
-fun NavGraphBuilder.classificationNavigation(navController: NavController) {
+fun NavGraphBuilder.classificationNavigation(
+    onClickBackIcon: () -> Unit,
+    navigateToHome: () -> Unit,
+) {
     composable(
         route = NavigationRoute.ClassificationScreen.route,
     ) {
         ClassificationRoute(
-            onClickBackIcon = { navController.popBackStack() },
+            onClickBackIcon = onClickBackIcon,
+            navigateToHome = navigateToHome,
         )
     }
 }

@@ -9,4 +9,7 @@ interface UserRepository {
     suspend fun setIsFirstEntry(isFirst: Boolean)
     fun getIsFirstEntry(): Flow<Boolean>
     suspend fun registerDeviceToken(deviceToken: DeviceToken): String
+
+    suspend fun setLastCopiedUrl(url: String)
+    fun getLastCopiedUrl(): Flow<String>
 }

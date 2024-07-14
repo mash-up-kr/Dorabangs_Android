@@ -9,11 +9,16 @@ import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.feature.navigation.homeCreateFolderNavigation
 import com.mashup.dorabangs.feature.navigation.homeNavigation
 import com.mashup.dorabangs.feature.navigation.navigateToHome
+import com.mashup.dorabangs.feature.navigation.navigateToHomeCrateFolder
+import com.mashup.dorabangs.feature.navigation.navigateToStorageDetail
+import com.mashup.dorabangs.feature.navigation.navigateToStorageFolderManage
 import com.mashup.dorabangs.feature.navigation.onBoardingNavigation
-import com.mashup.dorabangs.feature.storage.navigation.storageDetailNavigation
-import com.mashup.dorabangs.feature.storage.navigation.storageNavigation
+import com.mashup.dorabangs.feature.navigation.storageDetailNavigation
+import com.mashup.dorabangs.feature.navigation.storageFolderManageNavigation
+import com.mashup.dorabangs.feature.navigation.storageNavigation
 import com.mashup.feature.classification.navigation.classificationNavigation
 import com.mashup.feature.classification.navigation.navigateToClassification
 
@@ -28,19 +33,36 @@ fun MainNavHost(
         navController = appState.navController,
         startDestination = startDestination,
     ) {
+        onBoardingNavigation { appState.navController.navigateToHome() }
         homeNavigation(
             navigateToClassification = { appState.navController.navigateToClassification() },
-            navigateToSaveLink = { copiedUrl ->
+            navigateToSaveScreenWithLink = { copiedUrl ->
                 appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = copiedUrl)
             },
+            navigateToSaveScreenWithoutLink = {
+                appState.navController.navigateToSaveLink()
+            },
+            navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
         )
-        onBoardingNavigation { appState.navController.navigateToHome() }
-        storageNavigation(appState.navController)
+        homeCreateFolderNavigation(
+            navController = appState.navController,
+            onClickBackIcon = { appState.navController.popBackStack() },
+        )
+        storageNavigation(
+            navigateToStorageDetail = { appState.navController.navigateToStorageDetail() },
+            navigateToFolderManage = { folderManageType -> appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType) },
+        )
+        storageFolderManageNavigation(
+            onClickBackIcon = { appState.navController.popBackStack() },
+        )
         storageDetailNavigation(appState.navController)
-        classificationNavigation(appState.navController)
+        classificationNavigation(
+            onClickBackIcon = { appState.navController.popBackStack() },
+            navigateToHome = { appState.navController.popBackStack() },
+        )
         saveLinkNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
-            onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = "") },
+            onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = it) },
         )
         saveLinkSelectFolder(
             onClickBackButton = {

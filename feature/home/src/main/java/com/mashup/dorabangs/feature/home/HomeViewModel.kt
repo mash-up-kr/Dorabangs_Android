@@ -2,10 +2,15 @@ package com.mashup.dorabangs.feature.home
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
+import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -15,9 +20,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    val savedStateHandle: SavedStateHandle,
+    private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
+    private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
+
+    init {
+        viewModelScope.doraLaunch {
+            savedStateHandle.getStateFlow(
+                "isVisibleMovingBottomSheet",
+                initialValue = false,
+            ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
+        }
+    }
 
     fun changeSelectedTapIdx(index: Int) = intent {
         reduce {
@@ -46,6 +62,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun setLocalCopiedUrl(url: String) = viewModelScope.doraLaunch {
+        setLastCopiedUrlUseCase.invoke(url = url)
+    }
+
+    suspend fun getLocalCopiedUrl() = getLastCopiedUrlUseCase.invoke().firstOrNull()
+
     fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
         reduce {
             state.copy(isShowMoreButtonSheet = visible)
@@ -58,10 +80,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setVisibleMovingFolderBottomSheet(visible: Boolean) = intent {
+    fun setVisibleMovingFolderBottomSheet(visible: Boolean, isNavigate: Boolean = false) = intent {
         reduce {
             state.copy(isShowMovingFolderSheet = visible)
         }
+        if (isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
     }
 
     init {

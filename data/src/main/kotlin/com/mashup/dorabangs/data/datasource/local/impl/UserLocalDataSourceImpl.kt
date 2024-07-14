@@ -25,12 +25,20 @@ class UserLocalDataSourceImpl @Inject constructor(
         setDataStore(booleanPreferencesKey(FIRST_ENTRY), isFirst)
     }
 
+    override suspend fun setLastCopiedUrl(url: String) {
+        setDataStore(stringPreferencesKey(LAST_COPIED_URL), url)
+    }
+
     override fun getUserAccessToken(): Flow<String> {
         return getDataStore(stringPreferencesKey(ACCESS_TOKEN), "")
     }
 
     override fun getIsFirstEntry(): Flow<Boolean> {
         return getDataStore(booleanPreferencesKey(FIRST_ENTRY), false)
+    }
+
+    override fun getLastCopiedUrl(): Flow<String> {
+        return getDataStore(stringPreferencesKey(LAST_COPIED_URL), "")
     }
 
     private suspend fun <T> setDataStore(key: Preferences.Key<T>, value: T) {
@@ -56,5 +64,6 @@ class UserLocalDataSourceImpl @Inject constructor(
     companion object {
         private const val ACCESS_TOKEN = "ACCESS_TOKEN"
         private const val FIRST_ENTRY = "FIRST_ENTRY"
+        private const val LAST_COPIED_URL = "LAST_COPIED_URL"
     }
 }
