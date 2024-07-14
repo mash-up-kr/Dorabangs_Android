@@ -18,6 +18,8 @@ import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
+import com.mashup.dorabangs.feature.home.HomeCreateFolder
+import com.mashup.dorabangs.feature.home.HomeSideEffect
 import com.mashup.dorabangs.feature.home.HomeViewModel
 import com.mashup.dorabangs.home.R
 import org.orbitmvi.orbit.compose.collectAsState
@@ -28,28 +30,28 @@ fun HomeCreateFolderRoute(
     homeViewModel: HomeViewModel = hiltViewModel(),
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
-    homeCreateFolderViewModel: HomeCreateFolderViewModel = hiltViewModel(),
 ) {
-    val state by homeCreateFolderViewModel.collectAsState()
+    val state by homeViewModel.collectAsState()
 
-    homeCreateFolderViewModel.collectSideEffect { sideEffect ->
+    homeViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is HomeCreateFolderSideEffect.NavigateToHome -> navigateToHome()
+            is HomeSideEffect.NavigateToHome -> navigateToHome()
+            else -> {}
         }
     }
 
     Log.d("DOAROA", "HomeCreateFolderRoute: $homeViewModel")
     HomeCreateFolderScreen(
-        state = state,
+        state = state.homeCreateFolder,
         onClickBackIcon = onClickBackIcon,
-        onClickSaveButton = { homeCreateFolderViewModel.createFolder(state.folderName) },
-        onValueChanged = homeCreateFolderViewModel::setFolderName,
+        onClickSaveButton = { homeViewModel.createFolder(state.homeCreateFolder.folderName) },
+        onValueChanged = homeViewModel::setFolderName,
     )
 }
 
 @Composable
 fun HomeCreateFolderScreen(
-    state: HomeCreateFolderState,
+    state: HomeCreateFolder,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
     onValueChanged: (String) -> Unit,

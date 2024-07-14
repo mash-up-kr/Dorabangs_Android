@@ -7,6 +7,8 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.domain.model.CreateFolder
+import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +25,7 @@ class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
+    private val createFolderUseCase: CreateFolderUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -85,6 +88,32 @@ class HomeViewModel @Inject constructor(
             state.copy(isShowMovingFolderSheet = visible)
         }
         if (isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
+    }
+
+    fun createFolder(folderName: String) {
+        runCatching {
+            viewModelScope.doraLaunch {
+                val folderData = CreateFolder(names = listOf(folderName))
+                createFolderUseCase(folderData)
+            }
+        }.onSuccess {
+            intent {
+                postSideEffect(HomeSideEffect.NavigateToHome)
+            }
+        }.onFailure { throwable ->
+            // TODO - 에러메세지 넘기기
+            setTextHelperEnable(false)
+        }
+    }
+
+    fun setTextHelperEnable(isEnable: Boolean) = intent {
+        reduce { state.copy(homeCreateFolder = state.homeCreateFolder.copy(helperEnable = isEnable)) }
+    }
+
+    fun setFolderName(folderName: String) = intent {
+        reduce {
+            state.copy(homeCreateFolder = state.homeCreateFolder.copy(folderName = folderName))
+        }
     }
 
     init {

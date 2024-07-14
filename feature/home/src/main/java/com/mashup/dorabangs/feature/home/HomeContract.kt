@@ -12,6 +12,7 @@ data class HomeState(
     val isShowMoreButtonSheet: Boolean = true,
     val isShowDialog: Boolean = false,
     val isShowMovingFolderSheet: Boolean = false,
+    val homeCreateFolder: HomeCreateFolder = HomeCreateFolder()
 )
 
 data class ClipBoardState(
@@ -19,3 +20,9 @@ data class ClipBoardState(
 ) {
     val isValidUrl = copiedText.isNotBlank() && copiedText.isValidUrl()
 }
+
+data class HomeCreateFolder(
+    val folderName: String = "",
+    val helperEnable: Boolean = false,
+    val helperMessage: String = "",
+)
