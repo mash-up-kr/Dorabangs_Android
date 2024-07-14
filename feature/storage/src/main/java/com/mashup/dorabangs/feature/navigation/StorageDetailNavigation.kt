@@ -1,4 +1,4 @@
-package com.mashup.dorabangs.feature.storage.navigation
+package com.mashup.dorabangs.feature.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

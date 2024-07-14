@@ -57,10 +57,12 @@ fun HomeRoute(
     navigateToClassification: () -> Unit = {},
     navigateToSaveScreenWithLink: (String) -> Unit = {},
     navigateToSaveScreenWithoutLink: () -> Unit = {},
+    navigateToCreateFolder: () -> Unit,
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
+
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is HomeSideEffect.ShowSnackBar -> {
@@ -71,10 +73,10 @@ fun HomeRoute(
                     )
                 }
             }
-
-            HomeSideEffect.HideSnackBar -> {
+            is HomeSideEffect.HideSnackBar -> {
                 snackBarHostState.currentSnackbarData?.dismiss()
             }
+            is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
         }
     }
 
@@ -115,6 +117,8 @@ fun HomeRoute(
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
             isShowSheet = state.isShowMoreButtonSheet,
+            firstItemName = R.string.more_button_bottom_sheet_remove_link,
+            secondItemName = R.string.more_button_bottom_sheet_moving_folder,
             onClickDeleteLinkButton = {
                 viewModel.setVisibleMoreButtonBottomSheet(false)
                 viewModel.setVisibleDialog(true)
@@ -131,6 +135,8 @@ fun HomeRoute(
             isShowSheet = state.isShowMovingFolderSheet,
             folderList = testFolderListData,
             onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
+            onClickCreateFolder = { viewModel.setVisibleMovingFolderBottomSheet(visible = false, isNavigate = true) },
+            onClickMoveFolder = {},
         )
 
         DoraDialog(

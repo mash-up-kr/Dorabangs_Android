@@ -20,11 +20,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
+
+    init {
+        viewModelScope.doraLaunch {
+            savedStateHandle.getStateFlow(
+                "isVisibleMovingBottomSheet",
+                initialValue = false,
+            ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
+        }
+    }
 
     fun changeSelectedTapIdx(index: Int) = intent {
         reduce {
@@ -71,10 +80,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setVisibleMovingFolderBottomSheet(visible: Boolean) = intent {
+    fun setVisibleMovingFolderBottomSheet(visible: Boolean, isNavigate: Boolean = false) = intent {
         reduce {
             state.copy(isShowMovingFolderSheet = visible)
         }
+        if (isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
     }
 
     init {
