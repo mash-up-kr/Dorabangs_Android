@@ -77,6 +77,7 @@ fun HomeRoute(
                 snackBarHostState.currentSnackbarData?.dismiss()
             }
             is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+            else -> {}
         }
     }
 

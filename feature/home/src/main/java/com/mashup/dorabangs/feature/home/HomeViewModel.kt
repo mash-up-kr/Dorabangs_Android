@@ -91,18 +91,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun createFolder(folderName: String) {
-        runCatching {
-            viewModelScope.doraLaunch {
-                val folderData = CreateFolder(names = listOf(folderName))
-                createFolderUseCase(folderData)
-            }
-        }.onSuccess {
+        viewModelScope.doraLaunch {
+            val folderData = CreateFolder(names = listOf(folderName))
+            createFolderUseCase(folderData)
             intent {
                 postSideEffect(HomeSideEffect.NavigateToHome)
             }
-        }.onFailure { throwable ->
-            // TODO - 에러메세지 넘기기
-            setTextHelperEnable(false)
         }
     }
 
