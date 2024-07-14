@@ -18,8 +18,6 @@ object DoraColorTokens {
     val Black = Color(0xFF000000)
     val Alert = Color(0xFFFF5D47)
     val Dimend = Color(0xB2121212)
-    val Color737373 = Color(0xFF737373)
-    val ColorD9D9D9 = Color(0xFFD9D9D9)
     val Primary = Color(0xFF7764FF)
 }
 
@@ -39,9 +37,9 @@ object DoraGradientToken {
     )
     val Gradient3 = Brush.linearGradient(
         listOf(
-            Color(0xFFFFEAF4),
-            Color(0xFFF7F7FF),
             Color(0xFFE2ECFF),
+            Color(0xFFF7F7FF),
+            Color(0xFFFFEAF4),
         )
     )
     val Gradient2 = Brush.linearGradient(

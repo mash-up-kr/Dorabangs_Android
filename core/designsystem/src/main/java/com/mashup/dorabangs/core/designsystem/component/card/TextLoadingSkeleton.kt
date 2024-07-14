@@ -54,6 +54,7 @@ fun Modifier.animatedGradient(
     val colors = listOf(
         primaryColor,
         containerColor,
+        containerColor,
         primaryColor,
     )
     val offsetXAnimation by transition.animateFloat(
@@ -72,7 +73,7 @@ fun Modifier.animatedGradient(
             start = Offset(x = offsetXAnimation, y = 0f),
             end = Offset(x = offsetXAnimation + size.width.toFloat(), y = size.height.toFloat()),
         ),
-        shape = DoraRoundTokens.Round24,
+        shape = DoraRoundTokens.Round4,
     )
         .onGloballyPositioned {
             size = it.size
@@ -83,8 +84,8 @@ fun Modifier.animatedGradient(
 @Composable
 fun TextLoadingSkeletonPreview() {
     TextLoadingSkeleton(
-        DoraColorTokens.Color737373,
-        DoraColorTokens.ColorD9D9D9,
+        DoraColorTokens.Primary,
+        DoraColorTokens.White,
         modifier = Modifier
             .fillMaxWidth()
             .height(10.dp),
