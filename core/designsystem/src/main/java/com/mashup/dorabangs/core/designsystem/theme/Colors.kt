@@ -26,35 +26,35 @@ object DoraGradientToken {
         listOf(
             Color(0xFF7552FF),
             Color(0xFF788EFF),
-        )
+        ),
     )
     val Gradient4 = Brush.linearGradient(
         listOf(
             Color(0xFF7764FF),
             Color(0xFFE7E7FF),
             Color(0xFFFFE7F3),
-        )
+        ),
     )
     val Gradient3 = Brush.linearGradient(
         listOf(
             Color(0xFFE2ECFF),
             Color(0xFFF7F7FF),
             Color(0xFFFFEAF4),
-        )
+        ),
     )
     val Gradient2 = Brush.linearGradient(
         listOf(
             Color(0xFFF3FBFF),
             Color(0xFFF5F5FF),
             Color(0xFFF3FBFF),
-        )
+        ),
     )
     val Gradient1 = Brush.linearGradient(
         listOf(
             Color(0xFFFFF9FB),
             Color(0xFFF9F9FF),
             Color(0xFFF9F8FF),
-        )
+        ),
     )
 }
 

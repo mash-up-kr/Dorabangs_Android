@@ -34,7 +34,7 @@ fun GradientButton(
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Button(
         onClick = onClick,
@@ -45,13 +45,13 @@ fun GradientButton(
         elevation = elevation,
         contentPadding = PaddingValues(0.dp),
         border = border,
-        interactionSource = interactionSource
+        interactionSource = interactionSource,
     ) {
         Box(
             modifier = Modifier
                 .defaultMinSize(
                     minWidth = ButtonDefaults.MinWidth,
-                    minHeight = ButtonDefaults.MinHeight
+                    minHeight = ButtonDefaults.MinHeight,
                 )
                 .background(brush = containerColor, shape = shape)
                 .padding(contentPadding),
