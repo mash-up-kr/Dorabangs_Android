@@ -80,5 +80,8 @@ fun DoraShareSnackBar(
 @Preview
 @Composable
 fun DoraShareSnackBarPreview() {
-    DoraShareSnackBar(onClick = { /*TODO*/ })
+    DoraShareSnackBar(
+        onClick = { /*TODO*/ },
+        snackBarHostState = SnackbarHostState(),
+    )
 }
