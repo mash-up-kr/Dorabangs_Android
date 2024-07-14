@@ -31,8 +31,8 @@ fun StorageFolderManageRoute(
 ) {
     val folderManageState by folderManageViewModel.collectAsState()
 
-    folderManageViewModel.collectSideEffect {sideEffect ->
-        when(sideEffect) {
+    folderManageViewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
             is FolderManageSideEffect.NavigateToStorage -> onClickBackIcon()
         }
     }

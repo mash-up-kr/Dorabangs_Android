@@ -12,7 +12,7 @@ data class HomeState(
     val isShowMoreButtonSheet: Boolean = true,
     val isShowDialog: Boolean = false,
     val isShowMovingFolderSheet: Boolean = false,
-    val homeCreateFolder: HomeCreateFolder = HomeCreateFolder()
+    val homeCreateFolder: HomeCreateFolder = HomeCreateFolder(),
 )
 
 data class ClipBoardState(

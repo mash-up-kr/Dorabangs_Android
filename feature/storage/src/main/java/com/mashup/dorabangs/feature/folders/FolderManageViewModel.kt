@@ -41,7 +41,7 @@ class FolderManageViewModel @Inject constructor(
                 editFolderNameUseCase.invoke(folderName = EditFolder(name = folderName))
             }
         }
-        //에러 처리하고 postsideEffect
+        // 에러 처리하고 postsideEffect
         intent {
             postSideEffect(FolderManageSideEffect.NavigateToStorage)
         }

@@ -27,11 +27,11 @@ fun NavGraphBuilder.homeCreateFolderNavigation(
             HomeCreateFolderRoute(
                 homeViewModel = homeViewModel,
                 onClickBackIcon = onClickBackIcon,
-                navigateToHome = navigateToHome
+                navigateToHome = navigateToHome,
             )
         } ?: HomeCreateFolderRoute(
             onClickBackIcon = onClickBackIcon,
-            navigateToHome = navigateToHome
+            navigateToHome = navigateToHome,
         )
     }
 }

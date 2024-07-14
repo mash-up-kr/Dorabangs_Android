@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class DoraInterceptor @Inject constructor(
     private val json: Json,
-): Interceptor {
+) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         try {
             val response = chain.proceed(chain.request())
@@ -29,7 +29,7 @@ class DoraInterceptor @Inject constructor(
                 decodeErrorBody.let { doraError ->
                     throw DoraException(
                         code = doraError.code,
-                        message = doraError.message
+                        message = doraError.message,
                     )
                 }
             }
