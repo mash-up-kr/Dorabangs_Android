@@ -7,6 +7,7 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.domain.usecase.folder.GetFolderList
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
+    private val getFolderList: GetFolderList,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -32,6 +34,10 @@ class HomeViewModel @Inject constructor(
                 "isVisibleMovingBottomSheet",
                 initialValue = false,
             ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
+        }
+
+        viewModelScope.doraLaunch {
+            updateFolderList()
         }
     }
 
@@ -87,33 +93,26 @@ class HomeViewModel @Inject constructor(
         if (isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
     }
 
+    suspend fun updateFolderList() {
+        val folderList = getFolderList()
+
+        intent {
+            reduce {
+                state.copy(tapElements = folderList.toList().mapIndexed { index, folder ->
+                    DoraChipUiModel(
+                        id = folder.id.orEmpty(),
+                        title = folder.name,
+                        icon = if (index < folderList.defaultFolders.size) R.drawable.ic_plus else null
+                    )
+                })
+            }
+        }
+    }
+
     init {
         intent {
             reduce {
-                HomeState(
-                    tapElements = listOf(
-                        DoraChipUiModel(
-                            title = "전체",
-                            icon = R.drawable.ic_plus,
-                        ),
-                        DoraChipUiModel(
-                            title = "즐겨찾기",
-                            icon = R.drawable.ic_plus,
-                        ),
-                        DoraChipUiModel(
-                            title = "나중에 읽을 링크",
-                            icon = R.drawable.ic_plus,
-                        ),
-                        DoraChipUiModel(
-                            title = "테스트",
-                        ),
-                        DoraChipUiModel(
-                            title = "테스트",
-                        ),
-                        DoraChipUiModel(
-                            title = "테스트",
-                        ),
-                    ),
+                state.copy(
                     feedCards = listOf(
                         FeedCardUiModel(
                             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
