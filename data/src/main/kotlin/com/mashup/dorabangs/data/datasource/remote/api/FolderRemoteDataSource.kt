@@ -1,6 +1,5 @@
 package com.mashup.dorabangs.data.datasource.remote.api
 
-import com.mashup.dorabangs.data.model.CreateFolderResponse
 import com.mashup.dorabangs.data.model.EditFolderNameResponse
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel

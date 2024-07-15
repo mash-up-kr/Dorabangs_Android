@@ -40,7 +40,7 @@ class FolderManageViewModel @Inject constructor(
                 createFolderUseCase.invoke(folderList = CreateFolder(names = listOf(folderName)))
             }
             FolderManageType.CHANGE -> {
-                //TODO - Folder목록 조회 API 붙인 후 folderId 연결
+                // TODO - Folder목록 조회 API 붙인 후 folderId 연결
                 editFolderNameUseCase.invoke(folderName = EditFolder(name = folderName), folderId = folderId)
             }
         }

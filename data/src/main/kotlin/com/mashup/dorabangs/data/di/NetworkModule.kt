@@ -2,7 +2,6 @@ package com.mashup.dorabangs.data.di
 
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
-import com.facebook.flipper.testing.FlipperConnectionMock
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.mashup.dorabangs.data.BuildConfig
 import com.mashup.dorabangs.data.datasource.local.api.UserLocalDataSource

@@ -2,7 +2,6 @@ package com.mashup.dorabangs.data.repository
 
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.model.toDomain
-import com.mashup.dorabangs.domain.model.CreateCompleteFolderInfo
 import com.mashup.dorabangs.domain.model.CreateFolder
 import com.mashup.dorabangs.domain.model.EditCompleteFolderInfo
 import com.mashup.dorabangs.domain.model.EditFolder
@@ -27,7 +26,7 @@ class FolderRepositoryImpl @Inject constructor(
 
     override suspend fun editFolderName(
         editFolder: EditFolder,
-        folderId: String
+        folderId: String,
     ): EditCompleteFolderInfo =
         remoteDataSource.editFolderName(folderName = editFolder, folderId = folderId).toDomain()
 }
