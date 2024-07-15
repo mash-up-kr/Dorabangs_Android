@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.navigation
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
@@ -48,8 +50,9 @@ class DoraAppState(
 
     @Composable
     fun isBottomBarVisible(): Boolean {
+        val homeRoute = "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}"
         return when (currentDestination?.route) {
-            NavigationRoute.HomeScreen.route, NavigationRoute.StorageScreen.route -> true
+            homeRoute, NavigationRoute.StorageScreen.route -> true
             else -> false
         }
     }
