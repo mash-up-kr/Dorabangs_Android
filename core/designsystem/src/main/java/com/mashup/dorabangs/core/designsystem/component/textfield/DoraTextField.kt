@@ -155,7 +155,9 @@ fun DoraTextField(
                             if (textFieldValue.text.isNotBlank()) {
                                 IconButton(
                                     modifier = Modifier.size(size = 24.dp),
-                                    onClick = { textFieldValue = TextFieldValue("") },
+                                    onClick = { textFieldValue = TextFieldValue("")
+                                        onValueChanged(textFieldValue.text)
+                                              },
                                 ) {
                                     Image(
                                         imageVector = DoraIconClose.CloseCircle,
