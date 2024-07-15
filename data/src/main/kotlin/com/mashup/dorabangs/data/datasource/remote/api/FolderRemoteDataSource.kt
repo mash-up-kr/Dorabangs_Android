@@ -11,7 +11,7 @@ interface FolderRemoteDataSource {
 
     suspend fun getFolders(): FolderListResponseModel
 
-    suspend fun getFolderById(folderId: String): FolderResponseModel?
+    suspend fun getFolderById(folderId: String): FolderResponseModel
 
     suspend fun createFolder(folderList: CreateFolder): CreateFolderResponse
 
