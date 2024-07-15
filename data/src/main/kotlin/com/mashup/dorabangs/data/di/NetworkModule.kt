@@ -91,10 +91,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesNetworkFlipperPlugin() = NetworkFlipperPlugin().apply {
-        val connection = FlipperConnectionMock()
-        onConnect(connection)
-    }
+    fun providesNetworkFlipperPlugin() = NetworkFlipperPlugin()
 
     private const val AUTHORIZATION = "Authorization"
 }
