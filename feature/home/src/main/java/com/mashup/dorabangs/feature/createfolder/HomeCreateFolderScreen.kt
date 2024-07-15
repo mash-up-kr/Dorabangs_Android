@@ -40,7 +40,6 @@ fun HomeCreateFolderRoute(
         }
     }
 
-    Log.d("DOAROA", "HomeCreateFolderRoute: $homeViewModel")
     HomeCreateFolderScreen(
         state = state.homeCreateFolder,
         onClickBackIcon = onClickBackIcon,
@@ -89,7 +88,7 @@ fun HomeCreateFolderScreen(
                     .fillMaxWidth()
                     .padding(vertical = 20.dp),
                 buttonText = stringResource(id = R.string.home_create_folder_save),
-                enabled = true,
+                enabled = state.folderName.isNotEmpty() && !state.helperEnable,
                 onClickButton = onClickSaveButton,
             )
             Spacer(modifier = Modifier.height(20.dp))
