@@ -10,7 +10,5 @@ class UserRemoteDataSourceImpl @Inject constructor(
 ) : UserRemoteDataSource {
 
     override suspend fun registerUser(deviceToken: DeviceTokenDataModel): String =
-        userService.registerUser(deviceToken)
-            .getData()
-            ?.accessToken.orEmpty()
+        userService.registerUser(deviceToken).accessToken
 }

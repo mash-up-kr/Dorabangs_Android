@@ -16,10 +16,10 @@ import retrofit2.http.Path
 interface FolderService {
 
     @GET("folders")
-    suspend fun getFolders(): DoraResponse<FolderListResponseModel>
+    suspend fun getFolders(): FolderListResponseModel
 
     @GET("folders/{id}")
-    suspend fun getFolderById(@Path("id") folderId: String): DoraResponse<FolderResponseModel>
+    suspend fun getFolderById(@Path("id") folderId: String): FolderResponseModel
 
     @POST("folders")
     suspend fun createFolder(

@@ -9,5 +9,5 @@ import retrofit2.http.POST
 interface UserService {
 
     @POST("users")
-    suspend fun registerUser(@Body deviceToken: DeviceTokenDataModel): DoraResponse<UserTokenResponseModel>
+    suspend fun registerUser(@Body deviceToken: DeviceTokenDataModel): UserTokenResponseModel
 }

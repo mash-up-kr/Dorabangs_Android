@@ -17,11 +17,9 @@ class FolderRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getFolders(): FolderListResponseModel =
         folderService.getFolders()
-            .getData() ?: FolderListResponseModel()
 
     override suspend fun getFolderById(folderId: String): FolderResponseModel? =
         folderService.getFolderById(folderId)
-            .getData()
 
     override suspend fun createFolder(folderList: CreateFolder): CreateFolderResponse {
         return folderService.createFolder(folderList.toData())
