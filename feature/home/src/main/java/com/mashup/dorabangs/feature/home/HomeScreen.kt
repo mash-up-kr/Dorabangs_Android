@@ -188,7 +188,7 @@ private fun HomeCarousel(
 ) {
     val pagerState: PagerState = rememberPagerState(
         initialPage = 0,
-        pageCount = { homeCarouselItems.size }
+        pageCount = { homeCarouselItems.size },
     )
 
     Column(
@@ -199,7 +199,7 @@ private fun HomeCarousel(
             modifier = Modifier.background(
                 brush = DoraGradientToken.Gradient3,
             ),
-            state = pagerState
+            state = pagerState,
         ) { page ->
             Column(
                 modifier = Modifier
@@ -212,7 +212,7 @@ private fun HomeCarousel(
                     lottieRes = homeCarouselItems[page].lottieRes,
                     modifier = Modifier
                         .width(250.dp)
-                        .height(212.dp)
+                        .height(212.dp),
                 )
 
                 Column(
@@ -229,17 +229,17 @@ private fun HomeCarousel(
                     GradientButton(
                         containerColor = DoraGradientToken.Gradient3,
                         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
-                        onClick = homeCarouselItems[page].onClickButton
+                        onClick = homeCarouselItems[page].onClickButton,
                     ) {
                         Text(
-                            text = "확인하기",
+                            text = stringResource(id = R.string.home_carousel_checking_button),
                             style = DoraTypoTokens.caption1Bold,
                             color = DoraColorTokens.G7,
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.ic_right_arrow_black_12dp),
                             tint = DoraColorTokens.G7,
-                            contentDescription = ""
+                            contentDescription = "",
                         )
                     }
                 }
@@ -251,12 +251,12 @@ private fun HomeCarousel(
                 .padding(vertical = 12.dp)
                 .background(
                     brush = DoraGradientToken.Gradient1,
-                    shape = DoraRoundTokens.Round99
+                    shape = DoraRoundTokens.Round99,
                 ),
         ) {
             Row(
                 modifier = Modifier.padding(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 repeat(pagerState.pageCount) { index ->
                     Box(
@@ -266,7 +266,7 @@ private fun HomeCarousel(
                             .background(DoraColorTokens.G4)
                             .thenIf(index == pagerState.currentPage) {
                                 background(brush = DoraGradientToken.Gradient5)
-                            }
+                            },
                     )
                 }
             }
