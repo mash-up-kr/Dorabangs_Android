@@ -20,14 +20,13 @@ import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 import com.mashup.dorabangs.feature.home.HomeCreateFolder
 import com.mashup.dorabangs.feature.home.HomeSideEffect
-import com.mashup.dorabangs.feature.home.HomeViewModel
 import com.mashup.dorabangs.home.R
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeCreateFolderRoute(
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeCreateViewModel = hiltViewModel(),
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
 ) {
@@ -35,7 +34,7 @@ fun HomeCreateFolderRoute(
 
     homeViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is HomeSideEffect.NavigateToHome -> navigateToHome()
+//            is HomeSideEffect.NavigateToHome -> navigateToHome()
             else -> {}
         }
     }
