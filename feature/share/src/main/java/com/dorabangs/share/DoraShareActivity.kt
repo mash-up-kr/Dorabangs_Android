@@ -5,12 +5,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 
 class DoraShareActivity : ComponentActivity() {
+    companion object {
+        private const val URL = "SHARED_URL"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (handleShare().isNotBlank()) {
-            val intent = Intent(this, DoraOverlayService::class.java)
-            startService(intent)
-            finish()
+            Intent(this, DoraOverlayService::class.java)
+                .apply {
+                    putExtra(URL, handleShare())
+                }.also {
+                    startService(it)
+                    finish()
+                }
         }
     }
 

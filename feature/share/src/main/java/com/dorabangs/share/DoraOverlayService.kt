@@ -15,8 +15,18 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
+    companion object {
+        private const val URL = "SHARED_URL"
+    }
+
     private lateinit var windowManager: WindowManager
     private lateinit var overlayView: ComposeView
 
@@ -26,6 +36,8 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     override val savedStateRegistry: SavedStateRegistry =
         _savedStateRegistryController.savedStateRegistry
     override val lifecycle: Lifecycle = _lifecycleRegistry
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private lateinit var job: Job
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -38,10 +50,23 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         _savedStateRegistryController.performAttach()
         _savedStateRegistryController.performRestore(null)
         _lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
-        showOverlay()
     }
 
-    private fun showOverlay() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val url = intent?.getStringExtra(URL).orEmpty()
+        if (url.isNotBlank()) {
+            job = serviceScope.launch {
+                delay(3000L)
+                // 3초뒤에 아무것도 없으면? 그냥 api 쏘고 finish
+                stopSelf()
+            }
+        }
+        showOverlay(url)
+
+        return START_NOT_STICKY
+    }
+
+    private fun showOverlay(url: String) {
         _lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
         _lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
@@ -49,7 +74,10 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
             setViewTreeLifecycleOwner(this@DoraOverlayService)
             setViewTreeSavedStateRegistryOwner(this@DoraOverlayService)
             setContent {
-                DoraSnackBarWithShareScreen(sharedUrl = "www.naver.com")
+                DoraSnackBarWithShareScreen(onClick = {
+                    job.cancel()
+                    // startActivity를 통해 이동해보자 ~ with url
+                })
             }
         }
 
