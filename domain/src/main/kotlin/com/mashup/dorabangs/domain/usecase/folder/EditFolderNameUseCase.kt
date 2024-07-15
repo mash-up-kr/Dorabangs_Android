@@ -8,7 +8,7 @@ import javax.inject.Inject
 class EditFolderNameUseCase @Inject constructor(
     private val folderRepository: FolderRepository,
 ) {
-    suspend operator fun invoke(folderName: EditFolder): EditCompleteFolderInfo {
-        return folderRepository.editFolderName(editFolder = folderName)
+    suspend operator fun invoke(folderName: EditFolder, folderId: String): EditCompleteFolderInfo {
+        return folderRepository.editFolderName(editFolder = folderName, folderId = folderId)
     }
 }

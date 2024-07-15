@@ -97,6 +97,7 @@ class HomeViewModel @Inject constructor(
             intent {
                 postSideEffect(HomeSideEffect.NavigateToHome)
             }
+            // TODO - Error처리 필요
         }
     }
 

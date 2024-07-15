@@ -15,5 +15,5 @@ interface FolderRemoteDataSource {
 
     suspend fun createFolder(folderList: CreateFolder)
 
-    suspend fun editFolderName(folderName: EditFolder): EditFolderNameResponse
+    suspend fun editFolderName(folderName: EditFolder, folderId: String): EditFolderNameResponse
 }

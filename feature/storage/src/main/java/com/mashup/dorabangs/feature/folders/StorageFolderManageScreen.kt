@@ -84,7 +84,7 @@ fun FolderManageScreen(
                 hintText = stringResource(id = R.string.storage_create_folder_hint),
                 labelText = stringResource(id = R.string.storage_create_folder_label),
                 helperText = stringResource(id = R.string.storage_create_folder_helper),
-                helperEnabled = true,
+                helperEnabled = folderManageState.helperEnable,
                 counterEnabled = true,
                 onValueChanged = onValueChanged,
             )
@@ -94,7 +94,7 @@ fun FolderManageScreen(
                     .fillMaxWidth()
                     .padding(vertical = 20.dp),
                 buttonText = stringResource(id = R.string.storage_create_folder_save),
-                enabled = true,
+                enabled = folderManageState.folderName.isNotEmpty() && !folderManageState.helperEnable,
                 onClickButton = onClickSaveButton,
             )
             Spacer(modifier = Modifier.height(20.dp))

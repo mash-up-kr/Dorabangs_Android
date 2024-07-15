@@ -25,6 +25,6 @@ class FolderRemoteDataSourceImpl @Inject constructor(
         folderService.createFolder(folderList.toData())
     }
 
-    override suspend fun editFolderName(folderName: EditFolder): EditFolderNameResponse =
-        folderService.editFolderName(folderName.toData())
+    override suspend fun editFolderName(folderName: EditFolder, folderId: String): EditFolderNameResponse =
+        folderService.editFolderName(folderId, folderName.toData())
 }

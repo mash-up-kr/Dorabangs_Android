@@ -12,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface FolderService {
 
@@ -28,6 +29,7 @@ interface FolderService {
 
     @PATCH("folders/{folderId}")
     suspend fun editFolderName(
+        @Path("id") folderId: String,
         @Body editFolderNameRequest: EditFolderNameRequest,
     ): EditFolderNameResponse
 }
