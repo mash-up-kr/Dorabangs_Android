@@ -11,6 +11,6 @@ interface FolderRepository {
 
     suspend fun getFolders(): FolderList
     suspend fun getFolderById(folderId: String): Folder
-    suspend fun createFolder(createFolder: CreateFolder): CreateCompleteFolderInfo
+    suspend fun createFolder(createFolder: CreateFolder)
     suspend fun editFolderName(editFolder: EditFolder): EditCompleteFolderInfo
 }

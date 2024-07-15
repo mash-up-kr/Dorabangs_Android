@@ -24,7 +24,7 @@ interface FolderService {
     @POST("folders")
     suspend fun createFolder(
         @Body createFolderRequest: CreateFolderRequest,
-    ): CreateFolderResponse
+    )
 
     @PATCH("folders/{folderId}")
     suspend fun editFolderName(

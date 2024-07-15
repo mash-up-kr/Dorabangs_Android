@@ -22,8 +22,8 @@ class FolderRepositoryImpl @Inject constructor(
     override suspend fun getFolderById(folderId: String): Folder =
         remoteDataSource.getFolderById(folderId).toDomain()
 
-    override suspend fun createFolder(createFolder: CreateFolder): CreateCompleteFolderInfo =
-        remoteDataSource.createFolder(folderList = createFolder).toDomain()
+    override suspend fun createFolder(createFolder: CreateFolder) =
+        remoteDataSource.createFolder(folderList = createFolder)
 
     override suspend fun editFolderName(editFolder: EditFolder): EditCompleteFolderInfo =
         remoteDataSource.editFolderName(folderName = editFolder).toDomain()

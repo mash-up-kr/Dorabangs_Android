@@ -13,7 +13,7 @@ interface FolderRemoteDataSource {
 
     suspend fun getFolderById(folderId: String): FolderResponseModel
 
-    suspend fun createFolder(folderList: CreateFolder): CreateFolderResponse
+    suspend fun createFolder(folderList: CreateFolder)
 
     suspend fun editFolderName(folderName: EditFolder): EditFolderNameResponse
 }

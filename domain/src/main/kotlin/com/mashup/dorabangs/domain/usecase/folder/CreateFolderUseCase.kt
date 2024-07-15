@@ -8,7 +8,7 @@ import javax.inject.Inject
 class CreateFolderUseCase @Inject constructor(
     private val folderRepository: FolderRepository,
 ) {
-    suspend operator fun invoke(folderList: CreateFolder): CreateCompleteFolderInfo {
+    suspend operator fun invoke(folderList: CreateFolder) {
         return folderRepository.createFolder(createFolder = folderList)
     }
 }
