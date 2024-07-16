@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,8 +29,11 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.R
+import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun StorageRoute(
@@ -38,6 +42,13 @@ fun StorageRoute(
     navigateToFolderManage: (FolderManageType) -> Unit,
 ) {
     val storageState by storageViewModel.collectAsState()
+
+    storageViewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            StorageListSideEffect.NavigateToFolderManage -> navigateToFolderManage(FolderManageType.CHANGE)
+        }
+    }
+
     Box {
         StorageScreen(
             storageState = storageState,
@@ -58,8 +69,7 @@ fun StorageRoute(
                 storageViewModel.setVisibleDialog(true)
             },
             onClickMoveFolderButton = {
-                storageViewModel.setVisibleMoreButtonBottomSheet(false)
-                navigateToFolderManage(FolderManageType.CHANGE)
+                storageViewModel.setVisibleMoreButtonBottomSheet(visible = false, isNavigate = true)
             },
             onDismissRequest = { storageViewModel.setVisibleMoreButtonBottomSheet(false) },
         )
