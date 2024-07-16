@@ -12,10 +12,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
-import org.orbitmvi.orbit.syntax.simple.postSideEffect
 
 @HiltViewModel
 class DoraSaveViewModel @Inject constructor(
@@ -74,15 +74,16 @@ class DoraSaveViewModel @Inject constructor(
 
     fun clickSelectableItem(index: Int) = intent {
         postSideEffect(
-            DoraSaveSideEffect.ClickItem(index = index)
+            DoraSaveSideEffect.ClickItem(index = index),
         )
     }
 
     fun updateList(index: Int) = intent {
         reduce {
             state.folderList.mapIndexed { listIndex, item ->
-                if (listIndex == index - 1) item.copy(isSelected = true)
-                else item.copy(isSelected = false)
+                if (listIndex == index - 1) {
+                    item.copy(isSelected = true)
+                } else item.copy(isSelected = false)
             }.let { newList ->
                 state.copy(
                     folderList = newList,
@@ -93,7 +94,7 @@ class DoraSaveViewModel @Inject constructor(
 
     fun clickSaveButton() = intent {
         postSideEffect(
-            DoraSaveSideEffect.ClickSaveButton(id = state.folderList.find { it.isSelected }?.id.orEmpty())
+            DoraSaveSideEffect.ClickSaveButton(id = state.folderList.find { it.isSelected }?.id.orEmpty()),
         )
     }
 

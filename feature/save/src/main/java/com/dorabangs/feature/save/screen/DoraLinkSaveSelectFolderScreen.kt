@@ -58,7 +58,7 @@ fun DoraLinkSaveSelectFolderScreen(
                         itemName = "새 폴더 추가",
                         isSelected = false,
                         vector = NewFolder.IcNewFolder,
-                    )
+                    ),
                 ) + state.folderList.toSelectableItems(),
                 onClickItem = { searchIndex ->
                     viewModel.clickSelectableItem(index = searchIndex)
