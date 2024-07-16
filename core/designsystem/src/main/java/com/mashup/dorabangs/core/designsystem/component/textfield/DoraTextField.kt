@@ -112,7 +112,10 @@ fun DoraTextField(
                 textStyle = DoraTypoTokens.caption1Medium,
                 onValueChange = {
                     if (counterEnabled) {
-                        if (it.text.length <= 15) textFieldValue = it
+                        if (it.text.length <= 15) {
+                            textFieldValue = it
+                            onValueChanged(it.text)
+                        }
                     } else {
                         debounceJob?.cancel()
                         debounceJob = scope.launch {
@@ -152,7 +155,10 @@ fun DoraTextField(
                             if (textFieldValue.text.isNotBlank()) {
                                 IconButton(
                                     modifier = Modifier.size(size = 24.dp),
-                                    onClick = { textFieldValue = TextFieldValue("") },
+                                    onClick = {
+                                        textFieldValue = TextFieldValue("")
+                                        onValueChanged(textFieldValue.text)
+                                    },
                                 ) {
                                     Image(
                                         imageVector = DoraIconClose.CloseCircle,

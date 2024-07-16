@@ -56,6 +56,7 @@ fun HomeRoute(
             }
 
             is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+            else -> {}
         }
     }
 

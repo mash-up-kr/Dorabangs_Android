@@ -53,7 +53,6 @@ import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.hazeChild
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     state: HomeState,

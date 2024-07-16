@@ -5,6 +5,7 @@ import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.mashup.dorabangs.data.BuildConfig
 import com.mashup.dorabangs.data.datasource.local.api.UserLocalDataSource
+import com.mashup.dorabangs.data.utils.DoraInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,8 +43,12 @@ object NetworkModule {
         httpLoggingInterceptor: HttpLoggingInterceptor,
         flipperOkhttpInterceptor: FlipperOkhttpInterceptor,
         userLocalDataSource: UserLocalDataSource,
+        json: Json,
     ): OkHttpClient =
         OkHttpClient.Builder().apply {
+            addInterceptor(DoraInterceptor(json))
+            addInterceptor(httpLoggingInterceptor)
+            addNetworkInterceptor(flipperOkhttpInterceptor)
             addInterceptor(
                 Interceptor { chain ->
                     val token = runBlocking {
@@ -56,8 +61,6 @@ object NetworkModule {
                     chain.proceed(request)
                 },
             )
-            addInterceptor(httpLoggingInterceptor)
-            addNetworkInterceptor(flipperOkhttpInterceptor)
             connectTimeout(20, TimeUnit.SECONDS)
             readTimeout(20, TimeUnit.SECONDS)
             writeTimeout(20, TimeUnit.SECONDS)
@@ -83,7 +86,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesFlipperOkHttpPlugin(networkFlipperPlugin: NetworkFlipperPlugin): FlipperOkhttpInterceptor =
-        FlipperOkhttpInterceptor(networkFlipperPlugin)
+        FlipperOkhttpInterceptor(networkFlipperPlugin, true)
 
     @Provides
     @Singleton

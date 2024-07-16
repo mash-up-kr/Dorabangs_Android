@@ -21,6 +21,7 @@ import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 import com.mashup.dorabangs.feature.folders.model.FolderManageState
 import com.mashup.dorabangs.feature.storage.R
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun StorageFolderManageRoute(
@@ -30,6 +31,12 @@ fun StorageFolderManageRoute(
 ) {
     val folderManageState by folderManageViewModel.collectAsState()
 
+    folderManageViewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is FolderManageSideEffect.NavigateToStorage -> onClickBackIcon()
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         folderManageViewModel.setFolderManageType(folderManageType)
     }
@@ -37,7 +44,13 @@ fun StorageFolderManageRoute(
     FolderManageScreen(
         folderManageState = folderManageState,
         onClickBackIcon = onClickBackIcon,
-        onClickSaveButton = { },
+        onClickSaveButton = {
+            folderManageViewModel.createOrEditFolder(
+                folderName = folderManageState.folderName,
+                folderType = folderManageState.type,
+            )
+        },
+        onValueChanged = folderManageViewModel::setFolderName,
     )
 }
 
@@ -46,6 +59,7 @@ fun FolderManageScreen(
     folderManageState: FolderManageState,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
+    onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -69,10 +83,10 @@ fun FolderManageScreen(
                 text = "",
                 hintText = stringResource(id = R.string.storage_create_folder_hint),
                 labelText = stringResource(id = R.string.storage_create_folder_label),
-                helperText = stringResource(id = R.string.storage_create_folder_helper),
-                helperEnabled = true,
+                helperText = folderManageState.helperMessage,
+                helperEnabled = folderManageState.helperEnable,
                 counterEnabled = true,
-                onValueChanged = {},
+                onValueChanged = onValueChanged,
             )
             Spacer(modifier = Modifier.height(20.dp))
             DoraButtons.DoraBtnMaxFull(
@@ -80,7 +94,7 @@ fun FolderManageScreen(
                     .fillMaxWidth()
                     .padding(vertical = 20.dp),
                 buttonText = stringResource(id = R.string.storage_create_folder_save),
-                enabled = true,
+                enabled = folderManageState.folderName.isNotEmpty() && !folderManageState.helperEnable,
                 onClickButton = onClickSaveButton,
             )
             Spacer(modifier = Modifier.height(20.dp))

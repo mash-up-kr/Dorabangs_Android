@@ -15,6 +15,7 @@ fun NavController.navigateToHomeCrateFolder(navOptions: NavOptions? = null) =
 fun NavGraphBuilder.homeCreateFolderNavigation(
     navController: NavController,
     onClickBackIcon: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     composable(
         route = NavigationRoute.HomeScreen.HomeCreateFolder.route,
@@ -26,9 +27,11 @@ fun NavGraphBuilder.homeCreateFolderNavigation(
             HomeCreateFolderRoute(
                 homeViewModel = homeViewModel,
                 onClickBackIcon = onClickBackIcon,
+                navigateToHome = navigateToHome,
             )
         } ?: HomeCreateFolderRoute(
             onClickBackIcon = onClickBackIcon,
+            navigateToHome = navigateToHome,
         )
     }
 }
