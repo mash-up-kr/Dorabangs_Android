@@ -16,8 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mashup.dorabangs.core.designsystem.component.folder.icfolder.Folder
-import com.mashup.dorabangs.core.designsystem.component.folder.icfolder.ImgFolder
+import com.mashup.dorabangs.core.designsystem.component.folder.icnewfolder.IcNewFolder
+import com.mashup.dorabangs.core.designsystem.component.folder.icnewfolder.NewFolder
 import com.mashup.dorabangs.core.designsystem.component.folder.icselect.IcSelect
 import com.mashup.dorabangs.core.designsystem.component.folder.icselect.ImgSelect
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
@@ -110,13 +110,14 @@ fun DoraSelectableFolderListItemsPreview() {
     DoraSelectableFolderListItems(
         items = listOf(
             DoraSelectableFolderItem(
-                vector = Folder.ImgFolder,
+                vector = NewFolder.IcNewFolder,
                 itemName = "새 폴더 추가",
                 isSelected = true,
             ),
 
+            // TODO 3D 이미지가 안보여요~
             DoraSelectableFolderItem(
-                vector = Folder.ImgFolder,
+                vector = NewFolder.IcNewFolder,
                 itemName = "폴더 이름",
                 isSelected = false,
             ),

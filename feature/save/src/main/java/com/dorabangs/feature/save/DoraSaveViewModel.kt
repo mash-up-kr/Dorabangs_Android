@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
+import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.save.DoraUrlCheckUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
@@ -18,11 +19,36 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 class DoraSaveViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val urlCheckUseCase: DoraUrlCheckUseCase,
+    private val getFolderListUseCase: GetFolderListUseCase,
 ) : ViewModel(), ContainerHost<DoraSaveState, DoraSaveSideEffect> {
 
     init {
+        getFolderList()
         val copiedUrl = savedStateHandle.get<String>("copiedUrl").orEmpty()
         if (copiedUrl.isNotBlank()) checkUrl(copiedUrl)
+    }
+
+    private fun getFolderList() = viewModelScope.doraLaunch {
+        val list = getFolderListUseCase.invoke()
+        val newList = (list.defaultFolders + list.customFolders).let { mergedList ->
+            mergedList.mapIndexed { index, item ->
+                SelectableFolder(
+                    id = item.id,
+                    name = item.name,
+                    type = item.type,
+                    createdAt = item.createdAt,
+                    postCount = item.postCount,
+                    isSelected = index == 0,
+                )
+            }
+        }
+        intent {
+            reduce {
+                state.copy(
+                    folderList = newList,
+                )
+            }
+        }
     }
 
     override val container: Container<DoraSaveState, DoraSaveSideEffect> =
@@ -52,7 +78,7 @@ class DoraSaveViewModel @Inject constructor(
     fun updateList(index: Int) = intent {
         reduce {
             state.folderList.mapIndexed { listIndex, item ->
-                if (listIndex == index) item.copy(isSelected = true)
+                if (listIndex == index - 1) item.copy(isSelected = true)
                 else item.copy(isSelected = false)
             }.let { newList ->
                 state.copy(

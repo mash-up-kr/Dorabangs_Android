@@ -1,8 +1,6 @@
 package com.dorabangs.feature.save.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,8 +17,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.dorabangs.feature.save.DoraSaveState
 import com.dorabangs.feature.save.DoraSaveViewModel
 import com.dorabangs.feature.save.R
+import com.dorabangs.feature.save.SelectableFolder
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
+import com.mashup.dorabangs.core.designsystem.component.folder.DoraSelectableFolderItem
 import com.mashup.dorabangs.core.designsystem.component.folder.DoraSelectableFolderListItems
+import com.mashup.dorabangs.core.designsystem.component.folder.icnewfolder.IcNewFolder
+import com.mashup.dorabangs.core.designsystem.component.folder.icnewfolder.NewFolder
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 
@@ -51,7 +53,13 @@ fun DoraLinkSaveSelectFolderScreen(
             DoraSelectableFolderListItems(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState()),
-                items = state.folderList,
+                items = listOf(
+                    DoraSelectableFolderItem(
+                        itemName = "새 폴더 추가",
+                        isSelected = false,
+                        vector = NewFolder.IcNewFolder,
+                    )
+                ) + state.folderList.toSelectableItems(),
                 onClickItem = { searchIndex ->
                     viewModel.clickSelectableItem(index = searchIndex)
                 },
@@ -68,6 +76,14 @@ fun DoraLinkSaveSelectFolderScreen(
             )
         }
     }
+}
+
+fun List<SelectableFolder>.toSelectableItems() = map {
+    DoraSelectableFolderItem(
+        itemName = it.name,
+        isSelected = it.isSelected,
+        vector = NewFolder.IcNewFolder,
+    )
 }
 
 @Composable
