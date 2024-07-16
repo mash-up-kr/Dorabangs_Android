@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
+import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
+import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.save.DoraUrlCheckUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
@@ -20,6 +22,7 @@ class DoraSaveViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val urlCheckUseCase: DoraUrlCheckUseCase,
     private val getFolderListUseCase: GetFolderListUseCase,
+    private val postSaveLinkUseCase: SaveLinkUseCase,
 ) : ViewModel(), ContainerHost<DoraSaveState, DoraSaveSideEffect> {
 
     init {
@@ -86,5 +89,15 @@ class DoraSaveViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun clickSaveButton() = intent {
+        postSideEffect(
+            DoraSaveSideEffect.ClickSaveButton(id = state.folderList.find { it.isSelected }?.id.orEmpty())
+        )
+    }
+
+    fun saveLink(id: String) = intent {
+        postSaveLinkUseCase.invoke(Link(folderId = id, url = state.urlLink))
     }
 }

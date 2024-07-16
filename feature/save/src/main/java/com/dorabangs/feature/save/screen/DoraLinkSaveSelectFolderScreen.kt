@@ -72,7 +72,10 @@ fun DoraLinkSaveSelectFolderScreen(
                     .padding(all = 20.dp),
                 buttonText = stringResource(id = R.string.link_save_button_text),
                 enabled = state.folderList.any { it.isSelected },
-                onClickButton = onClickSaveButton,
+                onClickButton = {
+                    viewModel.clickSaveButton()
+                    onClickSaveButton.invoke()
+                },
             )
         }
     }
