@@ -1,10 +1,14 @@
 package com.mashup.dorabangs
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mashup.dorabangs.core.designsystem.theme.DorabangsTheme
@@ -16,10 +20,17 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val splashViewModel: SplashViewModel by viewModels()
+    private val overlayPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (!Settings.canDrawOverlays(this)) {
+                Toast.makeText(this, "허용해야 밖에서 편리하게 세팅한다?", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        checkPermission()
 
         val userId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         splashViewModel.checkUserToken(userId)
@@ -32,6 +43,17 @@ class MainActivity : ComponentActivity() {
             DorabangsTheme {
                 DoraApp()
             }
+        }
+    }
+
+    private fun checkPermission() {
+        if (!Settings.canDrawOverlays(this)) {
+            overlayPermissionLauncher.launch(
+                Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:$packageName"),
+                ),
+            )
         }
     }
 }
