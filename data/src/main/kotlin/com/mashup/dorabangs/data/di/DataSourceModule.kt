@@ -4,9 +4,11 @@ import com.mashup.dorabangs.data.datasource.local.api.UserLocalDataSource
 import com.mashup.dorabangs.data.datasource.local.impl.UserLocalDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.api.DoraUrlCheckRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
+import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.UserRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.impl.DoraUrlCheckRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.FolderRemoteDataSourceImpl
+import com.mashup.dorabangs.data.datasource.remote.impl.PostsRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.UserRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
@@ -40,4 +42,10 @@ abstract class DataSourceModule {
     abstract fun bindFolderRemoteDataSource(
         dataSource: FolderRemoteDataSourceImpl,
     ): FolderRemoteDataSource
+
+    @Binds
+    @Reusable
+    abstract fun bindPostsRemoteDataSource(
+        dataSource: PostsRemoteDataSourceImpl,
+    ): PostsRemoteDataSource
 }

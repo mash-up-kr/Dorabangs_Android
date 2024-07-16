@@ -1,6 +1,5 @@
 package com.mashup.dorabangs.data.network.service
 
-import com.mashup.dorabangs.data.model.DoraResponse
 import com.mashup.dorabangs.data.model.LinkRequestModel
 import com.mashup.dorabangs.data.model.PostInfoRequestModel
 import com.mashup.dorabangs.data.model.PostsResponseModel
@@ -20,7 +19,7 @@ interface PostsService {
         @Query("page") limit: Int? = null,
         @Query("page") order: String? = null,
         @Query("page") favorite: Boolean? = null,
-    ): DoraResponse<PostsResponseModel>
+    ): PostsResponseModel
 
     @POST("posts")
     suspend fun savePosts(@Body link: LinkRequestModel)

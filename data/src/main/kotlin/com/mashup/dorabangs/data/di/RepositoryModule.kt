@@ -1,9 +1,11 @@
 package com.mashup.dorabangs.data.di
 
 import com.mashup.dorabangs.data.repository.FolderRepositoryImpl
+import com.mashup.dorabangs.data.repository.PostsRepositoryImpl
 import com.mashup.dorabangs.data.repository.UserRepositoryImpl
 import com.mashup.dorabangs.data.repository.save.DoraUrlCheckRepositoryImpl
 import com.mashup.dorabangs.domain.repository.FolderRepository
+import com.mashup.dorabangs.domain.repository.PostsRepository
 import com.mashup.dorabangs.domain.repository.UserRepository
 import com.mashup.dorabangs.domain.repository.save.DoraUrlCheckRepository
 import dagger.Binds
@@ -32,4 +34,10 @@ abstract class RepositoryModule {
     abstract fun bindDoraUrlCheckRepository(
         repository: DoraUrlCheckRepositoryImpl,
     ): DoraUrlCheckRepository
+
+    @Binds
+    @Reusable
+    abstract fun bindPostsRepository(
+        repository: PostsRepositoryImpl,
+    ): PostsRepository
 }
