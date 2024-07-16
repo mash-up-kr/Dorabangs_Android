@@ -13,7 +13,7 @@ fun NavController.navigateToStorage(navOptions: NavOptions) = navigate(Navigatio
 
 fun NavGraphBuilder.storageNavigation(
     navigateToStorageDetail: (Folder) -> Unit,
-    navigateToFolderManage: (FolderManageType) -> Unit,
+    navigateToFolderManage: (FolderManageType, String) -> Unit,
 
 ) {
     composable(

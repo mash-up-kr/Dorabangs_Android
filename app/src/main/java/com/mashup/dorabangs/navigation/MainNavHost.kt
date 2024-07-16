@@ -51,7 +51,9 @@ fun MainNavHost(
         )
         storageNavigation(
             navigateToStorageDetail = { appState.navController.navigateToStorageDetail() },
-            navigateToFolderManage = { folderManageType -> appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType) },
+            navigateToFolderManage = { folderManageType, folderId ->
+                appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType, folderId = folderId)
+            },
         )
         storageFolderManageNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },

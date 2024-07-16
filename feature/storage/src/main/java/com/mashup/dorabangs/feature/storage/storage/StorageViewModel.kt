@@ -40,11 +40,11 @@ class StorageViewModel @Inject constructor(
 
     fun deleteFolder(folderId: String) = viewModelScope.doraLaunch {
         val isSuccessDelete = deleteFolderUseCase(folderId = folderId)
-        if(isSuccessDelete.isSuccess) {
+        if (isSuccessDelete.isSuccess) {
             getFolderList()
             setVisibleDialog(false)
         } else {
-            //TODO - 에러처리
+            // TODO - 에러처리
         }
     }
 

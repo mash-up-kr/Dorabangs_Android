@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,7 +30,6 @@ import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.R
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -39,13 +37,13 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun StorageRoute(
     storageViewModel: StorageViewModel = hiltViewModel(),
     navigateToStorageDetail: (Folder) -> Unit,
-    navigateToFolderManage: (FolderManageType) -> Unit,
+    navigateToFolderManage: (FolderManageType, String) -> Unit,
 ) {
     val storageState by storageViewModel.collectAsState()
 
     storageViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            StorageListSideEffect.NavigateToFolderManage -> navigateToFolderManage(FolderManageType.CHANGE)
+            StorageListSideEffect.NavigateToFolderManage -> navigateToFolderManage(FolderManageType.CHANGE, storageState.selectedFolderId)
         }
     }
 
@@ -57,7 +55,7 @@ fun StorageRoute(
                 storageViewModel.setSelectFolderId(folderId = folderItem.id.orEmpty())
                 storageViewModel.setVisibleMoreButtonBottomSheet(visible = true)
             },
-            onClickAddFolderIcon = { navigateToFolderManage(FolderManageType.CREATE) },
+            onClickAddFolderIcon = { navigateToFolderManage(FolderManageType.CREATE, storageState.selectedFolderId) },
         )
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
@@ -84,7 +82,7 @@ fun StorageRoute(
             onClickConfirmBtn = {
                 storageViewModel.deleteFolder(folderId = storageState.selectedFolderId)
                 storageViewModel.setVisibleDialog(false)
-                                },
+            },
         )
     }
 }
@@ -146,6 +144,6 @@ fun StorageTopAppBar(
 fun PreviewStorageScreen() {
     StorageRoute(
         navigateToStorageDetail = {},
-        navigateToFolderManage = {},
+        navigateToFolderManage = { type, id -> },
     )
 }
