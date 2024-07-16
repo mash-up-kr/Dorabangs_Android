@@ -1,8 +1,8 @@
 package com.mashup.dorabangs.data.network.service
 
-import com.mashup.dorabangs.data.model.CreateFolderRequest
-import com.mashup.dorabangs.data.model.EditFolderNameRequest
-import com.mashup.dorabangs.data.model.EditFolderNameResponse
+import com.mashup.dorabangs.data.model.CreateFolderRequestModel
+import com.mashup.dorabangs.data.model.EditFolderNameRequestModel
+import com.mashup.dorabangs.data.model.EditFolderNameResponseModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
 import retrofit2.http.Body
@@ -21,12 +21,12 @@ interface FolderService {
 
     @POST("folders")
     suspend fun createFolder(
-        @Body createFolderRequest: CreateFolderRequest,
+        @Body createFolderRequest: CreateFolderRequestModel,
     )
 
     @PATCH("folders/{folderId}")
     suspend fun editFolderName(
         @Path("id") folderId: String,
-        @Body editFolderNameRequest: EditFolderNameRequest,
-    ): EditFolderNameResponse
+        @Body editFolderNameRequest: EditFolderNameRequestModel,
+    ): EditFolderNameResponseModel
 }

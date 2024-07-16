@@ -1,19 +1,19 @@
 package com.mashup.dorabangs.data.model
 
-import com.mashup.dorabangs.domain.model.EditCompleteFolderInfo
+import com.mashup.dorabangs.domain.model.CreateCompleteFolderInfo
 import com.mashup.dorabangs.domain.model.FolderType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EditFolderNameResponse(
+data class CreateFolderResponseModel(
     val id: String = "",
     val name: String = "",
     val type: String = "",
     val createAt: String = "",
 )
 
-fun EditFolderNameResponse.toDomain(): EditCompleteFolderInfo {
-    return EditCompleteFolderInfo(
+fun CreateFolderResponseModel.toDomain(): CreateCompleteFolderInfo {
+    return CreateCompleteFolderInfo(
         id = id,
         name = name,
         type = if (type == FolderType.CUSTOM.name) FolderType.CUSTOM else FolderType.DEFAULT,

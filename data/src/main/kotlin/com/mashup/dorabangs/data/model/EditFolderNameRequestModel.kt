@@ -4,8 +4,8 @@ import com.mashup.dorabangs.domain.model.EditFolder
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EditFolderNameRequest(
+data class EditFolderNameRequestModel(
     val name: String,
 )
 
-fun EditFolder.toData(): EditFolderNameRequest = EditFolderNameRequest(name = this.name)
+fun EditFolder.toData(): EditFolderNameRequestModel = EditFolderNameRequestModel(name = this.name)

@@ -1,7 +1,7 @@
 package com.mashup.dorabangs.data.datasource.remote.impl
 
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
-import com.mashup.dorabangs.data.model.EditFolderNameResponse
+import com.mashup.dorabangs.data.model.EditFolderNameResponseModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
 import com.mashup.dorabangs.data.model.toData
@@ -24,6 +24,6 @@ class FolderRemoteDataSourceImpl @Inject constructor(
         folderService.createFolder(folderList.toData())
     }
 
-    override suspend fun editFolderName(folderName: EditFolder, folderId: String): EditFolderNameResponse =
+    override suspend fun editFolderName(folderName: EditFolder, folderId: String): EditFolderNameResponseModel =
         folderService.editFolderName(folderId, folderName.toData())
 }

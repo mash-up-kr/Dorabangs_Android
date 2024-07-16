@@ -22,7 +22,7 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideFolderService(
+    fun providesFolderService(
         retrofit: Retrofit,
     ): FolderService = retrofit.create()
 }
