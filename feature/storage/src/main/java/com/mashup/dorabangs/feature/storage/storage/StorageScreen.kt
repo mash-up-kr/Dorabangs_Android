@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,21 +25,22 @@ import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSh
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
+import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.R
-import com.mashup.dorabangs.feature.storage.storage.model.StorageFolderItem
+import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun StorageRoute(
     storageViewModel: StorageViewModel = hiltViewModel(),
-    navigateToStorageDetail: (StorageFolderItem) -> Unit,
+    navigateToStorageDetail: (Folder) -> Unit,
     navigateToFolderManage: (FolderManageType) -> Unit,
 ) {
-
     val storageState by storageViewModel.collectAsState()
     Box {
         StorageScreen(
+            storageState = storageState,
             navigateToStorageDetail = navigateToStorageDetail,
             onClickSettingButton = { storageViewModel.setVisibleMoreButtonBottomSheet(visible = true) },
             onClickAddFolderIcon = { navigateToFolderManage(FolderManageType.CREATE) },
@@ -75,8 +75,9 @@ fun StorageRoute(
 
 @Composable
 fun StorageScreen(
-    navigateToStorageDetail: (StorageFolderItem) -> Unit,
-    onClickSettingButton: (StorageFolderItem) -> Unit,
+    storageState: StorageListState,
+    navigateToStorageDetail: (Folder) -> Unit,
+    onClickSettingButton: (Folder) -> Unit,
     onClickAddFolderIcon: () -> Unit = {},
 ) {
     Column(
@@ -88,6 +89,7 @@ fun StorageScreen(
             onClickAddFolderIcon = onClickAddFolderIcon,
         )
         StorageFolderList(
+            storageState = storageState,
             navigateToStorageDetail = navigateToStorageDetail,
             onClickSettingButton = onClickSettingButton,
         )

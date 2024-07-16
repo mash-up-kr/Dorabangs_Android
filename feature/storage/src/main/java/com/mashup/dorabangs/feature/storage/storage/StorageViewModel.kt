@@ -3,7 +3,6 @@ package com.mashup.dorabangs.feature.storage.storage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
-import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderList
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StorageViewModel @Inject constructor(
-    private val getFolderListUseCase: GetFolderList
+    private val getFolderListUseCase: GetFolderList,
 ) : ViewModel(), ContainerHost<StorageListState, StorageListSideEffect> {
     override val container = container<StorageListState, StorageListSideEffect>(StorageListState())
 
@@ -24,14 +23,15 @@ class StorageViewModel @Inject constructor(
         getFolderList()
     }
 
-
     private fun getFolderList() = viewModelScope.doraLaunch {
         val folderList = getFolderListUseCase()
         intent {
-            state.copy(
-                defaultStorageFolderList = folderList.defaultFolders,
-                customStorageFolderList = folderList.customFolders
-            )
+            reduce {
+                state.copy(
+                    defaultStorageFolderList = folderList.defaultFolders,
+                    customStorageFolderList = folderList.customFolders,
+                )
+            }
         }
     }
 
