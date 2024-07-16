@@ -13,4 +13,5 @@ interface FolderRepository {
     suspend fun getFolderById(folderId: String): Folder
     suspend fun createFolder(newFolderNameList: NewFolderNameList): DoraSampleResponse
     suspend fun editFolderName(newFolderName: NewFolderName, folderId: String): EditCompleteFolderInfo
+    suspend fun deleteFolder(folderId: String): DoraSampleResponse
 }

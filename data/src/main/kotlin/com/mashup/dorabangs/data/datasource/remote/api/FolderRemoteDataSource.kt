@@ -15,4 +15,6 @@ interface FolderRemoteDataSource {
     suspend fun createFolder(folderList: NewFolderNameList)
 
     suspend fun editFolderName(folderName: NewFolderName, folderId: String): EditFolderNameResponseModel
+
+    suspend fun deleteFolder(folderId: String)
 }

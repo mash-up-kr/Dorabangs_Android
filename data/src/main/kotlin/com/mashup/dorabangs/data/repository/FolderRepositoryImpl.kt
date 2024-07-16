@@ -42,4 +42,12 @@ class FolderRepositoryImpl @Inject constructor(
             val errorMsg = throwable.message.orEmpty()
             errorMsg.FailEditFolder()
         }
+
+    override suspend fun deleteFolder(folderId: String): DoraSampleResponse =
+        runCatching {
+            remoteDataSource.deleteFolder(folderId = folderId)
+            DoraSampleResponse(isSuccess = true)
+        }.getOrElse {
+            DoraSampleResponse(isSuccess = true)
+        }
 }

@@ -6,6 +6,7 @@ import com.mashup.dorabangs.data.model.EditFolderNameResponseModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -26,7 +27,12 @@ interface FolderService {
 
     @PATCH("folders/{folderId}")
     suspend fun editFolderName(
-        @Path("id") folderId: String,
+        @Path("folderId") folderId: String,
         @Body editFolderNameRequest: EditFolderNameRequestModel,
     ): EditFolderNameResponseModel
+
+    @DELETE("folders/{folderId}")
+    suspend fun deleteFolder(
+        @Path("folderId") folderId: String,
+    )
 }
