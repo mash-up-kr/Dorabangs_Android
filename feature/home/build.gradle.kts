@@ -68,4 +68,7 @@ dependencies {
 
     // Image
     implementation(libs.coil)
+
+    // Blur
+    implementation(libs.haze)
 }
