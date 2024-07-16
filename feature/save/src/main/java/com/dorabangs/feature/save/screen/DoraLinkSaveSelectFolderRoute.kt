@@ -17,9 +17,7 @@ fun DoraLinkSaveSelectFolderRoute(
     viewModel: DoraSaveViewModel = hiltViewModel(),
 ) {
     val state by viewModel.collectAsState()
-    if (state.isError) {
-        onClickBackIcon.invoke()
-    }
+    if (state.isError) { onClickBackIcon.invoke() }
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is DoraSaveSideEffect.ClickItem -> viewModel.updateList(index = sideEffect.index)
