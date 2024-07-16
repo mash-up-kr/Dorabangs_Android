@@ -15,7 +15,7 @@ fun NavGraphBuilder.storageNavigation(
     navigateToStorageDetail: (Folder) -> Unit,
     navigateToFolderManage: (FolderManageType) -> Unit,
 
-    ) {
+) {
     composable(
         route = NavigationRoute.StorageScreen.route,
     ) {

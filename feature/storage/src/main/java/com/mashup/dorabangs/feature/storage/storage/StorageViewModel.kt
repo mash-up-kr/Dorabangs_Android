@@ -3,6 +3,7 @@ package com.mashup.dorabangs.feature.storage.storage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
+import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderList
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StorageViewModel @Inject constructor(
     private val getFolderListUseCase: GetFolderList,
+    private val deleteFolderUseCase: DeleteFolderUseCase,
 ) : ViewModel(), ContainerHost<StorageListState, StorageListSideEffect> {
     override val container = container<StorageListState, StorageListSideEffect>(StorageListState())
 
@@ -32,6 +34,22 @@ class StorageViewModel @Inject constructor(
                     customStorageFolderList = folderList.customFolders,
                 )
             }
+        }
+    }
+
+    fun deleteFolder(folderId: String) = viewModelScope.doraLaunch {
+        val isSuccessDelete = deleteFolderUseCase(folderId = folderId)
+        if(isSuccessDelete.isSuccess) {
+            getFolderList()
+            setVisibleDialog(false)
+        } else {
+            //TODO - 에러처리
+        }
+    }
+
+    fun setSelectFolderId(folderId: String) = intent {
+        reduce {
+            state.copy(selectedFolderId = folderId)
         }
     }
 

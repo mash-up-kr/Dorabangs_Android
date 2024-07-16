@@ -42,7 +42,10 @@ fun StorageRoute(
         StorageScreen(
             storageState = storageState,
             navigateToStorageDetail = navigateToStorageDetail,
-            onClickSettingButton = { storageViewModel.setVisibleMoreButtonBottomSheet(visible = true) },
+            onClickSettingButton = { folderItem ->
+                storageViewModel.setSelectFolderId(folderId = folderItem.id.orEmpty())
+                storageViewModel.setVisibleMoreButtonBottomSheet(visible = true)
+            },
             onClickAddFolderIcon = { navigateToFolderManage(FolderManageType.CREATE) },
         )
         DoraBottomSheet.MoreButtonBottomSheet(
@@ -68,7 +71,10 @@ fun StorageRoute(
             confirmBtnText = stringResource(R.string.dialog_folder_remove_button_remove),
             disMissBtnText = stringResource(R.string.dialog_folder_remove_button_cancel),
             onDisMissRequest = { storageViewModel.setVisibleDialog(false) },
-            onClickConfirmBtn = { storageViewModel.setVisibleDialog(false) },
+            onClickConfirmBtn = {
+                storageViewModel.deleteFolder(folderId = storageState.selectedFolderId)
+                storageViewModel.setVisibleDialog(false)
+                                },
         )
     }
 }
