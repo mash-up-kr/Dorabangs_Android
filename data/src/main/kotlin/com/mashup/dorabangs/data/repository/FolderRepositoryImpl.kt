@@ -7,7 +7,7 @@ import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.domain.model.CreateCompleteFolderInfo
 import com.mashup.dorabangs.domain.model.EditCompleteFolderInfo
 import com.mashup.dorabangs.domain.model.Folder
-import com.mashup.dorabangs.domain.model.FolderEdition
+import com.mashup.dorabangs.domain.model.FolderRename
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.NewFolderCreation
 import com.mashup.dorabangs.domain.repository.FolderRepository
@@ -33,11 +33,11 @@ class FolderRepositoryImpl @Inject constructor(
         }
 
     override suspend fun editFolderName(
-        folderEdition: FolderEdition,
+        folderRename: FolderRename,
         folderId: String,
     ): EditCompleteFolderInfo =
         runCatching {
-            remoteDataSource.editFolderName(folderName = folderEdition, folderId = folderId).CompleteEditFolder()
+            remoteDataSource.editFolderName(folderName = folderRename, folderId = folderId).CompleteEditFolder()
         }.getOrElse { throwable ->
             val errorMsg = throwable.message.orEmpty()
             errorMsg.FailEditFolder()

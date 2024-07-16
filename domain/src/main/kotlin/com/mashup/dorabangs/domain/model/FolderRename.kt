@@ -1,5 +1,5 @@
 package com.mashup.dorabangs.domain.model
 
-data class FolderEdition(
+data class FolderRename(
     val name: String,
 )

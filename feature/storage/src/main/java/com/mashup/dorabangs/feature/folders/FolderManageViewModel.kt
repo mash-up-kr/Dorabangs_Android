@@ -3,7 +3,7 @@ package com.mashup.dorabangs.feature.folders
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
-import com.mashup.dorabangs.domain.model.FolderEdition
+import com.mashup.dorabangs.domain.model.FolderRename
 import com.mashup.dorabangs.domain.model.NewFolderCreation
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.EditFolderNameUseCase
@@ -42,7 +42,7 @@ class FolderManageViewModel @Inject constructor(
             }
             FolderManageType.CHANGE -> {
                 // TODO - Folder목록 조회 API 붙인 후 folderId 연결
-                val editFolderInfo = editFolderNameUseCase.invoke(folderName = FolderEdition(name = folderName), folderId = folderId)
+                val editFolderInfo = editFolderNameUseCase.invoke(folderName = FolderRename(name = folderName), folderId = folderId)
                 editFolderInfo.completeFolderInfo.id.isNotEmpty() to editFolderInfo.errorMsg
             }
         }

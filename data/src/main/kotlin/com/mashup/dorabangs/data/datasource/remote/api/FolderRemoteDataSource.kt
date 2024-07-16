@@ -3,7 +3,7 @@ package com.mashup.dorabangs.data.datasource.remote.api
 import com.mashup.dorabangs.data.model.EditFolderNameResponseModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
-import com.mashup.dorabangs.domain.model.FolderEdition
+import com.mashup.dorabangs.domain.model.FolderRename
 import com.mashup.dorabangs.domain.model.NewFolderCreation
 
 interface FolderRemoteDataSource {
@@ -14,5 +14,5 @@ interface FolderRemoteDataSource {
 
     suspend fun createFolder(folderList: NewFolderCreation)
 
-    suspend fun editFolderName(folderName: FolderEdition, folderId: String): EditFolderNameResponseModel
+    suspend fun editFolderName(folderName: FolderRename, folderId: String): EditFolderNameResponseModel
 }
