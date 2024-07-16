@@ -123,41 +123,25 @@ class HomeViewModel @Inject constructor(
                 HomeState(
                     tapElements = listOf(
                         DoraChipUiModel(
-                            title = "전체 99+",
+                            title = "전체",
                             icon = R.drawable.ic_plus,
                         ),
                         DoraChipUiModel(
-                            title = "하이?",
-                            icon = R.drawable.link_icon,
+                            title = "즐겨찾기",
+                            icon = R.drawable.ic_plus,
                         ),
                         DoraChipUiModel(
-                            title = "바이?",
-                            icon = R.drawable.link_icon,
+                            title = "나중에 읽을 링크",
+                            icon = R.drawable.ic_plus,
                         ),
                         DoraChipUiModel(
-                            title = "바이?",
-                            icon = R.drawable.link_icon,
+                            title = "테스트",
                         ),
                         DoraChipUiModel(
-                            title = "바이?",
-                            icon = R.drawable.link_icon,
+                            title = "테스트",
                         ),
                         DoraChipUiModel(
-                            title = "전체 99+",
-                            icon = R.drawable.link_icon,
-                        ),
-                        DoraChipUiModel(
-                            title = "하이?",
-                        ),
-                        DoraChipUiModel(
-                            title = "바이?",
-                        ),
-                        DoraChipUiModel(
-                            title = "바이?",
-                        ),
-                        DoraChipUiModel(
-                            title = "바이?",
-                            icon = R.drawable.link_icon,
+                            title = "테스트",
                         ),
                     ),
                     feedCards = listOf(

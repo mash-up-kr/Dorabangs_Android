@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.theme.ChipColorTokens
-import com.mashup.dorabangs.core.designsystem.theme.ChipsColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
@@ -36,7 +35,6 @@ fun DoraChips(
 ) {
     LazyRow(
         modifier = modifier
-            .background(ChipsColorTokens.Containercolor)
             .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {

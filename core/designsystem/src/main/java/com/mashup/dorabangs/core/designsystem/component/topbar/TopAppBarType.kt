@@ -1,7 +1,9 @@
 package com.mashup.dorabangs.core.designsystem.component.topbar
 
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 
 object DoraTopBar : TopAppBarType {
     @Composable
@@ -28,7 +30,7 @@ object DoraTopBar : TopAppBarType {
         onClickBackIcon: () -> Unit,
     ) {
         DoraTopAppBar(
-            modifier = modifier,
+            modifier = modifier.background(DoraColorTokens.White),
             title = title,
             isTitleCenter = isTitleCenter,
             isEnableBackNavigation = true,
@@ -45,7 +47,7 @@ object DoraTopBar : TopAppBarType {
         onClickActonIcon: () -> Unit,
     ) {
         DoraTopAppBar(
-            modifier = modifier,
+            modifier = modifier.background(DoraColorTokens.White),
             title = title,
             isTitleCenter = false,
             isEnableBackNavigation = true,
@@ -61,7 +63,7 @@ object DoraTopBar : TopAppBarType {
         title: String,
     ) {
         DoraTopAppBar(
-            modifier = modifier,
+            modifier = modifier.background(DoraColorTokens.White),
             title = title,
             isTitleCenter = true,
         )
