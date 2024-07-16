@@ -19,25 +19,25 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
     @Binds
     @Reusable
-    abstract fun bindUserRepository(
+    abstract fun bindsUserRepository(
         repositoryImpl: UserRepositoryImpl,
     ): UserRepository
 
     @Binds
     @Reusable
-    abstract fun bindFolderRepository(
+    abstract fun bindsFolderRepository(
         repository: FolderRepositoryImpl,
     ): FolderRepository
 
     @Binds
     @Reusable
-    abstract fun bindDoraUrlCheckRepository(
+    abstract fun bindsDoraUrlCheckRepository(
         repository: DoraUrlCheckRepositoryImpl,
     ): DoraUrlCheckRepository
 
     @Binds
     @Reusable
-    abstract fun bindPostsRepository(
+    abstract fun bindsPostsRepository(
         repository: PostsRepositoryImpl,
     ): PostsRepository
 }

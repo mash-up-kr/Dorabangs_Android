@@ -27,25 +27,25 @@ abstract class DataSourceModule {
 
     @Binds
     @Reusable
-    abstract fun bindUserLocalDataSource(
+    abstract fun bindsUserLocalDataSource(
         dataSource: UserLocalDataSourceImpl,
     ): UserLocalDataSource
 
     @Binds
     @Reusable
-    abstract fun bindUserRemoteDataSource(
+    abstract fun bindsUserRemoteDataSource(
         dataSource: UserRemoteDataSourceImpl,
     ): UserRemoteDataSource
 
     @Binds
     @Reusable
-    abstract fun bindFolderRemoteDataSource(
+    abstract fun bindsFolderRemoteDataSource(
         dataSource: FolderRemoteDataSourceImpl,
     ): FolderRemoteDataSource
 
     @Binds
     @Reusable
-    abstract fun bindPostsRemoteDataSource(
+    abstract fun bindsPostsRemoteDataSource(
         dataSource: PostsRemoteDataSourceImpl,
     ): PostsRemoteDataSource
 }
