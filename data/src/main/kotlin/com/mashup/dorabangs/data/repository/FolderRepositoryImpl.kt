@@ -4,7 +4,7 @@ import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.model.CompleteEditFolder
 import com.mashup.dorabangs.data.model.FailEditFolder
 import com.mashup.dorabangs.data.model.toDomain
-import com.mashup.dorabangs.domain.model.CreateCompleteFolderInfo
+import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.EditCompleteFolderInfo
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
@@ -24,12 +24,12 @@ class FolderRepositoryImpl @Inject constructor(
     override suspend fun getFolderById(folderId: String): Folder =
         remoteDataSource.getFolderById(folderId).toDomain()
 
-    override suspend fun createFolder(newFolderNameList: NewFolderNameList): CreateCompleteFolderInfo =
+    override suspend fun createFolder(newFolderNameList: NewFolderNameList): DoraSampleResponse =
         runCatching {
             remoteDataSource.createFolder(folderList = newFolderNameList)
-            CreateCompleteFolderInfo(isSuccess = true)
+            DoraSampleResponse(isSuccess = true)
         }.getOrElse { throwable ->
-            CreateCompleteFolderInfo(isSuccess = false, errorMsg = throwable.message.orEmpty())
+            DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
         }
 
     override suspend fun editFolderName(
