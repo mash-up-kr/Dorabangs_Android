@@ -26,8 +26,8 @@ class PostsRemoteDataSourceImpl @Inject constructor(
             favorite = favorite
         ).toDomain()
 
-    override suspend fun savePosts(link: Link) =
-        postsService.savePosts(link.toData())
+    override suspend fun saveLink(link: Link) =
+        postsService.saveLink(link.toData())
 
     override suspend fun patchPostInfo(postId: String, postInfo: PostInfo) =
         postsService.patchPostInfo(postId, postInfo.toDomain())

@@ -13,7 +13,7 @@ interface PostsRemoteDataSource {
         favorite: Boolean? = null,
     ): Posts
 
-    suspend fun savePosts(
+    suspend fun saveLink(
         link: Link
     )
 

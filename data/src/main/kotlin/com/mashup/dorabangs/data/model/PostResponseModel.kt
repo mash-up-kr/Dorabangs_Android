@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PostsResponseModel(
-    val metaData: PostsMetaDataResponseModel,
-    val items: List<PostResponseModel>,
+    val metadata: PostsMetaDataResponseModel,
+    val items: List<PostResponseModel> = emptyList(),
 )
 
 @Serializable
@@ -44,6 +44,6 @@ fun PostsMetaDataResponseModel.toDomain() = PostsMetaData(
 )
 
 fun PostsResponseModel.toDomain() = Posts(
-    metaData = metaData.toDomain(),
+    metaData = metadata.toDomain(),
     items = items.map { it.toDomain() },
 )

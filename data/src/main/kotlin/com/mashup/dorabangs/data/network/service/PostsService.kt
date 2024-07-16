@@ -22,7 +22,7 @@ interface PostsService {
     ): PostsResponseModel
 
     @POST("posts")
-    suspend fun savePosts(@Body link: LinkRequestModel)
+    suspend fun saveLink(@Body link: LinkRequestModel)
 
     @PATCH("posts/{postId}")
     suspend fun patchPostInfo(
