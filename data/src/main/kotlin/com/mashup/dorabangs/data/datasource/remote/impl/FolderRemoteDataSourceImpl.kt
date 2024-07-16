@@ -6,8 +6,8 @@ import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
 import com.mashup.dorabangs.data.model.toData
 import com.mashup.dorabangs.data.network.service.FolderService
-import com.mashup.dorabangs.domain.model.NewFolderCreation
 import com.mashup.dorabangs.domain.model.FolderEdition
+import com.mashup.dorabangs.domain.model.NewFolderCreation
 import javax.inject.Inject
 
 class FolderRemoteDataSourceImpl @Inject constructor(

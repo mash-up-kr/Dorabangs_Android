@@ -93,16 +93,22 @@ class HomeViewModel @Inject constructor(
     fun createFolder(folderName: String) {
         viewModelScope.doraLaunch {
             val folderData = NewFolderCreation(names = listOf(folderName))
-            createFolderUseCase(folderData)
-            intent {
-                postSideEffect(HomeSideEffect.NavigateToHome)
+            val isCreateFolderSuccess = createFolderUseCase(folderData)
+            if (isCreateFolderSuccess.isSuccess) {
+                intent {
+                    postSideEffect(HomeSideEffect.NavigateToHome)
+                }
+            } else {
+                setTextHelperEnable(
+                    isEnable = true,
+                    helperMsg = isCreateFolderSuccess.errorMsg,
+                )
             }
-            // TODO - Error처리 필요
         }
     }
 
-    fun setTextHelperEnable(isEnable: Boolean) = intent {
-        reduce { state.copy(homeCreateFolder = state.homeCreateFolder.copy(helperEnable = isEnable)) }
+    private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
+        reduce { state.copy(homeCreateFolder = state.homeCreateFolder.copy(helperEnable = isEnable, helperMessage = helperMsg)) }
     }
 
     fun setFolderName(folderName: String) = intent {

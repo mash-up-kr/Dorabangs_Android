@@ -3,8 +3,8 @@ package com.mashup.dorabangs.data.datasource.remote.api
 import com.mashup.dorabangs.data.model.EditFolderNameResponseModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
-import com.mashup.dorabangs.domain.model.NewFolderCreation
 import com.mashup.dorabangs.domain.model.FolderEdition
+import com.mashup.dorabangs.domain.model.NewFolderCreation
 
 interface FolderRemoteDataSource {
 
