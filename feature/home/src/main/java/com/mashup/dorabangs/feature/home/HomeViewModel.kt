@@ -7,7 +7,7 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
-import com.mashup.dorabangs.domain.model.CreateFolder
+import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
@@ -92,17 +92,23 @@ class HomeViewModel @Inject constructor(
 
     fun createFolder(folderName: String) {
         viewModelScope.doraLaunch {
-            val folderData = CreateFolder(names = listOf(folderName))
-            createFolderUseCase(folderData)
-            intent {
-                postSideEffect(HomeSideEffect.NavigateToHome)
+            val folderData = NewFolderNameList(names = listOf(folderName))
+            val isCreateFolderSuccess = createFolderUseCase(folderData)
+            if (isCreateFolderSuccess.isSuccess) {
+                intent {
+                    postSideEffect(HomeSideEffect.NavigateToHome)
+                }
+            } else {
+                setTextHelperEnable(
+                    isEnable = true,
+                    helperMsg = isCreateFolderSuccess.errorMsg,
+                )
             }
-            // TODO - Error처리 필요
         }
     }
 
-    fun setTextHelperEnable(isEnable: Boolean) = intent {
-        reduce { state.copy(homeCreateFolder = state.homeCreateFolder.copy(helperEnable = isEnable)) }
+    private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
+        reduce { state.copy(homeCreateFolder = state.homeCreateFolder.copy(helperEnable = isEnable, helperMessage = helperMsg)) }
     }
 
     fun setFolderName(folderName: String) = intent {
@@ -117,41 +123,25 @@ class HomeViewModel @Inject constructor(
                 HomeState(
                     tapElements = listOf(
                         DoraChipUiModel(
-                            title = "전체 99+",
+                            title = "전체",
                             icon = R.drawable.ic_plus,
                         ),
                         DoraChipUiModel(
-                            title = "하이?",
-                            icon = R.drawable.link_icon,
+                            title = "즐겨찾기",
+                            icon = R.drawable.ic_plus,
                         ),
                         DoraChipUiModel(
-                            title = "바이?",
-                            icon = R.drawable.link_icon,
+                            title = "나중에 읽을 링크",
+                            icon = R.drawable.ic_plus,
                         ),
                         DoraChipUiModel(
-                            title = "바이?",
-                            icon = R.drawable.link_icon,
+                            title = "테스트",
                         ),
                         DoraChipUiModel(
-                            title = "바이?",
-                            icon = R.drawable.link_icon,
+                            title = "테스트",
                         ),
                         DoraChipUiModel(
-                            title = "전체 99+",
-                            icon = R.drawable.link_icon,
-                        ),
-                        DoraChipUiModel(
-                            title = "하이?",
-                        ),
-                        DoraChipUiModel(
-                            title = "바이?",
-                        ),
-                        DoraChipUiModel(
-                            title = "바이?",
-                        ),
-                        DoraChipUiModel(
-                            title = "바이?",
-                            icon = R.drawable.link_icon,
+                            title = "테스트",
                         ),
                     ),
                     feedCards = listOf(

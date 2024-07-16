@@ -76,7 +76,7 @@ fun HomeCreateFolderScreen(
                 text = "",
                 hintText = stringResource(id = R.string.home_create_folder_hint),
                 labelText = stringResource(id = R.string.home_create_folder_label),
-                helperText = stringResource(id = R.string.home_create_folder_helper),
+                helperText = state.helperMessage,
                 helperEnabled = state.helperEnable,
                 counterEnabled = true,
                 onValueChanged = onValueChanged,

@@ -10,16 +10,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 
 @Composable
 fun CardProgressBar(
     completedColor: Color,
-    remainColor: Color,
+    remainColor: Brush,
     modifier: Modifier = Modifier,
     current: Int = 0,
     total: Int = 100,
@@ -42,7 +44,7 @@ fun CardProgressBar(
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .background(
-                    color = remainColor,
+                    brush = DoraGradientToken.Gradient2,
                     shape = DoraRoundTokens.Round99,
                 ),
         )
@@ -57,7 +59,7 @@ fun PreviewCardProgressBar() {
             .fillMaxWidth()
             .height(4.dp),
         completedColor = DoraColorTokens.Black,
-        remainColor = DoraColorTokens.G4,
+        remainColor = DoraGradientToken.Gradient2,
         current = 10,
     )
 }

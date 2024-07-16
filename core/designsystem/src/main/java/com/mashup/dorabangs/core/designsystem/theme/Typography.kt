@@ -31,7 +31,7 @@ object DoraLineHeightTokens {
     val H6 = 38.sp
     val Title = 34.sp
     val SubTitle1 = 26.sp
-    val SubTitle2 = 16.sp
+    val SubTitle2 = 28.sp
     val Base1 = 24.sp
     val Base2 = 24.sp
     val Caption3 = 22.sp

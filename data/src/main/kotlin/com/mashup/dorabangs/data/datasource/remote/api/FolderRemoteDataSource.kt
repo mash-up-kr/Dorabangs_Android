@@ -1,10 +1,10 @@
 package com.mashup.dorabangs.data.datasource.remote.api
 
-import com.mashup.dorabangs.data.model.EditFolderNameResponse
+import com.mashup.dorabangs.data.model.EditFolderNameResponseModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
-import com.mashup.dorabangs.domain.model.CreateFolder
-import com.mashup.dorabangs.domain.model.EditFolder
+import com.mashup.dorabangs.domain.model.NewFolderName
+import com.mashup.dorabangs.domain.model.NewFolderNameList
 
 interface FolderRemoteDataSource {
 
@@ -12,7 +12,7 @@ interface FolderRemoteDataSource {
 
     suspend fun getFolderById(folderId: String): FolderResponseModel
 
-    suspend fun createFolder(folderList: CreateFolder)
+    suspend fun createFolder(folderList: NewFolderNameList)
 
-    suspend fun editFolderName(folderName: EditFolder, folderId: String): EditFolderNameResponse
+    suspend fun editFolderName(folderName: NewFolderName, folderId: String): EditFolderNameResponseModel
 }

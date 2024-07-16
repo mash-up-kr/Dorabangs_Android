@@ -83,7 +83,7 @@ fun FolderManageScreen(
                 text = "",
                 hintText = stringResource(id = R.string.storage_create_folder_hint),
                 labelText = stringResource(id = R.string.storage_create_folder_label),
-                helperText = stringResource(id = R.string.storage_create_folder_helper),
+                helperText = folderManageState.helperMessage,
                 helperEnabled = folderManageState.helperEnable,
                 counterEnabled = true,
                 onValueChanged = onValueChanged,

@@ -3,8 +3,8 @@ package com.mashup.dorabangs.feature.folders
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
-import com.mashup.dorabangs.domain.model.CreateFolder
-import com.mashup.dorabangs.domain.model.EditFolder
+import com.mashup.dorabangs.domain.model.NewFolderName
+import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.EditFolderNameUseCase
 import com.mashup.dorabangs.feature.folders.model.FolderManageState
@@ -35,18 +35,23 @@ class FolderManageViewModel @Inject constructor(
     }
 
     fun createOrEditFolder(folderName: String, folderType: FolderManageType, folderId: String = "") = viewModelScope.doraLaunch {
-        when (folderType) {
+        val (isSuccess, message) = when (folderType) {
             FolderManageType.CREATE -> {
-                createFolderUseCase.invoke(folderList = CreateFolder(names = listOf(folderName)))
+                val isSuccessCreateFolder = createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
+                isSuccessCreateFolder.isSuccess to isSuccessCreateFolder.errorMsg
             }
             FolderManageType.CHANGE -> {
                 // TODO - Folder목록 조회 API 붙인 후 folderId 연결
-                editFolderNameUseCase.invoke(folderName = EditFolder(name = folderName), folderId = folderId)
+                val editFolderInfo = editFolderNameUseCase.invoke(folderName = NewFolderName(name = folderName), folderId = folderId)
+                editFolderInfo.completeFolderInfo.id.isNotEmpty() to editFolderInfo.errorMsg
             }
         }
-        // TODO - Error처리 필요
-        intent {
-            postSideEffect(FolderManageSideEffect.NavigateToStorage)
+        if (isSuccess) {
+            intent {
+                postSideEffect(FolderManageSideEffect.NavigateToStorage)
+            }
+        } else {
+            setTextHelperEnable(isEnable = true, helperMessage = message)
         }
     }
 
@@ -56,7 +61,7 @@ class FolderManageViewModel @Inject constructor(
         }
     }
 
-    fun setTextHelperEnable(isEnable: Boolean) = intent {
-        reduce { state.copy(helperEnable = isEnable) }
+    fun setTextHelperEnable(isEnable: Boolean, helperMessage: String) = intent {
+        reduce { state.copy(helperEnable = isEnable, helperMessage = helperMessage) }
     }
 }
