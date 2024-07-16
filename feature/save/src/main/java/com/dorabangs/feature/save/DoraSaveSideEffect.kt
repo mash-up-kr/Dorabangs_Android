@@ -1,3 +1,5 @@
 package com.dorabangs.feature.save
 
-sealed class DoraSaveSideEffect
+sealed interface DoraSaveSideEffect {
+    data class ClickItem(val index: Int) : DoraSaveSideEffect
+}

@@ -12,6 +12,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 
 @HiltViewModel
 class DoraSaveViewModel @Inject constructor(
@@ -37,6 +38,25 @@ class DoraSaveViewModel @Inject constructor(
                     thumbnailUrl = checkResult.thumbnailUrl,
                     isShortLink = checkResult.isShortLink,
                     isError = checkResult.isError,
+                )
+            }
+        }
+    }
+
+    fun clickSelectableItem(index: Int) = intent {
+        postSideEffect(
+            DoraSaveSideEffect.ClickItem(index = index)
+        )
+    }
+
+    fun updateList(index: Int) = intent {
+        reduce {
+            state.folderList.mapIndexed { listIndex, item ->
+                if (listIndex == index) item.copy(isSelected = true)
+                else item.copy(isSelected = false)
+            }.let { newList ->
+                state.copy(
+                    folderList = newList,
                 )
             }
         }

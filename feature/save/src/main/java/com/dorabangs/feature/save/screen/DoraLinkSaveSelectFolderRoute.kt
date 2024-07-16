@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.dorabangs.feature.save.DoraSaveSideEffect
 import com.dorabangs.feature.save.DoraSaveViewModel
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun DoraLinkSaveSelectFolderRoute(
@@ -18,10 +20,16 @@ fun DoraLinkSaveSelectFolderRoute(
     if (state.isError) {
         onClickBackIcon.invoke()
     }
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is DoraSaveSideEffect.ClickItem -> viewModel.updateList(index = sideEffect.index)
+        }
+    }
 
     DoraLinkSaveSelectFolderScreen(
         modifier = modifier,
         state = state,
+        viewModel = viewModel,
         onClickSaveButton = onClickSaveButton,
         onClickBackIcon = onClickBackIcon,
     )
