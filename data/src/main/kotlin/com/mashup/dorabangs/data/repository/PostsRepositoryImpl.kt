@@ -22,8 +22,8 @@ class PostsRepositoryImpl @Inject constructor(
         favorite = favorite,
     )
 
-    override suspend fun savePosts(link: Link) =
-        postsRemoteDataSource.savePosts(link)
+    override suspend fun saveLink(link: Link) =
+        postsRemoteDataSource.saveLink(link)
 
     override suspend fun patchPostInfo(postId: String, postInfo: PostInfo) =
         postsRemoteDataSource.patchPostInfo(postId, postInfo)

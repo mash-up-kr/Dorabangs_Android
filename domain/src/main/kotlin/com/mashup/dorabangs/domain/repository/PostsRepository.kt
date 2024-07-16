@@ -13,7 +13,7 @@ interface PostsRepository {
         favorite: Boolean? = null,
     ): Posts
 
-    suspend fun savePosts(
+    suspend fun saveLink(
         link: Link
     )
 
