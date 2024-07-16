@@ -71,7 +71,9 @@ fun DoraFolderSelectableListItem(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+        modifier = modifier
+            .padding(horizontal = 16.dp, vertical = 14.dp)
+            .size(24.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
