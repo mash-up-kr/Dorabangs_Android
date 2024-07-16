@@ -6,8 +6,8 @@ import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
 import com.mashup.dorabangs.data.model.toData
 import com.mashup.dorabangs.data.network.service.FolderService
-import com.mashup.dorabangs.domain.model.FolderRename
-import com.mashup.dorabangs.domain.model.NewFolderCreation
+import com.mashup.dorabangs.domain.model.NewFolderName
+import com.mashup.dorabangs.domain.model.NewFolderNameList
 import javax.inject.Inject
 
 class FolderRemoteDataSourceImpl @Inject constructor(
@@ -20,10 +20,10 @@ class FolderRemoteDataSourceImpl @Inject constructor(
     override suspend fun getFolderById(folderId: String): FolderResponseModel =
         folderService.getFolderById(folderId)
 
-    override suspend fun createFolder(folderList: NewFolderCreation) {
+    override suspend fun createFolder(folderList: NewFolderNameList) {
         folderService.createFolder(folderList.toData())
     }
 
-    override suspend fun editFolderName(folderName: FolderRename, folderId: String): EditFolderNameResponseModel =
+    override suspend fun editFolderName(folderName: NewFolderName, folderId: String): EditFolderNameResponseModel =
         folderService.editFolderName(folderId, folderName.toData())
 }

@@ -7,9 +7,9 @@ import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.domain.model.CreateCompleteFolderInfo
 import com.mashup.dorabangs.domain.model.EditCompleteFolderInfo
 import com.mashup.dorabangs.domain.model.Folder
-import com.mashup.dorabangs.domain.model.FolderRename
 import com.mashup.dorabangs.domain.model.FolderList
-import com.mashup.dorabangs.domain.model.NewFolderCreation
+import com.mashup.dorabangs.domain.model.NewFolderName
+import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.repository.FolderRepository
 import javax.inject.Inject
 
@@ -24,20 +24,20 @@ class FolderRepositoryImpl @Inject constructor(
     override suspend fun getFolderById(folderId: String): Folder =
         remoteDataSource.getFolderById(folderId).toDomain()
 
-    override suspend fun createFolder(newFolderCreation: NewFolderCreation): CreateCompleteFolderInfo =
+    override suspend fun createFolder(newFolderNameList: NewFolderNameList): CreateCompleteFolderInfo =
         runCatching {
-            remoteDataSource.createFolder(folderList = newFolderCreation)
+            remoteDataSource.createFolder(folderList = newFolderNameList)
             CreateCompleteFolderInfo(isSuccess = true)
         }.getOrElse { throwable ->
             CreateCompleteFolderInfo(isSuccess = false, errorMsg = throwable.message.orEmpty())
         }
 
     override suspend fun editFolderName(
-        folderRename: FolderRename,
+        newFolderName: NewFolderName,
         folderId: String,
     ): EditCompleteFolderInfo =
         runCatching {
-            remoteDataSource.editFolderName(folderName = folderRename, folderId = folderId).CompleteEditFolder()
+            remoteDataSource.editFolderName(folderName = newFolderName, folderId = folderId).CompleteEditFolder()
         }.getOrElse { throwable ->
             val errorMsg = throwable.message.orEmpty()
             errorMsg.FailEditFolder()
