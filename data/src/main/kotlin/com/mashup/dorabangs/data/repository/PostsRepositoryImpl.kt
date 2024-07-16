@@ -8,13 +8,13 @@ import com.mashup.dorabangs.domain.repository.PostsRepository
 import javax.inject.Inject
 
 class PostsRepositoryImpl @Inject constructor(
-    private val postsRemoteDataSource: PostsRemoteDataSource
-): PostsRepository {
+    private val postsRemoteDataSource: PostsRemoteDataSource,
+) : PostsRepository {
     override suspend fun getPosts(
         page: Int?,
         limit: Int?,
         order: String?,
-        favorite: Boolean?
+        favorite: Boolean?,
     ): Posts = postsRemoteDataSource.getPosts(
         page = page,
         limit = limit,
@@ -27,7 +27,6 @@ class PostsRepositoryImpl @Inject constructor(
 
     override suspend fun patchPostInfo(postId: String, postInfo: PostInfo) =
         postsRemoteDataSource.patchPostInfo(postId, postInfo)
-
 
     override suspend fun deletePost(postId: String) =
         postsRemoteDataSource.deletePost(postId)

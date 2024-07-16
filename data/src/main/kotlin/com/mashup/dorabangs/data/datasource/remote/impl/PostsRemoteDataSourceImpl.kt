@@ -10,20 +10,20 @@ import com.mashup.dorabangs.domain.model.Posts
 import javax.inject.Inject
 
 class PostsRemoteDataSourceImpl @Inject constructor(
-    private val postsService: PostsService
-): PostsRemoteDataSource {
+    private val postsService: PostsService,
+) : PostsRemoteDataSource {
 
     override suspend fun getPosts(
         page: Int?,
         limit: Int?,
         order: String?,
-        favorite: Boolean?
+        favorite: Boolean?,
     ): Posts =
         postsService.getPosts(
             page = page,
             limit = limit,
             order = order,
-            favorite = favorite
+            favorite = favorite,
         ).toDomain()
 
     override suspend fun saveLink(link: Link) =

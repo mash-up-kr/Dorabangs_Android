@@ -14,7 +14,7 @@ interface PostsRemoteDataSource {
     ): Posts
 
     suspend fun saveLink(
-        link: Link
+        link: Link,
     )
 
     suspend fun patchPostInfo(

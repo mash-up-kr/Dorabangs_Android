@@ -11,10 +11,10 @@ data class PostInfoRequestModel(
 
 fun PostInfoRequestModel.toDomain() = PostInfo(
     isFavorite = this.isFavorite,
-    readAt = this.readAt
+    readAt = this.readAt,
 )
 
 fun PostInfo.toDomain() = PostInfoRequestModel(
     isFavorite = this.isFavorite,
-    readAt = this.readAt
+    readAt = this.readAt,
 )
