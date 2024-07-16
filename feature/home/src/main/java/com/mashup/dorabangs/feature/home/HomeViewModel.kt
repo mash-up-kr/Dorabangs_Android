@@ -7,7 +7,7 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
-import com.mashup.dorabangs.domain.model.CreateFolder
+import com.mashup.dorabangs.domain.model.NewFolderCreation
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
@@ -92,7 +92,7 @@ class HomeViewModel @Inject constructor(
 
     fun createFolder(folderName: String) {
         viewModelScope.doraLaunch {
-            val folderData = CreateFolder(names = listOf(folderName))
+            val folderData = NewFolderCreation(names = listOf(folderName))
             createFolderUseCase(folderData)
             intent {
                 postSideEffect(HomeSideEffect.NavigateToHome)

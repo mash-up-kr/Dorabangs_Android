@@ -3,8 +3,8 @@ package com.mashup.dorabangs.feature.folders
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
-import com.mashup.dorabangs.domain.model.CreateFolder
-import com.mashup.dorabangs.domain.model.EditFolder
+import com.mashup.dorabangs.domain.model.NewFolderCreation
+import com.mashup.dorabangs.domain.model.FolderEdition
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.EditFolderNameUseCase
 import com.mashup.dorabangs.feature.folders.model.FolderManageState
@@ -37,11 +37,11 @@ class FolderManageViewModel @Inject constructor(
     fun createOrEditFolder(folderName: String, folderType: FolderManageType, folderId: String = "") = viewModelScope.doraLaunch {
         when (folderType) {
             FolderManageType.CREATE -> {
-                createFolderUseCase.invoke(folderList = CreateFolder(names = listOf(folderName)))
+                createFolderUseCase.invoke(folderList = NewFolderCreation(names = listOf(folderName)))
             }
             FolderManageType.CHANGE -> {
                 // TODO - Folder목록 조회 API 붙인 후 folderId 연결
-                editFolderNameUseCase.invoke(folderName = EditFolder(name = folderName), folderId = folderId)
+                editFolderNameUseCase.invoke(folderName = FolderEdition(name = folderName), folderId = folderId)
             }
         }
         // TODO - Error처리 필요

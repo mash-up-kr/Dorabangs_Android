@@ -1,5 +1,5 @@
 package com.mashup.dorabangs.domain.model
 
-data class CreateFolder(
+data class NewFolderCreation(
     val names: List<String>,
 )
