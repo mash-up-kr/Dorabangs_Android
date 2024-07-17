@@ -43,6 +43,7 @@ gms = "4.4.2"
 firebase-bom = "33.1.1"
 haze = "0.7.2"
 lottie = "6.4.1"
+paging = "3.3.0"
 
 [libraries]
 kotlin-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin" }
@@ -109,6 +110,10 @@ haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze"}
 
 #firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom"}
+
+#paging
+paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging"}
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging"}
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
