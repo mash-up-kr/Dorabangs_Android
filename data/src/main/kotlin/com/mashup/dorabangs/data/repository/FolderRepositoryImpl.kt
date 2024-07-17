@@ -44,7 +44,7 @@ class FolderRepositoryImpl @Inject constructor(
         runCatching {
             remoteDataSource.deleteFolder(folderId = folderId)
             DoraSampleResponse(isSuccess = true)
-        }.getOrElse {
-            DoraSampleResponse(isSuccess = true)
+        }.getOrElse { throwable ->
+            DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
         }
 }
