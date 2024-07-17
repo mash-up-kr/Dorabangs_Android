@@ -51,13 +51,7 @@ fun DoraLinkSaveSelectFolderScreen(
             DoraSelectableFolderListItems(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState()),
-                items = listOf(
-                    DoraSelectableFolderItem(
-                        itemName = stringResource(id = R.string.link_save_add_new_folder),
-                        isSelected = false,
-                        vector = NewFolder.IcNewFolder,
-                    ),
-                ) + state.folderList.toSelectableItems(),
+                items = state.folderList.toSelectableItems(),
                 onClickItem = onClickItem,
             )
         }

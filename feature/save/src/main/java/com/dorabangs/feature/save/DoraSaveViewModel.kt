@@ -9,13 +9,13 @@ import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.save.DoraUrlCheckUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import javax.inject.Inject
 
 @HiltViewModel
 class DoraSaveViewModel @Inject constructor(
@@ -33,6 +33,16 @@ class DoraSaveViewModel @Inject constructor(
 
     private fun getFolderList() = viewModelScope.doraLaunch {
         val list = getFolderListUseCase.invoke()
+        val firstItem = listOf(
+            SelectableFolder(
+                id = null,
+                name = "새 폴더 추가",
+                type = "",
+                createdAt = null,
+                postCount = null,
+                isSelected = false
+            )
+        )
         val newList = (list.defaultFolders.reversed() + list.customFolders).let { mergedList ->
             mergedList.mapIndexed { index, item ->
                 SelectableFolder(
@@ -48,7 +58,7 @@ class DoraSaveViewModel @Inject constructor(
         intent {
             reduce {
                 state.copy(
-                    folderList = newList,
+                    folderList = firstItem + newList,
                 )
             }
         }
@@ -78,16 +88,23 @@ class DoraSaveViewModel @Inject constructor(
         )
     }
 
+    /**
+     * 0번 째 있는 새 폴더 추가는 클릭이 안됨
+     */
     fun updateSelectedFolder(index: Int) = intent {
         reduce {
-            state.folderList.mapIndexed { listIndex, item ->
-                if (listIndex == index - 1) {
-                    item.copy(isSelected = true)
-                } else item.copy(isSelected = false)
-            }.let { newList ->
-                state.copy(
-                    folderList = newList,
-                )
+            if (index != 0){
+                state.folderList.mapIndexed { listIndex, item ->
+                    if (listIndex == index) {
+                        item.copy(isSelected = true)
+                    } else item.copy(isSelected = false)
+                }.let { newList ->
+                    state.copy(
+                        folderList = newList,
+                    )
+                }
+            } else {
+                state
             }
         }
     }
