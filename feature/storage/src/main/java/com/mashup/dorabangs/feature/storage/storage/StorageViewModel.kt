@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
-import com.mashup.dorabangs.domain.usecase.folder.GetFolderList
+import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StorageViewModel @Inject constructor(
-    private val getFolderListUseCase: GetFolderList,
+    private val getFolderListUseCase: GetFolderListUseCase,
     private val deleteFolderUseCase: DeleteFolderUseCase,
 ) : ViewModel(), ContainerHost<StorageListState, StorageListSideEffect> {
     override val container = container<StorageListState, StorageListSideEffect>(StorageListState())
