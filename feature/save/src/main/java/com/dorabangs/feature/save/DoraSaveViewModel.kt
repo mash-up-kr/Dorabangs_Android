@@ -33,7 +33,7 @@ class DoraSaveViewModel @Inject constructor(
 
     private fun getFolderList() = viewModelScope.doraLaunch {
         val list = getFolderListUseCase.invoke()
-        val newList = (list.defaultFolders + list.customFolders).let { mergedList ->
+        val newList = (list.defaultFolders.reversed() + list.customFolders).let { mergedList ->
             mergedList.mapIndexed { index, item ->
                 SelectableFolder(
                     id = item.id,
