@@ -33,6 +33,6 @@ fun DoraLinkSaveSelectFolderRoute(
             onClickSaveButton.invoke()
         },
         onClickBackIcon = onClickBackIcon,
-        onClickItem = viewModel::clickSelectableItem
+        onClickItem = viewModel::clickSelectableItem,
     )
 }
