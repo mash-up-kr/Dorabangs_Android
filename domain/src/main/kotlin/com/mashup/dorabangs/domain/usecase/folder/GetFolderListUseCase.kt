@@ -4,7 +4,7 @@ import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.repository.FolderRepository
 import javax.inject.Inject
 
-class GetFolderList @Inject constructor(
+class GetFolderListUseCase @Inject constructor(
     private val folderRepository: FolderRepository,
 ) {
 
