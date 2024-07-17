@@ -34,24 +34,21 @@ class FolderManageViewModel @Inject constructor(
         }
     }
 
-    fun createOrEditFolder(folderName: String, folderType: FolderManageType, folderId: String = "") = viewModelScope.doraLaunch {
-        val (isSuccess, message) = when (folderType) {
+    fun createOrEditFolder(folderName: String, folderType: FolderManageType, folderId: String) = viewModelScope.doraLaunch {
+        val isSuccessNewFolder = when (folderType) {
             FolderManageType.CREATE -> {
-                val isSuccessCreateFolder = createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
-                isSuccessCreateFolder.isSuccess to isSuccessCreateFolder.errorMsg
+                createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
             }
             FolderManageType.CHANGE -> {
-                // TODO - Folder목록 조회 API 붙인 후 folderId 연결
-                val editFolderInfo = editFolderNameUseCase.invoke(folderName = NewFolderName(name = folderName), folderId = folderId)
-                editFolderInfo.completeFolderInfo.id.isNotEmpty() to editFolderInfo.errorMsg
+                editFolderNameUseCase.invoke(folderName = NewFolderName(name = folderName), folderId = folderId)
             }
         }
-        if (isSuccess) {
+        if (isSuccessNewFolder.isSuccess) {
             intent {
                 postSideEffect(FolderManageSideEffect.NavigateToStorage)
             }
         } else {
-            setTextHelperEnable(isEnable = true, helperMessage = message)
+            setTextHelperEnable(isEnable = true, helperMessage = isSuccessNewFolder.errorMsg)
         }
     }
 

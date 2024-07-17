@@ -12,23 +12,30 @@ import com.mashup.dorabangs.feature.folders.model.FolderManageType
 
 fun NavController.navigateToStorageFolderManage(
     folderManageType: FolderManageType,
+    folderId: String,
     navOptions: NavOptions? = null,
-) = navigate("${NavigationRoute.StorageScreen.StorageFolderManageScreen.route}/${folderManageType.name}", navOptions)
+) = navigate("${NavigationRoute.StorageScreen.StorageFolderManageScreen.route}/${folderManageType.name}/$folderId", navOptions)
 
 fun NavGraphBuilder.storageFolderManageNavigation(
     onClickBackIcon: () -> Unit = {},
 ) {
     composable(
-        route = "${NavigationRoute.StorageScreen.StorageFolderManageScreen.route}/{folderManageType}",
+        route = "${NavigationRoute.StorageScreen.StorageFolderManageScreen.route}/{folderManageType}/{folderId}",
         arguments = listOf(
             navArgument("folderManageType") {
                 type = NavType.StringType
                 defaultValue = FolderManageType.CHANGE.name
             },
+            navArgument("folderId") {
+                type = NavType.StringType
+                defaultValue = ""
+            },
         ),
     ) { navBackStackEntry ->
         val folderManageType = navBackStackEntry.arguments?.getString("folderManageType") ?: FolderManageType.CHANGE.name
+        val folderId = navBackStackEntry.arguments?.getString("folderId").orEmpty()
         StorageFolderManageRoute(
+            folderId = folderId,
             folderManageType = folderManageType,
             onClickBackIcon = onClickBackIcon,
         )
