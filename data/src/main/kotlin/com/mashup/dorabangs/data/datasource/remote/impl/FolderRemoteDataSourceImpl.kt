@@ -4,6 +4,7 @@ import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.model.EditFolderNameResponseModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
+import com.mashup.dorabangs.data.model.LinksFromFolderListResponseModel
 import com.mashup.dorabangs.data.model.toData
 import com.mashup.dorabangs.data.network.service.FolderService
 import com.mashup.dorabangs.domain.model.NewFolderName
@@ -26,4 +27,13 @@ class FolderRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun editFolderName(folderName: NewFolderName, folderId: String): EditFolderNameResponseModel =
         folderService.editFolderName(folderId, folderName.toData())
+
+    override suspend fun getLinksFromFolder(folderId: String, page: Int, order: String, unread: Boolean): LinksFromFolderListResponseModel =
+        folderService.getLinkFolderList(
+            folderId = folderId,
+            page = page,
+            order = order,
+            unread = unread
+        )
+
 }

@@ -10,6 +10,7 @@ import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.NewFolderName
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.model.SavedLinkListFromFolder
 import com.mashup.dorabangs.domain.repository.FolderRepository
 import javax.inject.Inject
 
@@ -42,4 +43,17 @@ class FolderRepositoryImpl @Inject constructor(
             val errorMsg = throwable.message.orEmpty()
             errorMsg.FailEditFolder()
         }
+
+    override suspend fun getLinksFromFolder(
+        folderId: String,
+        page: Int,
+        order: String,
+        unread: Boolean
+    ): SavedLinkListFromFolder
+        = remoteDataSource.getLinksFromFolder(
+            folderId = folderId,
+            page = page,
+            order = order,
+            unread = unread
+        ).toDomain()
 }
