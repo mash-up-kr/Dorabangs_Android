@@ -78,7 +78,7 @@ class DoraSaveViewModel @Inject constructor(
         )
     }
 
-    fun updateList(index: Int) = intent {
+    fun updateSelectedFolder(index: Int) = intent {
         reduce {
             state.folderList.mapIndexed { listIndex, item ->
                 if (listIndex == index - 1) {

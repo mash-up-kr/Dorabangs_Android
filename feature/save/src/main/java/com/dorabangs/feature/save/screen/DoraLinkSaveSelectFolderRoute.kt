@@ -20,7 +20,7 @@ fun DoraLinkSaveSelectFolderRoute(
     if (state.isError) { onClickBackIcon.invoke() }
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is DoraSaveSideEffect.ClickItem -> viewModel.updateList(index = sideEffect.index)
+            is DoraSaveSideEffect.ClickItem -> viewModel.updateSelectedFolder(index = sideEffect.index)
             is DoraSaveSideEffect.ClickSaveButton -> viewModel.saveLink(id = sideEffect.id)
         }
     }
