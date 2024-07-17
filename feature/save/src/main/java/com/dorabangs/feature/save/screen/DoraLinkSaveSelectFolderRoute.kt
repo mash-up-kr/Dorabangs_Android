@@ -28,8 +28,11 @@ fun DoraLinkSaveSelectFolderRoute(
     DoraLinkSaveSelectFolderScreen(
         modifier = modifier,
         state = state,
-        viewModel = viewModel,
-        onClickSaveButton = onClickSaveButton,
+        onClickSaveButton = {
+            viewModel.clickSaveButton()
+            onClickSaveButton.invoke()
+        },
         onClickBackIcon = onClickBackIcon,
+        onClickItem = viewModel::clickSelectableItem
     )
 }

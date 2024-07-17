@@ -13,9 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.dorabangs.feature.save.DoraSaveState
-import com.dorabangs.feature.save.DoraSaveViewModel
 import com.dorabangs.feature.save.R
 import com.dorabangs.feature.save.SelectableFolder
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
@@ -29,9 +27,9 @@ import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 @Composable
 fun DoraLinkSaveSelectFolderScreen(
     state: DoraSaveState,
-    viewModel: DoraSaveViewModel,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
+    onClickItem: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -55,14 +53,12 @@ fun DoraLinkSaveSelectFolderScreen(
                     .verticalScroll(state = rememberScrollState()),
                 items = listOf(
                     DoraSelectableFolderItem(
-                        itemName = "새 폴더 추가",
+                        itemName = stringResource(id = R.string.link_save_add_new_folder),
                         isSelected = false,
                         vector = NewFolder.IcNewFolder,
                     ),
                 ) + state.folderList.toSelectableItems(),
-                onClickItem = { searchIndex ->
-                    viewModel.clickSelectableItem(index = searchIndex)
-                },
+                onClickItem = onClickItem,
             )
         }
         Column {
@@ -72,10 +68,7 @@ fun DoraLinkSaveSelectFolderScreen(
                     .padding(all = 20.dp),
                 buttonText = stringResource(id = R.string.link_save_button_text),
                 enabled = state.folderList.any { it.isSelected },
-                onClickButton = {
-                    viewModel.clickSaveButton()
-                    onClickSaveButton.invoke()
-                },
+                onClickButton = onClickSaveButton,
             )
         }
     }
@@ -98,6 +91,6 @@ fun DoraLinkSaveSelectFolderScreenPreview() {
         ),
         onClickBackIcon = {},
         onClickSaveButton = {},
-        viewModel = hiltViewModel(),
+        onClickItem = {},
     )
 }
