@@ -9,10 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleStartEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.dorabangs.feature.save.DoraSaveState
 import com.dorabangs.feature.save.R
 import com.dorabangs.feature.save.SelectableFolder
@@ -30,8 +35,27 @@ fun DoraLinkSaveSelectFolderScreen(
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
     onClickItem: (Int) -> Unit,
+    getInitialFolder: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleState = lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
+    LaunchedEffect(key1 = lifecycleState) {
+        when (lifecycleState.value) {
+            Lifecycle.State.DESTROYED -> println("tjrwn current state is DESTROY")
+            Lifecycle.State.INITIALIZED -> println("tjrwn current state is INITIALIZED")
+            Lifecycle.State.CREATED -> println("tjrwn current state is CRETED")
+            Lifecycle.State.STARTED -> println("tjrwn current state is STARTED")
+            Lifecycle.State.RESUMED -> println("tjrwn current state is RESUMED")
+        }
+    }
+    LifecycleStartEffect(key1 = Unit) {
+        getInitialFolder()
+        onStopOrDispose {
+            /* no-op */
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -86,5 +110,6 @@ fun DoraLinkSaveSelectFolderScreenPreview() {
         onClickBackIcon = {},
         onClickSaveButton = {},
         onClickItem = {},
+        getInitialFolder = {},
     )
 }

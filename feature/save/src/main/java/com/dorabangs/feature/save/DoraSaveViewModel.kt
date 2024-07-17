@@ -4,18 +4,19 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
+import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.save.DoraUrlCheckUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import javax.inject.Inject
 
 @HiltViewModel
 class DoraSaveViewModel @Inject constructor(
@@ -24,26 +25,29 @@ class DoraSaveViewModel @Inject constructor(
     private val getFolderListUseCase: GetFolderListUseCase,
     private val postSaveLinkUseCase: SaveLinkUseCase,
 ) : ViewModel(), ContainerHost<DoraSaveState, DoraSaveSideEffect> {
+    companion object {
+        private const val DEFAULT_TYPE = "default"
+        private const val ADD_NEW_FOLDER = "새 폴더 추가"
+    }
 
     init {
-        getFolderList()
         val copiedUrl = savedStateHandle.get<String>("copiedUrl").orEmpty()
         if (copiedUrl.isNotBlank()) checkUrl(copiedUrl)
     }
 
-    private fun getFolderList() = viewModelScope.doraLaunch {
+    fun getFolderList() = viewModelScope.doraLaunch {
         val list = getFolderListUseCase.invoke()
         val firstItem = listOf(
             SelectableFolder(
                 id = null,
-                name = "새 폴더 추가",
+                name = ADD_NEW_FOLDER,
                 type = "",
                 createdAt = null,
                 postCount = null,
-                isSelected = false
-            )
+                isSelected = false,
+            ),
         )
-        val newList = (list.defaultFolders.reversed() + list.customFolders).let { mergedList ->
+        val newList = (filterDefaultList(list) + list.customFolders).let { mergedList ->
             mergedList.mapIndexed { index, item ->
                 SelectableFolder(
                     id = item.id,
@@ -63,6 +67,15 @@ class DoraSaveViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * 서버 통신해서 나온 default folders 중에서 나중에 읽을 링크만 사용
+     */
+    private fun filterDefaultList(list: FolderList) =
+        listOf(
+            list.defaultFolders.firstOrNull { it.type == DEFAULT_TYPE }
+                ?: error("여기는 서버 잘못임 우리 탓 아님 ㄹㅇ"),
+        )
 
     override val container: Container<DoraSaveState, DoraSaveSideEffect> =
         container(DoraSaveState())
@@ -93,7 +106,7 @@ class DoraSaveViewModel @Inject constructor(
      */
     fun updateSelectedFolder(index: Int) = intent {
         reduce {
-            if (index != 0){
+            if (index != 0) {
                 state.folderList.mapIndexed { listIndex, item ->
                     if (listIndex == index) {
                         item.copy(isSelected = true)
