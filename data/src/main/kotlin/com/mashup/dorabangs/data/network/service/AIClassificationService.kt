@@ -1,6 +1,6 @@
 package com.mashup.dorabangs.data.network.service
 
-import com.mashup.dorabangs.data.model.AIClassificationFolderResponseModel
+import com.mashup.dorabangs.data.model.AIClassificationFoldersResponseModel
 import com.mashup.dorabangs.data.model.AIClassificationPostsResponseModel
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -11,7 +11,7 @@ import retrofit2.http.Query
 interface AIClassificationService {
 
     @GET("classification/folders")
-    suspend fun getAIClassificationsFolderList(): AIClassificationFolderResponseModel
+    suspend fun getAIClassificationsFolderList(): AIClassificationFoldersResponseModel
 
     @GET("classification/posts")
     suspend fun getAIClassificationPosts(
