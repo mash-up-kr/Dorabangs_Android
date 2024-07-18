@@ -13,6 +13,7 @@ java {
 dependencies {
     implementation(libs.kotlin.core)
     implementation(libs.javax.inject)
+    implementation(libs.paging.common)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
