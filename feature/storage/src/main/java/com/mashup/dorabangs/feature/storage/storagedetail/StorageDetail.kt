@@ -13,6 +13,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import org.orbitmvi.orbit.compose.collectAsState
@@ -28,6 +31,7 @@ fun StorageDetailRoute(
     val listState = rememberLazyListState()
     val overlapHeightPx = with(LocalDensity.current) { MaxToolbarHeight.toPx() - MinToolbarHeight.toPx() }
     val state by storageDetailViewModel.collectAsState()
+    val linksPagingList = state.pagingList.collectAsLazyPagingItems()
 
     val isCollapsed: Boolean by remember {
         derivedStateOf {
@@ -38,6 +42,7 @@ fun StorageDetailRoute(
 
     StorageDetailScreen(
         state = state,
+        linksPagingList = linksPagingList,
         listState = listState,
         isCollapsed = isCollapsed,
         onClickBackIcon = onClickBackIcon,
@@ -48,6 +53,7 @@ fun StorageDetailRoute(
 
 @Composable
 fun StorageDetailScreen(
+    linksPagingList: LazyPagingItems<FeedCardUiModel>,
     modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),
@@ -68,6 +74,7 @@ fun StorageDetailScreen(
         )
         StorageDetailList(
             listState = listState,
+            linksPagingList = linksPagingList,
             state = state,
             onClickBackIcon = onClickBackIcon,
             onClickSortedIcon = onClickSortedIcon,
