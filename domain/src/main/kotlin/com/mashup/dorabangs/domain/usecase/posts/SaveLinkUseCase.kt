@@ -4,7 +4,7 @@ import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.repository.PostsRepository
 import javax.inject.Inject
 
-class SaveLink @Inject constructor(
+class SaveLinkUseCase @Inject constructor(
     private val postsRepository: PostsRepository,
 ) {
 

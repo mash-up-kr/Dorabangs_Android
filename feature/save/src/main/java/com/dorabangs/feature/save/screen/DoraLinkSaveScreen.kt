@@ -46,7 +46,7 @@ fun DoraLinkSaveScreen(
                 .padding(horizontal = 20.dp),
         ) {
             DoraTextField(
-                text = "",
+                text = state.urlLink,
                 hintText = stringResource(id = R.string.link_save_hint_text),
                 labelText = stringResource(id = R.string.link_save_label_text),
                 helperText = stringResource(id = R.string.link_save_error_text),

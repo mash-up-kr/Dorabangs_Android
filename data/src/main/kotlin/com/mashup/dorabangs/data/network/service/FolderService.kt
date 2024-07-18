@@ -2,11 +2,11 @@ package com.mashup.dorabangs.data.network.service
 
 import com.mashup.dorabangs.data.model.CreateFolderRequestModel
 import com.mashup.dorabangs.data.model.EditFolderNameRequestModel
-import com.mashup.dorabangs.data.model.EditFolderNameResponseModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
 import com.mashup.dorabangs.data.model.LinksFromFolderResponseModel
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -28,9 +28,9 @@ interface FolderService {
 
     @PATCH("folders/{folderId}")
     suspend fun editFolderName(
-        @Path("id") folderId: String,
+        @Path("folderId") folderId: String,
         @Body editFolderNameRequest: EditFolderNameRequestModel,
-    ): EditFolderNameResponseModel
+    )
 
     @GET("folders/{folderId}/posts")
     suspend fun getLinkFolderList(
@@ -40,4 +40,9 @@ interface FolderService {
         @Query("order") order: String,
         @Query("unread") unread: Boolean,
     ): LinksFromFolderResponseModel
+
+    @DELETE("folders/{folderId}")
+    suspend fun deleteFolder(
+        @Path("folderId") folderId: String,
+    )
 }

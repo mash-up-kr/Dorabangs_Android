@@ -51,7 +51,9 @@ fun MainNavHost(
         )
         storageNavigation(
             navigateToStorageDetail = { appState.navController.navigateToStorageDetail() },
-            navigateToFolderManage = { folderManageType -> appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType) },
+            navigateToFolderManage = { folderManageType, folderId ->
+                appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType, folderId = folderId)
+            },
         )
         storageFolderManageNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
@@ -70,8 +72,7 @@ fun MainNavHost(
                 appState.navController.popBackStack()
             },
             onClickSaveButton = {
-                // TODO 다하고 저장누르면 서버에 정보 날리고 홈으로 이동
-                // TODO 클릭 때 데이터 스토어에 저장해서 다시 클립보드 안뜨게 하기
+                // TODO 클릭 때 데이터 스토어에 저장해서 다시 클립보드 안뜨게 하기?
                 appState.navController.navigateToHome(
                     navOptions = navOptions {
                         popUpTo(appState.navController.graph.id) {
@@ -79,6 +80,9 @@ fun MainNavHost(
                         }
                     },
                 )
+            },
+            onClickAddNewFolder = {
+                appState.navController.navigateToHomeCrateFolder()
             },
         )
     }

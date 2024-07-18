@@ -2,12 +2,9 @@ package com.mashup.dorabangs.data.repository
 
 import androidx.paging.PagingData
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
-import com.mashup.dorabangs.data.model.CompleteEditFolder
-import com.mashup.dorabangs.data.model.FailEditFolder
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
-import com.mashup.dorabangs.domain.model.EditCompleteFolderInfo
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.NewFolderName
@@ -39,12 +36,20 @@ class FolderRepositoryImpl @Inject constructor(
     override suspend fun editFolderName(
         newFolderName: NewFolderName,
         folderId: String,
-    ): EditCompleteFolderInfo =
+    ): DoraSampleResponse =
         runCatching {
-            remoteDataSource.editFolderName(folderName = newFolderName, folderId = folderId).CompleteEditFolder()
+            remoteDataSource.editFolderName(folderName = newFolderName, folderId = folderId)
+            DoraSampleResponse(isSuccess = true)
         }.getOrElse { throwable ->
-            val errorMsg = throwable.message.orEmpty()
-            errorMsg.FailEditFolder()
+            DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
+        }
+
+    override suspend fun deleteFolder(folderId: String): DoraSampleResponse =
+        runCatching {
+            remoteDataSource.deleteFolder(folderId = folderId)
+            DoraSampleResponse(isSuccess = true)
+        }.getOrElse { throwable ->
+            DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
         }
 
     override suspend fun getLinksFromFolder(

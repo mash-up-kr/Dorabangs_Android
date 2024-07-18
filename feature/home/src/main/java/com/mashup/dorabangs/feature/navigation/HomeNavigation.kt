@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.navigation
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -33,7 +31,6 @@ fun NavGraphBuilder.homeNavigation(
     ) { backStackEntry ->
 
         val homeViewModel: HomeViewModel = hiltViewModel()
-        Log.d(TAG, "homeNavigationbackStackEntry: ${backStackEntry.savedStateHandle.get<Boolean>("isVisibleMovingBottomSheet")}")
         HomeRoute(
             viewModel = homeViewModel,
             navigateToClassification = navigateToClassification,
