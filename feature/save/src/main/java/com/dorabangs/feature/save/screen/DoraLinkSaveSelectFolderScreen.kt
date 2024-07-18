@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,8 +31,13 @@ fun DoraLinkSaveSelectFolderScreen(
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
     onClickItem: (Int) -> Unit,
+    getInitialFolder: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    LaunchedEffect(key1 = Unit) {
+        getInitialFolder()
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -51,13 +57,7 @@ fun DoraLinkSaveSelectFolderScreen(
             DoraSelectableFolderListItems(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState()),
-                items = listOf(
-                    DoraSelectableFolderItem(
-                        itemName = stringResource(id = R.string.link_save_add_new_folder),
-                        isSelected = false,
-                        vector = NewFolder.IcNewFolder,
-                    ),
-                ) + state.folderList.toSelectableItems(),
+                items = state.folderList.toSelectableItems(),
                 onClickItem = onClickItem,
             )
         }
@@ -92,5 +92,6 @@ fun DoraLinkSaveSelectFolderScreenPreview() {
         onClickBackIcon = {},
         onClickSaveButton = {},
         onClickItem = {},
+        getInitialFolder = {},
     )
 }
