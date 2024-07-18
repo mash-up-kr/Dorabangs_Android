@@ -5,7 +5,7 @@ import com.mashup.dorabangs.data.model.EditFolderNameRequestModel
 import com.mashup.dorabangs.data.model.EditFolderNameResponseModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
-import com.mashup.dorabangs.data.model.LinksFromFolderListResponseModel
+import com.mashup.dorabangs.data.model.LinksFromFolderResponseModel
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -38,6 +38,6 @@ interface FolderService {
         @Query("page") page: Int,
         @Query("limit") limit: Int = 10,
         @Query("order") order: String,
-        @Query("unread") unread: Boolean
-    ): LinksFromFolderListResponseModel
+        @Query("unread") unread: Boolean,
+    ): LinksFromFolderResponseModel
 }

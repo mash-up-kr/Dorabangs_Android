@@ -1,14 +1,15 @@
 package com.mashup.dorabangs.data.model
 import com.mashup.dorabangs.domain.model.LinkKeywordInfo
+import com.mashup.dorabangs.domain.model.PageData
+import com.mashup.dorabangs.domain.model.PagingInfo
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
-import com.mashup.dorabangs.domain.model.SavedLinkListFromFolder
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LinksFromFolderListResponseModel(
+data class LinksFromFolderResponseModel(
     val hasNext: Boolean,
     val list: List<SavedLinkInfo>,
-    val total: Int
+    val total: Int,
 )
 
 @Serializable
@@ -21,20 +22,22 @@ data class SavedLinkInfo(
     val keywords: List<LinkKeyword>,
     val title: String,
     val url: String,
-    val userId: String
+    val userId: String,
 )
 
 @Serializable
 data class LinkKeyword(
     val id: String,
-    val name: String
+    val name: String,
 )
 
-fun LinksFromFolderListResponseModel.toDomain(): SavedLinkListFromFolder {
-    return SavedLinkListFromFolder(
-        hasNext = hasNext,
-        total = total,
-        list = list.map {it.toDomain() }
+fun LinksFromFolderResponseModel.toDomain(): PageData<List<SavedLinkDetailInfo>> {
+    return PageData(
+        data = list.map { it.toDomain() },
+        pagingInfo = PagingInfo(
+            total = total,
+            hasNext = hasNext,
+        ),
     )
 }
 
@@ -48,13 +51,13 @@ fun SavedLinkInfo.toDomain(): SavedLinkDetailInfo {
         keywords = keywords.map { it.toDomain() },
         title = title,
         url = url,
-        userId = userId
+        userId = userId,
     )
 }
 
 fun LinkKeyword.toDomain(): LinkKeywordInfo {
     return LinkKeywordInfo(
         id = id,
-        name = name
+        name = name,
     )
 }
