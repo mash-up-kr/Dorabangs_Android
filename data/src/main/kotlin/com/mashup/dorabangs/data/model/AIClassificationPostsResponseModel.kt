@@ -9,5 +9,5 @@ data class AIClassificationPostsResponseModel(
 )
 
 fun AIClassificationPostsResponseModel.toDomain() = AIClassificationPosts(
-    list = this.list
+    list = this.list,
 )

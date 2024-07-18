@@ -19,7 +19,7 @@ data class AIClassificationFolderResponseModel(
 
 fun AIClassificationFoldersResponseModel.toDomain() = AIClassificationFolders(
     totalCounts = this.totalCounts,
-    list = this.list.map { it.toDomain() }
+    list = this.list.map { it.toDomain() },
 )
 
 fun AIClassificationFolderResponseModel.toDomain() = AIClassificationFolder(

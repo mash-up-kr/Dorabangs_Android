@@ -18,7 +18,7 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
     override suspend fun getAIClassificationPosts(
         page: Int?,
         limit: Int?,
-        order: String?
+        order: String?,
     ): AIClassificationPosts =
         service.getAIClassificationPosts(
             page = page,
@@ -35,7 +35,7 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
         folderId: String,
         page: Int?,
         limit: Int?,
-        order: String?
+        order: String?,
     ): AIClassificationPosts =
         service.getAIClassificationPostsByFolder(
             folderId = folderId,
@@ -46,6 +46,6 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun deletePostFromAIClassification(postId: String) =
         service.deletePostFromAIClassification(
-            postId = postId
+            postId = postId,
         )
 }

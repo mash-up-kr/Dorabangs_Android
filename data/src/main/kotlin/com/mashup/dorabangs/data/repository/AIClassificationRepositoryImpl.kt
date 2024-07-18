@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class AIClassificationRepositoryImpl @Inject constructor(
     private val remoteDataSource: AIClassificationRemoteDataSource,
-): AIClassificationRepository {
+) : AIClassificationRepository {
 
     override suspend fun getAIClassificationsFolderList(): AIClassificationFolders =
         remoteDataSource.getAIClassificationsFolderList()
@@ -16,7 +16,7 @@ class AIClassificationRepositoryImpl @Inject constructor(
     override suspend fun getAIClassificationPosts(
         page: Int?,
         limit: Int?,
-        order: String?
+        order: String?,
     ): AIClassificationPosts =
         remoteDataSource.getAIClassificationPosts(
             page = page,
@@ -31,7 +31,7 @@ class AIClassificationRepositoryImpl @Inject constructor(
         folderId: String,
         page: Int?,
         limit: Int?,
-        order: String?
+        order: String?,
     ): AIClassificationPosts =
         remoteDataSource.getAIClassificationPostsByFolder(
             folderId = folderId,
