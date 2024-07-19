@@ -22,7 +22,7 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
      */
     private suspend fun checkUrl(urlLink: String): DoraUrlCheckResponse = withContext(Dispatchers.IO) {
         val validUrlLink =
-            if (urlLink.startsWith("https://").not()) "https://${urlLink}" else urlLink
+            if (urlLink.startsWith("https://").not()) "https://$urlLink" else urlLink
         return@withContext runCatching {
             var connection = Jsoup.connect(validUrlLink)
                 .followRedirects(false)
