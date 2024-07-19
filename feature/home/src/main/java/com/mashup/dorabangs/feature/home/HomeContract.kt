@@ -9,7 +9,7 @@ data class HomeState(
     val tapElements: List<DoraChipUiModel> = emptyList(),
     val feedCards: List<FeedCardUiModel> = emptyList(),
     val selectedIndex: Int = 0,
-    val isShowMoreButtonSheet: Boolean = true,
+    val isShowMoreButtonSheet: Boolean = false,
     val isShowDialog: Boolean = false,
     val isShowMovingFolderSheet: Boolean = false,
     val homeCreateFolder: HomeCreateFolder = HomeCreateFolder(),
@@ -25,4 +25,5 @@ data class HomeCreateFolder(
     val folderName: String = "",
     val helperEnable: Boolean = false,
     val helperMessage: String = "",
+    val urlLink: String = "",
 )
