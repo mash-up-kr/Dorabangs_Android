@@ -49,3 +49,13 @@ fun HomeDoraSnackBar(
         dismissAction = { dismissAction(text) },
     )
 }
+
+// 1. https://www.naver.com -> 잘 입력했을 때 그대로
+// 2. http://www.naver.com -> http로 입력했을 때
+// 3. www.naver.com -> 아무것도 없이 들어왔을 때
+fun String.checkAndReplacePrefix(): String {
+    if (startsWith("https")) return this
+    if (startsWith("http")) return this
+    if (contains("https").not() && contains("http").not()) return "https://${this}"
+    return ""
+}
