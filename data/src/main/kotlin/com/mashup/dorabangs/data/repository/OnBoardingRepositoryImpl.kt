@@ -11,5 +11,4 @@ class OnBoardingRepositoryImpl @Inject constructor(
 
     override suspend fun getOnboardingKeywords(limit: Int?) =
         remoteDataSource.getOnboardingKeywords(limit)
-            .toDomain()
 }
