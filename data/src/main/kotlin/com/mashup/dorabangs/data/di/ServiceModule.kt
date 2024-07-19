@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.data.di
 
+import com.mashup.dorabangs.data.network.service.AIClassificationService
 import com.mashup.dorabangs.data.network.service.FolderService
 import com.mashup.dorabangs.data.network.service.PostsService
 import com.mashup.dorabangs.data.network.service.UserService
@@ -32,4 +33,10 @@ object ServiceModule {
     fun providesPostsService(
         retrofit: Retrofit,
     ): PostsService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun providesAIClassificationService(
+        retrofit: Retrofit,
+    ): AIClassificationService = retrofit.create()
 }

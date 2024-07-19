@@ -16,9 +16,9 @@ interface PostsService {
     @GET("posts")
     suspend fun getPosts(
         @Query("page") page: Int? = null,
-        @Query("page") limit: Int? = null,
-        @Query("page") order: String? = null,
-        @Query("page") favorite: Boolean? = null,
+        @Query("limit") limit: Int? = null,
+        @Query("order") order: String? = null,
+        @Query("favorite") favorite: Boolean? = null,
     ): PostsResponseModel
 
     @POST("posts")
