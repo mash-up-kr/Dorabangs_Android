@@ -12,14 +12,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dorabangs.feature.save.DoraSaveState
 import com.dorabangs.feature.save.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
+import com.mashup.dorabangs.domain.utils.isValidUrl
 
 @Composable
 fun DoraLinkSaveScreen(
+    state: DoraSaveState,
+    onValueChanged: (String) -> Unit,
     onClickSaveButton: () -> Unit,
     onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
@@ -42,12 +46,13 @@ fun DoraLinkSaveScreen(
                 .padding(horizontal = 20.dp),
         ) {
             DoraTextField(
-                text = "",
+                text = state.urlLink,
                 hintText = stringResource(id = R.string.link_save_hint_text),
                 labelText = stringResource(id = R.string.link_save_label_text),
                 helperText = stringResource(id = R.string.link_save_error_text),
-                helperEnabled = true, // TODO 서버통신 이후에 알 수 있음
-                counterEnabled = true,
+                helperEnabled = state.isError,
+                counterEnabled = false,
+                onValueChanged = onValueChanged,
             )
             Spacer(modifier = Modifier.height(20.dp))
             DoraButtons.DoraBtnMaxFull(
@@ -55,7 +60,7 @@ fun DoraLinkSaveScreen(
                     .fillMaxWidth()
                     .padding(vertical = 20.dp),
                 buttonText = stringResource(R.string.link_save_button_text),
-                enabled = true,
+                enabled = state.isError.not() && state.urlLink.isValidUrl(),
                 onClickButton = onClickSaveButton,
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -67,7 +72,9 @@ fun DoraLinkSaveScreen(
 @Preview
 fun DoraLinkSaveScreenPreview() {
     DoraLinkSaveScreen(
-        onClickBackIcon = {},
+        onValueChanged = {},
         onClickSaveButton = {},
+        onClickBackIcon = {},
+        state = DoraSaveState(),
     )
 }

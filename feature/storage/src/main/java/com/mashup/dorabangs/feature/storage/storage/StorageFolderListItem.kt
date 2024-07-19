@@ -25,32 +25,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import com.mashup.dorabangs.feature.storage.storage.model.StorageFolderItem
+import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
 
 @Composable
 fun StorageFolderList(
-    customList: List<StorageFolderItem> = StorageListState.customFolderList(),
-    navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
-    onClickAddMoreButton: (StorageFolderItem) -> Unit = {},
+    storageState: StorageListState,
+    navigateToStorageDetail: (Folder) -> Unit = {},
+    onClickSettingButton: (Folder) -> Unit = {},
 ) {
     LazyColumn(
         modifier = Modifier.padding(horizontal = 20.dp),
     ) {
         item {
             Spacer(modifier = Modifier.height(20.dp))
-            StorageDefaultFolder()
+            StorageDefaultFolder(
+                defaultFolderList = storageState.defaultStorageFolderList,
+            )
             Spacer(modifier = Modifier.height(20.dp))
         }
-        itemsIndexed(customList) { idx, item ->
+        itemsIndexed(storageState.customStorageFolderList) { idx, item ->
             StorageListItem(
                 item = item,
                 isFirstItem = idx == 0,
-                isLastItem = idx == customList.lastIndex,
+                isLastItem = idx == storageState.customStorageFolderList.lastIndex,
                 navigateToStorageDetail = { navigateToStorageDetail(item) },
-                onClickAddMoreButton = { onClickAddMoreButton(item) },
+                onClickSettingButton = { onClickSettingButton(item) },
             )
-            if (idx != customList.lastIndex) {
+            if (idx != storageState.customStorageFolderList.lastIndex) {
                 HorizontalDivider(
                     modifier =
                     Modifier
@@ -67,21 +69,21 @@ fun StorageFolderList(
 
 @Composable
 fun StorageDefaultFolder(
-    list: List<StorageFolderItem> = StorageListState.defaultFolderList(),
-    navigateToStorageDetail: (StorageFolderItem) -> Unit = {},
+    defaultFolderList: List<Folder>,
+    navigateToStorageDetail: (Folder) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth(),
     ) {
-        list.forEachIndexed { idx, item ->
+        defaultFolderList.forEachIndexed { idx, item ->
             StorageListItem(
                 item = item,
                 isFirstItem = idx == 0,
-                isLastItem = idx == list.lastIndex,
+                isLastItem = idx == defaultFolderList.lastIndex,
                 navigateToStorageDetail = { navigateToStorageDetail(item) },
             )
-            if (idx != list.lastIndex) {
+            if (idx != defaultFolderList.lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier
                         .height(0.5.dp)
@@ -94,12 +96,12 @@ fun StorageDefaultFolder(
 
 @Composable
 fun StorageListItem(
-    item: StorageFolderItem,
+    item: Folder,
     isDefault: Boolean = false,
     isFirstItem: Boolean = false,
     isLastItem: Boolean = false,
     navigateToStorageDetail: () -> Unit = {},
-    onClickAddMoreButton: () -> Unit = {},
+    onClickSettingButton: () -> Unit = {},
 ) {
     val shape =
         if (isFirstItem) {
@@ -129,7 +131,7 @@ fun StorageListItem(
                     .padding(start = 12.dp)
                     .align(Alignment.CenterVertically),
                 textAlign = TextAlign.Center,
-                text = item.folderTitle.title,
+                text = item.name,
                 color = DoraColorTokens.G9,
                 style = DoraTypoTokens.caption3Medium,
             )
@@ -152,7 +154,7 @@ fun StorageListItem(
                     androidx.core.R.drawable.ic_call_answer
                 }
             Icon(
-                modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickAddMoreButton() },
+                modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickSettingButton() },
                 painter = painterResource(id = icon),
                 contentDescription = "folderIcon",
             )
@@ -163,5 +165,7 @@ fun StorageListItem(
 @Preview
 @Composable
 fun PreviewStorageFolderList() {
-    StorageFolderList()
+    StorageFolderList(
+        storageState = StorageListState(),
+    )
 }

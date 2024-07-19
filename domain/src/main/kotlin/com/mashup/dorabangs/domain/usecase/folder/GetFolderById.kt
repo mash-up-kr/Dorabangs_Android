@@ -8,7 +8,7 @@ class GetFolderById @Inject constructor(
     private val folderRepository: FolderRepository,
 ) {
 
-    suspend operator fun invoke(folderId: String): Folder? {
+    suspend operator fun invoke(folderId: String): Folder {
         return folderRepository.getFolderById(folderId)
     }
 }

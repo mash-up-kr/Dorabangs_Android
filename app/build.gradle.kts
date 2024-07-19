@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.google.gms.service)
 }
 
 android {
@@ -32,7 +33,6 @@ android {
     buildTypes {
         debug {
             isDebuggable = true
-            applicationIdSuffix = ".debug"
             isMinifyEnabled = false
             buildConfigField("Boolean", "DEBUG_MODE", "true")
         }
@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":feature:storage"))
     implementation(project(":feature:classification"))
     implementation(project(":feature:save"))
+    implementation(project(":feature:share"))
 
     implementation(libs.core.ktx)
     implementation(libs.kotlin.android)
@@ -96,4 +97,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
 }

@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.core.designsystem.theme
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 object DoraColorTokens {
@@ -10,15 +11,51 @@ object DoraColorTokens {
     val G6 = Color(0xFF4B4C4E)
     val G5 = Color(0xFF6E7277)
     val G4 = Color(0xFFADB5BD)
-    val G3 = Color(0xFFDEE2E6)
-    val G2 = Color(0xFFE9ECEF)
+    val G3 = Color(0xFFCDD1D9)
+    val G2 = Color(0xFFF0F3F7)
     val G1 = Color(0xFFF4F6F8)
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)
     val Alert = Color(0xFFFF5D47)
     val Dimend = Color(0xB2121212)
-    val Color737373 = Color(0xFF737373)
-    val ColorD9D9D9 = Color(0xFFD9D9D9)
+    val Primary = Color(0xFF7764FF)
+}
+
+object DoraGradientToken {
+    val Gradient5 = Brush.linearGradient(
+        listOf(
+            Color(0xFF7552FF),
+            Color(0xFF788EFF),
+        ),
+    )
+    val Gradient4 = Brush.linearGradient(
+        listOf(
+            Color(0xFF7764FF),
+            Color(0xFFE7E7FF),
+            Color(0xFFFFE7F3),
+        ),
+    )
+    val Gradient3 = Brush.linearGradient(
+        listOf(
+            Color(0xFFE2ECFF),
+            Color(0xFFF7F7FF),
+            Color(0xFFFFEAF4),
+        ),
+    )
+    val Gradient2 = Brush.linearGradient(
+        listOf(
+            Color(0xFFF3FBFF),
+            Color(0xFFF5F5FF),
+            Color(0xFFF3FBFF),
+        ),
+    )
+    val Gradient1 = Brush.linearGradient(
+        listOf(
+            Color(0xFFFFF9FB),
+            Color(0xFFF9F9FF),
+            Color(0xFFF9F8FF),
+        ),
+    )
 }
 
 object BtnMaxColorTokens {
@@ -47,6 +84,7 @@ object TextFieldColorTokens {
     val BackGroundColor = DoraColorTokens.G1
     val HintTextColor = DoraColorTokens.G4
     val TextCounterColor = DoraColorTokens.G6
+    val HelperRoundedColor = DoraColorTokens.Alert
 }
 
 object TextFieldLabelColorTokens {

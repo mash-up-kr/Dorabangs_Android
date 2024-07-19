@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
 @Composable
@@ -67,8 +68,8 @@ fun FeedCard(
                     .padding(vertical = 8.dp)
                     .fillMaxWidth()
                     .height(4.dp),
-                completedColor = DoraColorTokens.Black,
-                remainColor = DoraColorTokens.G4,
+                completedColor = DoraColorTokens.Primary,
+                remainColor = DoraGradientToken.Gradient2,
                 current = 10,
             )
             FeedCardCategoryAndDayLabel(
@@ -131,8 +132,8 @@ fun FeedCardContent(
             Spacer(modifier = Modifier.height(12.dp))
             repeat(3) {
                 TextLoadingSkeleton(
-                    primaryColor = DoraColorTokens.ColorD9D9D9,
-                    containerColor = DoraColorTokens.Color737373,
+                    primaryColor = DoraColorTokens.White,
+                    containerColor = DoraColorTokens.Primary,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 4.dp)
@@ -141,8 +142,8 @@ fun FeedCardContent(
             }
             Spacer(modifier = Modifier.height(8.dp))
             TextLoadingSkeleton(
-                primaryColor = DoraColorTokens.ColorD9D9D9,
-                containerColor = DoraColorTokens.Color737373,
+                primaryColor = DoraColorTokens.White,
+                containerColor = DoraColorTokens.Primary,
                 modifier = Modifier
                     .padding(vertical = 2.dp)
                     .width(172.dp)
