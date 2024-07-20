@@ -23,7 +23,7 @@ class DoraPagingSource<T : Any> (
 
         return try {
             val result = apiExecutor(page)
-            val isLastPage = (page == result.pagingInfo.total) || (result.pagingInfo.total == 0)
+            val isLastPage = (!result.pagingInfo.hasNext) || (result.pagingInfo.total == 0)
 
             if (result.data.isEmpty()) return LoadResult.Error(DoraException(message = "empty"))
 
