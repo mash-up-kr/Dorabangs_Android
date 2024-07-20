@@ -34,7 +34,7 @@ interface FolderService {
 
     @GET("folders/{folderId}/posts")
     suspend fun getLinkFolderList(
-        @Path("folderId") folderId: String,
+        @Path("folderId") folderId: String?,
         @Query("page") page: Int,
         @Query("limit") limit: Int = 10,
         @Query("order") order: String,

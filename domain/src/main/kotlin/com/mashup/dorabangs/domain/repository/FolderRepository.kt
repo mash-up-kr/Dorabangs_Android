@@ -17,7 +17,7 @@ interface FolderRepository {
     suspend fun editFolderName(newFolderName: NewFolderName, folderId: String): DoraSampleResponse
     suspend fun deleteFolder(folderId: String): DoraSampleResponse
     suspend fun getLinksFromFolder(
-        folderId: String,
+        folderId: String?,
         order: String,
         unread: Boolean,
     ): Flow<PagingData<SavedLinkDetailInfo>>

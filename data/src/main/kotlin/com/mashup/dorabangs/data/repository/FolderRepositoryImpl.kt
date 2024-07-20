@@ -53,7 +53,7 @@ class FolderRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getLinksFromFolder(
-        folderId: String,
+        folderId: String?,
         order: String,
         unread: Boolean,
     ): Flow<PagingData<SavedLinkDetailInfo>> =

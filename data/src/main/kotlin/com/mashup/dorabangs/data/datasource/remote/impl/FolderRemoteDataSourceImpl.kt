@@ -26,17 +26,16 @@ class FolderRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun editFolderName(folderName: NewFolderName, folderId: String) {
         folderService.editFolderName(folderId, folderName.toData())
-
     }
 
-    override suspend fun getLinksFromFolder(folderId: String, page: Int, order: String, unread: Boolean): LinksFromFolderResponseModel =
+    override suspend fun getLinksFromFolder(folderId: String?, page: Int, order: String, unread: Boolean): LinksFromFolderResponseModel =
         folderService.getLinkFolderList(
             folderId = folderId,
             page = page,
             order = order,
             unread = unread,
         )
-    
+
     override suspend fun deleteFolder(folderId: String) {
         folderService.deleteFolder(folderId = folderId)
     }

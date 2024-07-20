@@ -15,12 +15,12 @@ data class FolderResponseModel(
     val id: String? = null,
     val name: String = "",
     val type: String = "",
-    val createdAt: String? = null,
-    val postCount: Int? = null,
+    val createdAt: String = "",
+    val postCount: Int = 0,
 )
 
 fun FolderResponseModel.toDomain() = Folder(
-    id = id,
+    id = id.orEmpty(),
     name = name,
     type = type,
     createdAt = createdAt,
