@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,25 +21,25 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageDetailEmpty(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-          Image(
-              painter = painterResource(id = coreR.drawable.ic_empty),
-              contentDescription = "emptyIcon"
-          )
-          Spacer(modifier = Modifier.height(12.dp))
-          Text(
-              text = stringResource(id =  R.string.storage_detail_empty_list),
-              color = DoraColorTokens.G3,
-              style = DoraTypoTokens.caption3Medium
-          )
+            Image(
+                painter = painterResource(id = coreR.drawable.ic_empty),
+                contentDescription = "emptyIcon",
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(id = R.string.storage_detail_empty_list),
+                color = DoraColorTokens.G3,
+                style = DoraTypoTokens.caption3Medium,
+            )
         }
     }
 }

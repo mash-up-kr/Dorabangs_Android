@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -49,7 +48,7 @@ fun StorageDetailList(
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
-    if(linksPagingList.itemCount == 0) {
+    if (linksPagingList.itemCount == 0) {
         Column {
             StorageDetailExpandedHeader(
                 state = state,
@@ -62,7 +61,7 @@ fun StorageDetailList(
         LazyColumn(
             state = listState,
             contentPadding = contentPadding,
-            modifier = modifier
+            modifier = modifier,
         ) {
             item {
                 StorageDetailExpandedHeader(
