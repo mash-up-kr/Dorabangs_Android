@@ -3,9 +3,11 @@ package com.mashup.dorabangs.feature.storage.storagedetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,37 +49,48 @@ fun StorageDetailList(
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
-    LazyColumn(
-        state = listState,
-        contentPadding = contentPadding,
-        modifier = modifier,
-    ) {
-        item {
+    if(linksPagingList.itemCount == 0) {
+        Column {
             StorageDetailExpandedHeader(
                 state = state,
                 onClickBackIcon = onClickBackIcon,
                 onClickTabItem = onClickTabItem,
             )
+            StorageDetailEmpty(modifier = modifier)
         }
-        item {
-            SortButtonRow(
-                onClickSortedIcon = onClickSortedIcon,
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-        }
-        items(
-            count = linksPagingList.itemCount,
-            key = linksPagingList.itemKey(FeedCardUiModel::id),
-            contentType = linksPagingList.itemContentType { "SavedLinks" },
-        ) { idx ->
-            linksPagingList[idx]?.let { cardItem ->
-                FeedCard(cardInfo = cardItem, onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) })
+    } else {
+        LazyColumn(
+            state = listState,
+            contentPadding = contentPadding,
+            modifier = modifier
+        ) {
+            item {
+                StorageDetailExpandedHeader(
+                    state = state,
+                    onClickBackIcon = onClickBackIcon,
+                    onClickTabItem = onClickTabItem,
+                )
             }
-            // TODO - 마지막 처리 필요
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                thickness = 0.5.dp,
-            )
+            item {
+                SortButtonRow(
+                    onClickSortedIcon = onClickSortedIcon,
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+            items(
+                count = linksPagingList.itemCount,
+                key = linksPagingList.itemKey(FeedCardUiModel::id),
+                contentType = linksPagingList.itemContentType { "SavedLinks" },
+            ) { idx ->
+                linksPagingList[idx]?.let { cardItem ->
+                    FeedCard(cardInfo = cardItem, onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) })
+                }
+                // TODO - 마지막 처리 필요
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                    thickness = 0.5.dp,
+                )
+            }
         }
     }
 }
