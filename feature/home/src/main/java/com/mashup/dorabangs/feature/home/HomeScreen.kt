@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -67,53 +67,74 @@ fun HomeScreen(
     ) {
         val hazeState = remember { HazeState() }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .haze(hazeState),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            item {
-                Spacer(
-                    modifier = Modifier.height(104.dp),
+        if (state.feedCards.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Icon(
+                    modifier = Modifier.padding(top = 104.dp),
+                    painter = painterResource(id = R.drawable.ic_empty),
+                    contentDescription = "",
+                    tint = Color.Unspecified,
                 )
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = stringResource(id = R.string.home_empty_feed),
+                    style = DoraTypoTokens.caption3Medium,
+                    color = DoraColorTokens.G3,
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .haze(hazeState),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                item {
+                    Spacer(
+                        modifier = Modifier.height(104.dp),
+                    )
 
-                HomeCarousel(
-                    homeCarouselItems = listOf(
-                        HomeCarouselItem(
-                            lottieRes = R.raw.unread,
-                            description = "3초만에 링크를\n저장하는 방법이에요",
-                            onClickButton = navigateToClassification,
+                    HomeCarousel(
+                        homeCarouselItems = listOf(
+                            HomeCarouselItem(
+                                lottieRes = R.raw.unread,
+                                description = "3초만에 링크를\n저장하는 방법이에요",
+                                onClickButton = navigateToClassification,
+                            ),
+                            HomeCarouselItem(
+                                lottieRes = R.raw.ai,
+                                description = "AI로 분류 링크가\n375개 있어요",
+                                onClickButton = navigateToClassification,
+                            ),
                         ),
-                        HomeCarouselItem(
-                            lottieRes = R.raw.ai,
-                            description = "AI로 분류 링크가\n375개 있어요",
-                            onClickButton = navigateToClassification,
-                        ),
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
+
+                Feeds(
+                    modifier = Modifier,
+                    feeds = state.feedCards,
+                    onClickMoreButton = { index ->
+                        onClickMoreButton(index)
+                    },
                 )
             }
 
-            Feeds(
-                modifier = Modifier,
-                feeds = state.feedCards,
-                onClickMoreButton = { index ->
-                    onClickMoreButton(index)
-                },
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(104.dp)
+                    .hazeChild(
+                        state = hazeState,
+                        style = HazeStyle(blurRadius = 12.dp),
+                    ),
             )
         }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(104.dp)
-                .hazeChild(
-                    state = hazeState,
-                    style = HazeStyle(blurRadius = 12.dp),
-                ),
-        )
 
         Column {
             DoraTopBar.HomeTopBar(
@@ -142,42 +163,22 @@ private fun LazyListScope.Feeds(
     modifier: Modifier = Modifier,
     onClickMoreButton: (Int) -> Unit = {},
 ) {
-    if (feeds.isEmpty()) {
-        item {
-            Column(
-                modifier = modifier.fillMaxHeight(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_android_white_24dp),
-                    contentDescription = "",
-                )
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = stringResource(id = R.string.home_empty_feed),
-                    style = DoraTypoTokens.caption3Medium,
-                    color = DoraColorTokens.G3,
-                )
-            }
-        }
-    } else {
-        items(feeds.size) { index ->
-            FeedCard(
-                cardInfo = feeds[index],
-                onClickMoreButton = {
-                    onClickMoreButton(index)
-                },
+    items(feeds.size) { index ->
+        FeedCard(
+            cardInfo = feeds[index],
+            onClickMoreButton = {
+                onClickMoreButton(index)
+            },
+        )
+        if (index != feeds.lastIndex) {
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                thickness = 0.5.dp,
             )
-            if (index != feeds.lastIndex) {
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                    thickness = 0.5.dp,
-                )
-            }
         }
     }
 }
+
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
