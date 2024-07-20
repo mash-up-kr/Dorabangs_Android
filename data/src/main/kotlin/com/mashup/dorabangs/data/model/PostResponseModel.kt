@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.data.model
 
+import com.mashup.dorabangs.domain.model.PageData
+import com.mashup.dorabangs.domain.model.PagingInfo
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.PostsMetaData
@@ -47,3 +49,13 @@ fun PostsResponseModel.toDomain() = Posts(
     metaData = metadata.toDomain(),
     items = items.map { it.toDomain() },
 )
+
+fun PostsResponseModel.toPagingDomain(): PageData<List<Post>> {
+    return PageData(
+        data = items.map { it.toDomain() },
+        pagingInfo = PagingInfo(
+            total = metadata.total,
+            hasNext = metadata.hasNext,
+        ),
+    )
+}
