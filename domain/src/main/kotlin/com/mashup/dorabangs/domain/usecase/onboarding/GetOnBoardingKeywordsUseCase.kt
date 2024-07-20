@@ -8,6 +8,6 @@ class GetOnBoardingKeywordsUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(
-        limit: Int? = null
+        limit: Int? = null,
     ) = onBoardingRepository.getOnboardingKeywords(limit)
 }

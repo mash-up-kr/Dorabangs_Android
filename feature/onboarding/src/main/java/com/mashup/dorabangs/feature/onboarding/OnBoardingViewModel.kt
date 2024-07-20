@@ -41,9 +41,11 @@ class OnBoardingViewModel @Inject constructor(
 
     fun onClickOkButton() = intent {
         setIsFirstEntryUseCase(false)
-        createFolderUseCase(NewFolderNameList(
-            state.keywords.filterIndexed { index, _ -> index in state.selectedIndex }
-        ))
+        createFolderUseCase(
+            NewFolderNameList(
+                state.keywords.filterIndexed { index, _ -> index in state.selectedIndex },
+            ),
+        )
         postSideEffect(OnBoardingSideEffect.NavigateToHome)
     }
 
@@ -52,7 +54,7 @@ class OnBoardingViewModel @Inject constructor(
         intent {
             reduce {
                 state.copy(
-                    keywords = onBoardingKeywords
+                    keywords = onBoardingKeywords,
                 )
             }
         }

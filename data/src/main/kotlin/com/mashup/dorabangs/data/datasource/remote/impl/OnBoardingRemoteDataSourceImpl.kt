@@ -11,4 +11,3 @@ class OnBoardingRemoteDataSourceImpl @Inject constructor(
     override suspend fun getOnboardingKeywords(limit: Int?) =
         service.getOnboardingKeywords(limit)
 }
-

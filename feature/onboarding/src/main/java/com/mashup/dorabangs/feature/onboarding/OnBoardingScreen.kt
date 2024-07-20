@@ -99,8 +99,8 @@ private fun KeywordChip(
                 shape = DoraRoundTokens.Round99,
             )
             .thenIf(isSelected) {
-                this.
-                    background(
+                this
+                    .background(
                         color = DoraColorTokens.G9,
                         shape = DoraRoundTokens.Round99,
                     )
@@ -110,7 +110,7 @@ private fun KeywordChip(
                                 Color(0xff7764FF),
                                 Color(0xffE7E7FF),
                                 Color(0xffFFE7F3),
-                            )
+                            ),
                         ),
                         width = 1.dp,
                         shape = DoraRoundTokens.Round99,
@@ -135,8 +135,8 @@ private fun KeywordChip(
                             Color(0xffCDC6FF),
                             Color(0xffE7E7FF),
                             Color(0xffFFC8E2),
-                        )
-                    )
+                        ),
+                    ),
                 ),
             )
         }
@@ -179,7 +179,7 @@ fun PreviewOnBoardingScreen() {
                 "패션",
                 "정치",
                 "생산성",
-                "환경"
+                "환경",
             ),
             selectedIndex = setOf(4, 9),
         ),
