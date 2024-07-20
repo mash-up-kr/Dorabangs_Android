@@ -2,6 +2,7 @@ package com.mashup.dorabangs.feature.storage.storagedetail.model
 
 import androidx.paging.PagingData
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -28,6 +29,18 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
         content = this.description,
         createdAt = this.createdAt,
         keywordList = this.keywords?.map { it.name },
+        isFavorite = isFavorite ?: false,
+        thumbnail = "",
+    )
+}
+
+fun Post.toUiModel(): FeedCardUiModel {
+    return FeedCardUiModel(
+        id = this.id.orEmpty(),
+        title = this.title,
+        content = this.description,
+        createdAt = "",
+        keywordList = listOf(),
         isFavorite = isFavorite ?: false,
         thumbnail = "",
     )

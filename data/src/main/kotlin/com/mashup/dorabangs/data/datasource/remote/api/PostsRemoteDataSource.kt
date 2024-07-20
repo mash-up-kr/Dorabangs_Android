@@ -11,6 +11,7 @@ interface PostsRemoteDataSource {
         page: Int? = null,
         order: String? = null,
         favorite: Boolean? = null,
+        isRead: Boolean? = null,
     ): PageData<List<Post>>
 
     suspend fun saveLink(

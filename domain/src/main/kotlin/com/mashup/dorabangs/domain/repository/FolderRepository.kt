@@ -19,6 +19,6 @@ interface FolderRepository {
     suspend fun getLinksFromFolder(
         folderId: String?,
         order: String,
-        unread: Boolean,
+        isRead: Boolean?,
     ): Flow<PagingData<SavedLinkDetailInfo>>
 }
