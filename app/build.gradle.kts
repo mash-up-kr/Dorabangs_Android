@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":feature:storage"))
     implementation(project(":feature:classification"))
     implementation(project(":feature:save"))
+    implementation(project(":feature:share"))
 
     implementation(libs.core.ktx)
     implementation(libs.kotlin.android)

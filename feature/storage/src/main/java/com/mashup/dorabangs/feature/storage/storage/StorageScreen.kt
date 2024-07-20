@@ -25,23 +25,37 @@ import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSh
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
+import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.R
-import com.mashup.dorabangs.feature.storage.storage.model.StorageFolderItem
+import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
+import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun StorageRoute(
     storageViewModel: StorageViewModel = hiltViewModel(),
-    navigateToStorageDetail: (StorageFolderItem) -> Unit,
-    navigateToFolderManage: (FolderManageType) -> Unit,
+    navigateToStorageDetail: (Folder) -> Unit,
+    navigateToFolderManage: (FolderManageType, String) -> Unit,
 ) {
     val storageState by storageViewModel.collectAsState()
+
+    storageViewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            StorageListSideEffect.NavigateToFolderManage -> navigateToFolderManage(FolderManageType.CHANGE, storageState.selectedFolderId)
+        }
+    }
+
     Box {
         StorageScreen(
+            storageState = storageState,
             navigateToStorageDetail = navigateToStorageDetail,
-            onClickSettingButton = { storageViewModel.setVisibleMoreButtonBottomSheet(visible = true) },
-            onClickAddFolderIcon = { navigateToFolderManage(FolderManageType.CREATE) },
+            onClickSettingButton = { folderItem ->
+                storageViewModel.setSelectFolderId(folderId = folderItem.id.orEmpty())
+                storageViewModel.setVisibleMoreButtonBottomSheet(visible = true)
+            },
+            onClickAddFolderIcon = { navigateToFolderManage(FolderManageType.CREATE, storageState.selectedFolderId) },
         )
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
@@ -53,8 +67,7 @@ fun StorageRoute(
                 storageViewModel.setVisibleDialog(true)
             },
             onClickMoveFolderButton = {
-                storageViewModel.setVisibleMoreButtonBottomSheet(false)
-                navigateToFolderManage(FolderManageType.CHANGE)
+                storageViewModel.setVisibleMoreButtonBottomSheet(visible = false, isNavigate = true)
             },
             onDismissRequest = { storageViewModel.setVisibleMoreButtonBottomSheet(false) },
         )
@@ -66,15 +79,19 @@ fun StorageRoute(
             confirmBtnText = stringResource(R.string.dialog_folder_remove_button_remove),
             disMissBtnText = stringResource(R.string.dialog_folder_remove_button_cancel),
             onDisMissRequest = { storageViewModel.setVisibleDialog(false) },
-            onClickConfirmBtn = { storageViewModel.setVisibleDialog(false) },
+            onClickConfirmBtn = {
+                storageViewModel.deleteFolder(folderId = storageState.selectedFolderId)
+                storageViewModel.setVisibleDialog(false)
+            },
         )
     }
 }
 
 @Composable
 fun StorageScreen(
-    navigateToStorageDetail: (StorageFolderItem) -> Unit,
-    onClickSettingButton: (StorageFolderItem) -> Unit,
+    storageState: StorageListState,
+    navigateToStorageDetail: (Folder) -> Unit,
+    onClickSettingButton: (Folder) -> Unit,
     onClickAddFolderIcon: () -> Unit = {},
 ) {
     Column(
@@ -86,6 +103,7 @@ fun StorageScreen(
             onClickAddFolderIcon = onClickAddFolderIcon,
         )
         StorageFolderList(
+            storageState = storageState,
             navigateToStorageDetail = navigateToStorageDetail,
             onClickSettingButton = onClickSettingButton,
         )
@@ -126,6 +144,6 @@ fun StorageTopAppBar(
 fun PreviewStorageScreen() {
     StorageRoute(
         navigateToStorageDetail = {},
-        navigateToFolderManage = {},
+        navigateToFolderManage = { type, id -> },
     )
 }

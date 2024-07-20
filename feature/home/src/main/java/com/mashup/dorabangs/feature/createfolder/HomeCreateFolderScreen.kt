@@ -1,6 +1,5 @@
 package com.mashup.dorabangs.feature.createfolder
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -17,25 +17,42 @@ import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
+import com.mashup.dorabangs.feature.home.HomeCreateFolder
+import com.mashup.dorabangs.feature.home.HomeSideEffect
 import com.mashup.dorabangs.feature.home.HomeViewModel
 import com.mashup.dorabangs.home.R
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeCreateFolderRoute(
     homeViewModel: HomeViewModel = hiltViewModel(),
     onClickBackIcon: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
-    Log.d("DOAROA", "HomeCreateFolderRoute: $homeViewModel")
+    val state by homeViewModel.collectAsState()
+
+    homeViewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is HomeSideEffect.NavigateToHome -> navigateToHome()
+            else -> {}
+        }
+    }
+
     HomeCreateFolderScreen(
+        state = state.homeCreateFolder,
         onClickBackIcon = onClickBackIcon,
-        onClickSaveButton = {},
+        onClickSaveButton = { homeViewModel.createFolder(state.homeCreateFolder.folderName) },
+        onValueChanged = homeViewModel::setFolderName,
     )
 }
 
 @Composable
 fun HomeCreateFolderScreen(
+    state: HomeCreateFolder,
     onClickBackIcon: () -> Unit,
     onClickSaveButton: () -> Unit,
+    onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -59,10 +76,10 @@ fun HomeCreateFolderScreen(
                 text = "",
                 hintText = stringResource(id = R.string.home_create_folder_hint),
                 labelText = stringResource(id = R.string.home_create_folder_label),
-                helperText = stringResource(id = R.string.home_create_folder_helper),
-                helperEnabled = true,
+                helperText = state.helperMessage,
+                helperEnabled = state.helperEnable,
                 counterEnabled = true,
-                onValueChanged = {},
+                onValueChanged = onValueChanged,
             )
             Spacer(modifier = Modifier.height(20.dp))
             DoraButtons.DoraBtnMaxFull(
@@ -70,7 +87,7 @@ fun HomeCreateFolderScreen(
                     .fillMaxWidth()
                     .padding(vertical = 20.dp),
                 buttonText = stringResource(id = R.string.home_create_folder_save),
-                enabled = true,
+                enabled = state.folderName.isNotEmpty() && !state.helperEnable,
                 onClickButton = onClickSaveButton,
             )
             Spacer(modifier = Modifier.height(20.dp))
