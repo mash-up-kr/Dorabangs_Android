@@ -106,11 +106,18 @@ class HomeViewModel @Inject constructor(
                     DoraChipUiModel(
                         id = folder.id.orEmpty(),
                         title = folder.name,
-                        icon = if (index < folderList.defaultFolders.size) R.drawable.ic_plus else null
+                        icon = setDefaultFolderIcon(index)
                     )
                 })
             }
         }
+    }
+
+    private fun setDefaultFolderIcon(index: Int) = when (index) {
+        0 -> R.drawable.ic_3d_all_small
+        1 -> R.drawable.ic_3d_bookmark_small
+        2 -> R.drawable.ic_3d_pin_small
+        else -> null
     }
 
     private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
