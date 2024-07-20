@@ -236,7 +236,7 @@ private fun HomeCarousel(
                             color = DoraColorTokens.G7,
                         )
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_right_arrow_black_12dp),
+                            painter = painterResource(id = R.drawable.ic_chevron_right_small_balck),
                             tint = DoraColorTokens.G7,
                             contentDescription = "",
                         )
