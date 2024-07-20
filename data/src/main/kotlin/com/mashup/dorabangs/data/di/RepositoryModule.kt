@@ -1,9 +1,11 @@
 package com.mashup.dorabangs.data.di
 
+import com.mashup.dorabangs.data.repository.AIClassificationRepositoryImpl
 import com.mashup.dorabangs.data.repository.FolderRepositoryImpl
 import com.mashup.dorabangs.data.repository.PostsRepositoryImpl
 import com.mashup.dorabangs.data.repository.UserRepositoryImpl
 import com.mashup.dorabangs.data.repository.save.DoraUrlCheckRepositoryImpl
+import com.mashup.dorabangs.domain.repository.AIClassificationRepository
 import com.mashup.dorabangs.domain.repository.FolderRepository
 import com.mashup.dorabangs.domain.repository.PostsRepository
 import com.mashup.dorabangs.domain.repository.UserRepository
@@ -40,4 +42,10 @@ abstract class RepositoryModule {
     abstract fun bindsPostsRepository(
         repository: PostsRepositoryImpl,
     ): PostsRepository
+
+    @Binds
+    @Reusable
+    abstract fun bindsAIClassificationRepository(
+        repository: AIClassificationRepositoryImpl,
+    ): AIClassificationRepository
 }

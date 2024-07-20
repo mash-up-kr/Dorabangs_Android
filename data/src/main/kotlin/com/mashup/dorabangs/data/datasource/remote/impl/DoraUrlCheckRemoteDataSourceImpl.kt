@@ -14,14 +14,17 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
     }
 
     /**
-     * 전달 받은 url을 체크합니다.
+     * 전달 받은 url을 체크합니다. https://로 시작하지 않으면 변환해줍니다 (www.naver.com -> https://www.naver.com)
+     * http로만 시작하는 경우 통신을 막아둬서 어차피 fail
      * 리다이렉션이 있는 경우, 특히나 short Link 의 경우 헤더의 Location 값이 원 주소이기 때문에 검사합니다
      * 추가로 short Link 에서는 원 링크가 아닌 이상 title, thumbnail 을 가져올 수 없어서,
      * connection을 원 주소로 다시 연결하여 정보를 가져옴
      */
     private suspend fun checkUrl(urlLink: String): DoraUrlCheckResponse = withContext(Dispatchers.IO) {
+        val validUrlLink =
+            if (urlLink.startsWith("https://").not()) "https://$urlLink" else urlLink
         return@withContext runCatching {
-            var connection = Jsoup.connect(urlLink)
+            var connection = Jsoup.connect(validUrlLink)
                 .followRedirects(false)
                 .ignoreContentType(true)
 
@@ -45,7 +48,7 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
             val thumbnailUrl = thumbnailElement?.attr("content")
 
             DoraUrlCheckResponse(
-                urlLink = longUrlLink ?: urlLink,
+                urlLink = longUrlLink ?: validUrlLink,
                 title = title.orEmpty(),
                 thumbnailUrl = thumbnailUrl.orEmpty(),
                 isShortLink = longUrlLink == null,

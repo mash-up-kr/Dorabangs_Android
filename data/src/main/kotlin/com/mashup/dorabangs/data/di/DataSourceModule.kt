@@ -2,10 +2,12 @@ package com.mashup.dorabangs.data.di
 
 import com.mashup.dorabangs.data.datasource.local.api.UserLocalDataSource
 import com.mashup.dorabangs.data.datasource.local.impl.UserLocalDataSourceImpl
+import com.mashup.dorabangs.data.datasource.remote.api.AIClassificationRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.DoraUrlCheckRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.UserRemoteDataSource
+import com.mashup.dorabangs.data.datasource.remote.impl.AIClassificationRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.DoraUrlCheckRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.FolderRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.PostsRemoteDataSourceImpl
@@ -48,4 +50,10 @@ abstract class DataSourceModule {
     abstract fun bindsPostsRemoteDataSource(
         dataSource: PostsRemoteDataSourceImpl,
     ): PostsRemoteDataSource
+
+    @Binds
+    @Reusable
+    abstract fun bindsAIClassificationRemoteDataSource(
+        dataSource: AIClassificationRemoteDataSourceImpl,
+    ): AIClassificationRemoteDataSource
 }
