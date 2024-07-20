@@ -7,9 +7,10 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
-import com.mashup.dorabangs.domain.usecase.folder.GetFolderList
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
+import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
+import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,8 +26,9 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
+    private val getFolderList: GetFolderListUseCase,
+    private val getPosts: GetPosts,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
-    private val getFolderList: GetFolderList,
     private val createFolderUseCase: CreateFolderUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
@@ -96,8 +98,31 @@ class HomeViewModel @Inject constructor(
         if (isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
     }
 
-    suspend fun updateFolderList() {
+    private suspend fun updateFolderList() {
         val folderList = getFolderList()
+        intent {
+            reduce {
+                state.copy(tapElements = folderList.toList().mapIndexed { index, folder ->
+                    DoraChipUiModel(
+                        id = folder.id.orEmpty(),
+                        title = folder.name,
+                        icon = if (index < folderList.defaultFolders.size) R.drawable.ic_plus else null
+                    )
+                })
+            }
+        }
+    }
+
+    private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
+        reduce {
+            state.copy(
+                homeCreateFolder = state.homeCreateFolder.copy(
+                    helperEnable = isEnable,
+                    helperMessage = helperMsg
+                )
+            )
+        }
+    }
 
     fun createFolder(folderName: String) {
         viewModelScope.doraLaunch {
@@ -116,27 +141,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
-        reduce { state.copy(homeCreateFolder = state.homeCreateFolder.copy(helperEnable = isEnable, helperMessage = helperMsg)) }
-    }
-
     fun setFolderName(folderName: String) = intent {
         reduce {
             state.copy(homeCreateFolder = state.homeCreateFolder.copy(folderName = folderName))
-        }
-    }
-
-    init {
-        intent {
-            reduce {
-                state.copy(tapElements = folderList.toList().mapIndexed { index, folder ->
-                    DoraChipUiModel(
-                        id = folder.id.orEmpty(),
-                        title = folder.name,
-                        icon = if (index < folderList.defaultFolders.size) R.drawable.ic_plus else null
-                    )
-                })
-            }
         }
     }
 
