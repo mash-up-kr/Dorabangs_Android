@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -68,4 +69,6 @@ dependencies {
     implementation(libs.paging.compose)
 
     implementation(libs.coil)
+
+    implementation(libs.serialization)
 }
