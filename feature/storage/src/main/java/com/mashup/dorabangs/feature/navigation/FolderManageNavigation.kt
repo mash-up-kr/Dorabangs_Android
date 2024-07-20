@@ -33,9 +33,7 @@ fun NavGraphBuilder.storageFolderManageNavigation(
         ),
     ) { navBackStackEntry ->
         val folderManageType = navBackStackEntry.arguments?.getString("folderManageType") ?: FolderManageType.CHANGE.name
-        val folderId = navBackStackEntry.arguments?.getString("folderId").orEmpty()
         StorageFolderManageRoute(
-            folderId = folderId,
             folderManageType = folderManageType,
             onClickBackIcon = onClickBackIcon,
         )
