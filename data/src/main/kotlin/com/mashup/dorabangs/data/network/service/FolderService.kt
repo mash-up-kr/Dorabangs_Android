@@ -38,7 +38,7 @@ interface FolderService {
         @Query("page") page: Int,
         @Query("limit") limit: Int = 10,
         @Query("order") order: String,
-        @Query("unread") unread: Boolean,
+        @Query("isRead") isRead: Boolean?,
     ): LinksFromFolderResponseModel
 
     @DELETE("folders/{folderId}")

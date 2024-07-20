@@ -55,14 +55,14 @@ class FolderRepositoryImpl @Inject constructor(
     override suspend fun getLinksFromFolder(
         folderId: String?,
         order: String,
-        unread: Boolean,
+        isRead: Boolean?,
     ): Flow<PagingData<SavedLinkDetailInfo>> =
         doraPager { page ->
             remoteDataSource.getLinksFromFolder(
                 folderId = folderId,
                 page = page,
                 order = order,
-                unread = unread,
+                isRead = isRead,
             ).toDomain()
         }.flow
 }

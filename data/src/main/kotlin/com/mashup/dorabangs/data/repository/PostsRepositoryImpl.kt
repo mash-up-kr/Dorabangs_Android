@@ -16,12 +16,14 @@ class PostsRepositoryImpl @Inject constructor(
     override suspend fun getPosts(
         order: String?,
         favorite: Boolean?,
+        isRead: Boolean?,
     ): Flow<PagingData<Post>> =
         doraPager { page ->
             postsRemoteDataSource.getPosts(
                 page = page,
                 order = order,
                 favorite = favorite,
+                isRead = isRead,
             )
         }.flow
 

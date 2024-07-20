@@ -10,7 +10,9 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
+import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
+import com.mashup.dorabangs.feature.storage.storagedetail.model.FolderType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
@@ -31,6 +33,7 @@ class StorageDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val savedLinksFromFolderUseCase: GetSavedLinksFromFolderUseCase,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
+    private val getPostsUseCase: GetPosts,
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
@@ -43,15 +46,37 @@ class StorageDetailViewModel @Inject constructor(
                 folderType = folderItem.type,
             )
         }
-        getSavedLinkFromFolder(folderId = folderItem.id.orEmpty())
+        fetchSavedLinkFromType(
+            type = folderItem.type,
+            folderId = folderItem.id,
+        )
     }
 
-    private fun getSavedLinkFromFolder(
+    /**
+     * 폴더 타입별 API 호출 분기 처리
+     */
+    private fun fetchSavedLinkFromType(
+        type: String = "",
+        folderId: String? = "",
+        order: String = StorageDetailSort.ASC.name,
+        isRead: Boolean? = null,
+    ) {
+        when (type) {
+            FolderType.All.type -> getSavedLinkFromDefaultFolder(order = order, favorite = false, isRead = isRead)
+            FolderType.Favorite.type -> getSavedLinkFromDefaultFolder(order = order, favorite = true, isRead = isRead)
+            else -> getSavedLinkFromCustomFolder(folderId = folderId, order = order, isRead = isRead)
+        }
+    }
+
+    /**
+     * 사용자 지정 folder links
+     */
+    private fun getSavedLinkFromCustomFolder(
         folderId: String?,
         order: String = StorageDetailSort.ASC.name,
-        unread: Boolean = false,
+        isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-        val pagingData = savedLinksFromFolderUseCase.invoke(folderId = folderId, order = order, unread = unread)
+        val pagingData = savedLinksFromFolderUseCase.invoke(folderId = folderId, order = order, isRead = isRead)
             .cachedIn(viewModelScope).map { pagedData ->
                 pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
             }.stateIn(
@@ -67,12 +92,41 @@ class StorageDetailViewModel @Inject constructor(
     }
 
     /**
+     * default folder links
+     */
+    private fun getSavedLinkFromDefaultFolder(
+        order: String = StorageDetailSort.ASC.name,
+        favorite: Boolean = false,
+        isRead: Boolean? = null,
+    ) = viewModelScope.doraLaunch {
+        val pagingData =
+            getPostsUseCase.invoke(order = order, favorite = favorite, isRead = isRead)
+                .cachedIn(viewModelScope).map { pagedData ->
+                    pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+                }.stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.Lazily,
+                    initialValue = PagingData.empty(),
+                )
+        intent {
+            reduce {
+                state.copy(pagingList = pagingData)
+            }
+        }
+    }
+
+    /**
      * 탭 변환
      */
     fun changeSelectedTabIdx(selectedIdx: Int) = viewModelScope.launch {
         intent {
-            val unread = selectedIdx == 0
-            getSavedLinkFromFolder(folderId = state.folderId, order = state.isLatestSort.name, unread = unread)
+            val isRead = if (selectedIdx == 0) null else false
+            fetchSavedLinkFromType(
+                type = state.folderType,
+                folderId = state.folderId,
+                order = state.isLatestSort.name,
+                isRead = isRead,
+            )
             reduce {
                 state.copy(
                     selectedTabIdx = selectedIdx,
@@ -86,8 +140,13 @@ class StorageDetailViewModel @Inject constructor(
      */
     fun clickFeedSort(item: StorageDetailSort) = viewModelScope.launch {
         intent {
-            val unread = state.selectedTabIdx == 0
-            getSavedLinkFromFolder(folderId = state.folderId, order = item.name, unread = unread)
+            val isRead = if (state.selectedTabIdx == 0) null else false
+            fetchSavedLinkFromType(
+                type = state.folderType,
+                folderId = state.folderId,
+                order = item.name,
+                isRead = isRead,
+            )
             reduce {
                 state.copy(
                     isLatestSort = item,

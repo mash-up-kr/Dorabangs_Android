@@ -19,11 +19,13 @@ class PostsRemoteDataSourceImpl @Inject constructor(
         page: Int?,
         order: String?,
         favorite: Boolean?,
+        isRead: Boolean?,
     ): PageData<List<Post>> =
         postsService.getPosts(
             page = page,
             order = order,
             favorite = favorite,
+            isRead = isRead,
         ).toPagingDomain()
 
     override suspend fun saveLink(link: Link) =

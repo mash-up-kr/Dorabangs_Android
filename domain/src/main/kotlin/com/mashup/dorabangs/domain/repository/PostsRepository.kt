@@ -11,6 +11,7 @@ interface PostsRepository {
     suspend fun getPosts(
         order: String? = null,
         favorite: Boolean? = null,
+        isRead: Boolean? = null,
     ): Flow<PagingData<Post>>
 
     suspend fun saveLink(
