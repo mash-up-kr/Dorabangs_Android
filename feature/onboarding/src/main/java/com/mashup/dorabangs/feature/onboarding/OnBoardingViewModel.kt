@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
+import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.onboarding.GetOnBoardingKeywordsUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetIsFirstEntryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +20,7 @@ import javax.inject.Inject
 class OnBoardingViewModel @Inject constructor(
     private val getOnBoardingKeywordsUseCase: GetOnBoardingKeywordsUseCase,
     private val setIsFirstEntryUseCase: SetIsFirstEntryUseCase,
+    private val createFolderUseCase: CreateFolderUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ContainerHost<OnBoardingState, OnBoardingSideEffect> {
     override val container = container<OnBoardingState, OnBoardingSideEffect>(OnBoardingState())
@@ -38,6 +41,9 @@ class OnBoardingViewModel @Inject constructor(
 
     fun onClickOkButton() = intent {
         setIsFirstEntryUseCase(false)
+        createFolderUseCase(NewFolderNameList(
+            state.keywords.filterIndexed { index, _ -> index in state.selectedIndex }
+        ))
         postSideEffect(OnBoardingSideEffect.NavigateToHome)
     }
 
