@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.domain.model.DeviceToken
+import com.mashup.dorabangs.domain.usecase.user.GetIsFirstEntryUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetUserAccessTokenUseCase
 import com.mashup.dorabangs.domain.usecase.user.RegisterUserUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetUserAccessTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withTimeout
@@ -20,10 +22,14 @@ class SplashViewModel @Inject constructor(
     private val getUserAccessTokenUseCase: GetUserAccessTokenUseCase,
     private val setUserAccessTokenUseCase: SetUserAccessTokenUseCase,
     private val registerUserUseCase: RegisterUserUseCase,
+    private val getIsFirstEntryUseCase: GetIsFirstEntryUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val splashShowFlow = MutableStateFlow(true)
     val isSplashShow = splashShowFlow.asStateFlow()
+
+    private val _isFirstEntry = MutableStateFlow<Boolean?>(null)
+    val isFirstEntry: StateFlow<Boolean?> = _isFirstEntry
 
     fun checkUserToken(userId: String) {
         viewModelScope.doraLaunch {
@@ -37,6 +43,7 @@ class SplashViewModel @Inject constructor(
             withTimeout(SPLASH_SCREEN_TIME) {
                 if (userAccessToken.isNotEmpty()) {
                     splashShowFlow.value = false
+                    _isFirstEntry.value = getIsFirstEntryUseCase().firstOrNull() ?: true
                 } else {
                     // Todo :: 유저 토큰 가져오기 실패에 대한 처리 해줘야함 (Like 토스트 메시지)
                 }

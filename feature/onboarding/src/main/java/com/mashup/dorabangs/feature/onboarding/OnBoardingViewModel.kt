@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.domain.usecase.onboarding.GetOnBoardingKeywordsUseCase
+import com.mashup.dorabangs.domain.usecase.user.SetIsFirstEntryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
     private val getOnBoardingKeywordsUseCase: GetOnBoardingKeywordsUseCase,
+    private val setIsFirstEntryUseCase: SetIsFirstEntryUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ContainerHost<OnBoardingState, OnBoardingSideEffect> {
     override val container = container<OnBoardingState, OnBoardingSideEffect>(OnBoardingState())
@@ -35,6 +37,7 @@ class OnBoardingViewModel @Inject constructor(
     }
 
     fun onClickOkButton() = intent {
+        setIsFirstEntryUseCase(false)
         postSideEffect(OnBoardingSideEffect.NavigateToHome)
     }
 
