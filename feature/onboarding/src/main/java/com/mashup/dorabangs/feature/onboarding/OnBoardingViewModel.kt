@@ -40,13 +40,13 @@ class OnBoardingViewModel @Inject constructor(
     }
 
     fun onClickOkButton() = intent {
+        postSideEffect(OnBoardingSideEffect.NavigateToHome)
         setIsFirstEntryUseCase(false)
         createFolderUseCase(
             NewFolderNameList(
                 state.keywords.filterIndexed { index, _ -> index in state.selectedIndex },
             ),
         )
-        postSideEffect(OnBoardingSideEffect.NavigateToHome)
     }
 
     fun fetchOnBoardingKeywords(limit: Int? = null) = viewModelScope.doraLaunch {
