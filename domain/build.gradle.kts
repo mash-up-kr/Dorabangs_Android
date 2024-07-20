@@ -3,6 +3,7 @@ plugins {
     id("java-library")
     id("jacoco")
     alias(libs.plugins.org.jetbrains.kotlin.jvm)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 java {
@@ -18,6 +19,8 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlin.test)
+
+    implementation(libs.serialization)
 }
 
 tasks.register("dorabangs") {

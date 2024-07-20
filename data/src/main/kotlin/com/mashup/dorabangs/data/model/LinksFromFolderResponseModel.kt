@@ -14,21 +14,21 @@ data class LinksFromFolderResponseModel(
 
 @Serializable
 data class SavedLinkInfo(
-    val createdAt: String,
-    val description: String,
-    val folderId: String,
-    val id: String,
-    val isFavorite: Boolean,
-    val keywords: List<LinkKeyword>,
-    val title: String,
-    val url: String,
-    val userId: String,
+    val createdAt: String? = "",
+    val description: String? = "",
+    val folderId: String? = "",
+    val id: String? = "",
+    val isFavorite: Boolean = false,
+    val keywords: List<LinkKeyword>? = listOf(),
+    val title: String? = "",
+    val url: String? = "",
+    val userId: String? = "",
 )
 
 @Serializable
 data class LinkKeyword(
-    val id: String,
-    val name: String,
+    val id: String? = "",
+    val name: String? = "",
 )
 
 fun LinksFromFolderResponseModel.toDomain(): PageData<List<SavedLinkDetailInfo>> {
@@ -48,7 +48,7 @@ fun SavedLinkInfo.toDomain(): SavedLinkDetailInfo {
         folderId = folderId,
         id = id,
         isFavorite = isFavorite,
-        keywords = keywords.map { it.toDomain() },
+        keywords = keywords?.map { it.toDomain() },
         title = title,
         url = url,
         userId = userId,

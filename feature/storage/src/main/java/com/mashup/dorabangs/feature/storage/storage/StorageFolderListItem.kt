@@ -31,7 +31,7 @@ import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
 @Composable
 fun StorageFolderList(
     storageState: StorageListState,
-    navigateToStorageDetail: (Folder) -> Unit = {},
+    navigateToStorageDetail: (Folder) -> Unit,
     onClickSettingButton: (Folder) -> Unit = {},
 ) {
     LazyColumn(
@@ -41,6 +41,7 @@ fun StorageFolderList(
             Spacer(modifier = Modifier.height(20.dp))
             StorageDefaultFolder(
                 defaultFolderList = storageState.defaultStorageFolderList,
+                navigateToStorageDetail = navigateToStorageDetail,
             )
             Spacer(modifier = Modifier.height(20.dp))
         }
@@ -70,7 +71,7 @@ fun StorageFolderList(
 @Composable
 fun StorageDefaultFolder(
     defaultFolderList: List<Folder>,
-    navigateToStorageDetail: (Folder) -> Unit = {},
+    navigateToStorageDetail: (Folder) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -167,5 +168,6 @@ fun StorageListItem(
 fun PreviewStorageFolderList() {
     StorageFolderList(
         storageState = StorageListState(),
+        navigateToStorageDetail = {},
     )
 }

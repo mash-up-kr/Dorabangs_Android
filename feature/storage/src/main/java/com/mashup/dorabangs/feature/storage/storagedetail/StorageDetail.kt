@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -16,15 +17,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import org.orbitmvi.orbit.compose.collectAsState
 
 val MinToolbarHeight = 96.dp
-val MaxToolbarHeight = 160.dp
+val MaxToolbarHeight = 161.dp
 
 @Composable
 fun StorageDetailRoute(
+    folderItem: Folder,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
     onClickBackIcon: () -> Unit = {},
 ) {
@@ -32,6 +35,10 @@ fun StorageDetailRoute(
     val overlapHeightPx = with(LocalDensity.current) { MaxToolbarHeight.toPx() - MinToolbarHeight.toPx() }
     val state by storageDetailViewModel.collectAsState()
     val linksPagingList = state.pagingList.collectAsLazyPagingItems()
+
+    LaunchedEffect(key1 = Unit) {
+        storageDetailViewModel.setFolderInfo(folderItem)
+    }
 
     val isCollapsed: Boolean by remember {
         derivedStateOf {
@@ -48,19 +55,21 @@ fun StorageDetailRoute(
         onClickBackIcon = onClickBackIcon,
         onClickTabItem = storageDetailViewModel::changeSelectedTabIdx,
         onClickSortedIcon = storageDetailViewModel::clickFeedSort,
+        onClickBookMarkButton = storageDetailViewModel::addFavoriteItem,
     )
 }
 
 @Composable
 fun StorageDetailScreen(
     linksPagingList: LazyPagingItems<FeedCardUiModel>,
+    onClickBookMarkButton: (String, Boolean) -> Unit,
+    onClickBackIcon: () -> Unit,
+    onClickTabItem: (Int) -> Unit,
+    onClickSortedIcon: (StorageDetailSort) -> Unit,
     modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),
     isCollapsed: Boolean = false,
-    onClickBackIcon: () -> Unit = {},
-    onClickTabItem: (Int) -> Unit = {},
-    onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     Box(
         modifier = modifier,
@@ -78,6 +87,9 @@ fun StorageDetailScreen(
             state = state,
             onClickBackIcon = onClickBackIcon,
             onClickSortedIcon = onClickSortedIcon,
+            onClickTabItem = onClickTabItem,
+            onClickBookMarkButton = onClickBookMarkButton,
+
         )
     }
 }
@@ -85,5 +97,7 @@ fun StorageDetailScreen(
 @Preview
 @Composable
 fun PreviewStorageDetailScreen() {
-    StorageDetailRoute()
+    StorageDetailRoute(
+        folderItem = Folder(),
+    )
 }

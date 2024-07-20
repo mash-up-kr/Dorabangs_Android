@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,7 +42,9 @@ fun StorageDetailList(
     state: StorageDetailState,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    onClickBackIcon: () -> Unit = {},
+    onClickBackIcon: () -> Unit,
+    onClickTabItem: (Int) -> Unit,
+    onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     LazyColumn(
@@ -53,6 +56,7 @@ fun StorageDetailList(
             StorageDetailExpandedHeader(
                 state = state,
                 onClickBackIcon = onClickBackIcon,
+                onClickTabItem = onClickTabItem,
             )
         }
         item {
@@ -63,32 +67,24 @@ fun StorageDetailList(
         }
         items(
             count = linksPagingList.itemCount,
-            key = linksPagingList.itemKey(FeedCardUiModel::title),
+            key = linksPagingList.itemKey(FeedCardUiModel::id),
             contentType = linksPagingList.itemContentType { "SavedLinks" },
         ) { idx ->
-            linksPagingList[idx]?.let { FeedCard(cardInfo = it) }
-//            if (idx != FeedCardUiModel.getDefaultFeedCard().lastIndex) {
-//                HorizontalDivider(
-//                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-//                    thickness = 0.5.dp,
-//                )
-//            }
+            linksPagingList[idx]?.let { cardItem ->
+                FeedCard(cardInfo = cardItem, onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) })
+            }
+            // TODO - 마지막 처리 필요
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                thickness = 0.5.dp,
+            )
         }
-//        itemsIndexed(FeedCardUiModel.getDefaultFeedCard()) { idx, cardInfo ->
-//            FeedCard(cardInfo = cardInfo)
-//            if (idx != FeedCardUiModel.getDefaultFeedCard().lastIndex) {
-//                HorizontalDivider(
-//                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-//                    thickness = 0.5.dp,
-//                )
-//            }
-//        }
     }
 }
 
 @Composable
 fun SortButtonRow(
-    items: List<StorageDetailSort> = listOf(StorageDetailSort.LATEST, StorageDetailSort.PAST),
+    items: List<StorageDetailSort> = listOf(StorageDetailSort.DESC, StorageDetailSort.ASC),
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     Row(
