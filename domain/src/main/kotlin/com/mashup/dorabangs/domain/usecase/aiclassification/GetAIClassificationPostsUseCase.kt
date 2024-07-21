@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.domain.usecase.aiclassification
 
+import com.mashup.dorabangs.domain.model.Sort
 import com.mashup.dorabangs.domain.repository.AIClassificationRepository
 import javax.inject.Inject
 
@@ -10,11 +11,11 @@ class GetAIClassificationPostsUseCase @Inject constructor(
     suspend operator fun invoke(
         page: Int? = null,
         limit: Int? = null,
-        order: String? = null,
+        order: Sort? = null,
     ) =
         aiClassificationRepository.getAIClassificationPosts(
             page = page,
             limit = limit,
-            order = order,
+            order = order?.query,
         )
 }
