@@ -16,6 +16,7 @@ import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationC
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
+import com.mashup.dorabangs.domain.usecase.posts.GetUnReadPostsCountUseCase
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
@@ -42,6 +43,7 @@ class HomeViewModel @Inject constructor(
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
     private val createFolderUseCase: CreateFolderUseCase,
     private val saveLinkUseCase: SaveLinkUseCase,
+    private val getUnReadPostsCountUseCase: GetUnReadPostsCountUseCase,
     private val getAIClassificationCount: GetAIClassificationCountUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
@@ -64,6 +66,7 @@ class HomeViewModel @Inject constructor(
 
         updateFolderList()
         setAIClassificationCount()
+        setPostsCount()
         getSavedLinkFromDefaultFolder()
     }
 
@@ -208,6 +211,15 @@ class HomeViewModel @Inject constructor(
         intent {
             reduce {
                 state.copy(aiClassificationCount = count)
+            }
+        }
+    }
+
+    private fun setPostsCount() = viewModelScope.launch {
+        val count = getUnReadPostsCountUseCase()
+        intent {
+            reduce {
+                state.copy(unReadPostCount = count)
             }
         }
     }

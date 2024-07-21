@@ -38,4 +38,7 @@ class PostsRepositoryImpl @Inject constructor(
 
     override suspend fun changePostFolder(postId: String, folderId: String) =
         postsRemoteDataSource.changePostFolder(postId, folderId)
+
+    override suspend fun getPostsCount(isRead: Boolean?): Int =
+        postsRemoteDataSource.getPostsCount(isRead)
 }

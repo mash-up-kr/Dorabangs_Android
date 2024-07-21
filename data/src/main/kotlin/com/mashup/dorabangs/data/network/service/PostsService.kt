@@ -39,4 +39,7 @@ interface PostsService {
         @Path("postId") postId: String,
         @Body folderId: String,
     )
+
+    @GET("posts/count")
+    suspend fun getPostsCount(@Query("isRead") isRead: Boolean?): Int
 }

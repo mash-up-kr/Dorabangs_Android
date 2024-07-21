@@ -17,6 +17,7 @@ data class HomeState(
     val isShowMovingFolderSheet: Boolean = false,
     val homeCreateFolder: HomeCreateFolder = HomeCreateFolder(),
     val aiClassificationCount: Int = 0,
+    val unReadPostCount: Int = 0,
 )
 
 data class ClipBoardState(

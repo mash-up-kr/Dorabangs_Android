@@ -138,13 +138,14 @@ fun HomeScreen(
                                         append(stringResource(id = R.string.home_carousel_not_read_yet) + "\n")
                                     }
                                     withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
-                                        append(stringResource(id = R.string.home_carousel_count, state.aiClassificationCount) + " ")
+                                        append(stringResource(id = R.string.home_carousel_count, state.unReadPostCount) + " ")
                                     }
                                     withStyle(SpanStyle(color = DoraColorTokens.Black)) {
                                         append(stringResource(id = R.string.home_carousel_its_here))
                                     }
                                 },
                                 onClickButton = navigateToClassification,
+                                isVisible = state.unReadPostCount > 0,
                             ),
                             HomeCarouselItem(
                                 lottieRes = R.raw.unread,
