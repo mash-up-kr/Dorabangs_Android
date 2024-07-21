@@ -7,12 +7,16 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
+import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
+import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
+import com.mashup.dorabangs.domain.usecase.posts.DeletePost
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
+import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.FolderType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
@@ -37,16 +41,20 @@ class StorageDetailViewModel @Inject constructor(
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
     private val getPostsUseCase: GetPosts,
     private val deleteFolderUseCase: DeleteFolderUseCase,
+    private val deletePostUseCase: DeletePost,
+    private val getFolderListUseCase: GetFolderListUseCase,
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
     fun setFolderInfo(folderItem: Folder) = intent {
         reduce {
             state.copy(
-                folderId = folderItem.id,
-                title = folderItem.name,
-                postCount = folderItem.postCount,
-                folderType = folderItem.type,
+                folderInfo = state.folderInfo.copy(
+                    folderId = folderItem.id,
+                    title = folderItem.name,
+                    postCount = folderItem.postCount,
+                    folderType = folderItem.type,
+                ),
             )
         }
         fetchSavedLinkFromType(
@@ -125,15 +133,13 @@ class StorageDetailViewModel @Inject constructor(
         intent {
             val isRead = if (selectedIdx == 0) null else false
             fetchSavedLinkFromType(
-                type = state.folderType,
-                folderId = state.folderId,
+                type = state.folderInfo.folderType,
+                folderId = state.folderInfo.folderId,
                 order = state.isLatestSort.name,
                 isRead = isRead,
             )
             reduce {
-                state.copy(
-                    selectedTabIdx = selectedIdx,
-                )
+                state.copy(tabInfo = state.tabInfo.copy(selectedTabIdx = selectedIdx))
             }
         }
     }
@@ -143,10 +149,10 @@ class StorageDetailViewModel @Inject constructor(
      */
     fun clickFeedSort(item: StorageDetailSort) = viewModelScope.launch {
         intent {
-            val isRead = if (state.selectedTabIdx == 0) null else false
+            val isRead = if (state.tabInfo.selectedTabIdx == 0) null else false
             fetchSavedLinkFromType(
-                type = state.folderType,
-                folderId = state.folderId,
+                type = state.folderInfo.folderType,
+                folderId = state.folderInfo.folderId,
                 order = item.name,
                 isRead = isRead,
             )
@@ -199,19 +205,84 @@ class StorageDetailViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 링크 삭제
+     */
+    fun deletePost(postId: String) = viewModelScope.doraLaunch {
+        deletePostUseCase(postId)
+        setVisibleDialog(false)
+        // fetchSavedLinkFromType() TODO - 새로 데이터 불러오거느 update
+    }
+
+    /**
+     * 현재 폴더 리스트 가져오기
+     */
+    fun getFolderList() = viewModelScope.doraLaunch {
+        val customFolderList = getFolderListUseCase().customFolders
+        intent {
+            reduce {
+                state.copy(folderList = customFolderList)
+            }
+            setVisibleMovingFolderBottomSheet(true)
+        }
+    }
+
     fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
+        val bottomSheet = when (state.editActionType) {
+            EditActionType.FolderEdit -> {
+                state.moreBottomSheetState.copy(
+                    isShowMoreButtonSheet = visible,
+                    firstItem = R.string.remove_dialog_folder_title,
+                    secondItem = R.string.rename_folder_bottom_sheet_title,
+                )
+            }
+            EditActionType.LinkEdit -> {
+                state.moreBottomSheetState.copy(
+                    isShowMoreButtonSheet = visible,
+                    firstItem = R.string.remove_dialog_title,
+                    secondItem = R.string.moving_folder_dialog_title,
+                )
+            }
+        }
         reduce {
-            state.copy(isShowMoreButtonSheet = visible)
+            state.copy(moreBottomSheetState = bottomSheet)
         }
     }
 
     fun setVisibleDialog(visible: Boolean) = intent {
-        reduce {
-            state.copy(isShowDialog = visible)
+        val dialogState = when (state.editActionType) {
+            EditActionType.FolderEdit -> {
+                state.editDialogState.copy(
+                    isShowDialog = visible,
+                    dialogTitle = R.string.remove_dialog_folder_title,
+                    dialogCont = R.string.remove_dialog_folder_cont,
+                )
+            }
+            EditActionType.LinkEdit -> {
+                state.editDialogState.copy(
+                    isShowDialog = visible,
+                    dialogTitle = R.string.remove_dialog_title,
+                    dialogCont = R.string.remove_dialog_content,
+                )
+            }
         }
+        reduce {
+            state.copy(editDialogState = dialogState)
+        }
+    }
+
+    fun setActionType(type: EditActionType, postId: String = "") = intent {
+        reduce { state.copy(editActionType = type, currentClickPostId = postId) }
     }
 
     fun moveToEditFolderName(folderId: String?) = intent {
         postSideEffect(StorageDetailSideEffect.NavigateToEditFolder(folderId = folderId.orEmpty()))
+    }
+
+    fun setVisibleMovingFolderBottomSheet(visible: Boolean, isNavigate: Boolean = false) = intent {
+        reduce {
+            state.copy(isShowMovingFolderSheet = visible)
+        }
+        if (isNavigate) postSideEffect(StorageDetailSideEffect.NavigateToCreateFolder)
     }
 }

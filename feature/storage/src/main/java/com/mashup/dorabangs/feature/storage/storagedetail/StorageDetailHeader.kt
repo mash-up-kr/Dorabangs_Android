@@ -55,7 +55,7 @@ fun StorageDetailCollapsingHeader(
                 onClickActionIcon = onClickActionIcon,
             )
             StorageDetailHeaderTabBar(
-                tabList = state.tabTitleList,
+                tabList = state.tabInfo.tabTitleList,
                 onClickTabItem = onClickTabItem,
             )
         }
@@ -82,8 +82,8 @@ fun StorageDetailExpandedHeader(
             state = state,
         )
         StorageDetailHeaderTabBar(
-            tabList = state.tabTitleList,
-            selectedTabIdx = state.selectedTabIdx,
+            tabList = state.tabInfo.tabTitleList,
+            selectedTabIdx = state.tabInfo.selectedTabIdx,
             onClickTabItem = onClickTabItem,
         )
         HorizontalDivider(
@@ -119,11 +119,11 @@ fun StorageDetailHeaderContent(
                 .fillMaxWidth(),
         ) {
             Text(
-                text = state.title,
+                text = state.folderInfo.title,
                 style = DoraTypoTokens.base2Bold,
             )
             Text(
-                text = "${state.postCount} 게시물",
+                text = "${state.folderInfo.postCount} 게시물",
                 style = DoraTypoTokens.caption1Medium,
             )
         }
@@ -186,11 +186,11 @@ fun StorageDetailTopBarByFolderType(
     onClickActionIcon: () -> Unit = {},
     onClickBackIcon: () -> Unit,
 ) {
-    when (state.folderType) {
+    when (state.folderInfo.folderType) {
         FolderType.Custom.type -> {
             DoraTopBar.BackWithActionIconTopBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = state.title,
+                title = state.folderInfo.title,
                 isTitleCenter = true,
                 actionIcon = coreR.drawable.ic_more_black,
                 onClickBackIcon = onClickBackIcon,
@@ -200,7 +200,7 @@ fun StorageDetailTopBarByFolderType(
         else -> {
             DoraTopBar.BackNavigationTopBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = state.title,
+                title = state.folderInfo.title,
                 isTitleCenter = true,
                 onClickBackIcon = onClickBackIcon,
             )

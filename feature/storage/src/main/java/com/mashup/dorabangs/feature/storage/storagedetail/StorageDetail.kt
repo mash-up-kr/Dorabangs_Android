@@ -23,9 +23,11 @@ import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSh
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.domain.model.Folder
+import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
+import com.mashup.dorabangs.feature.storage.storagedetail.model.toBottomSheetModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -38,6 +40,7 @@ fun StorageDetailRoute(
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
     navigateToFolderManager: (String) -> Unit,
+    navigateToCreateFolder: () -> Unit,
     onClickBackIcon: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
@@ -57,11 +60,12 @@ fun StorageDetailRoute(
     }
 
     storageDetailViewModel.collectSideEffect { sideEffect ->
-        when (sideEffect) {
-            // TODO - SnackBarToast 띄우기
-            is StorageDetailSideEffect.NavigateToHome -> navigateToHome()
-            is StorageDetailSideEffect.NavigateToEditFolder -> navigateToFolderManager(sideEffect.folderId)
-        }
+        handleSideEffect(
+            sideEffect = sideEffect,
+            navigateToHome = navigateToHome,
+            navigateToFolderManager = navigateToFolderManager,
+            navigateToCreateFolder = navigateToCreateFolder,
+        )
     }
 
     StorageDetailScreen(
@@ -73,34 +77,77 @@ fun StorageDetailRoute(
         onClickTabItem = storageDetailViewModel::changeSelectedTabIdx,
         onClickSortedIcon = storageDetailViewModel::clickFeedSort,
         onClickBookMarkButton = storageDetailViewModel::addFavoriteItem,
-        onClickActionIcon = { storageDetailViewModel.setVisibleMoreButtonBottomSheet(true) },
+        onClickActionIcon = {
+            storageDetailViewModel.setActionType(EditActionType.FolderEdit)
+            storageDetailViewModel.setVisibleMoreButtonBottomSheet(true)
+        },
+        onClickMoreButton = { postId ->
+            storageDetailViewModel.setActionType(EditActionType.LinkEdit, postId)
+            storageDetailViewModel.setVisibleMoreButtonBottomSheet(true)
+        },
     )
 
     DoraBottomSheet.MoreButtonBottomSheet(
         modifier = Modifier.height(320.dp),
-        isShowSheet = state.isShowMoreButtonSheet,
-        firstItemName = R.string.remove_dialog_folder_title,
-        secondItemName = R.string.rename_folder_bottom_sheet_title,
+        isShowSheet = state.moreBottomSheetState.isShowMoreButtonSheet,
+        firstItemName = state.moreBottomSheetState.firstItem,
+        secondItemName = state.moreBottomSheetState.secondItem,
         onClickDeleteLinkButton = {
             storageDetailViewModel.setVisibleMoreButtonBottomSheet(false)
             storageDetailViewModel.setVisibleDialog(true)
         },
         onClickMoveFolderButton = {
             storageDetailViewModel.setVisibleMoreButtonBottomSheet(false)
-            storageDetailViewModel.moveToEditFolderName(state.folderId)
+            when (state.editActionType) {
+                EditActionType.FolderEdit -> storageDetailViewModel.moveToEditFolderName(state.folderInfo.folderId)
+                EditActionType.LinkEdit -> storageDetailViewModel.getFolderList()
+            }
         },
         onDismissRequest = { storageDetailViewModel.setVisibleMoreButtonBottomSheet(false) },
     )
 
     DoraDialog(
-        isShowDialog = state.isShowDialog,
-        title = stringResource(R.string.remove_dialog_folder_title),
-        content = stringResource(R.string.remove_dialog_folder_cont),
+        isShowDialog = state.editDialogState.isShowDialog,
+        title = stringResource(state.editDialogState.dialogTitle),
+        content = stringResource(state.editDialogState.dialogCont),
         confirmBtnText = stringResource(R.string.remove_dialog_confirm),
         disMissBtnText = stringResource(R.string.remove_dialog_cancil),
         onDisMissRequest = { storageDetailViewModel.setVisibleDialog(false) },
-        onClickConfirmBtn = { storageDetailViewModel.deleteFolder(state.folderId) },
+        onClickConfirmBtn = {
+            when (state.editActionType) {
+                EditActionType.FolderEdit -> storageDetailViewModel.deleteFolder(state.folderInfo.folderId)
+                EditActionType.LinkEdit -> storageDetailViewModel.deletePost(state.currentClickPostId)
+            }
+        },
     )
+
+    DoraBottomSheet.MovingFolderBottomSheet(
+        modifier = Modifier.height(441.dp),
+        isShowSheet = state.isShowMovingFolderSheet,
+        folderList = state.folderList.map { it.toBottomSheetModel(state.folderInfo.folderId.orEmpty()) },
+        onDismissRequest = { storageDetailViewModel.setVisibleMovingFolderBottomSheet(false) },
+        onClickCreateFolder = {
+            storageDetailViewModel.setVisibleMovingFolderBottomSheet(
+                visible = false,
+                isNavigate = true,
+            )
+        },
+        onClickMoveFolder = {},
+    )
+}
+
+private fun handleSideEffect(
+    sideEffect: StorageDetailSideEffect,
+    navigateToHome: () -> Unit,
+    navigateToCreateFolder: () -> Unit,
+    navigateToFolderManager: (String) -> Unit,
+) {
+    when (sideEffect) {
+        // TODO - SnackBarToast 띄우기
+        is StorageDetailSideEffect.NavigateToHome -> navigateToHome()
+        is StorageDetailSideEffect.NavigateToEditFolder -> navigateToFolderManager(sideEffect.folderId)
+        is StorageDetailSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+    }
 }
 
 @Composable
@@ -111,6 +158,7 @@ fun StorageDetailScreen(
     onClickTabItem: (Int) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit,
     onClickActionIcon: () -> Unit,
+    onClickMoreButton: (String) -> Unit,
     modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),
@@ -136,6 +184,7 @@ fun StorageDetailScreen(
             onClickTabItem = onClickTabItem,
             onClickBookMarkButton = onClickBookMarkButton,
             onClickActionIcon = onClickActionIcon,
+            onClickMoreButton = onClickMoreButton,
 
         )
     }
@@ -148,5 +197,6 @@ fun PreviewStorageDetailScreen() {
         folderItem = Folder(),
         navigateToHome = {},
         navigateToFolderManager = {},
+        navigateToCreateFolder = {},
     )
 }

@@ -46,6 +46,7 @@ fun StorageDetailList(
     onClickBackIcon: () -> Unit,
     onClickTabItem: (Int) -> Unit,
     onClickActionIcon: () -> Unit,
+    onClickMoreButton: (String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
@@ -85,7 +86,11 @@ fun StorageDetailList(
                 contentType = linksPagingList.itemContentType { "SavedLinks" },
             ) { idx ->
                 linksPagingList[idx]?.let { cardItem ->
-                    FeedCard(cardInfo = cardItem, onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) })
+                    FeedCard(
+                        cardInfo = cardItem,
+                        onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) },
+                        onClickMoreButton = { onClickMoreButton(cardItem.id) },
+                    )
                 }
                 // TODO - 마지막 처리 필요
                 HorizontalDivider(

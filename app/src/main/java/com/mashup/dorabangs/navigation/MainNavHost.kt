@@ -70,6 +70,7 @@ fun MainNavHost(
             navigateToFolderManager = { folderId ->
                 appState.navController.navigateToStorageFolderManage(folderManageType = FolderManageType.CHANGE, folderId = folderId)
             },
+            navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
             navigateToHome = {
                 appState.navController.navigateToHome(
                     navOptions = navOptions {
