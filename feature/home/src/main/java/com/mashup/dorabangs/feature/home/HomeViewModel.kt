@@ -7,12 +7,16 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
+import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -26,15 +30,24 @@ class HomeViewModel @Inject constructor(
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
     private val createFolderUseCase: CreateFolderUseCase,
+    private val saveLinkUseCase: SaveLinkUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
     init {
         viewModelScope.doraLaunch {
-            savedStateHandle.getStateFlow(
-                "isVisibleMovingBottomSheet",
-                initialValue = false,
-            ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
+            launch {
+                savedStateHandle.getStateFlow(
+                    "isVisibleMovingBottomSheet",
+                    initialValue = false,
+                ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
+            }
+            launch {
+                savedStateHandle.getStateFlow(
+                    "urlLink",
+                    initialValue = "",
+                ).collect { urlLink -> setStateUrlLink(urlLink) }
+            }
         }
     }
 
@@ -90,18 +103,34 @@ class HomeViewModel @Inject constructor(
         if (isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
     }
 
-    fun createFolder(folderName: String) {
+    private fun setStateUrlLink(urlLink: String) = intent {
+        reduce {
+            state.copy(homeCreateFolder = state.homeCreateFolder.copy(urlLink = urlLink))
+        }
+    }
+
+    fun createFolder(folderName: String, urlLink: String) {
         viewModelScope.doraLaunch {
             val folderData = NewFolderNameList(names = listOf(folderName))
-            val isCreateFolderSuccess = createFolderUseCase(folderData)
-            if (isCreateFolderSuccess.isSuccess) {
+            val afterCreateFolder = createFolderUseCase(folderData)
+            if (afterCreateFolder.isSuccess) {
+                // TODO API 바뀌면 id 넣는 로직 추가
                 intent {
-                    postSideEffect(HomeSideEffect.NavigateToHome)
+                    if (urlLink.isNotBlank()) {
+                        postSideEffect(
+                            HomeSideEffect.SaveLink(
+                                folderId = "afterCreateFolder.folderId",
+                                urlLink = urlLink,
+                            ),
+                        )
+                    } else {
+                        postSideEffect(HomeSideEffect.NavigateToHome)
+                    }
                 }
             } else {
                 setTextHelperEnable(
                     isEnable = true,
-                    helperMsg = isCreateFolderSuccess.errorMsg,
+                    helperMsg = afterCreateFolder.errorMsg,
                 )
             }
         }
@@ -109,6 +138,16 @@ class HomeViewModel @Inject constructor(
 
     private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
         reduce { state.copy(homeCreateFolder = state.homeCreateFolder.copy(helperEnable = isEnable, helperMessage = helperMsg)) }
+    }
+
+    fun saveLink(folderId: String, urlLink: String) = viewModelScope.doraLaunch {
+        saveLinkUseCase.invoke(Link(folderId = folderId, url = urlLink))
+
+        intent {
+            postSideEffect(
+                HomeSideEffect.NavigateHomeAfterSaveLink,
+            )
+        }
     }
 
     fun setFolderName(folderName: String) = intent {

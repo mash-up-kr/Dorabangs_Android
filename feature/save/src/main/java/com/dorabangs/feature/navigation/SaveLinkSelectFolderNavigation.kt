@@ -23,7 +23,7 @@ fun NavController.navigateToSaveLinkSelectFolder(
 fun NavGraphBuilder.saveLinkSelectFolder(
     onClickBackButton: () -> Unit,
     onClickSaveButton: () -> Unit,
-    onClickAddNewFolder: () -> Unit,
+    onClickAddNewFolder: (String) -> Unit,
 ) {
     composable(
         route = "${NavigationRoute.SaveLink.SelectFolder.route}/{copiedUrl}",
