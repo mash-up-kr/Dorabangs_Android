@@ -28,8 +28,8 @@ class SplashViewModel @Inject constructor(
     private val splashShowFlow = MutableStateFlow(true)
     val isSplashShow = splashShowFlow.asStateFlow()
 
-    private val _isFirstEntry = MutableStateFlow<Boolean?>(null)
-    val isFirstEntry: StateFlow<Boolean?> = _isFirstEntry.asStateFlow()
+    private val _firstEntryScreen = MutableStateFlow(FirstEntryScreen.Splash)
+    val firstEntryScreen: StateFlow<FirstEntryScreen> = _firstEntryScreen.asStateFlow()
 
     fun checkUserToken(userId: String) {
         viewModelScope.doraLaunch {
@@ -43,7 +43,7 @@ class SplashViewModel @Inject constructor(
             withTimeout(SPLASH_SCREEN_TIME) {
                 if (userAccessToken.isNotEmpty()) {
                     splashShowFlow.value = false
-                    _isFirstEntry.value = getIsFirstEntryUseCase().firstOrNull() ?: true
+                    _firstEntryScreen.value = if (getIsFirstEntryUseCase().firstOrNull() != false) FirstEntryScreen.Onboarding else FirstEntryScreen.Home
                 } else {
                     // Todo :: 유저 토큰 가져오기 실패에 대한 처리 해줘야함 (Like 토스트 메시지)
                 }
@@ -54,4 +54,8 @@ class SplashViewModel @Inject constructor(
     companion object {
         private const val SPLASH_SCREEN_TIME = 1000L
     }
+}
+
+enum class FirstEntryScreen {
+    Splash, Onboarding, Home
 }
