@@ -3,12 +3,15 @@ package com.mashup.dorabangs.feature.home
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.model.Sort
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
@@ -16,8 +19,12 @@ import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
+import com.mashup.dorabangs.feature.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -31,7 +38,7 @@ class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
     private val getFolderList: GetFolderListUseCase,
-    private val getPosts: GetPosts,
+    private val getPostsUseCase: GetPosts,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
     private val createFolderUseCase: CreateFolderUseCase,
     private val saveLinkUseCase: SaveLinkUseCase,
@@ -57,6 +64,7 @@ class HomeViewModel @Inject constructor(
 
         updateFolderList()
         setAIClassificationCount()
+        getSavedLinkFromDefaultFolder()
     }
 
     fun changeSelectedTapIdx(index: Int) = intent {
@@ -204,59 +212,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    init {
+    private fun getSavedLinkFromDefaultFolder(
+        order: String = Sort.ASC.name,
+        favorite: Boolean = false,
+        isRead: Boolean? = null,
+    ) = viewModelScope.doraLaunch {
+        val pagingData =
+            getPostsUseCase.invoke(order = order, favorite = favorite, isRead = isRead)
+                .cachedIn(viewModelScope).map { pagedData ->
+                    pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+                }.stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.Lazily,
+                    initialValue = PagingData.empty(),
+                )
         intent {
             reduce {
-                state.copy(
-                    feedCards = listOf(
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                            isLoading = true,
-                        ),
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                        ),
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                        ),
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                        ),
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                        ),
-                    ),
-                )
+                state.copy(feedCards = pagingData)
             }
         }
     }
