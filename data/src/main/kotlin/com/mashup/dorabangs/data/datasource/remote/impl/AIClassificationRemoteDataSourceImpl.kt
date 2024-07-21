@@ -48,4 +48,7 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
         service.deletePostFromAIClassification(
             postId = postId,
         )
+
+    override suspend fun getAIClassificationCount() =
+        service.getAIClassificationCount()
 }

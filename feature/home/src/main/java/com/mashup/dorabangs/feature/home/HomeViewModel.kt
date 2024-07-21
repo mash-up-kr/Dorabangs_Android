@@ -8,6 +8,7 @@ import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
@@ -15,6 +16,7 @@ import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -30,6 +32,7 @@ class HomeViewModel @Inject constructor(
     private val getPosts: GetPosts,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
     private val createFolderUseCase: CreateFolderUseCase,
+    private val getAIClassificationCount: GetAIClassificationCountUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -41,9 +44,8 @@ class HomeViewModel @Inject constructor(
             ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
         }
 
-        viewModelScope.doraLaunch {
-            updateFolderList()
-        }
+        updateFolderList()
+        setAIClassificationCount()
     }
 
     fun changeSelectedTapIdx(index: Int) = intent {
@@ -98,7 +100,7 @@ class HomeViewModel @Inject constructor(
         if (isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
     }
 
-    private suspend fun updateFolderList() {
+    private fun updateFolderList() = viewModelScope.doraLaunch {
         val folderList = getFolderList()
         intent {
             reduce {
@@ -151,6 +153,15 @@ class HomeViewModel @Inject constructor(
     fun setFolderName(folderName: String) = intent {
         reduce {
             state.copy(homeCreateFolder = state.homeCreateFolder.copy(folderName = folderName))
+        }
+    }
+
+    private fun setAIClassificationCount() = viewModelScope.launch {
+        val count = getAIClassificationCount()
+        intent {
+            reduce {
+                state.copy(aiClassificationCount = count)
+            }
         }
     }
 

@@ -101,13 +101,13 @@ fun HomeScreen(
                     HomeCarousel(
                         homeCarouselItems = listOf(
                             HomeCarouselItem(
-                                lottieRes = R.raw.unread,
-                                description = "3초만에 링크를\n저장하는 방법이에요",
+                                lottieRes = R.raw.ai,
+                                description = "AI로 분류 링크가\n375개 있어요",
                                 onClickButton = navigateToClassification,
                             ),
                             HomeCarouselItem(
-                                lottieRes = R.raw.ai,
-                                description = "AI로 분류 링크가\n375개 있어요",
+                                lottieRes = R.raw.unread,
+                                description = "3초만에 링크를\n저장하는 방법이에요",
                                 onClickButton = navigateToClassification,
                             ),
                         ),
