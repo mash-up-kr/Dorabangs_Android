@@ -10,9 +10,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mashup.dorabangs.core.designsystem.theme.DorabangsTheme
 import com.mashup.dorabangs.navigation.DoraApp
+import com.mashup.dorabangs.splash.FirstEntryScreen
 import com.mashup.dorabangs.splash.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,12 +38,15 @@ class MainActivity : ComponentActivity() {
         splashViewModel.checkUserToken(userId)
 
         installSplashScreen().apply {
-            setKeepOnScreenCondition { splashViewModel.isSplashShow.value }
+            setKeepOnScreenCondition { splashViewModel.isSplashShow.value || splashViewModel.firstEntryScreen.value == FirstEntryScreen.Splash }
         }
 
         setContent {
-            DorabangsTheme {
-                DoraApp()
+            val firstEntryScreen = splashViewModel.firstEntryScreen.collectAsState()
+            if (firstEntryScreen.value != FirstEntryScreen.Splash) {
+                DorabangsTheme {
+                    DoraApp(isFirstEntry = firstEntryScreen.value == FirstEntryScreen.Onboarding)
+                }
             }
         }
     }

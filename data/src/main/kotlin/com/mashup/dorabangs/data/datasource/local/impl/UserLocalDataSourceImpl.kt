@@ -34,7 +34,7 @@ class UserLocalDataSourceImpl @Inject constructor(
     }
 
     override fun getIsFirstEntry(): Flow<Boolean> {
-        return getDataStore(booleanPreferencesKey(FIRST_ENTRY), false)
+        return getDataStore(booleanPreferencesKey(FIRST_ENTRY), true)
     }
 
     override fun getLastCopiedUrl(): Flow<String> {
