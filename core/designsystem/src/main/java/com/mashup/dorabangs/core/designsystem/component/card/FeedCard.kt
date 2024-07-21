@@ -117,7 +117,7 @@ fun FeedCardContent(
             Row {
                 Icon(
                     modifier = Modifier.size(12.dp, 16.dp),
-                    painter = painterResource(id = R.drawable.ic_plus),
+                    painter = painterResource(id = R.drawable.ic_ai_14dp),
                     contentDescription = "",
                 )
                 Text(

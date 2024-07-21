@@ -7,11 +7,11 @@ enum class BottomNavigationDestination(
     val routeName: Int,
 ) {
     HOME(
-        icon = androidx.core.R.drawable.ic_call_answer,
+        icon = R.drawable.ic_home_default,
         routeName = R.string.home,
     ),
     STORAGE(
-        icon = androidx.core.R.drawable.ic_call_answer,
+        icon = R.drawable.ic_folder_default,
         routeName = R.string.storage,
     ),
 }
