@@ -29,7 +29,7 @@ class SplashViewModel @Inject constructor(
     val isSplashShow = splashShowFlow.asStateFlow()
 
     private val _isFirstEntry = MutableStateFlow<Boolean?>(null)
-    val isFirstEntry: StateFlow<Boolean?> = _isFirstEntry
+    val isFirstEntry: StateFlow<Boolean?> = _isFirstEntry.asStateFlow()
 
     fun checkUserToken(userId: String) {
         viewModelScope.doraLaunch {

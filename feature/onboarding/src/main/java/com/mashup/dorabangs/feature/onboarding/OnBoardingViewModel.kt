@@ -49,7 +49,7 @@ class OnBoardingViewModel @Inject constructor(
         )
     }
 
-    fun fetchOnBoardingKeywords(limit: Int? = null) = viewModelScope.doraLaunch {
+    private fun fetchOnBoardingKeywords(limit: Int? = null) = viewModelScope.doraLaunch {
         val onBoardingKeywords = getOnBoardingKeywordsUseCase.invoke(limit)
         intent {
             reduce {

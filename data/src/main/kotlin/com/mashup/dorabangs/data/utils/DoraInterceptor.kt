@@ -17,7 +17,6 @@ class DoraInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         try {
             val response = chain.proceed(chain.request())
-            Log.d("TAG", "response: $response")
             val responseBody = response.body
             if (responseBody != null && response.isSuccessful) {
                 return response.newBuilder()
