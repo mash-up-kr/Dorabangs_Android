@@ -1,17 +1,18 @@
 package com.mashup.dorabangs.domain.repository
 
+import androidx.paging.PagingData
 import com.mashup.dorabangs.domain.model.Link
+import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
-import com.mashup.dorabangs.domain.model.Posts
+import kotlinx.coroutines.flow.Flow
 
 interface PostsRepository {
 
     suspend fun getPosts(
-        page: Int? = null,
-        limit: Int? = null,
         order: String? = null,
         favorite: Boolean? = null,
-    ): Posts
+        isRead: Boolean? = null,
+    ): Flow<PagingData<Post>>
 
     suspend fun saveLink(
         link: Link,

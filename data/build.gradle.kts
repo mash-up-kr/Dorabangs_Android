@@ -77,6 +77,10 @@ dependencies {
 
     // HTML
     implementation(libs.jsoup)
+
+    // Paging
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
 }
 
 fun getSeverBaseUrl(propertyKey: String): String {

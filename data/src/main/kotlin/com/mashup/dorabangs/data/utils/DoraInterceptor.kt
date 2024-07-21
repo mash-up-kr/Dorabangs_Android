@@ -42,6 +42,6 @@ class DoraInterceptor @Inject constructor(
 }
 
 class DoraException(
-    val code: String,
+    val code: String = "UnKnown",
     override val message: String?,
 ) : IOException(message)

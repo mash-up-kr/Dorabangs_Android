@@ -4,12 +4,14 @@ import com.mashup.dorabangs.data.model.CreateFolderRequestModel
 import com.mashup.dorabangs.data.model.EditFolderNameRequestModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
+import com.mashup.dorabangs.data.model.LinksFromFolderResponseModel
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface FolderService {
 
@@ -29,6 +31,15 @@ interface FolderService {
         @Path("folderId") folderId: String,
         @Body editFolderNameRequest: EditFolderNameRequestModel,
     )
+
+    @GET("folders/{folderId}/posts")
+    suspend fun getLinkFolderList(
+        @Path("folderId") folderId: String?,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int = 10,
+        @Query("order") order: String,
+        @Query("isRead") isRead: Boolean?,
+    ): LinksFromFolderResponseModel
 
     @DELETE("folders/{folderId}")
     suspend fun deleteFolder(

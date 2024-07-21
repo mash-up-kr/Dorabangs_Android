@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PostInfoRequestModel(
     val isFavorite: Boolean,
-    val readAt: String,
+    val readAt: String?,
 )
 
 fun PostInfoRequestModel.toDomain() = PostInfo(

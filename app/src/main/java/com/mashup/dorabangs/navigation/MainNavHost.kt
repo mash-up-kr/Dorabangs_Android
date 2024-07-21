@@ -55,7 +55,9 @@ fun MainNavHost(
             },
         )
         storageNavigation(
-            navigateToStorageDetail = { appState.navController.navigateToStorageDetail() },
+            navigateToStorageDetail = { folder ->
+                appState.navController.navigateToStorageDetail(folder = folder)
+            },
             navigateToFolderManage = { folderManageType, folderId ->
                 appState.navController.navigateToStorageFolderManage(
                     folderManageType = folderManageType,
@@ -66,7 +68,9 @@ fun MainNavHost(
         storageFolderManageNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
         )
-        storageDetailNavigation(appState.navController)
+        storageDetailNavigation(
+            onClickBackIcon = { appState.navController.popBackStack() },
+        )
         classificationNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
             navigateToHome = { appState.navController.popBackStack() },
