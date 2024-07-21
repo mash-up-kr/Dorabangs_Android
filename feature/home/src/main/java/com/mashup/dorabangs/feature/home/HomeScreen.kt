@@ -218,7 +218,6 @@ private fun LazyListScope.Feeds(
     }
 }
 
-
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun HomeCarousel(
@@ -314,7 +313,7 @@ private fun HomeCarousel(
                             GradientIcon(
                                 painter = painterResource(
                                     id = homeCarouselItems[index].indicatorIcon
-                                        ?: R.drawable.ic_empty
+                                        ?: R.drawable.ic_empty,
                                 ),
                                 contentDescription = "",
                                 brushGradient = DoraGradientToken.Gradient5,
@@ -323,7 +322,7 @@ private fun HomeCarousel(
                             Icon(
                                 painter = painterResource(
                                     id = homeCarouselItems[index].indicatorIcon
-                                        ?: R.drawable.ic_empty
+                                        ?: R.drawable.ic_empty,
                                 ),
                                 contentDescription = "",
                                 modifier = Modifier.size(8.dp),
@@ -379,8 +378,8 @@ fun HomeCarouselPreview() {
                 },
                 onClickButton = {},
                 isVisible = true,
-            )
-        )
+            ),
+        ),
     )
 }
 

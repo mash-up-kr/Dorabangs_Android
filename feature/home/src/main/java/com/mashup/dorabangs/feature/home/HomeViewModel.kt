@@ -11,13 +11,12 @@ import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
-import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
+import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
@@ -122,13 +121,15 @@ class HomeViewModel @Inject constructor(
         val folderList = getFolderList()
         intent {
             reduce {
-                state.copy(tapElements = folderList.toList().mapIndexed { index, folder ->
-                    DoraChipUiModel(
-                        id = folder.id.orEmpty(),
-                        title = folder.name,
-                        icon = setDefaultFolderIcon(index)
-                    )
-                })
+                state.copy(
+                    tapElements = folderList.toList().mapIndexed { index, folder ->
+                        DoraChipUiModel(
+                            id = folder.id.orEmpty(),
+                            title = folder.name,
+                            icon = setDefaultFolderIcon(index),
+                        )
+                    },
+                )
             }
         }
     }
@@ -145,8 +146,8 @@ class HomeViewModel @Inject constructor(
             state.copy(
                 homeCreateFolder = state.homeCreateFolder.copy(
                     helperEnable = isEnable,
-                    helperMessage = helperMsg
-                )
+                    helperMessage = helperMsg,
+                ),
             )
         }
     }
