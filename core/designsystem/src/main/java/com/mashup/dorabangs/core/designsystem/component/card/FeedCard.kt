@@ -230,11 +230,15 @@ fun FeedCardCategoryAndDayLabel(
             painter = painterResource(id = R.drawable.ic_plus),
             contentDescription = "categoryLabel",
         )
-        Text(
-            text = "${cardInfo.createdAt?.convertCreatedDate()}일 전",
-            style = DoraTypoTokens.XSNormal,
-            color = DoraColorTokens.G5,
-        )
+        cardInfo.createdAt?.let { day ->
+            if (day.isNotEmpty()) {
+                Text(
+                    text = "${day.convertCreatedDate()}일 전",
+                    style = DoraTypoTokens.XSNormal,
+                    color = DoraColorTokens.G5,
+                )
+            }
+        }
     }
 }
 
