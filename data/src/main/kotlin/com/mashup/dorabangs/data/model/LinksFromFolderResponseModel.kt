@@ -8,25 +8,25 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LinksFromFolderResponseModel(
     val hasNext: Boolean,
-    val list: List<SavedLinkInfo>,
+    val list: List<SavedLinkInfoResponseModel>,
     val total: Int,
 )
 
 @Serializable
-data class SavedLinkInfo(
+data class SavedLinkInfoResponseModel(
     val createdAt: String? = "",
     val description: String? = "",
     val folderId: String? = "",
     val id: String? = "",
     val isFavorite: Boolean = false,
-    val keywords: List<LinkKeyword>? = listOf(),
+    val keywords: List<LinkKeywordResponseModel>? = listOf(),
     val title: String? = "",
     val url: String? = "",
     val userId: String? = "",
 )
 
 @Serializable
-data class LinkKeyword(
+data class LinkKeywordResponseModel(
     val id: String? = "",
     val name: String? = "",
 )
@@ -41,7 +41,7 @@ fun LinksFromFolderResponseModel.toDomain(): PageData<List<SavedLinkDetailInfo>>
     )
 }
 
-fun SavedLinkInfo.toDomain(): SavedLinkDetailInfo {
+fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
     return SavedLinkDetailInfo(
         createdAt = createdAt,
         description = description,
@@ -55,7 +55,7 @@ fun SavedLinkInfo.toDomain(): SavedLinkDetailInfo {
     )
 }
 
-fun LinkKeyword.toDomain(): LinkKeywordInfo {
+fun LinkKeywordResponseModel.toDomain(): LinkKeywordInfo {
     return LinkKeywordInfo(
         id = id,
         name = name,
