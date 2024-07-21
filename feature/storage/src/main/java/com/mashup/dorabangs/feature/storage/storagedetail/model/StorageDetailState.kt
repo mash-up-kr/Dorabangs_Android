@@ -38,12 +38,12 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
 
 fun Post.toUiModel(): FeedCardUiModel {
     return FeedCardUiModel(
-        id = this.id.orEmpty(),
+        id = this.id,
         title = this.title,
         content = this.description,
-        createdAt = "",
+        createdAt = this.createAt,
         keywordList = listOf(),
-        isFavorite = isFavorite ?: false,
+        isFavorite = isFavorite,
         thumbnail = "",
     )
 }

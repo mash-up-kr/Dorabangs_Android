@@ -7,13 +7,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LinksFromFolderResponseModel(
-    val hasNext: Boolean,
-    val list: List<SavedLinkInfo>,
-    val total: Int,
+    val metadata: PagingMetaDataResponseModel,
+    val list: List<SavedLinkInfoResponseModel>,
 )
 
 @Serializable
-data class SavedLinkInfo(
+data class SavedLinkInfoResponseModel(
     val createdAt: String? = "",
     val description: String? = "",
     val folderId: String? = "",
@@ -35,13 +34,13 @@ fun LinksFromFolderResponseModel.toDomain(): PageData<List<SavedLinkDetailInfo>>
     return PageData(
         data = list.map { it.toDomain() },
         pagingInfo = PagingInfo(
-            total = total,
-            hasNext = hasNext,
+            total = metadata.total,
+            hasNext = metadata.hasNext,
         ),
     )
 }
 
-fun SavedLinkInfo.toDomain(): SavedLinkDetailInfo {
+fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
     return SavedLinkDetailInfo(
         createdAt = createdAt,
         description = description,
