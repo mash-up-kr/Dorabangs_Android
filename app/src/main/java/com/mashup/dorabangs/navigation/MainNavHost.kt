@@ -62,6 +62,15 @@ fun MainNavHost(
         )
         storageDetailNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
+            navigateToHome = {
+                appState.navController.navigateToHome(
+                    navOptions = navOptions {
+                        popUpTo(appState.navController.graph.id) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
         )
         classificationNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },

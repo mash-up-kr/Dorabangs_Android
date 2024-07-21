@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -10,17 +11,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.domain.model.Folder
+import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 val MinToolbarHeight = 96.dp
 val MaxToolbarHeight = 161.dp
@@ -29,6 +36,7 @@ val MaxToolbarHeight = 161.dp
 fun StorageDetailRoute(
     folderItem: Folder,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
+    navigateToHome: () -> Unit,
     onClickBackIcon: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
@@ -47,6 +55,12 @@ fun StorageDetailRoute(
         }
     }
 
+    storageDetailViewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            StorageDetailSideEffect.NavigateToHome -> navigateToHome() // TODO - SnackBarToast 띄우기
+        }
+    }
+
     StorageDetailScreen(
         state = state,
         linksPagingList = linksPagingList,
@@ -56,7 +70,32 @@ fun StorageDetailRoute(
         onClickTabItem = storageDetailViewModel::changeSelectedTabIdx,
         onClickSortedIcon = storageDetailViewModel::clickFeedSort,
         onClickBookMarkButton = storageDetailViewModel::addFavoriteItem,
-        onClickActionIcon = {},
+        onClickActionIcon = { storageDetailViewModel.setVisibleMoreButtonBottomSheet(true) },
+    )
+
+    DoraBottomSheet.MoreButtonBottomSheet(
+        modifier = Modifier.height(320.dp),
+        isShowSheet = state.isShowMoreButtonSheet,
+        firstItemName = R.string.remove_dialog_folder_title,
+        secondItemName = R.string.rename_folder_bottom_sheet_title,
+        onClickDeleteLinkButton = {
+            storageDetailViewModel.setVisibleMoreButtonBottomSheet(false)
+            storageDetailViewModel.setVisibleDialog(true)
+        },
+        onClickMoveFolderButton = {
+            storageDetailViewModel.setVisibleMoreButtonBottomSheet(false)
+        },
+        onDismissRequest = { storageDetailViewModel.setVisibleMoreButtonBottomSheet(false) },
+    )
+
+    DoraDialog(
+        isShowDialog = state.isShowDialog,
+        title = stringResource(R.string.remove_dialog_folder_title),
+        content = stringResource(R.string.remove_dialog_folder_cont),
+        confirmBtnText = stringResource(R.string.remove_dialog_confirm),
+        disMissBtnText = stringResource(R.string.remove_dialog_cancil),
+        onDisMissRequest = { storageDetailViewModel.setVisibleDialog(false) },
+        onClickConfirmBtn = { storageDetailViewModel.deleteFolder(state.folderId) },
     )
 }
 
@@ -92,6 +131,7 @@ fun StorageDetailScreen(
             onClickSortedIcon = onClickSortedIcon,
             onClickTabItem = onClickTabItem,
             onClickBookMarkButton = onClickBookMarkButton,
+            onClickActionIcon = onClickActionIcon,
 
         )
     }
@@ -102,5 +142,6 @@ fun StorageDetailScreen(
 fun PreviewStorageDetailScreen() {
     StorageDetailRoute(
         folderItem = Folder(),
+        navigateToHome = {},
     )
 }

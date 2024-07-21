@@ -18,7 +18,10 @@ fun NavController.navigateToStorageDetail(folder: Folder) {
     navigate("${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folderItem=$folderItem")
 }
 
-fun NavGraphBuilder.storageDetailNavigation(onClickBackIcon: () -> Unit) {
+fun NavGraphBuilder.storageDetailNavigation(
+    onClickBackIcon: () -> Unit,
+    navigateToHome: () -> Unit,
+) {
     composable(
         route = "${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folderItem={folder}",
         arguments = listOf(
@@ -32,6 +35,7 @@ fun NavGraphBuilder.storageDetailNavigation(onClickBackIcon: () -> Unit) {
             StorageDetailRoute(
                 folderItem = item,
                 onClickBackIcon = onClickBackIcon,
+                navigateToHome = navigateToHome,
             )
         }
     }

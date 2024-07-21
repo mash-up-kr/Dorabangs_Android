@@ -67,6 +67,7 @@ fun StorageDetailExpandedHeader(
     state: StorageDetailState,
     onClickTabItem: (Int) -> Unit,
     onClickBackIcon: () -> Unit,
+    onClickActionIcon: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -75,6 +76,7 @@ fun StorageDetailExpandedHeader(
         StorageDetailTopBarByFolderType(
             state = state,
             onClickBackIcon = onClickBackIcon,
+            onClickActionIcon = onClickActionIcon,
         )
         StorageDetailHeaderContent(
             state = state,

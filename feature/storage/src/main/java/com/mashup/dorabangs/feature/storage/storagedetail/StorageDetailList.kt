@@ -45,6 +45,7 @@ fun StorageDetailList(
     contentPadding: PaddingValues = PaddingValues(),
     onClickBackIcon: () -> Unit,
     onClickTabItem: (Int) -> Unit,
+    onClickActionIcon: () -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
@@ -54,6 +55,7 @@ fun StorageDetailList(
                 state = state,
                 onClickBackIcon = onClickBackIcon,
                 onClickTabItem = onClickTabItem,
+                onClickActionIcon = onClickActionIcon,
             )
             StorageDetailEmpty(modifier = modifier)
         }
@@ -68,6 +70,7 @@ fun StorageDetailList(
                     state = state,
                     onClickBackIcon = onClickBackIcon,
                     onClickTabItem = onClickTabItem,
+                    onClickActionIcon = onClickActionIcon,
                 )
             }
             item {

@@ -9,6 +9,7 @@ import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.PostInfo
+import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
@@ -34,6 +36,7 @@ class StorageDetailViewModel @Inject constructor(
     private val savedLinksFromFolderUseCase: GetSavedLinksFromFolderUseCase,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
     private val getPostsUseCase: GetPosts,
+    private val deleteFolderUseCase: DeleteFolderUseCase,
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
@@ -178,6 +181,33 @@ class StorageDetailViewModel @Inject constructor(
                 }
                 state.copy(pagingList = updatedCardList)
             }
+        }
+    }
+
+    /**
+     * 폴더 삭제
+     */
+    fun deleteFolder(folderId: String?) = viewModelScope.doraLaunch {
+        folderId?.let { id ->
+            val isSuccessDelete = deleteFolderUseCase(folderId = id)
+            if (isSuccessDelete.isSuccess) {
+                setVisibleDialog(false)
+                intent { postSideEffect(StorageDetailSideEffect.NavigateToHome) }
+            } else {
+                // TODO - 에러처리
+            }
+        }
+    }
+
+    fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
+        reduce {
+            state.copy(isShowMoreButtonSheet = visible)
+        }
+    }
+
+    fun setVisibleDialog(visible: Boolean) = intent {
+        reduce {
+            state.copy(isShowDialog = visible)
         }
     }
 }

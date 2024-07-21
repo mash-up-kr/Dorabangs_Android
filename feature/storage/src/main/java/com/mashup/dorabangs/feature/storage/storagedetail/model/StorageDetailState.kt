@@ -15,6 +15,8 @@ data class StorageDetailState(
     val tabTitleList: List<StorageDetailTab> = getDefaultTabTitleList(),
     val selectedTabIdx: Int = 0,
     val isLatestSort: StorageDetailSort = StorageDetailSort.ASC,
+    val isShowMoreButtonSheet: Boolean = false,
+    val isShowDialog: Boolean = false,
     val pagingList: Flow<PagingData<FeedCardUiModel>> = emptyFlow(),
 ) {
     companion object {

@@ -1,3 +1,5 @@
 package com.mashup.dorabangs.feature.storage.storagedetail.model
 
-sealed class StorageDetailSideEffect
+sealed class StorageDetailSideEffect {
+    object NavigateToHome : StorageDetailSideEffect()
+}
