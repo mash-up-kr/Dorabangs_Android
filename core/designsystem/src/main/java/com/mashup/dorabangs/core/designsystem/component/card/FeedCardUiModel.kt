@@ -47,11 +47,14 @@ data class FeedCardUiModel(
             )
         }
 
-        fun String.convertCreatedDate(): Long {
-            val givenDate = Instant.parse(this)
-            val currentDate = Instant.now()
-            val daysBetween = ChronoUnit.DAYS.between(givenDate, currentDate)
-            return daysBetween
+        fun String?.convertCreatedDate(): Long {
+            this?.let {
+                val givenDate = Instant.parse(this)
+                val currentDate = Instant.now()
+                val daysBetween = ChronoUnit.DAYS.between(givenDate, currentDate)
+                return daysBetween
+            }
+            return 0L
         }
     }
 }

@@ -9,14 +9,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PostsResponseModel(
-    val metadata: PostsMetaDataResponseModel,
-    val items: List<PostResponseModel> = emptyList(),
-)
-
-@Serializable
-data class PostsMetaDataResponseModel(
-    val hasNext: Boolean = false,
-    val total: Int = 0,
+    val metadata: PagingMetaDataResponseModel,
+    val list: List<PostResponseModel> = emptyList(),
 )
 
 @Serializable
@@ -27,7 +21,8 @@ data class PostResponseModel(
     val title: String = "",
     val description: String = "",
     val isFavorite: Boolean = false,
-    val readAt: String = "",
+    val createAt: String = "",
+    val aiStatus: String,
 )
 
 fun PostResponseModel.toDomain() = Post(
@@ -37,22 +32,23 @@ fun PostResponseModel.toDomain() = Post(
     title = title,
     description = description,
     isFavorite = isFavorite,
-    readAt = readAt,
+    createAt = createAt,
+    aiStatus = aiStatus,
 )
 
-fun PostsMetaDataResponseModel.toDomain() = PostsMetaData(
+fun PagingMetaDataResponseModel.toDomain() = PostsMetaData(
     hasNext = hasNext,
     total = total,
 )
 
 fun PostsResponseModel.toDomain() = Posts(
     metaData = metadata.toDomain(),
-    items = items.map { it.toDomain() },
+    items = list.map { it.toDomain() },
 )
 
 fun PostsResponseModel.toPagingDomain(): PageData<List<Post>> {
     return PageData(
-        data = items.map { it.toDomain() },
+        data = list.map { it.toDomain() },
         pagingInfo = PagingInfo(
             total = metadata.total,
             hasNext = metadata.hasNext,

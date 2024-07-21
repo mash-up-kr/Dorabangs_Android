@@ -7,9 +7,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LinksFromFolderResponseModel(
-    val hasNext: Boolean,
+    val metadata: PagingMetaDataResponseModel,
     val list: List<SavedLinkInfoResponseModel>,
-    val total: Int,
 )
 
 @Serializable
@@ -35,8 +34,8 @@ fun LinksFromFolderResponseModel.toDomain(): PageData<List<SavedLinkDetailInfo>>
     return PageData(
         data = list.map { it.toDomain() },
         pagingInfo = PagingInfo(
-            total = total,
-            hasNext = hasNext,
+            total = metadata.total,
+            hasNext = metadata.hasNext,
         ),
     )
 }
