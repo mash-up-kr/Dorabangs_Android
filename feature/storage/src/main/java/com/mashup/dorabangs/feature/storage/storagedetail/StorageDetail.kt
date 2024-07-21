@@ -37,6 +37,7 @@ fun StorageDetailRoute(
     folderItem: Folder,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
+    navigateToFolderManager: (String) -> Unit,
     onClickBackIcon: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
@@ -57,7 +58,9 @@ fun StorageDetailRoute(
 
     storageDetailViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            StorageDetailSideEffect.NavigateToHome -> navigateToHome() // TODO - SnackBarToast 띄우기
+            // TODO - SnackBarToast 띄우기
+            is StorageDetailSideEffect.NavigateToHome -> navigateToHome()
+            is StorageDetailSideEffect.NavigateToEditFolder -> navigateToFolderManager(sideEffect.folderId)
         }
     }
 
@@ -84,6 +87,7 @@ fun StorageDetailRoute(
         },
         onClickMoveFolderButton = {
             storageDetailViewModel.setVisibleMoreButtonBottomSheet(false)
+            storageDetailViewModel.moveToEditFolderName(state.folderId)
         },
         onDismissRequest = { storageDetailViewModel.setVisibleMoreButtonBottomSheet(false) },
     )
@@ -143,5 +147,6 @@ fun PreviewStorageDetailScreen() {
     StorageDetailRoute(
         folderItem = Folder(),
         navigateToHome = {},
+        navigateToFolderManager = {},
     )
 }

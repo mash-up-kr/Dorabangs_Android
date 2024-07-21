@@ -18,6 +18,7 @@ fun NavController.navigateToStorageFolderManage(
 
 fun NavGraphBuilder.storageFolderManageNavigation(
     onClickBackIcon: () -> Unit = {},
+    onClickSaveButton: (String) -> Unit,
 ) {
     composable(
         route = "${NavigationRoute.StorageScreen.StorageFolderManageScreen.route}/{folderManageType}/{folderId}",
@@ -33,9 +34,12 @@ fun NavGraphBuilder.storageFolderManageNavigation(
         ),
     ) { navBackStackEntry ->
         val folderManageType = navBackStackEntry.arguments?.getString("folderManageType") ?: FolderManageType.CHANGE.name
+        val folderId = navBackStackEntry.arguments?.getString("folderId").orEmpty()
         StorageFolderManageRoute(
+            folderId = folderId,
             folderManageType = folderManageType,
             onClickBackIcon = onClickBackIcon,
+            onClickSaveButton = onClickSaveButton,
         )
     }
 }

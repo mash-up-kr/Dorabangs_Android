@@ -14,6 +14,7 @@
     <string name="storage_create_folder_label">폴더명</string>
     <string name="storage_create_folder_helper">같은 이름의 폴더 있어요</string>
     <string name="storage_create_folder_save">저장</string>
+    <string name="storage_create_folder_edit">수정</string>
     <string name="storage_create_folder_title">새 폴더 추가</string>
     <string name="storage_edit_folder_title">폴더 이름 변경</string>
 

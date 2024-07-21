@@ -9,6 +9,7 @@ import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.navigation.homeCreateFolderNavigation
 import com.mashup.dorabangs.feature.navigation.homeNavigation
 import com.mashup.dorabangs.feature.navigation.navigateToHome
@@ -59,9 +60,16 @@ fun MainNavHost(
         )
         storageFolderManageNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
+            onClickSaveButton = { folderName ->
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", folderName)
+                appState.navController.popBackStack()
+            },
         )
         storageDetailNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
+            navigateToFolderManager = { folderId ->
+                appState.navController.navigateToStorageFolderManage(folderManageType = FolderManageType.CHANGE, folderId = folderId)
+            },
             navigateToHome = {
                 appState.navController.navigateToHome(
                     navOptions = navOptions {

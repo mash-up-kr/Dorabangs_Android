@@ -210,4 +210,8 @@ class StorageDetailViewModel @Inject constructor(
             state.copy(isShowDialog = visible)
         }
     }
+
+    fun moveToEditFolderName(folderId: String?) = intent {
+        postSideEffect(StorageDetailSideEffect.NavigateToEditFolder(folderId = folderId.orEmpty()))
+    }
 }

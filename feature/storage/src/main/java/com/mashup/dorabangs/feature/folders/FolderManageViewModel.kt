@@ -45,7 +45,7 @@ class FolderManageViewModel @Inject constructor(
         }
         if (isSuccessNewFolder.isSuccess) {
             intent {
-                postSideEffect(FolderManageSideEffect.NavigateToStorage)
+                postSideEffect(FolderManageSideEffect.NavigateToBackStack(state.folderName))
             }
         } else {
             setTextHelperEnable(isEnable = true, helperMessage = isSuccessNewFolder.errorMsg)

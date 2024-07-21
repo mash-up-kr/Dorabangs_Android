@@ -1,6 +1,8 @@
 package com.mashup.dorabangs.feature.navigation
 
+import android.content.ContentValues.TAG
 import android.net.Uri
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -21,6 +23,7 @@ fun NavController.navigateToStorageDetail(folder: Folder) {
 fun NavGraphBuilder.storageDetailNavigation(
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToFolderManager: (String) -> Unit,
 ) {
     composable(
         route = "${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folderItem={folder}",
@@ -31,11 +34,16 @@ fun NavGraphBuilder.storageDetailNavigation(
         ),
     ) { navBackStackEntry ->
         val folderItem = navBackStackEntry.arguments?.bundleSerializable("folder") as Folder?
+        val editFolderName = navBackStackEntry.savedStateHandle.get<String>("editFolderName").orEmpty()
+        Log.d(TAG, "storageDetailNavigation: folderItem$folderItem")
+
         folderItem?.let { item ->
             StorageDetailRoute(
-                folderItem = item,
+                folderItem = if (editFolderName.isNotEmpty()) folderItem.copy(name = editFolderName) else folderItem,
                 onClickBackIcon = onClickBackIcon,
                 navigateToHome = navigateToHome,
+                navigateToFolderManager = navigateToFolderManager,
+
             )
         }
     }

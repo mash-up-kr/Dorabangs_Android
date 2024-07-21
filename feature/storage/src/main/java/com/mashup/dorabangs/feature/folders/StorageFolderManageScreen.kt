@@ -19,6 +19,7 @@ import com.mashup.dorabangs.core.designsystem.component.textfield.DoraTextField
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 import com.mashup.dorabangs.feature.folders.model.FolderManageState
+import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.R
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -28,13 +29,13 @@ fun StorageFolderManageRoute(
     folderId: String = "",
     folderManageType: String,
     onClickBackIcon: () -> Unit,
+    onClickSaveButton: (String) -> Unit,
     folderManageViewModel: FolderManageViewModel = hiltViewModel(),
 ) {
     val folderManageState by folderManageViewModel.collectAsState()
-
     folderManageViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is FolderManageSideEffect.NavigateToStorage -> onClickBackIcon()
+            is FolderManageSideEffect.NavigateToBackStack -> onClickSaveButton(sideEffect.folderName)
         }
     }
 
@@ -64,6 +65,11 @@ fun FolderManageScreen(
     onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val btnText = when (folderManageState.type) {
+        FolderManageType.CREATE -> R.string.storage_create_folder_save
+        FolderManageType.CHANGE -> R.string.storage_create_folder_edit
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -95,7 +101,7 @@ fun FolderManageScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 20.dp),
-                buttonText = stringResource(id = R.string.storage_create_folder_save),
+                buttonText = stringResource(id = btnText),
                 enabled = folderManageState.folderName.isNotEmpty() && !folderManageState.helperEnable,
                 onClickButton = onClickSaveButton,
             )
