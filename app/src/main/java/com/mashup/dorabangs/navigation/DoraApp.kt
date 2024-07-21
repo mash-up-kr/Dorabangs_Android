@@ -10,12 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.BottomNavigationDestination
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.BottomNavigationItems
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.DoraBottomNavigation
 
 @Composable
-fun DoraApp(appState: DoraAppState = rememberDoraAppState()) {
+fun DoraApp(
+    isFirstEntry: Boolean,
+    appState: DoraAppState = rememberDoraAppState(),
+) {
     Scaffold(
         bottomBar = {
             if (appState.isBottomBarVisible()) {
@@ -35,6 +39,8 @@ fun DoraApp(appState: DoraAppState = rememberDoraAppState()) {
             ) {
                 MainNavHost(
                     appState = appState,
+                    startDestination =
+                    if (isFirstEntry) NavigationRoute.OnBoardingScreen.route else "${NavigationRoute.HomeScreen.route}/false",
                 )
             }
         },

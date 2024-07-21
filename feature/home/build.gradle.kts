@@ -37,6 +37,7 @@ dependencies {
     implementation(project(":core:coroutine"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
+    implementation(project(":feature:save"))
 
     // Compose
     implementation(libs.ui)
