@@ -42,7 +42,7 @@ fun DoraTopAppBar(
                 modifier = Modifier.align(Alignment.CenterStart)
                     .padding(start = 20.dp)
                     .clickable { onClickBackIcon() },
-                painter = painterResource(id = R.drawable.ic_back),
+                painter = painterResource(id = R.drawable.ic_chevron_left_big_black),
                 contentDescription = "navigation",
             )
             Text(
@@ -64,7 +64,7 @@ fun DoraTopAppBar(
                         modifier = Modifier
                             .padding(start = 20.dp)
                             .clickable { onClickBackIcon() },
-                        painter = painterResource(id = R.drawable.ic_back),
+                        painter = painterResource(id = R.drawable.ic_chevron_left_big_black),
                         contentDescription = "navigation",
                     )
                 }
@@ -117,6 +117,7 @@ fun PreviewBackWithActionIconTopBar() {
         actionIcon = R.drawable.ic_plus,
         onClickBackIcon = {},
         onClickActonIcon = {},
+        isTitleCenter = true,
     )
 }
 

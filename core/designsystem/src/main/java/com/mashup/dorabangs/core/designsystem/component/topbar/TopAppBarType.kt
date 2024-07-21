@@ -43,13 +43,14 @@ object DoraTopBar : TopAppBarType {
         modifier: Modifier,
         title: String,
         actionIcon: Int,
+        isTitleCenter: Boolean,
         onClickBackIcon: () -> Unit,
         onClickActonIcon: () -> Unit,
     ) {
         DoraTopAppBar(
             modifier = modifier.background(DoraColorTokens.White),
             title = title,
-            isTitleCenter = false,
+            isTitleCenter = isTitleCenter,
             isEnableBackNavigation = true,
             actionIcon = actionIcon,
             onClickBackIcon = onClickBackIcon,
@@ -92,6 +93,7 @@ sealed interface TopAppBarType {
         modifier: Modifier,
         title: String,
         actionIcon: Int,
+        isTitleCenter: Boolean,
         onClickBackIcon: () -> Unit,
         onClickActonIcon: () -> Unit,
     )

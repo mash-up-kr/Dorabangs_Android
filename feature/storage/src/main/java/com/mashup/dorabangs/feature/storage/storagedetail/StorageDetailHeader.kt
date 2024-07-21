@@ -27,9 +27,10 @@ import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import com.mashup.dorabangs.feature.storage.R
+import com.mashup.dorabangs.feature.storage.storagedetail.model.FolderType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailTab
+import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageDetailCollapsingHeader(
@@ -37,6 +38,7 @@ fun StorageDetailCollapsingHeader(
     isCollapsed: Boolean,
     onClickBackIcon: () -> Unit,
     onClickTabItem: (Int) -> Unit,
+    onClickActionIcon: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -47,11 +49,10 @@ fun StorageDetailCollapsingHeader(
         ),
     ) {
         if (isCollapsed) {
-            DoraTopBar.BackNavigationTopBar(
-                modifier = Modifier.fillMaxWidth(),
-                title = state.title,
-                isTitleCenter = true,
+            StorageDetailTopBarByFolderType(
+                state = state,
                 onClickBackIcon = onClickBackIcon,
+                onClickActionIcon = onClickActionIcon,
             )
             StorageDetailHeaderTabBar(
                 tabList = state.tabTitleList,
@@ -71,10 +72,8 @@ fun StorageDetailExpandedHeader(
     Column(
         modifier = modifier.height(MaxToolbarHeight),
     ) {
-        DoraTopBar.BackNavigationTopBar(
-            modifier = Modifier.fillMaxWidth(),
-            title = "",
-            isTitleCenter = false,
+        StorageDetailTopBarByFolderType(
+            state = state,
             onClickBackIcon = onClickBackIcon,
         )
         StorageDetailHeaderContent(
@@ -176,6 +175,34 @@ fun StorageDetailHeaderTabBar(
             modifier = Modifier.fillMaxWidth(),
             color = DoraColorTokens.G2,
         )
+    }
+}
+
+@Composable
+fun StorageDetailTopBarByFolderType(
+    state: StorageDetailState,
+    onClickActionIcon: () -> Unit = {},
+    onClickBackIcon: () -> Unit,
+) {
+    when (state.folderType) {
+        FolderType.Custom.type -> {
+            DoraTopBar.BackWithActionIconTopBar(
+                modifier = Modifier.fillMaxWidth(),
+                title = state.title,
+                isTitleCenter = true,
+                actionIcon = coreR.drawable.ic_more_black,
+                onClickBackIcon = onClickBackIcon,
+                onClickActonIcon = onClickActionIcon,
+            )
+        }
+        else -> {
+            DoraTopBar.BackNavigationTopBar(
+                modifier = Modifier.fillMaxWidth(),
+                title = state.title,
+                isTitleCenter = true,
+                onClickBackIcon = onClickBackIcon,
+            )
+        }
     }
 }
 

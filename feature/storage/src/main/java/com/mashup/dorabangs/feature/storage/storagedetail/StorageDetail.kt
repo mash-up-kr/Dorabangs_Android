@@ -56,6 +56,7 @@ fun StorageDetailRoute(
         onClickTabItem = storageDetailViewModel::changeSelectedTabIdx,
         onClickSortedIcon = storageDetailViewModel::clickFeedSort,
         onClickBookMarkButton = storageDetailViewModel::addFavoriteItem,
+        onClickActionIcon = {},
     )
 }
 
@@ -66,6 +67,7 @@ fun StorageDetailScreen(
     onClickBackIcon: () -> Unit,
     onClickTabItem: (Int) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit,
+    onClickActionIcon: () -> Unit,
     modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),
@@ -80,6 +82,7 @@ fun StorageDetailScreen(
             isCollapsed = isCollapsed,
             onClickBackIcon = onClickBackIcon,
             onClickTabItem = onClickTabItem,
+            onClickActionIcon = onClickActionIcon,
         )
         StorageDetailList(
             listState = listState,
