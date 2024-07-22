@@ -10,7 +10,11 @@ import javax.inject.Inject
 class GetSavedLinksFromFolderUseCase @Inject constructor(
     private val folderRepository: FolderRepository,
 ) {
-    suspend operator fun invoke(folderId: String?, order: String, isRead: Boolean?): Flow<PagingData<SavedLinkDetailInfo>> {
+    suspend operator fun invoke(
+        folderId: String?,
+        order: String,
+        isRead: Boolean?
+    ): Flow<PagingData<SavedLinkDetailInfo>> {
         return folderRepository.getLinksFromFolder(
             folderId = folderId,
             order = order.lowercase(Locale.ROOT),

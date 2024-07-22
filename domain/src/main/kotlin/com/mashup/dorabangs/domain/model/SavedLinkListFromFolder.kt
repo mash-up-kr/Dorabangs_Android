@@ -1,15 +1,15 @@
 package com.mashup.dorabangs.domain.model
 
 data class SavedLinkDetailInfo(
-    val createdAt: String?,
-    val description: String?,
-    val folderId: String?,
     val id: String?,
-    val isFavorite: Boolean?,
-    val keywords: List<LinkKeywordInfo>?,
-    val title: String?,
+    val folderId: String?,
     val url: String?,
+    val title: String?,
+    val description: String?,
+    val isFavorite: Boolean?,
     val userId: String?,
+    val createdAt: String?,
+    val keywords: List<LinkKeywordInfo>?,
 )
 
 data class LinkKeywordInfo(

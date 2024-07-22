@@ -15,6 +15,7 @@ import com.mashup.dorabangs.domain.model.Sort
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
+import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.GetUnReadPostsCountUseCase
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
@@ -43,6 +44,7 @@ class HomeViewModel @Inject constructor(
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
     private val createFolderUseCase: CreateFolderUseCase,
     private val saveLinkUseCase: SaveLinkUseCase,
+    private val getSavedLinksFromFolderUseCase: GetSavedLinksFromFolderUseCase,
     private val getUnReadPostsCountUseCase: GetUnReadPostsCountUseCase,
     private val getAIClassificationCount: GetAIClassificationCountUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
@@ -71,6 +73,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun changeSelectedTapIdx(index: Int) = intent {
+        getSavedLinkFromDefaultFolder(
+            folderId = state.tapElements[index].id,
+        )
+
         reduce {
             state.copy(selectedIndex = index)
         }
@@ -226,18 +232,35 @@ class HomeViewModel @Inject constructor(
 
     private fun getSavedLinkFromDefaultFolder(
         order: String = Sort.ASC.name,
+        folderId: String? = null,
         favorite: Boolean = false,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
         val pagingData =
-            getPostsUseCase.invoke(order = order, favorite = favorite, isRead = isRead)
-                .cachedIn(viewModelScope).map { pagedData ->
-                    pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-                }.stateIn(
+            if (folderId.isNullOrBlank()) {
+                getPostsUseCase.invoke(order = order, favorite = favorite, isRead = isRead)
+                    .cachedIn(viewModelScope).map { pagedData ->
+                        pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+                    }.stateIn(
+                        scope = viewModelScope,
+                        started = SharingStarted.Lazily,
+                        initialValue = PagingData.empty(),
+                    )
+            } else {
+                getSavedLinksFromFolderUseCase.invoke(
+                    folderId = folderId,
+                    order = order,
+                    isRead = isRead,
+                )
+                    .cachedIn(viewModelScope).map { pagedData ->
+                        pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+                    }
+                    .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.Lazily,
-                    initialValue = PagingData.empty(),
+                    initialValue = PagingData.empty()
                 )
+            }
         intent {
             reduce {
                 state.copy(feedCards = pagingData)
