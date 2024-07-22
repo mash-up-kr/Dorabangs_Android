@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,8 +28,8 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderType
-import com.mashup.dorabangs.core.designsystem.R as coreR
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
+import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageFolderList(
@@ -152,7 +151,7 @@ fun StorageListItem(
                 style = DoraTypoTokens.caption3Medium,
             )
             val isDefault = item.type != FolderType.CUSTOM.name.lowercase()
-            val icon = if(isDefault) coreR.drawable.ic_chevron_right_m_gray else coreR.drawable.ic_more_gray
+            val icon = if (isDefault) coreR.drawable.ic_chevron_right_m_gray else coreR.drawable.ic_more_gray
             Image(
                 modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickSettingButton() },
                 painter = painterResource(id = icon),
@@ -163,7 +162,7 @@ fun StorageListItem(
 }
 
 private fun getFolderIcon(type: String): Int {
-    return when(type.uppercase()) {
+    return when (type.uppercase()) {
         FolderType.ALL.name -> coreR.drawable.ic_3d_all_big
         FolderType.FAVORITE.name -> coreR.drawable.ic_3d_bookmark_big
         FolderType.DEFAULT.name -> coreR.drawable.ic_3d_pin_big

@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,6 +32,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
+import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageDetailList(
@@ -55,6 +56,7 @@ fun StorageDetailList(
         }
         item {
             SortButtonRow(
+                isLatestSort = state.isLatestSort,
                 onClickSortedIcon = onClickSortedIcon,
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -73,6 +75,7 @@ fun StorageDetailList(
 
 @Composable
 fun SortButtonRow(
+    isLatestSort: Boolean = false,
     items: List<StorageDetailSort> = listOf(StorageDetailSort.LATEST, StorageDetailSort.PAST),
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
@@ -92,9 +95,13 @@ fun SortButtonRow(
                     .background(color = DoraColorTokens.White)
                     .clickable { onClickSortedIcon(item) },
             ) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    painter = painterResource(id = androidx.core.R.drawable.ic_call_answer),
+                val icon = when (item) {
+                    StorageDetailSort.LATEST -> if (isLatestSort) coreR.drawable.ic_arrow_down_active else coreR.drawable.ic_arrow_down_disabled
+                    StorageDetailSort.PAST -> if (isLatestSort) coreR.drawable.ic_arrow_up_disabled else coreR.drawable.ic_arrow_up_active
+                }
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(id = icon),
                     contentDescription = stringResource(id = item.btnName),
                 )
                 Spacer(modifier = Modifier.width(4.dp))
