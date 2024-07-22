@@ -12,7 +12,7 @@ import com.mashup.dorabangs.feature.folders.model.FolderManageType
 
 fun NavController.navigateToStorageFolderManage(
     folderManageType: FolderManageType,
-    folderId: String,
+    folderId: String = "0",
     navOptions: NavOptions? = null,
 ) = navigate("${NavigationRoute.StorageScreen.StorageFolderManageScreen.route}/${folderManageType.name}/$folderId", navOptions)
 
@@ -35,6 +35,7 @@ fun NavGraphBuilder.storageFolderManageNavigation(
     ) { navBackStackEntry ->
         val folderManageType = navBackStackEntry.arguments?.getString("folderManageType") ?: FolderManageType.CHANGE.name
         val folderId = navBackStackEntry.arguments?.getString("folderId").orEmpty()
+
         StorageFolderManageRoute(
             folderId = folderId,
             folderManageType = folderManageType,

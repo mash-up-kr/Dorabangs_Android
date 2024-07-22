@@ -58,8 +58,12 @@ fun MainNavHost(
                 appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType, folderId = folderId)
             },
         )
+
         storageFolderManageNavigation(
-            onClickBackIcon = { appState.navController.popBackStack() },
+            onClickBackIcon = {
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", false)
+                appState.navController.popBackStack()
+                              },
             onClickSaveButton = { folderName ->
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", folderName)
                 appState.navController.popBackStack()
@@ -70,7 +74,9 @@ fun MainNavHost(
             navigateToFolderManager = { folderId ->
                 appState.navController.navigateToStorageFolderManage(folderManageType = FolderManageType.CHANGE, folderId = folderId)
             },
-            navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
+            navigateToCreateFolder = {
+                appState.navController.navigateToStorageFolderManage(folderManageType = FolderManageType.CREATE)
+            },
             navigateToHome = {
                 appState.navController.navigateToHome(
                     navOptions = navOptions {

@@ -13,6 +13,7 @@ import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
+import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
 import com.mashup.dorabangs.domain.usecase.posts.DeletePost
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
@@ -43,6 +44,7 @@ class StorageDetailViewModel @Inject constructor(
     private val deleteFolderUseCase: DeleteFolderUseCase,
     private val deletePostUseCase: DeletePost,
     private val getFolderListUseCase: GetFolderListUseCase,
+    private val changePostFolderUseCase: ChangePostFolder
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
@@ -175,18 +177,19 @@ class StorageDetailViewModel @Inject constructor(
                 postId = postId,
                 postInfo = postInfo,
             )
-            reduce {
-                val updatedCardList = state.pagingList.map { pagingData ->
-                    pagingData.map { currentItem ->
-                        if (currentItem.id == postId) {
-                            currentItem.copy(isFavorite = !isFavorite)
-                        } else {
-                            currentItem
-                        }
-                    }
-                }
-                state.copy(pagingList = updatedCardList)
-            }
+//            reduce {
+////                val updatedCardList = state.pagingList.map { pagingData ->
+////                    pagingData.map { currentItem ->
+////                        if (currentItem.id == postId) {
+////                            currentItem.copy(isFavorite = !isFavorite)
+////                        } else {
+////                            currentItem
+////                        }
+////                    }
+////                }
+////                state.copy(pagingList = updatedCardList)
+//            }
+            intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
         }
     }
 
@@ -226,6 +229,17 @@ class StorageDetailViewModel @Inject constructor(
             setVisibleMovingFolderBottomSheet(true)
         }
     }
+
+    /**
+     * 링크 폴더 이동
+     */
+    fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
+        changePostFolderUseCase(postId = postId, folderId = folderId)
+        setVisibleMovingFolderBottomSheet(false)
+        //TODO - 실패 성공 여부 리스트 업데이트
+        intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+    }
+
 
     fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
         val bottomSheet = when (state.editActionType) {

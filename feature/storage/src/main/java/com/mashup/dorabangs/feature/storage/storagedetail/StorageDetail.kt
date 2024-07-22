@@ -37,6 +37,7 @@ val MaxToolbarHeight = 161.dp
 @Composable
 fun StorageDetailRoute(
     folderItem: Folder,
+    isVisibleBottomSheet: Boolean = false,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
     navigateToFolderManager: (String) -> Unit,
@@ -50,6 +51,7 @@ fun StorageDetailRoute(
 
     LaunchedEffect(key1 = Unit) {
         storageDetailViewModel.setFolderInfo(folderItem)
+        storageDetailViewModel.setVisibleMovingFolderBottomSheet(isVisibleBottomSheet)
     }
 
     val isCollapsed: Boolean by remember {
@@ -65,6 +67,7 @@ fun StorageDetailRoute(
             navigateToHome = navigateToHome,
             navigateToFolderManager = navigateToFolderManager,
             navigateToCreateFolder = navigateToCreateFolder,
+            refreshPagingList = { linksPagingList.refresh() }
         )
     }
 
@@ -141,12 +144,14 @@ private fun handleSideEffect(
     navigateToHome: () -> Unit,
     navigateToCreateFolder: () -> Unit,
     navigateToFolderManager: (String) -> Unit,
+    refreshPagingList:() -> Unit
 ) {
     when (sideEffect) {
         // TODO - SnackBarToast 띄우기
         is StorageDetailSideEffect.NavigateToHome -> navigateToHome()
         is StorageDetailSideEffect.NavigateToEditFolder -> navigateToFolderManager(sideEffect.folderId)
         is StorageDetailSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+        is StorageDetailSideEffect.RefreshPagingList -> refreshPagingList()
     }
 }
 
