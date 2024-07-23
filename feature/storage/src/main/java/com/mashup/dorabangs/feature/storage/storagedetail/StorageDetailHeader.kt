@@ -29,7 +29,6 @@ import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import com.mashup.dorabangs.feature.storage.R
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailTab
 import com.mashup.dorabangs.core.designsystem.R as coreR
