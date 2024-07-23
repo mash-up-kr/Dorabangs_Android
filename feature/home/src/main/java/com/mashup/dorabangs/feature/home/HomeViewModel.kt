@@ -14,7 +14,9 @@ import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
+import com.mashup.dorabangs.domain.usecase.user.GetIdFromLinkToReadLaterUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
+import com.mashup.dorabangs.domain.usecase.user.SetIdLinkToReadLaterUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
@@ -36,8 +38,14 @@ class HomeViewModel @Inject constructor(
     private val createFolderUseCase: CreateFolderUseCase,
     private val saveLinkUseCase: SaveLinkUseCase,
     private val getAIClassificationCount: GetAIClassificationCountUseCase,
+    private val getIdFromLinkToReadLaterUseCase: GetIdFromLinkToReadLaterUseCase,
+    private val setIdFromLinkToReadLaterUseCase: SetIdLinkToReadLaterUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
+
+    companion object {
+        private const val TYPE_DEFAULT = "default"
+    }
 
     init {
         viewModelScope.doraLaunch {
@@ -118,11 +126,18 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateFolderList() = viewModelScope.doraLaunch {
-        val folderList = getFolderList()
+        val folderList = getFolderList().toList()
+        if (getIdFromLinkToReadLaterUseCase.invoke().isBlank()) {
+            folderList.firstOrNull { it.type == TYPE_DEFAULT }?.let { folder ->
+                setIdFromLinkToReadLaterUseCase.invoke(
+                    id = folder.id ?: error("서버가 또 잘못함 : 나중에 읽을 링크의 id가 null"),
+                )
+            }
+        }
         intent {
             reduce {
                 state.copy(
-                    tapElements = folderList.toList().mapIndexed { index, folder ->
+                    tapElements = folderList.mapIndexed { index, folder ->
                         DoraChipUiModel(
                             id = folder.id.orEmpty(),
                             title = folder.name,
