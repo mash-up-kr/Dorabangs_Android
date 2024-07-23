@@ -155,12 +155,17 @@ class HomeViewModel @Inject constructor(
         else -> null
     }
 
-    private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
+    private fun setTextHelperEnable(
+        isEnable: Boolean,
+        helperMsg: String,
+        lastCheckedFolderName: String,
+    ) = intent {
         reduce {
             state.copy(
                 homeCreateFolder = state.homeCreateFolder.copy(
                     helperEnable = isEnable,
                     helperMessage = helperMsg,
+                    lastCheckedFolderName = lastCheckedFolderName,
                 ),
             )
         }
@@ -188,6 +193,7 @@ class HomeViewModel @Inject constructor(
                 setTextHelperEnable(
                     isEnable = true,
                     helperMsg = afterCreateFolder.errorMsg,
+                    lastCheckedFolderName = folderName,
                 )
             }
         }
@@ -205,7 +211,12 @@ class HomeViewModel @Inject constructor(
 
     fun setFolderName(folderName: String) = intent {
         reduce {
-            state.copy(homeCreateFolder = state.homeCreateFolder.copy(folderName = folderName))
+            state.copy(
+                homeCreateFolder = state.homeCreateFolder.copy(
+                    folderName = folderName,
+                    helperEnable = folderName == state.homeCreateFolder.lastCheckedFolderName,
+                ),
+            )
         }
     }
 
