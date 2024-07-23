@@ -69,11 +69,10 @@ fun MainNavHost(
 
         storageFolderManageNavigation(
             onClickBackIcon = {
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", false)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", true)
                 appState.navController.popBackStack()
             },
             onClickSaveButton = { folderName ->
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", folderName)
                 appState.navController.popBackStack()
             },
         )

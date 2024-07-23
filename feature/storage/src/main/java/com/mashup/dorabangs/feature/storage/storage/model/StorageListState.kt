@@ -5,7 +5,7 @@ import com.mashup.dorabangs.domain.model.Folder
 data class StorageListState(
     val defaultStorageFolderList: List<Folder> = listOf(),
     val customStorageFolderList: List<Folder> = listOf(),
-    val selectedFolderId: String = "",
+    val selectedFolderId: String = "folderId",
     val isShowMoreButtonSheet: Boolean = false,
     val isShowDialog: Boolean = false,
 )

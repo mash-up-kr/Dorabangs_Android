@@ -177,18 +177,6 @@ class StorageDetailViewModel @Inject constructor(
                 postId = postId,
                 postInfo = postInfo,
             )
-//            reduce {
-// //                val updatedCardList = state.pagingList.map { pagingData ->
-// //                    pagingData.map { currentItem ->
-// //                        if (currentItem.id == postId) {
-// //                            currentItem.copy(isFavorite = !isFavorite)
-// //                        } else {
-// //                            currentItem
-// //                        }
-// //                    }
-// //                }
-// //                state.copy(pagingList = updatedCardList)
-//            }
             intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
         }
     }
@@ -214,7 +202,7 @@ class StorageDetailViewModel @Inject constructor(
     fun deletePost(postId: String) = viewModelScope.doraLaunch {
         deletePostUseCase(postId)
         setVisibleDialog(false)
-        // fetchSavedLinkFromType() TODO - 새로 데이터 불러오거느 update
+        intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
     }
 
     /**
