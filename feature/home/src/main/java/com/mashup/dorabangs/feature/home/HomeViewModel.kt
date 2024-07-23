@@ -128,11 +128,13 @@ class HomeViewModel @Inject constructor(
     private fun updateFolderList() = viewModelScope.doraLaunch {
         val folderList = getFolderList().toList()
         if (getIdFromLinkToReadLaterUseCase.invoke().isBlank()) {
-            folderList.firstOrNull { it.type == TYPE_DEFAULT }?.let { folder ->
-                setIdFromLinkToReadLaterUseCase.invoke(
-                    id = folder.id ?: error("서버가 또 잘못함 : 나중에 읽을 링크의 id가 null"),
-                )
-            }
+            folderList
+                .firstOrNull { it.type == TYPE_DEFAULT }
+                ?.let { folder ->
+                    setIdFromLinkToReadLaterUseCase.invoke(
+                        id = folder.id ?: error("서버가 또 잘못함 : 나중에 읽을 링크의 id가 null"),
+                    )
+                }
         }
         intent {
             reduce {
