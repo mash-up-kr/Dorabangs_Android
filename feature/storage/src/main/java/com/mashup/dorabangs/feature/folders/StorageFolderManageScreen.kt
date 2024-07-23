@@ -28,7 +28,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun StorageFolderManageRoute(
     folderId: String = "",
     folderManageType: String,
-    onClickBackIcon: () -> Unit,
+    onClickBackIcon: (FolderManageType) -> Unit,
     onClickSaveButton: (String) -> Unit,
     folderManageViewModel: FolderManageViewModel = hiltViewModel(),
 ) {
@@ -45,7 +45,7 @@ fun StorageFolderManageRoute(
 
     FolderManageScreen(
         folderManageState = folderManageState,
-        onClickBackIcon = onClickBackIcon,
+        onClickBackIcon = { onClickBackIcon(folderManageState.type) },
         onClickSaveButton = {
             folderManageViewModel.createOrEditFolder(
                 folderId = folderId,

@@ -68,8 +68,9 @@ fun MainNavHost(
         )
 
         storageFolderManageNavigation(
-            onClickBackIcon = {
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", true)
+            onClickBackIcon = { folderType ->
+                val isVisibleBottomSheet = folderType == FolderManageType.CREATE
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", isVisibleBottomSheet)
                 appState.navController.popBackStack()
             },
             onClickSaveButton = { folderName ->
