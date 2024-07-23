@@ -42,4 +42,7 @@ class AIClassificationRepositoryImpl @Inject constructor(
 
     override suspend fun deletePostFromAIClassification(postId: String) =
         remoteDataSource.deletePostFromAIClassification(postId)
+
+    override suspend fun getAIClassificationCount() =
+        remoteDataSource.getAIClassificationCount()
 }

@@ -9,12 +9,14 @@ import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
+import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
+import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
@@ -28,9 +30,12 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
+    private val getFolderList: GetFolderListUseCase,
+    private val getPosts: GetPosts,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
     private val createFolderUseCase: CreateFolderUseCase,
     private val saveLinkUseCase: SaveLinkUseCase,
+    private val getAIClassificationCount: GetAIClassificationCountUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -49,6 +54,9 @@ class HomeViewModel @Inject constructor(
                 ).collect { urlLink -> setStateUrlLink(urlLink) }
             }
         }
+
+        updateFolderList()
+        setAIClassificationCount()
     }
 
     fun changeSelectedTapIdx(index: Int) = intent {
@@ -109,6 +117,41 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun updateFolderList() = viewModelScope.doraLaunch {
+        val folderList = getFolderList()
+        intent {
+            reduce {
+                state.copy(
+                    tapElements = folderList.toList().mapIndexed { index, folder ->
+                        DoraChipUiModel(
+                            id = folder.id.orEmpty(),
+                            title = folder.name,
+                            icon = setDefaultFolderIcon(index),
+                        )
+                    },
+                )
+            }
+        }
+    }
+
+    private fun setDefaultFolderIcon(index: Int) = when (index) {
+        0 -> R.drawable.ic_3d_all_small
+        1 -> R.drawable.ic_3d_bookmark_small
+        2 -> R.drawable.ic_3d_pin_small
+        else -> null
+    }
+
+    private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
+        reduce {
+            state.copy(
+                homeCreateFolder = state.homeCreateFolder.copy(
+                    helperEnable = isEnable,
+                    helperMessage = helperMsg,
+                ),
+            )
+        }
+    }
+
     fun createFolder(folderName: String, urlLink: String) {
         viewModelScope.doraLaunch {
             val folderData = NewFolderNameList(names = listOf(folderName))
@@ -136,10 +179,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
-        reduce { state.copy(homeCreateFolder = state.homeCreateFolder.copy(helperEnable = isEnable, helperMessage = helperMsg)) }
-    }
-
     fun saveLink(folderId: String, urlLink: String) = viewModelScope.doraLaunch {
         saveLinkUseCase.invoke(Link(folderId = folderId, url = urlLink))
 
@@ -156,33 +195,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun setAIClassificationCount() = viewModelScope.launch {
+        val count = getAIClassificationCount()
+        intent {
+            reduce {
+                state.copy(aiClassificationCount = count)
+            }
+        }
+    }
+
     init {
         intent {
             reduce {
-                HomeState(
-                    tapElements = listOf(
-                        DoraChipUiModel(
-                            title = "전체",
-                            icon = R.drawable.ic_plus,
-                        ),
-                        DoraChipUiModel(
-                            title = "즐겨찾기",
-                            icon = R.drawable.ic_plus,
-                        ),
-                        DoraChipUiModel(
-                            title = "나중에 읽을 링크",
-                            icon = R.drawable.ic_plus,
-                        ),
-                        DoraChipUiModel(
-                            title = "테스트",
-                        ),
-                        DoraChipUiModel(
-                            title = "테스트",
-                        ),
-                        DoraChipUiModel(
-                            title = "테스트",
-                        ),
-                    ),
+                state.copy(
                     feedCards = listOf(
                         FeedCardUiModel(
                             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
