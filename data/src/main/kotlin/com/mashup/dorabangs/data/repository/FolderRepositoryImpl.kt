@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.utils.doraPager
+import com.mashup.dorabangs.domain.model.DoraCreateFolderModel
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
@@ -25,12 +26,16 @@ class FolderRepositoryImpl @Inject constructor(
     override suspend fun getFolderById(folderId: String): Folder =
         remoteDataSource.getFolderById(folderId).toDomain()
 
-    override suspend fun createFolder(newFolderNameList: NewFolderNameList): DoraSampleResponse =
+    override suspend fun createFolder(newFolderNameList: NewFolderNameList): DoraCreateFolderModel =
         runCatching {
-            remoteDataSource.createFolder(folderList = newFolderNameList)
-            DoraSampleResponse(isSuccess = true)
+            val result =
+                remoteDataSource.createFolder(folderList = newFolderNameList)
+            result.toDomain()
         }.getOrElse { throwable ->
-            DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
+            DoraCreateFolderModel(
+                isSuccess = false,
+                errorMsg = throwable.message.orEmpty()
+            )
         }
 
     override suspend fun editFolderName(

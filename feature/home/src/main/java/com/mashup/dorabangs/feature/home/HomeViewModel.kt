@@ -171,12 +171,12 @@ class HomeViewModel @Inject constructor(
             val folderData = NewFolderNameList(names = listOf(folderName))
             val afterCreateFolder = createFolderUseCase(folderData)
             if (afterCreateFolder.isSuccess) {
-                // TODO API 바뀌면 id 넣는 로직 추가
                 intent {
                     if (urlLink.isNotBlank()) {
                         postSideEffect(
                             HomeSideEffect.SaveLink(
-                                folderId = "afterCreateFolder.folderId",
+                                folderId = afterCreateFolder.result.firstOrNull()?.id
+                                    ?: error("정확한 id가 안내려 왔어요"),
                                 urlLink = urlLink,
                             ),
                         )

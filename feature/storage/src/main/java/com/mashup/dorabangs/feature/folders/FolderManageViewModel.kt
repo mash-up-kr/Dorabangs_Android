@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.domain.model.NewFolderName
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.model.toSampleResponse
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.EditFolderNameUseCase
 import com.mashup.dorabangs.feature.folders.model.FolderManageState
@@ -37,12 +38,13 @@ class FolderManageViewModel @Inject constructor(
     fun createOrEditFolder(folderName: String, folderType: FolderManageType, folderId: String) = viewModelScope.doraLaunch {
         val isSuccessNewFolder = when (folderType) {
             FolderManageType.CREATE -> {
-                createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
+                createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName))).toSampleResponse()
             }
             FolderManageType.CHANGE -> {
                 editFolderNameUseCase.invoke(folderName = NewFolderName(name = folderName), folderId = folderId)
             }
         }
+
         if (isSuccessNewFolder.isSuccess) {
             intent {
                 postSideEffect(FolderManageSideEffect.NavigateToStorage)
@@ -58,7 +60,7 @@ class FolderManageViewModel @Inject constructor(
         }
     }
 
-    fun setTextHelperEnable(isEnable: Boolean, helperMessage: String) = intent {
+    private fun setTextHelperEnable(isEnable: Boolean, helperMessage: String) = intent {
         reduce { state.copy(helperEnable = isEnable, helperMessage = helperMessage) }
     }
 }
