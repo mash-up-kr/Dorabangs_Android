@@ -5,9 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 
 class DoraShareActivity : ComponentActivity() {
-    companion object {
-        private const val URL = "SHARED_URL"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,5 +36,9 @@ class DoraShareActivity : ComponentActivity() {
 
     private fun handleSendText(): String {
         return intent.getStringExtra(Intent.EXTRA_TEXT).orEmpty()
+    }
+
+    companion object {
+        private const val URL = "SHARED_URL"
     }
 }
