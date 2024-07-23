@@ -7,12 +7,18 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
+import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
+import com.mashup.dorabangs.domain.usecase.posts.GetPosts
+import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -24,18 +30,33 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
+    private val getFolderList: GetFolderListUseCase,
+    private val getPosts: GetPosts,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
     private val createFolderUseCase: CreateFolderUseCase,
+    private val saveLinkUseCase: SaveLinkUseCase,
+    private val getAIClassificationCount: GetAIClassificationCountUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
     init {
         viewModelScope.doraLaunch {
-            savedStateHandle.getStateFlow(
-                "isVisibleMovingBottomSheet",
-                initialValue = false,
-            ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
+            launch {
+                savedStateHandle.getStateFlow(
+                    "isVisibleMovingBottomSheet",
+                    initialValue = false,
+                ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
+            }
+            launch {
+                savedStateHandle.getStateFlow(
+                    "urlLink",
+                    initialValue = "",
+                ).collect { urlLink -> setStateUrlLink(urlLink) }
+            }
         }
+
+        updateFolderList()
+        setAIClassificationCount()
     }
 
     fun changeSelectedTapIdx(index: Int) = intent {
@@ -90,25 +111,82 @@ class HomeViewModel @Inject constructor(
         if (isNavigate) postSideEffect(HomeSideEffect.NavigateToCreateFolder)
     }
 
-    fun createFolder(folderName: String) {
-        viewModelScope.doraLaunch {
-            val folderData = NewFolderNameList(names = listOf(folderName))
-            val isCreateFolderSuccess = createFolderUseCase(folderData)
-            if (isCreateFolderSuccess.isSuccess) {
-                intent {
-                    postSideEffect(HomeSideEffect.NavigateToHome)
-                }
-            } else {
-                setTextHelperEnable(
-                    isEnable = true,
-                    helperMsg = isCreateFolderSuccess.errorMsg,
+    private fun setStateUrlLink(urlLink: String) = intent {
+        reduce {
+            state.copy(homeCreateFolder = state.homeCreateFolder.copy(urlLink = urlLink))
+        }
+    }
+
+    private fun updateFolderList() = viewModelScope.doraLaunch {
+        val folderList = getFolderList()
+        intent {
+            reduce {
+                state.copy(
+                    tapElements = folderList.toList().mapIndexed { index, folder ->
+                        DoraChipUiModel(
+                            id = folder.id.orEmpty(),
+                            title = folder.name,
+                            icon = setDefaultFolderIcon(index),
+                        )
+                    },
                 )
             }
         }
     }
 
+    private fun setDefaultFolderIcon(index: Int) = when (index) {
+        0 -> R.drawable.ic_3d_all_small
+        1 -> R.drawable.ic_3d_bookmark_small
+        2 -> R.drawable.ic_3d_pin_small
+        else -> null
+    }
+
     private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
-        reduce { state.copy(homeCreateFolder = state.homeCreateFolder.copy(helperEnable = isEnable, helperMessage = helperMsg)) }
+        reduce {
+            state.copy(
+                homeCreateFolder = state.homeCreateFolder.copy(
+                    helperEnable = isEnable,
+                    helperMessage = helperMsg,
+                ),
+            )
+        }
+    }
+
+    fun createFolder(folderName: String, urlLink: String) {
+        viewModelScope.doraLaunch {
+            val folderData = NewFolderNameList(names = listOf(folderName))
+            val afterCreateFolder = createFolderUseCase(folderData)
+            if (afterCreateFolder.isSuccess) {
+                // TODO API 바뀌면 id 넣는 로직 추가
+                intent {
+                    if (urlLink.isNotBlank()) {
+                        postSideEffect(
+                            HomeSideEffect.SaveLink(
+                                folderId = "afterCreateFolder.folderId",
+                                urlLink = urlLink,
+                            ),
+                        )
+                    } else {
+                        postSideEffect(HomeSideEffect.NavigateToHome)
+                    }
+                }
+            } else {
+                setTextHelperEnable(
+                    isEnable = true,
+                    helperMsg = afterCreateFolder.errorMsg,
+                )
+            }
+        }
+    }
+
+    fun saveLink(folderId: String, urlLink: String) = viewModelScope.doraLaunch {
+        saveLinkUseCase.invoke(Link(folderId = folderId, url = urlLink))
+
+        intent {
+            postSideEffect(
+                HomeSideEffect.NavigateHomeAfterSaveLink,
+            )
+        }
     }
 
     fun setFolderName(folderName: String) = intent {
@@ -117,33 +195,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun setAIClassificationCount() = viewModelScope.launch {
+        val count = getAIClassificationCount()
+        intent {
+            reduce {
+                state.copy(aiClassificationCount = count)
+            }
+        }
+    }
+
     init {
         intent {
             reduce {
-                HomeState(
-                    tapElements = listOf(
-                        DoraChipUiModel(
-                            title = "전체",
-                            icon = R.drawable.ic_plus,
-                        ),
-                        DoraChipUiModel(
-                            title = "즐겨찾기",
-                            icon = R.drawable.ic_plus,
-                        ),
-                        DoraChipUiModel(
-                            title = "나중에 읽을 링크",
-                            icon = R.drawable.ic_plus,
-                        ),
-                        DoraChipUiModel(
-                            title = "테스트",
-                        ),
-                        DoraChipUiModel(
-                            title = "테스트",
-                        ),
-                        DoraChipUiModel(
-                            title = "테스트",
-                        ),
-                    ),
+                state.copy(
                     feedCards = listOf(
                         FeedCardUiModel(
                             id = "",

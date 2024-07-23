@@ -17,6 +17,7 @@ data class StorageDetailState(
     val selectedTabIdx: Int = 0,
     val isLatestSort: StorageDetailSort = StorageDetailSort.ASC,
     val pagingList: Flow<PagingData<FeedCardUiModel>> = emptyFlow(),
+
 ) {
     companion object {
         fun getDefaultTabTitleList() = listOf(StorageDetailTab.ALL, StorageDetailTab.UNREAD)

@@ -5,11 +5,13 @@ import com.mashup.dorabangs.data.datasource.local.impl.UserLocalDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.api.AIClassificationRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.DoraUrlCheckRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
+import com.mashup.dorabangs.data.datasource.remote.api.OnBoardingRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.api.UserRemoteDataSource
 import com.mashup.dorabangs.data.datasource.remote.impl.AIClassificationRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.DoraUrlCheckRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.FolderRemoteDataSourceImpl
+import com.mashup.dorabangs.data.datasource.remote.impl.OnBoardingRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.PostsRemoteDataSourceImpl
 import com.mashup.dorabangs.data.datasource.remote.impl.UserRemoteDataSourceImpl
 import dagger.Binds
@@ -56,4 +58,10 @@ abstract class DataSourceModule {
     abstract fun bindsAIClassificationRemoteDataSource(
         dataSource: AIClassificationRemoteDataSourceImpl,
     ): AIClassificationRemoteDataSource
+
+    @Binds
+    @Reusable
+    abstract fun bindsOnBoardingRemoteDataSource(
+        dataSource: OnBoardingRemoteDataSourceImpl,
+    ): OnBoardingRemoteDataSource
 }

@@ -27,4 +27,6 @@ interface AIClassificationRepository {
     suspend fun deletePostFromAIClassification(
         postId: String,
     )
+
+    suspend fun getAIClassificationCount(): Int
 }

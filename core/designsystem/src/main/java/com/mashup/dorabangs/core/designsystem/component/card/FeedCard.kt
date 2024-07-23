@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -118,7 +119,7 @@ fun FeedCardContent(
             Row {
                 Icon(
                     modifier = Modifier.size(12.dp, 16.dp),
-                    painter = painterResource(id = R.drawable.ic_plus),
+                    painter = painterResource(id = R.drawable.ic_ai_14dp),
                     contentDescription = "",
                 )
                 Text(
@@ -154,8 +155,8 @@ fun FeedCardContent(
         } else {
             Row {
                 Icon(
-                    modifier = Modifier.size(12.dp, 16.dp),
-                    painter = painterResource(id = R.drawable.ic_plus),
+                    modifier = Modifier.size(14.dp),
+                    painter = painterResource(id = R.drawable.ic_ai_14dp),
                     contentDescription = "",
                 )
                 Text(
@@ -253,16 +254,18 @@ fun FeedCardMenuItems(
             modifier = Modifier
                 .size(24.dp)
                 .clickable { onClickBookMarkButton() },
-            painter = if (cardInfo.isFavorite) painterResource(id = R.drawable.ic_add_link) else painterResource(id = R.drawable.ic_back),
+            painter = painterResource(id = R.drawable.ic_bookmark_default),
             contentDescription = "menuIcon",
+            tint = Color.Unspecified,
         )
         Spacer(modifier = Modifier.width(12.dp))
         Icon(
             modifier = Modifier
                 .size(24.dp)
                 .clickable { onClickMoreButton() },
-            painter = painterResource(id = R.drawable.ic_back),
+            painter = painterResource(id = R.drawable.ic_more_gray),
             contentDescription = "menuIcon",
+            tint = Color.Unspecified,
         )
     }
 }

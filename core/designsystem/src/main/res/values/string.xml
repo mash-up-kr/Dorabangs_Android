@@ -18,7 +18,13 @@
     <string name="more_button_bottom_sheet_remove_link">링크 삭제</string>
     <string name="more_button_bottom_sheet_moving_folder">폴더 이동</string>
     <string name="moving_folder_bottom_sheet_complete">완료</string>
-    <string name="onboarding_screen_title">어떤 유형의 URL 카테고리를\n저장하시나요</string>
-    <string name="onboarding_screen_sub_title">1개 이상을 선택해주세요.\n선택하신 키워드로 자동으로 폴더가 생성돼요.</string>
+    <string name="onboarding_screen_title">주로 어떤 링크를 저장하시나요?</string>
+    <string name="onboarding_screen_sub_title">1개 이상을 선택해주세요</string>
+    <string name="onboarding_screen_complete_button">완료</string>
     <string name="onboarding_screen_ok_button">확인</string>
+    <string name="home_carousel_classified_link_as_ai">AI로 분류한 링크가</string>
+    <string name="home_carousel_not_read_yet">아직 읽지 않은 링크가</string>
+    <string name="home_carousel_count">%s개</string>
+    <string name="home_carousel_its_here">있어요</string>
+    <string name="home_carousel_save_introduce">3초만에 링크를 \n저장하는 방법이에요</string>
 </resources>

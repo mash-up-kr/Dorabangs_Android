@@ -29,12 +29,18 @@ fun HomeCreateFolderRoute(
     homeViewModel: HomeViewModel = hiltViewModel(),
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToHomeAfterSaveLink: () -> Unit,
 ) {
     val state by homeViewModel.collectAsState()
 
     homeViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is HomeSideEffect.NavigateToHome -> navigateToHome()
+            is HomeSideEffect.SaveLink -> homeViewModel.saveLink(
+                folderId = sideEffect.folderId,
+                urlLink = sideEffect.urlLink,
+            )
+            is HomeSideEffect.NavigateHomeAfterSaveLink -> navigateToHomeAfterSaveLink()
             else -> {}
         }
     }
@@ -42,7 +48,7 @@ fun HomeCreateFolderRoute(
     HomeCreateFolderScreen(
         state = state.homeCreateFolder,
         onClickBackIcon = onClickBackIcon,
-        onClickSaveButton = { homeViewModel.createFolder(state.homeCreateFolder.folderName) },
+        onClickSaveButton = { homeViewModel.createFolder(state.homeCreateFolder.folderName, state.homeCreateFolder.urlLink) },
         onValueChanged = homeViewModel::setFolderName,
     )
 }

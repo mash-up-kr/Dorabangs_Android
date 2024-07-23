@@ -37,4 +37,7 @@ interface AIClassificationService {
     suspend fun deletePostFromAIClassification(
         @Path("postId") postId: String,
     )
+
+    @GET("classification/count")
+    suspend fun getAIClassificationCount(): Int
 }

@@ -5,7 +5,9 @@ import java.io.Serializable
 data class FolderList(
     val defaultFolders: List<Folder>,
     val customFolders: List<Folder>,
-)
+) {
+    fun toList() = defaultFolders + customFolders
+}
 
 @kotlinx.serialization.Serializable
 data class Folder(
