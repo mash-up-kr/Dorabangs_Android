@@ -5,4 +5,5 @@ enum class FolderType {
     DEFAULT,
     ALL,
     FAVORITE,
+    NOTHING,
 }

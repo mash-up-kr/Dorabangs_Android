@@ -1,5 +1,7 @@
 package com.dorabangs.feature.save
 
+import com.mashup.dorabangs.domain.model.FolderType
+
 data class DoraSaveState(
     val title: String = "",
     val urlLink: String = "",
@@ -12,7 +14,7 @@ data class DoraSaveState(
 data class SelectableFolder(
     val id: String?,
     val name: String,
-    val type: String,
+    val type: FolderType,
     val createdAt: String?,
     val postCount: Int?,
     val isSelected: Boolean,

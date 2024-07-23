@@ -26,9 +26,6 @@ class DoraSaveViewModel @Inject constructor(
     private val getFolderListUseCase: GetFolderListUseCase,
     private val postSaveLinkUseCase: SaveLinkUseCase,
 ) : ViewModel(), ContainerHost<DoraSaveState, DoraSaveSideEffect> {
-    companion object {
-        private const val ADD_NEW_FOLDER = "새 폴더 추가"
-    }
 
     init {
         val copiedUrl = savedStateHandle.get<String>("copiedUrl").orEmpty()
@@ -41,7 +38,7 @@ class DoraSaveViewModel @Inject constructor(
             SelectableFolder(
                 id = null,
                 name = ADD_NEW_FOLDER,
-                type = "",
+                type = FolderType.NOTHING,
                 createdAt = null,
                 postCount = null,
                 isSelected = false,
@@ -52,7 +49,7 @@ class DoraSaveViewModel @Inject constructor(
                 SelectableFolder(
                     id = item.id,
                     name = item.name,
-                    type = item.type,
+                    type = item.folderType,
                     createdAt = item.createdAt,
                     postCount = item.postCount,
                     isSelected = index == 0,
@@ -130,5 +127,9 @@ class DoraSaveViewModel @Inject constructor(
 
     fun saveLink(id: String) = intent {
         postSaveLinkUseCase.invoke(Link(folderId = id, url = state.urlLink))
+    }
+
+    companion object {
+        private const val ADD_NEW_FOLDER = "새 폴더 추가"
     }
 }
