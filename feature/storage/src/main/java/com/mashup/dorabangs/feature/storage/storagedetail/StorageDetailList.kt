@@ -92,12 +92,13 @@ fun StorageDetailList(
                         onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) },
                         onClickMoreButton = { onClickMoreButton(cardItem.id) },
                     )
+                    if (idx != state.folderInfo.postCount - 1) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                            thickness = 0.5.dp,
+                        )
+                    }
                 }
-                // TODO - 마지막 처리 필요
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                    thickness = 0.5.dp,
-                )
             }
         }
     }
