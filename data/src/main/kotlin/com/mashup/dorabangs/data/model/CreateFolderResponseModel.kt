@@ -19,7 +19,7 @@ data class CreatedResult(
     val createdAt: String = "",
     val id: String = "",
     val name: String = "",
-    val type: String = ""
+    val type: String = "",
 )
 
 fun CreateFolderResponseModel.toDomain() = DoraCreateFolderModel(

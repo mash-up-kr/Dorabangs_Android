@@ -34,7 +34,7 @@ class FolderRepositoryImpl @Inject constructor(
         }.getOrElse { throwable ->
             DoraCreateFolderModel(
                 isSuccess = false,
-                errorMsg = throwable.message.orEmpty()
+                errorMsg = throwable.message.orEmpty(),
             )
         }
 
