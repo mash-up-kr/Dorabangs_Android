@@ -74,6 +74,7 @@ fun MainNavHost(
                 appState.navController.popBackStack()
             },
             onClickSaveButton = { folderName ->
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", folderName)
                 appState.navController.popBackStack()
             },
         )
