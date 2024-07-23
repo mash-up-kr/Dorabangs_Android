@@ -7,7 +7,7 @@ data class StorageDetailState(
     val postCount: Int = 0,
     val tabTitleList: List<StorageDetailTab> = getDefaultTabTitleList(),
     val selectedIdx: Int = 0,
-    val isLatestSort: Boolean = false,
+    val isLatestSort: Boolean = true,
     val postList: List<FeedCardUiModel> = listOf(),
 ) {
     companion object {
