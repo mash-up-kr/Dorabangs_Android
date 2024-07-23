@@ -49,13 +49,21 @@ fun MainNavHost(
             navController = appState.navController,
             onClickBackIcon = { appState.navController.popBackStack() },
             navigateToHome = { appState.navController.popBackStack() },
+            navigateToHomeAfterSaveLink = {
+                appState.navController.navigateToHome(
+                    isVisibleMovingBottomSheet = false,
+                )
+            },
         )
         storageNavigation(
             navigateToStorageDetail = { folder ->
                 appState.navController.navigateToStorageDetail(folder = folder)
             },
             navigateToFolderManage = { folderManageType, folderId ->
-                appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType, folderId = folderId)
+                appState.navController.navigateToStorageFolderManage(
+                    folderManageType = folderManageType,
+                    folderId = folderId,
+                )
             },
         )
 
@@ -109,8 +117,8 @@ fun MainNavHost(
                     },
                 )
             },
-            onClickAddNewFolder = {
-                appState.navController.navigateToHomeCrateFolder()
+            onClickAddNewFolder = { url ->
+                appState.navController.navigateToHomeCrateFolder(urlLink = url)
             },
         )
     }

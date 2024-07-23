@@ -5,6 +5,7 @@ import androidx.paging.PagingData
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.domain.model.Folder
+import com.mashup.dorabangs.domain.model.FolderType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -19,6 +20,7 @@ data class StorageDetailState(
     val currentClickPostId: String = "",
     val folderList: List<Folder> = listOf(),
     val pagingList: Flow<PagingData<FeedCardUiModel>> = emptyFlow(),
+
 ) {
     companion object {
         fun getDefaultTabTitleList() = listOf(StorageDetailTab.ALL, StorageDetailTab.UNREAD)
@@ -34,7 +36,7 @@ data class FolderInfo(
     val folderId: String? = "",
     val title: String = "",
     val postCount: Int = 0,
-    val folderType: String = "",
+    val folderType: FolderType = FolderType.ALL,
 )
 
 data class MoreBottomSheetState(

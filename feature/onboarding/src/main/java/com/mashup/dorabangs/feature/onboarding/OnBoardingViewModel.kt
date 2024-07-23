@@ -2,6 +2,12 @@ package com.mashup.dorabangs.feature.onboarding
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mashup.dorabangs.core.coroutine.doraLaunch
+import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
+import com.mashup.dorabangs.domain.usecase.onboarding.GetOnBoardingKeywordsUseCase
+import com.mashup.dorabangs.domain.usecase.user.SetIsFirstEntryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -12,9 +18,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
+    private val getOnBoardingKeywordsUseCase: GetOnBoardingKeywordsUseCase,
+    private val setIsFirstEntryUseCase: SetIsFirstEntryUseCase,
+    private val createFolderUseCase: CreateFolderUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ContainerHost<OnBoardingState, OnBoardingSideEffect> {
     override val container = container<OnBoardingState, OnBoardingSideEffect>(OnBoardingState())
+
+    init {
+        fetchOnBoardingKeywords()
+    }
 
     fun onClickKeyword(index: Int) = intent {
         reduce {
@@ -28,35 +41,20 @@ class OnBoardingViewModel @Inject constructor(
 
     fun onClickOkButton() = intent {
         postSideEffect(OnBoardingSideEffect.NavigateToHome)
+        setIsFirstEntryUseCase(false)
+        createFolderUseCase(
+            NewFolderNameList(
+                state.keywords.filterIndexed { index, _ -> index in state.selectedIndex },
+            ),
+        )
     }
 
-    init {
+    private fun fetchOnBoardingKeywords(limit: Int? = null) = viewModelScope.doraLaunch {
+        val onBoardingKeywords = getOnBoardingKeywordsUseCase.invoke(limit)
         intent {
             reduce {
                 state.copy(
-                    keywords = listOf(
-                        "테스트",
-                        "입니다",
-                        "ㅎㅎㅎㅎㅎㅎㅎ",
-                        "올라",
-                        "떡볶이",
-                        "후참잘",
-                        "별로더라고???",
-                        "ㅋㅋㅋㅋㅋㅋ",
-                        "아",
-                        "퇴근했는데",
-                        "퇴근못함",
-                        "길게 한번 가자고고고고곡고고",
-                        "빨래",
-                        "널어놨는데",
-                        "장마철이라",
-                        "냄새가",
-                        "꿉꿉해서",
-                        "다시",
-                        "빨아야함",
-                        "이거",
-                        "실화냐!!!!!!",
-                    ),
+                    keywords = onBoardingKeywords,
                 )
             }
         }

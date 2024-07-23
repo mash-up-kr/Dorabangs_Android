@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.feature.storage.storage
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -9,11 +10,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,7 +27,9 @@ import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.domain.model.Folder
+import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
+import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageFolderList(
@@ -98,7 +101,6 @@ fun StorageDefaultFolder(
 @Composable
 fun StorageListItem(
     item: Folder,
-    isDefault: Boolean = false,
     isFirstItem: Boolean = false,
     isLastItem: Boolean = false,
     navigateToStorageDetail: () -> Unit = {},
@@ -123,8 +125,9 @@ fun StorageListItem(
                 .align(Alignment.CenterStart)
                 .clickable { navigateToStorageDetail() },
         ) {
-            Icon(
-                painter = painterResource(id = androidx.core.R.drawable.ic_call_answer),
+            Image(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(id = getFolderIcon(item.type)),
                 contentDescription = "folderIcon",
             )
             Text(
@@ -148,18 +151,24 @@ fun StorageListItem(
                 color = DoraColorTokens.G4,
                 style = DoraTypoTokens.caption3Medium,
             )
-            val icon =
-                if (isDefault) {
-                    androidx.core.R.drawable.ic_call_answer
-                } else {
-                    androidx.core.R.drawable.ic_call_answer
-                }
-            Icon(
+            val isDefault = item.type != FolderType.CUSTOM.name.lowercase()
+            val icon = if (isDefault) coreR.drawable.ic_chevron_right_m_gray else coreR.drawable.ic_more_gray
+            Image(
                 modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickSettingButton() },
                 painter = painterResource(id = icon),
                 contentDescription = "folderIcon",
             )
         }
+    }
+}
+
+private fun getFolderIcon(type: String): Int {
+    return when (type.uppercase()) {
+        FolderType.ALL.name -> coreR.drawable.ic_3d_all_big
+        FolderType.FAVORITE.name -> coreR.drawable.ic_3d_bookmark_big
+        FolderType.DEFAULT.name -> coreR.drawable.ic_3d_pin_big
+        FolderType.CUSTOM.name -> coreR.drawable.ic_3d_folder_big
+        else -> coreR.drawable.ic_3d_folder_big
     }
 }
 

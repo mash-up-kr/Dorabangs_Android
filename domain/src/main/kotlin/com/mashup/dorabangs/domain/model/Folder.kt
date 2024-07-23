@@ -5,7 +5,9 @@ import java.io.Serializable
 data class FolderList(
     val defaultFolders: List<Folder>,
     val customFolders: List<Folder>,
-)
+) {
+    fun toList() = defaultFolders + customFolders
+}
 
 @kotlinx.serialization.Serializable
 data class Folder(
@@ -14,4 +16,7 @@ data class Folder(
     val type: String = "",
     val createdAt: String = "",
     val postCount: Int = 0,
-) : Serializable
+) : Serializable {
+    val folderType: FolderType
+        get() = FolderType.valueOf(type.uppercase())
+}

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,8 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import com.mashup.dorabangs.feature.storage.storagedetail.model.FolderType
+import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailTab
 import com.mashup.dorabangs.core.designsystem.R as coreR
@@ -105,13 +107,22 @@ fun StorageDetailHeaderContent(
             .background(color = DoraColorTokens.P1)
             .padding(horizontal = 20.dp, vertical = 6.dp),
     ) {
-        Image(
-            modifier = Modifier
-                .size(52.dp)
-                .aspectRatio(1f),
-            painter = painterResource(id = androidx.core.R.drawable.ic_call_answer),
-            contentDescription = "icon",
-        )
+        Box(
+            modifier = Modifier.background(
+                color = DoraColorTokens.G1,
+                shape = DoraRoundTokens.Round8,
+            )
+                .size(54.dp),
+        ) {
+            Image(
+                modifier = Modifier
+                    .padding(6.dp)
+                    .size(40.dp)
+                    .aspectRatio(1f),
+                painter = painterResource(id = coreR.drawable.ic_3d_all_big),
+                contentDescription = "상단바 아이콘",
+            )
+        }
         Spacer(modifier = Modifier.width(16.dp))
         Column(
             modifier = Modifier
@@ -187,7 +198,7 @@ fun StorageDetailTopBarByFolderType(
     onClickBackIcon: () -> Unit,
 ) {
     when (state.folderInfo.folderType) {
-        FolderType.Custom.type -> {
+        FolderType.CUSTOM -> {
             DoraTopBar.BackWithActionIconTopBar(
                 modifier = Modifier.fillMaxWidth(),
                 title = state.folderInfo.title,

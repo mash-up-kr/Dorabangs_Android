@@ -9,6 +9,7 @@ import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.domain.model.Folder
+import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
@@ -18,7 +19,6 @@ import com.mashup.dorabangs.domain.usecase.posts.DeletePost
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
-import com.mashup.dorabangs.feature.storage.storagedetail.model.FolderType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
@@ -55,12 +55,12 @@ class StorageDetailViewModel @Inject constructor(
                     folderId = folderItem.id,
                     title = folderItem.name,
                     postCount = folderItem.postCount,
-                    folderType = folderItem.type,
+                    folderType = folderItem.folderType,
                 ),
             )
         }
         fetchSavedLinkFromType(
-            type = folderItem.type,
+            type = folderItem.folderType,
             folderId = folderItem.id,
         )
     }
@@ -69,14 +69,14 @@ class StorageDetailViewModel @Inject constructor(
      * 폴더 타입별 API 호출 분기 처리
      */
     private fun fetchSavedLinkFromType(
-        type: String = "",
+        type: FolderType = FolderType.ALL,
         folderId: String? = "",
         order: String = StorageDetailSort.ASC.name,
         isRead: Boolean? = null,
     ) {
         when (type) {
-            FolderType.All.type -> getSavedLinkFromDefaultFolder(order = order, favorite = false, isRead = isRead)
-            FolderType.Favorite.type -> getSavedLinkFromDefaultFolder(order = order, favorite = true, isRead = isRead)
+            FolderType.ALL -> getSavedLinkFromDefaultFolder(order = order, favorite = false, isRead = isRead)
+            FolderType.FAVORITE -> getSavedLinkFromDefaultFolder(order = order, favorite = true, isRead = isRead)
             else -> getSavedLinkFromCustomFolder(folderId = folderId, order = order, isRead = isRead)
         }
     }

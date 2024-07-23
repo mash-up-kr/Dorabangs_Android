@@ -34,6 +34,7 @@ import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
+import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageRoute(
@@ -137,7 +138,7 @@ fun StorageTopAppBar(
             onClick = { onClickAddFolderIcon() },
         ) {
             Icon(
-                painter = painterResource(id = com.google.android.material.R.drawable.ic_call_answer),
+                painter = painterResource(id = coreR.drawable.ic_add_folder),
                 contentDescription = "folderIcon",
             )
         }
