@@ -102,7 +102,7 @@ fun FeedCard(
 fun FeedCardContent(
     cardInfo: FeedCardUiModel,
     modifier: Modifier,
-    isLoading: Boolean?,
+    isLoading: Boolean,
 ) {
     Column(
         modifier = Modifier.then(modifier),
@@ -114,7 +114,7 @@ fun FeedCardContent(
             color = DoraColorTokens.G9,
         )
         Spacer(modifier = Modifier.height(12.dp))
-        if (isLoading == true) {
+        if (isLoading) {
             Row {
                 Icon(
                     modifier = Modifier.size(12.dp, 16.dp),
