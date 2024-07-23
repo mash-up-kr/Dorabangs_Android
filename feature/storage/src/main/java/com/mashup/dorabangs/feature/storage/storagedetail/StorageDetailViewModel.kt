@@ -44,7 +44,7 @@ class StorageDetailViewModel @Inject constructor(
     private val deleteFolderUseCase: DeleteFolderUseCase,
     private val deletePostUseCase: DeletePost,
     private val getFolderListUseCase: GetFolderListUseCase,
-    private val changePostFolderUseCase: ChangePostFolder
+    private val changePostFolderUseCase: ChangePostFolder,
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
@@ -178,16 +178,16 @@ class StorageDetailViewModel @Inject constructor(
                 postInfo = postInfo,
             )
 //            reduce {
-////                val updatedCardList = state.pagingList.map { pagingData ->
-////                    pagingData.map { currentItem ->
-////                        if (currentItem.id == postId) {
-////                            currentItem.copy(isFavorite = !isFavorite)
-////                        } else {
-////                            currentItem
-////                        }
-////                    }
-////                }
-////                state.copy(pagingList = updatedCardList)
+// //                val updatedCardList = state.pagingList.map { pagingData ->
+// //                    pagingData.map { currentItem ->
+// //                        if (currentItem.id == postId) {
+// //                            currentItem.copy(isFavorite = !isFavorite)
+// //                        } else {
+// //                            currentItem
+// //                        }
+// //                    }
+// //                }
+// //                state.copy(pagingList = updatedCardList)
 //            }
             intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
         }
@@ -236,10 +236,9 @@ class StorageDetailViewModel @Inject constructor(
     fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
         changePostFolderUseCase(postId = postId, folderId = folderId)
         setVisibleMovingFolderBottomSheet(false)
-        //TODO - 실패 성공 여부 리스트 업데이트
+        // TODO - 실패 성공 여부 리스트 업데이트
         intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
     }
-
 
     fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
         val bottomSheet = when (state.editActionType) {

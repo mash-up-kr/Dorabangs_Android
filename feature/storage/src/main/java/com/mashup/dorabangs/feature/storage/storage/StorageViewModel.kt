@@ -22,11 +22,7 @@ class StorageViewModel @Inject constructor(
 ) : ViewModel(), ContainerHost<StorageListState, StorageListSideEffect> {
     override val container = container<StorageListState, StorageListSideEffect>(StorageListState())
 
-    init {
-        getFolderList()
-    }
-
-    private fun getFolderList() = viewModelScope.doraLaunch {
+    fun getFolderList() = viewModelScope.doraLaunch {
         val folderList = getFolderListUseCase()
         intent {
             reduce {

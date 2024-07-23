@@ -67,7 +67,7 @@ fun StorageDetailRoute(
             navigateToHome = navigateToHome,
             navigateToFolderManager = navigateToFolderManager,
             navigateToCreateFolder = navigateToCreateFolder,
-            refreshPagingList = { linksPagingList.refresh() }
+            refreshPagingList = { linksPagingList.refresh() },
         )
     }
 
@@ -144,7 +144,7 @@ private fun handleSideEffect(
     navigateToHome: () -> Unit,
     navigateToCreateFolder: () -> Unit,
     navigateToFolderManager: (String) -> Unit,
-    refreshPagingList:() -> Unit
+    refreshPagingList: () -> Unit,
 ) {
     when (sideEffect) {
         // TODO - SnackBarToast 띄우기

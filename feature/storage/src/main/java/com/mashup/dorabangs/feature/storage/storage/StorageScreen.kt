@@ -21,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
@@ -45,6 +47,9 @@ fun StorageRoute(
         when (sideEffect) {
             StorageListSideEffect.NavigateToFolderManage -> navigateToFolderManage(FolderManageType.CHANGE, storageState.selectedFolderId)
         }
+    }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        storageViewModel.getFolderList()
     }
 
     Box {

@@ -63,7 +63,7 @@ fun MainNavHost(
             onClickBackIcon = {
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", false)
                 appState.navController.popBackStack()
-                              },
+            },
             onClickSaveButton = { folderName ->
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", folderName)
                 appState.navController.popBackStack()
