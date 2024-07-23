@@ -13,7 +13,7 @@ data class FolderList(
 data class Folder(
     val id: String? = "",
     val name: String = "",
-    val type: String = "",
+    private val type: String = "",
     val createdAt: String = "",
     val postCount: Int = 0,
 ) : Serializable {

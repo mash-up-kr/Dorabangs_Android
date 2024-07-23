@@ -7,6 +7,7 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
@@ -42,10 +43,6 @@ class HomeViewModel @Inject constructor(
     private val setIdFromLinkToReadLaterUseCase: SetIdLinkToReadLaterUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
-
-    companion object {
-        private const val TYPE_DEFAULT = "default"
-    }
 
     init {
         viewModelScope.doraLaunch {
@@ -129,7 +126,7 @@ class HomeViewModel @Inject constructor(
         val folderList = getFolderList().toList()
         if (getIdFromLinkToReadLaterUseCase.invoke().isBlank()) {
             folderList
-                .firstOrNull { it.type == TYPE_DEFAULT }
+                .firstOrNull { it.folderType == FolderType.DEFAULT }
                 ?.let { folder ->
                     setIdFromLinkToReadLaterUseCase.invoke(
                         id = folder.id ?: error("서버가 또 잘못함 : 나중에 읽을 링크의 id가 null"),
