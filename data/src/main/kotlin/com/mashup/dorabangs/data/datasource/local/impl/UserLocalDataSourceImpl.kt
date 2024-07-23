@@ -29,6 +29,10 @@ class UserLocalDataSourceImpl @Inject constructor(
         setDataStore(stringPreferencesKey(LAST_COPIED_URL), url)
     }
 
+    override suspend fun setIdLinkToReadLater(id: String) {
+        setDataStore(stringPreferencesKey(READ_LATER_LINK_ID), id)
+    }
+
     override fun getUserAccessToken(): Flow<String> {
         return getDataStore(stringPreferencesKey(ACCESS_TOKEN), "")
     }
@@ -39,6 +43,10 @@ class UserLocalDataSourceImpl @Inject constructor(
 
     override fun getLastCopiedUrl(): Flow<String> {
         return getDataStore(stringPreferencesKey(LAST_COPIED_URL), "")
+    }
+
+    override fun getIdFromLinkToReadLater(): Flow<String> {
+        return getDataStore(stringPreferencesKey(READ_LATER_LINK_ID), "")
     }
 
     private suspend fun <T> setDataStore(key: Preferences.Key<T>, value: T) {
@@ -65,5 +73,6 @@ class UserLocalDataSourceImpl @Inject constructor(
         private const val ACCESS_TOKEN = "ACCESS_TOKEN"
         private const val FIRST_ENTRY = "FIRST_ENTRY"
         private const val LAST_COPIED_URL = "LAST_COPIED_URL"
+        private const val READ_LATER_LINK_ID = "READ_LATER_LINK_ID"
     }
 }

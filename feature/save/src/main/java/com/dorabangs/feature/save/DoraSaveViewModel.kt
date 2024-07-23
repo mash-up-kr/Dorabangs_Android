@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.domain.model.FolderList
+import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
@@ -25,10 +26,6 @@ class DoraSaveViewModel @Inject constructor(
     private val getFolderListUseCase: GetFolderListUseCase,
     private val postSaveLinkUseCase: SaveLinkUseCase,
 ) : ViewModel(), ContainerHost<DoraSaveState, DoraSaveSideEffect> {
-    companion object {
-        private const val DEFAULT_TYPE = "default"
-        private const val ADD_NEW_FOLDER = "새 폴더 추가"
-    }
 
     init {
         val copiedUrl = savedStateHandle.get<String>("copiedUrl").orEmpty()
@@ -41,7 +38,7 @@ class DoraSaveViewModel @Inject constructor(
             SelectableFolder(
                 id = null,
                 name = ADD_NEW_FOLDER,
-                type = "",
+                type = FolderType.NOTHING,
                 createdAt = null,
                 postCount = null,
                 isSelected = false,
@@ -52,7 +49,7 @@ class DoraSaveViewModel @Inject constructor(
                 SelectableFolder(
                     id = item.id,
                     name = item.name,
-                    type = item.type,
+                    type = item.folderType,
                     createdAt = item.createdAt,
                     postCount = item.postCount,
                     isSelected = index == 0,
@@ -73,7 +70,7 @@ class DoraSaveViewModel @Inject constructor(
      */
     private fun filterDefaultList(list: FolderList) =
         listOf(
-            list.defaultFolders.firstOrNull { it.type == DEFAULT_TYPE }
+            list.defaultFolders.firstOrNull { it.folderType == FolderType.DEFAULT }
                 ?: error("여기는 서버 잘못임 우리 탓 아님 ㄹㅇ"),
         )
 
@@ -130,5 +127,9 @@ class DoraSaveViewModel @Inject constructor(
 
     fun saveLink(id: String) = intent {
         postSaveLinkUseCase.invoke(Link(folderId = id, url = state.urlLink))
+    }
+
+    companion object {
+        private const val ADD_NEW_FOLDER = "새 폴더 추가"
     }
 }

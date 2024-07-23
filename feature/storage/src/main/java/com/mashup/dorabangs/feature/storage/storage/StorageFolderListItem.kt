@@ -127,7 +127,7 @@ fun StorageListItem(
         ) {
             Image(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(id = getFolderIcon(item.type)),
+                painter = painterResource(id = getFolderIcon(item.folderType)),
                 contentDescription = "folderIcon",
             )
             Text(
@@ -151,7 +151,7 @@ fun StorageListItem(
                 color = DoraColorTokens.G4,
                 style = DoraTypoTokens.caption3Medium,
             )
-            val isDefault = item.type != FolderType.CUSTOM.name.lowercase()
+            val isDefault = item.folderType != FolderType.CUSTOM
             val icon = if (isDefault) coreR.drawable.ic_chevron_right_m_gray else coreR.drawable.ic_more_gray
             Image(
                 modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickSettingButton() },
@@ -162,12 +162,12 @@ fun StorageListItem(
     }
 }
 
-private fun getFolderIcon(type: String): Int {
-    return when (type.uppercase()) {
-        FolderType.ALL.name -> coreR.drawable.ic_3d_all_big
-        FolderType.FAVORITE.name -> coreR.drawable.ic_3d_bookmark_big
-        FolderType.DEFAULT.name -> coreR.drawable.ic_3d_pin_big
-        FolderType.CUSTOM.name -> coreR.drawable.ic_3d_folder_big
+private fun getFolderIcon(type: FolderType): Int {
+    return when (type) {
+        FolderType.ALL -> coreR.drawable.ic_3d_all_big
+        FolderType.FAVORITE -> coreR.drawable.ic_3d_bookmark_big
+        FolderType.DEFAULT -> coreR.drawable.ic_3d_pin_big
+        FolderType.CUSTOM -> coreR.drawable.ic_3d_folder_big
         else -> coreR.drawable.ic_3d_folder_big
     }
 }
