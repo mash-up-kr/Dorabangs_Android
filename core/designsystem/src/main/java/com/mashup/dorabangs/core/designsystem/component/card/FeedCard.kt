@@ -1,6 +1,5 @@
 package com.mashup.dorabangs.core.designsystem.component.card
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,7 +27,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedDate
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -57,10 +58,10 @@ fun FeedCard(
                 isLoading = cardInfo.isLoading,
             )
             Spacer(modifier = Modifier.width(13.dp))
-            Image(
-                modifier = Modifier.size(65.dp),
-                painter = painterResource(id = cardInfo.thumbnail),
-                contentDescription = "thumbnail",
+            AsyncImage(
+                modifier = Modifier.size(size = 65.dp),
+                model = cardInfo.thumbnail,
+                contentDescription = "url 썸네일",
             )
         }
         if (cardInfo.isLoading) {
@@ -89,6 +90,7 @@ fun FeedCard(
                     cardInfo = cardInfo,
                 )
                 FeedCardMenuItems(
+                    cardInfo = cardInfo,
                     onClickBookMarkButton = onClickBookMarkButton,
                     onClickMoreButton = onClickMoreButton,
                 )
@@ -107,7 +109,7 @@ fun FeedCardContent(
         modifier = Modifier.then(modifier),
     ) {
         Text(
-            text = cardInfo.title,
+            text = cardInfo.title.orEmpty(),
             textAlign = TextAlign.Left,
             style = DoraTypoTokens.caption3Bold,
             color = DoraColorTokens.G9,
@@ -169,7 +171,7 @@ fun FeedCardContent(
             }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = cardInfo.content,
+                text = cardInfo.content.orEmpty(),
                 textAlign = TextAlign.Left,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
@@ -182,9 +184,9 @@ fun FeedCardContent(
 }
 
 @Composable
-fun FeedCardKeyword(keywordList: List<String>) {
+fun FeedCardKeyword(keywordList: List<String?>?) {
     Row {
-        keywordList.forEach { keyword ->
+        keywordList?.forEach { keyword ->
             Box(
                 modifier = Modifier
                     .border(
@@ -217,7 +219,7 @@ fun FeedCardCategoryAndDayLabel(
         modifier = modifier.then(Modifier.wrapContentWidth()),
     ) {
         Text(
-            text = cardInfo.category,
+            text = cardInfo.category.orEmpty(),
             style = DoraTypoTokens.XSNormal,
             color = DoraColorTokens.G5,
         )
@@ -229,16 +231,21 @@ fun FeedCardCategoryAndDayLabel(
             painter = painterResource(id = R.drawable.ic_plus),
             contentDescription = "categoryLabel",
         )
-        Text(
-            text = "${cardInfo.createdAt}일 전",
-            style = DoraTypoTokens.XSNormal,
-            color = DoraColorTokens.G5,
-        )
+        cardInfo.createdAt?.let { day ->
+            if (day.isNotEmpty()) {
+                Text(
+                    text = "${day.convertCreatedDate()}일 전",
+                    style = DoraTypoTokens.XSNormal,
+                    color = DoraColorTokens.G5,
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun FeedCardMenuItems(
+    cardInfo: FeedCardUiModel,
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
 ) {
@@ -268,12 +275,13 @@ fun FeedCardMenuItems(
 private fun PreviewFeedCard() {
     val cardInfo =
         FeedCardUiModel(
+            id = "",
             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             keywordList = listOf("다연", "호현", "석주"),
             category = "디자인",
-            createdAt = 1,
-            thumbnail = androidx.core.R.drawable.ic_call_answer,
+            createdAt = "2024-07-18T15:50:36.181Z",
+            thumbnail = "",
         )
     FeedCard(cardInfo = cardInfo)
 }
@@ -283,12 +291,13 @@ private fun PreviewFeedCard() {
 private fun PreviewLoadingFeedCard() {
     val cardInfo =
         FeedCardUiModel(
+            id = "",
             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             keywordList = listOf("다연", "호현", "석주"),
             category = "디자인",
-            createdAt = 1,
-            thumbnail = androidx.core.R.drawable.ic_call_answer,
+            createdAt = "2024-07-18T15:50:36.181Z",
+            thumbnail = "",
             isLoading = true,
         )
     FeedCard(cardInfo = cardInfo)

@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
@@ -37,10 +39,13 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 @Composable
 fun StorageDetailList(
     listState: LazyListState,
+    linksPagingList: LazyPagingItems<FeedCardUiModel>,
     state: StorageDetailState,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    onClickBackIcon: () -> Unit = {},
+    onClickBackIcon: () -> Unit,
+    onClickTabItem: (Int) -> Unit,
+    onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     LazyColumn(
@@ -52,31 +57,37 @@ fun StorageDetailList(
             StorageDetailExpandedHeader(
                 state = state,
                 onClickBackIcon = onClickBackIcon,
+                onClickTabItem = onClickTabItem,
             )
         }
         item {
             SortButtonRow(
-                isLatestSort = state.isLatestSort,
+                isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
                 onClickSortedIcon = onClickSortedIcon,
             )
             Spacer(modifier = Modifier.height(20.dp))
         }
-        itemsIndexed(FeedCardUiModel.getDefaultFeedCard()) { idx, cardInfo ->
-            FeedCard(cardInfo = cardInfo)
-            if (idx != FeedCardUiModel.getDefaultFeedCard().lastIndex) {
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                    thickness = 0.5.dp,
-                )
+        items(
+            count = linksPagingList.itemCount,
+            key = linksPagingList.itemKey(FeedCardUiModel::id),
+            contentType = linksPagingList.itemContentType { "SavedLinks" },
+        ) { idx ->
+            linksPagingList[idx]?.let { cardItem ->
+                FeedCard(cardInfo = cardItem, onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) })
             }
+            // TODO - 마지막 처리 필요
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                thickness = 0.5.dp,
+            )
         }
     }
 }
 
 @Composable
 fun SortButtonRow(
+    items: List<StorageDetailSort> = listOf(StorageDetailSort.DESC, StorageDetailSort.ASC),
     isLatestSort: Boolean = false,
-    items: List<StorageDetailSort> = listOf(StorageDetailSort.LATEST, StorageDetailSort.PAST),
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     Row(
@@ -96,8 +107,8 @@ fun SortButtonRow(
                     .clickable { onClickSortedIcon(item) },
             ) {
                 val icon = when (item) {
-                    StorageDetailSort.LATEST -> if (isLatestSort) coreR.drawable.ic_arrow_down_active else coreR.drawable.ic_arrow_down_disabled
-                    StorageDetailSort.PAST -> if (isLatestSort) coreR.drawable.ic_arrow_up_disabled else coreR.drawable.ic_arrow_up_active
+                    StorageDetailSort.ASC -> if (isLatestSort) coreR.drawable.ic_arrow_down_active else coreR.drawable.ic_arrow_down_disabled
+                    StorageDetailSort.DESC -> if (isLatestSort) coreR.drawable.ic_arrow_up_disabled else coreR.drawable.ic_arrow_up_active
                 }
                 Image(
                     modifier = Modifier.size(24.dp),

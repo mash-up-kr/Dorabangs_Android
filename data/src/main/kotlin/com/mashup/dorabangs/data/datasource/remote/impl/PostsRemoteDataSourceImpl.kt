@@ -3,10 +3,12 @@ package com.mashup.dorabangs.data.datasource.remote.impl
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.data.model.toData
 import com.mashup.dorabangs.data.model.toDomain
+import com.mashup.dorabangs.data.model.toPagingDomain
 import com.mashup.dorabangs.data.network.service.PostsService
 import com.mashup.dorabangs.domain.model.Link
+import com.mashup.dorabangs.domain.model.PageData
+import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
-import com.mashup.dorabangs.domain.model.Posts
 import javax.inject.Inject
 
 class PostsRemoteDataSourceImpl @Inject constructor(
@@ -15,16 +17,16 @@ class PostsRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getPosts(
         page: Int?,
-        limit: Int?,
         order: String?,
         favorite: Boolean?,
-    ): Posts =
+        isRead: Boolean?,
+    ): PageData<List<Post>> =
         postsService.getPosts(
             page = page,
-            limit = limit,
             order = order,
             favorite = favorite,
-        ).toDomain()
+            isRead = isRead,
+        ).toPagingDomain()
 
     override suspend fun saveLink(link: Link) =
         postsService.saveLink(link.toData())
