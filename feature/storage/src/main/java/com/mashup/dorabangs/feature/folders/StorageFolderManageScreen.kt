@@ -25,7 +25,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun StorageFolderManageRoute(
-    folderId: String,
+    folderId: String = "",
     folderManageType: String,
     onClickBackIcon: () -> Unit,
     folderManageViewModel: FolderManageViewModel = hiltViewModel(),

@@ -34,7 +34,7 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 @Composable
 fun StorageFolderList(
     storageState: StorageListState,
-    navigateToStorageDetail: (Folder) -> Unit = {},
+    navigateToStorageDetail: (Folder) -> Unit,
     onClickSettingButton: (Folder) -> Unit = {},
 ) {
     LazyColumn(
@@ -44,6 +44,7 @@ fun StorageFolderList(
             Spacer(modifier = Modifier.height(20.dp))
             StorageDefaultFolder(
                 defaultFolderList = storageState.defaultStorageFolderList,
+                navigateToStorageDetail = navigateToStorageDetail,
             )
             Spacer(modifier = Modifier.height(20.dp))
         }
@@ -73,7 +74,7 @@ fun StorageFolderList(
 @Composable
 fun StorageDefaultFolder(
     defaultFolderList: List<Folder>,
-    navigateToStorageDetail: (Folder) -> Unit = {},
+    navigateToStorageDetail: (Folder) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -176,5 +177,6 @@ private fun getFolderIcon(type: String): Int {
 fun PreviewStorageFolderList() {
     StorageFolderList(
         storageState = StorageListState(),
+        navigateToStorageDetail = {},
     )
 }

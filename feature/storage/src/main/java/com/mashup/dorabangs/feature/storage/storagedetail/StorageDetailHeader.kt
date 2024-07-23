@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +29,6 @@ import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import com.mashup.dorabangs.feature.storage.R
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailTab
 import com.mashup.dorabangs.core.designsystem.R as coreR
@@ -37,9 +37,9 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 fun StorageDetailCollapsingHeader(
     state: StorageDetailState,
     isCollapsed: Boolean,
+    onClickBackIcon: () -> Unit,
+    onClickTabItem: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    onClickBackIcon: () -> Unit = {},
-    onClickTabItem: (Int) -> Unit = {},
 ) {
     Column(
         modifier = modifier.then(
@@ -66,8 +66,9 @@ fun StorageDetailCollapsingHeader(
 @Composable
 fun StorageDetailExpandedHeader(
     state: StorageDetailState,
+    onClickTabItem: (Int) -> Unit,
+    onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
-    onClickBackIcon: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.height(MaxToolbarHeight),
@@ -83,8 +84,8 @@ fun StorageDetailExpandedHeader(
         )
         StorageDetailHeaderTabBar(
             tabList = state.tabTitleList,
-            selectedTabIdx = state.selectedIdx,
-            onClickTabItem = {},
+            selectedTabIdx = state.selectedTabIdx,
+            onClickTabItem = onClickTabItem,
         )
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
@@ -128,7 +129,7 @@ fun StorageDetailHeaderContent(
                 .fillMaxWidth(),
         ) {
             Text(
-                text = stringResource(id = R.string.storage_detail_header_title_later_read),
+                text = state.title,
                 style = DoraTypoTokens.base2Bold,
             )
             Text(
@@ -142,36 +143,50 @@ fun StorageDetailHeaderContent(
 @Composable
 fun StorageDetailHeaderTabBar(
     tabList: List<StorageDetailTab>,
+    onClickTabItem: (Int) -> Unit,
     modifier: Modifier = Modifier,
     selectedTabIdx: Int = 0,
-    onClickTabItem: (Int) -> Unit = {},
 ) {
-    Row(
-        modifier = modifier.height(48.dp),
-    ) {
-        tabList.forEachIndexed { index, tabItem ->
-            val isSelected = index == selectedTabIdx
-            Column(
-                modifier = Modifier
-                    .clickable { onClickTabItem(index) }
-                    .padding(vertical = 9.5.dp),
-            ) {
-                Text(
-                    modifier = Modifier.padding(horizontal = 24.dp),
-                    text = stringResource(id = tabItem.tabTitle),
-                    style = DoraTypoTokens.caption2Medium,
-                    color = if (isSelected) DoraColorTokens.G9 else DoraColorTokens.G4,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                if (isSelected) {
-                    Canvas(
-                        Modifier.size(3.dp).align(Alignment.CenterHorizontally),
-                    ) {
-                        drawCircle(color = Color.Black)
+    Column {
+        Row(
+            modifier = modifier.height(48.dp).fillMaxWidth(),
+        ) {
+            tabList.forEachIndexed { index, tabItem ->
+                val isSelected = index == selectedTabIdx
+                Column(
+                    modifier = Modifier
+                        .clickable { onClickTabItem(index) }
+                        .padding(vertical = 9.5.dp),
+                ) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        text = stringResource(id = tabItem.tabTitle),
+                        style = DoraTypoTokens.caption2Medium,
+                        color = if (isSelected) DoraColorTokens.G9 else DoraColorTokens.G4,
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    if (isSelected) {
+                        Canvas(
+                            Modifier
+                                .size(3.dp)
+                                .align(Alignment.CenterHorizontally),
+                        ) {
+                            drawCircle(color = Color.Black)
+                        }
                     }
+                }
+                if (index == 0) {
+                    VerticalDivider(
+                        modifier = Modifier.padding(top = 14.dp, bottom = 22.dp),
+                        color = DoraColorTokens.G2,
+                    )
                 }
             }
         }
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            color = DoraColorTokens.G2,
+        )
     }
 }
 
@@ -181,5 +196,6 @@ fun PreviewStorageDetailCollapsingTopBar() {
     StorageDetailHeaderTabBar(
         tabList = StorageDetailState.getDefaultTabTitleList(),
         selectedTabIdx = 0,
+        onClickTabItem = {},
     )
 }

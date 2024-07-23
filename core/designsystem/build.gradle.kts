@@ -48,4 +48,6 @@ dependencies {
 
     // Lottie
     implementation(libs.lottie)
+
+    implementation(libs.coil)
 }
