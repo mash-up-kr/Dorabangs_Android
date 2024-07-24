@@ -77,6 +77,7 @@ fun DoraFolderListItem(
     ) {
         Image(
             painterResource(id = data.icon),
+            modifier = Modifier.size(24.dp),
             contentDescription = "",
         )
         Text(
@@ -91,32 +92,44 @@ fun DoraFolderListItem(
 @Composable
 fun DoraBottomSheetFolderItem(
     data: SelectableBottomSheetItemUIModel,
+    isLastItem: Boolean,
     modifier: Modifier = Modifier,
     background: Color = BottomSheetColorTokens.MovingFolderColor,
     onClickItem: () -> Unit = {},
 ) {
-    Row(
-        modifier = modifier
-            .background(background)
-            .padding(vertical = 14.dp, horizontal = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        DoraFolderListItem(
-            data = BottomSheetItemUIModel(
-                icon = data.icon,
-                itemName = data.itemName,
-                color = data.color,
-            ),
-            modifier = Modifier.clickable { onClickItem() },
-        )
-        if (data.isSelected) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_check),
-                contentDescription = "selectedIcon",
+    Column {
+        Row(
+            modifier = modifier
+                .background(background)
+                .padding(vertical = 14.dp, horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            DoraFolderListItem(
+                data = BottomSheetItemUIModel(
+                    icon = data.icon,
+                    itemName = data.itemName,
+                    color = data.color,
+                ),
+                modifier = Modifier.clickable { onClickItem() },
             )
-        } else {
-            Box(modifier = Modifier.size(24.dp))
+            if (data.isSelected) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_check),
+                    contentDescription = "selectedIcon",
+                )
+            } else {
+                Box(modifier = Modifier.size(24.dp))
+            }
+        }
+        if (!isLastItem) {
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                thickness = 0.5.dp,
+                color = BottomSheetColorTokens.DividerColor,
+            )
         }
     }
 }
@@ -143,5 +156,6 @@ fun PreviewDoraFolderListItem() {
             itemName = "폴더이름",
             isSelected = true,
         ),
+        isLastItem = false,
     )
 }

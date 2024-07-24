@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -21,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
+import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -105,7 +107,7 @@ fun HomeRoute(
             },
             onClickMoveFolderButton = {
                 viewModel.setVisibleMoreButtonBottomSheet(false)
-                viewModel.setVisibleMovingFolderBottomSheet(true)
+                viewModel.getCustomFolderList()
             },
             onDismissRequest = { viewModel.setVisibleMoreButtonBottomSheet(false) },
         )
@@ -113,7 +115,7 @@ fun HomeRoute(
         DoraBottomSheet.MovingFolderBottomSheet(
             modifier = Modifier.height(441.dp),
             isShowSheet = state.isShowMovingFolderSheet,
-            folderList = testFolderListData,
+            folderList = state.folderList.toSelectBottomSheetModel(),
             onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
             onClickCreateFolder = {
                 viewModel.setVisibleMovingFolderBottomSheet(

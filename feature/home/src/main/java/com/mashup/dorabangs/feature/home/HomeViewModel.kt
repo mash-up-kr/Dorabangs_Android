@@ -218,6 +218,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 현재 폴더 리스트 가져오기
+     */
+    fun getCustomFolderList() = viewModelScope.doraLaunch {
+        val customFolderList = getFolderList().customFolders
+        intent {
+            reduce {
+                state.copy(folderList = customFolderList)
+            }
+            setVisibleMovingFolderBottomSheet(true)
+        }
+    }
+
     init {
         intent {
             reduce {

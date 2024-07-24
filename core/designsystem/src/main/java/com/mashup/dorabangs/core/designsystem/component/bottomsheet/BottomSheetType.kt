@@ -102,6 +102,7 @@ object DoraBottomSheet : BottomSheetType {
                                 color = DoraColorTokens.Primary,
                             ),
                             onClickItem = onClickCreateFolder,
+                            isLastItem = false,
                         )
                     }
 
@@ -110,6 +111,7 @@ object DoraBottomSheet : BottomSheetType {
                             modifier = Modifier.fillMaxWidth(),
                             data = folderList[index],
                             onClickItem = onClickMoveFolder,
+                            isLastItem = index == folderList.lastIndex,
                         )
                     }
 
