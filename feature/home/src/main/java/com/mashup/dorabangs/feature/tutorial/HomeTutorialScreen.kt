@@ -74,7 +74,7 @@ fun HomeTutorialScreen(
             Spacer(modifier = Modifier.height(18.5.dp))
             HomeTutorialCont(modifier = Modifier.padding(horizontal = 20.dp))
             Spacer(modifier = Modifier.height(20.dp))
-            TutorialVideo()
+            TutorialVideo(modifier = Modifier)
             Spacer(modifier = Modifier.weight(1f))
             DoraButtons.DoraBtnMaxFull(
                 modifier = Modifier

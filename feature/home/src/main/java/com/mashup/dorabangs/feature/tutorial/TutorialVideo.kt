@@ -16,7 +16,9 @@ import androidx.media3.ui.PlayerView
 import com.mashup.dorabangs.home.R
 
 @Composable
-fun TutorialVideo() {
+fun TutorialVideo(
+    modifier: Modifier = Modifier,
+) {
     val context = LocalContext.current
     val exoplayer = ExoPlayer.Builder(context).build()
 
@@ -39,7 +41,7 @@ fun TutorialVideo() {
                 this.useController = false
             }
         },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f),
     )
