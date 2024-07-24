@@ -22,7 +22,7 @@ fun NavController.navigateToSaveLinkSelectFolder(
 
 fun NavGraphBuilder.saveLinkSelectFolder(
     onClickBackButton: () -> Unit,
-    onClickSaveButton: () -> Unit,
+    finishSaveLink: () -> Unit,
     onClickAddNewFolder: (String) -> Unit,
 ) {
     composable(
@@ -36,7 +36,7 @@ fun NavGraphBuilder.saveLinkSelectFolder(
     ) {
         DoraLinkSaveSelectFolderRoute(
             modifier = Modifier,
-            onClickSaveButton = onClickSaveButton,
+            finishSaveLink = finishSaveLink,
             onClickBackIcon = onClickBackButton,
             onClickAddNewFolder = onClickAddNewFolder,
         )

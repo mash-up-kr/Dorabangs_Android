@@ -85,8 +85,7 @@ fun MainNavHost(
             onClickBackButton = {
                 appState.navController.popBackStack()
             },
-            onClickSaveButton = {
-                // TODO 클릭 때 데이터 스토어에 저장해서 다시 클립보드 안뜨게 하기?
+            finishSaveLink = {
                 appState.navController.navigateToHome(
                     navOptions = navOptions {
                         popUpTo(appState.navController.graph.id) {

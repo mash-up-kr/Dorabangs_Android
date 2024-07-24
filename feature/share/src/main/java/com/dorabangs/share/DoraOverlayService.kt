@@ -23,9 +23,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
-    companion object {
-        private const val URL = "SHARED_URL"
-    }
 
     private lateinit var windowManager: WindowManager
     private lateinit var overlayView: ComposeView
@@ -96,5 +93,9 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     override fun onDestroy() {
         super.onDestroy()
         windowManager.removeView(overlayView)
+    }
+
+    companion object {
+        private const val URL = "SHARED_URL"
     }
 }

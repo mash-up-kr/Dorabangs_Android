@@ -2,6 +2,7 @@ package com.mashup.dorabangs.feature.storage.storagedetail.model
 
 import androidx.paging.PagingData
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import kotlinx.coroutines.flow.Flow
@@ -11,11 +12,12 @@ data class StorageDetailState(
     val folderId: String? = "",
     val title: String = "",
     val postCount: Int = 0,
-    val folderType: String = "",
+    val folderType: FolderType = FolderType.ALL,
     val tabTitleList: List<StorageDetailTab> = getDefaultTabTitleList(),
     val selectedTabIdx: Int = 0,
     val isLatestSort: StorageDetailSort = StorageDetailSort.ASC,
     val pagingList: Flow<PagingData<FeedCardUiModel>> = emptyFlow(),
+
 ) {
     companion object {
         fun getDefaultTabTitleList() = listOf(StorageDetailTab.ALL, StorageDetailTab.UNREAD)

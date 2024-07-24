@@ -40,7 +40,7 @@ fun DoraApp(
                 MainNavHost(
                     appState = appState,
                     startDestination =
-                    if (isFirstEntry) NavigationRoute.OnBoardingScreen.route else "${NavigationRoute.HomeScreen.route}/false",
+                    if (isFirstEntry) NavigationRoute.OnBoardingScreen.route else "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}",
                 )
             }
         },

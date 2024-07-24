@@ -26,8 +26,8 @@ data class SavedLinkInfoResponseModel(
 
 @Serializable
 data class LinkKeywordResponseModel(
-    val id: String? = "",
-    val name: String? = "",
+    val id: String = "",
+    val name: String = "",
 )
 
 fun LinksFromFolderResponseModel.toDomain(): PageData<List<SavedLinkDetailInfo>> {

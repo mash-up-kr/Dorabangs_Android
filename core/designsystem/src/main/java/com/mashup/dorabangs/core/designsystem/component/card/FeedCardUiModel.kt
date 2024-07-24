@@ -9,7 +9,7 @@ data class FeedCardUiModel(
     val content: String?,
     val category: String? = "",
     val createdAt: String?,
-    val keywordList: List<String?>?,
+    val keywordList: List<String>?,
     val thumbnail: String?,
     val isFavorite: Boolean = false,
     val isLoading: Boolean = false,

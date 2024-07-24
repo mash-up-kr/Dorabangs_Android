@@ -12,7 +12,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 @Composable
 fun DoraLinkSaveSelectFolderRoute(
     onClickBackIcon: () -> Unit,
-    onClickSaveButton: () -> Unit,
+    finishSaveLink: () -> Unit,
     onClickAddNewFolder: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DoraSaveViewModel = hiltViewModel(),
@@ -29,16 +29,14 @@ fun DoraLinkSaveSelectFolderRoute(
                 }
             }
             is DoraSaveSideEffect.ClickSaveButton -> viewModel.saveLink(id = sideEffect.id)
+            is DoraSaveSideEffect.FinishSaveLink -> finishSaveLink()
         }
     }
 
     DoraLinkSaveSelectFolderScreen(
         modifier = modifier,
         state = state,
-        onClickSaveButton = {
-            viewModel.clickSaveButton()
-            onClickSaveButton.invoke()
-        },
+        onClickSaveButton = viewModel::clickSaveButton,
         onClickBackIcon = onClickBackIcon,
         onClickItem = viewModel::clickSelectableItem,
         getInitialFolder = viewModel::getFolderList,

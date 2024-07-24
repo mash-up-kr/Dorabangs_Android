@@ -39,4 +39,12 @@ class UserRepositoryImpl @Inject constructor(
     override fun getLastCopiedUrl(): Flow<String> {
         return userLocalDataSource.getLastCopiedUrl()
     }
+
+    override suspend fun setIdLinkToReadLater(id: String) {
+        return userLocalDataSource.setIdLinkToReadLater(id = id)
+    }
+
+    override fun getIdFromLinkToReadLater(): Flow<String> {
+        return userLocalDataSource.getIdFromLinkToReadLater()
+    }
 }

@@ -9,6 +9,7 @@ import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.model.Sort
@@ -19,7 +20,9 @@ import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.GetUnReadPostsCountUseCase
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
+import com.mashup.dorabangs.domain.usecase.user.GetIdFromLinkToReadLaterUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
+import com.mashup.dorabangs.domain.usecase.user.SetIdLinkToReadLaterUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import com.mashup.dorabangs.feature.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,6 +50,8 @@ class HomeViewModel @Inject constructor(
     private val getSavedLinksFromFolderUseCase: GetSavedLinksFromFolderUseCase,
     private val getUnReadPostsCountUseCase: GetUnReadPostsCountUseCase,
     private val getAIClassificationCount: GetAIClassificationCountUseCase,
+    private val getIdFromLinkToReadLaterUseCase: GetIdFromLinkToReadLaterUseCase,
+    private val setIdFromLinkToReadLaterUseCase: SetIdLinkToReadLaterUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -135,11 +140,20 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateFolderList() = viewModelScope.doraLaunch {
-        val folderList = getFolderList()
+        val folderList = getFolderList().toList()
+        if (getIdFromLinkToReadLaterUseCase.invoke().isBlank()) {
+            folderList
+                .firstOrNull { it.folderType == FolderType.DEFAULT }
+                ?.let { folder ->
+                    setIdFromLinkToReadLaterUseCase.invoke(
+                        id = folder.id ?: error("서버가 또 잘못함 : 나중에 읽을 링크의 id가 null"),
+                    )
+                }
+        }
         intent {
             reduce {
                 state.copy(
-                    tapElements = folderList.toList().mapIndexed { index, folder ->
+                    tapElements = folderList.mapIndexed { index, folder ->
                         DoraChipUiModel(
                             id = folder.id.orEmpty(),
                             title = folder.name,
@@ -158,12 +172,17 @@ class HomeViewModel @Inject constructor(
         else -> null
     }
 
-    private fun setTextHelperEnable(isEnable: Boolean, helperMsg: String) = intent {
+    private fun setTextHelperEnable(
+        isEnable: Boolean,
+        helperMsg: String,
+        lastCheckedFolderName: String,
+    ) = intent {
         reduce {
             state.copy(
                 homeCreateFolder = state.homeCreateFolder.copy(
                     helperEnable = isEnable,
                     helperMessage = helperMsg,
+                    lastCheckedFolderName = lastCheckedFolderName,
                 ),
             )
         }
@@ -174,12 +193,12 @@ class HomeViewModel @Inject constructor(
             val folderData = NewFolderNameList(names = listOf(folderName))
             val afterCreateFolder = createFolderUseCase(folderData)
             if (afterCreateFolder.isSuccess) {
-                // TODO API 바뀌면 id 넣는 로직 추가
                 intent {
                     if (urlLink.isNotBlank()) {
                         postSideEffect(
                             HomeSideEffect.SaveLink(
-                                folderId = "afterCreateFolder.folderId",
+                                folderId = afterCreateFolder.result.firstOrNull()?.id
+                                    ?: error("정확한 id가 안내려 왔어요"),
                                 urlLink = urlLink,
                             ),
                         )
@@ -191,6 +210,7 @@ class HomeViewModel @Inject constructor(
                 setTextHelperEnable(
                     isEnable = true,
                     helperMsg = afterCreateFolder.errorMsg,
+                    lastCheckedFolderName = folderName,
                 )
             }
         }
@@ -208,7 +228,12 @@ class HomeViewModel @Inject constructor(
 
     fun setFolderName(folderName: String) = intent {
         reduce {
-            state.copy(homeCreateFolder = state.homeCreateFolder.copy(folderName = folderName))
+            state.copy(
+                homeCreateFolder = state.homeCreateFolder.copy(
+                    folderName = folderName,
+                    helperEnable = folderName == state.homeCreateFolder.lastCheckedFolderName,
+                ),
+            )
         }
     }
 

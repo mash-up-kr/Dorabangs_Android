@@ -13,6 +13,6 @@ data class SavedLinkDetailInfo(
 )
 
 data class LinkKeywordInfo(
-    val id: String?,
-    val name: String?,
+    val id: String,
+    val name: String,
 )
