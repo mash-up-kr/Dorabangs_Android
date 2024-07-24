@@ -210,7 +210,7 @@ private fun LazyListScope.Feeds(
     items(
         count = feeds.itemCount,
         key = feeds.itemKey(FeedCardUiModel::id),
-        contentType = feeds.itemContentType { "SavedLinks" }
+        contentType = feeds.itemContentType { "SavedLinks" },
     ) { index ->
         feeds[index]?.let { cardInfo ->
             FeedCard(

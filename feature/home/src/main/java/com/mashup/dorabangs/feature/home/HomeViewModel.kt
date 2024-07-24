@@ -281,10 +281,10 @@ class HomeViewModel @Inject constructor(
                         pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
                     }
                     .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.Lazily,
-                    initialValue = PagingData.empty()
-                )
+                        scope = viewModelScope,
+                        started = SharingStarted.Lazily,
+                        initialValue = PagingData.empty(),
+                    )
             }
         intent {
             reduce {

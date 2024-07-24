@@ -27,7 +27,7 @@ fun DoraBottomNavigation(
         modifier =
         Modifier
             .fillMaxWidth()
-            .background(Color.Transparent)
+            .background(Color.Transparent),
     ) {
         NavigationBar(
             modifier = modifier,

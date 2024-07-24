@@ -24,6 +24,6 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
         createdAt = this.createdAt,
         keywordList = emptyList(),
         isFavorite = this.isFavorite ?: false,
-        thumbnail = ""
+        thumbnail = "",
     )
 }

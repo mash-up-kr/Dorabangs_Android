@@ -33,9 +33,13 @@ fun MainNavHost(
         navController = appState.navController,
         startDestination = startDestination,
     ) {
-        onBoardingNavigation { appState.navController.navigateToHome(navOptions {
-            popUpTo(NavigationRoute.OnBoardingScreen.route) { inclusive = true }
-        }) }
+        onBoardingNavigation {
+            appState.navController.navigateToHome(
+                navOptions {
+                    popUpTo(NavigationRoute.OnBoardingScreen.route) { inclusive = true }
+                },
+            )
+        }
         homeNavigation(
             navigateToClassification = { appState.navController.navigateToClassification() },
             navigateToSaveScreenWithLink = { copiedUrl ->
