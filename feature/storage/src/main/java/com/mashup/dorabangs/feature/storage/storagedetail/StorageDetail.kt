@@ -37,12 +37,12 @@ val MaxToolbarHeight = 161.dp
 @Composable
 fun StorageDetailRoute(
     folderItem: Folder,
-    isVisibleBottomSheet: Boolean = false,
-    storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
     navigateToFolderManager: (String) -> Unit,
     navigateToCreateFolder: () -> Unit,
-    onClickBackIcon: () -> Unit = {},
+    onClickBackIcon: () -> Unit,
+    isVisibleBottomSheet: Boolean = false,
+    storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
 ) {
     val listState = rememberLazyListState()
     val overlapHeightPx = with(LocalDensity.current) { MaxToolbarHeight.toPx() - MinToolbarHeight.toPx() }
@@ -203,5 +203,6 @@ fun PreviewStorageDetailScreen() {
         navigateToHome = {},
         navigateToFolderManager = {},
         navigateToCreateFolder = {},
+        onClickBackIcon = {}
     )
 }
