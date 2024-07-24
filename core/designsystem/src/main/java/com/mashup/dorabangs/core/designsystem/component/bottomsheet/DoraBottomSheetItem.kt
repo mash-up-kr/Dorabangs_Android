@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.core.designsystem.component.bottomsheet
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -75,7 +75,7 @@ fun DoraFolderListItem(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(
+        Image(
             painterResource(id = data.icon),
             contentDescription = "",
         )
@@ -106,13 +106,14 @@ fun DoraBottomSheetFolderItem(
             data = BottomSheetItemUIModel(
                 icon = data.icon,
                 itemName = data.itemName,
+                color = data.color,
             ),
             modifier = Modifier.clickable { onClickItem() },
         )
         if (data.isSelected) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_plus),
-                contentDescription = "",
+            Image(
+                painter = painterResource(id = R.drawable.ic_check),
+                contentDescription = "selectedIcon",
             )
         } else {
             Box(modifier = Modifier.size(24.dp))

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -41,12 +43,12 @@ object DoraBottomSheet : BottomSheetType {
                         .padding(top = 46.dp),
                     items = listOf(
                         BottomSheetItemUIModel(
-                            icon = R.drawable.ic_plus,
+                            icon = R.drawable.ic_trashbin,
                             itemName = stringResource(id = firstItemName),
                             color = DoraColorTokens.Alert,
                         ),
                         BottomSheetItemUIModel(
-                            icon = R.drawable.ic_plus,
+                            icon = R.drawable.ic_edit,
                             itemName = stringResource(id = secondItemName),
                         ),
                     ),
@@ -94,9 +96,10 @@ object DoraBottomSheet : BottomSheetType {
                         DoraBottomSheetFolderItem(
                             modifier = Modifier.fillMaxWidth(),
                             data = SelectableBottomSheetItemUIModel(
-                                icon = R.drawable.ic_plus,
+                                icon = R.drawable.ic_add_folder_purple,
                                 itemName = stringResource(id = R.string.moving_folder_dialog_add_folder),
                                 isSelected = false,
+                                color = DoraColorTokens.Primary,
                             ),
                             onClickItem = onClickCreateFolder,
                         )
@@ -148,4 +151,9 @@ sealed interface BottomSheetType {
         onClickCreateFolder: () -> Unit,
         onClickMoveFolder: () -> Unit,
     )
+}
+
+enum class ExpandedType {
+    MIN,
+    MAX,
 }

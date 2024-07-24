@@ -14,4 +14,5 @@ data class SelectableBottomSheetItemUIModel(
     @DrawableRes val icon: Int,
     val itemName: String,
     val isSelected: Boolean,
+    val color: Color = DoraColorTokens.Black,
 )
