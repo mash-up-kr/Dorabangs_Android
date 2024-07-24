@@ -28,6 +28,7 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
     return FeedCardUiModel(
         id = this.id.orEmpty(),
         title = this.title,
+        folderId = this.folderId.orEmpty(),
         content = this.description,
         createdAt = this.createdAt,
         keywordList = this.keywords?.map { it.name },
@@ -45,5 +46,6 @@ fun Post.toUiModel(): FeedCardUiModel {
         keywordList = listOf(),
         isFavorite = isFavorite,
         thumbnail = "",
+        folderId = this.folderId
     )
 }
