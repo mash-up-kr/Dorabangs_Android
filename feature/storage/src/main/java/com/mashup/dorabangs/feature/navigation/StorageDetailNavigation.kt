@@ -1,8 +1,6 @@
 package com.mashup.dorabangs.feature.navigation
 
-import android.content.ContentValues.TAG
 import android.net.Uri
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable

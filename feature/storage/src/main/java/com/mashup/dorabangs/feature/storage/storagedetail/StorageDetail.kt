@@ -203,6 +203,6 @@ fun PreviewStorageDetailScreen() {
         navigateToHome = {},
         navigateToFolderManager = {},
         navigateToCreateFolder = {},
-        onClickBackIcon = {}
+        onClickBackIcon = {},
     )
 }
