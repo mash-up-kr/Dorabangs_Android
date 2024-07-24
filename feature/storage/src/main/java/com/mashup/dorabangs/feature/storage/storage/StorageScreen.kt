@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,8 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
@@ -38,19 +37,20 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageRoute(
+    editFolder: String = "",
     storageViewModel: StorageViewModel = hiltViewModel(),
     navigateToStorageDetail: (Folder) -> Unit,
     navigateToFolderManage: (FolderManageType, String) -> Unit,
 ) {
     val storageState by storageViewModel.collectAsState()
-
     storageViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             StorageListSideEffect.NavigateToFolderManage -> navigateToFolderManage(FolderManageType.CHANGE, storageState.selectedFolderId)
         }
     }
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        storageViewModel.getFolderList()
+
+    LaunchedEffect(Unit) {
+        if (editFolder.isNotEmpty()) storageViewModel.getFolderList()
     }
 
     Box {

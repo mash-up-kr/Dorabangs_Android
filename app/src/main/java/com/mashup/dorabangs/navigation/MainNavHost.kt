@@ -71,6 +71,7 @@ fun MainNavHost(
             onClickBackIcon = { folderType ->
                 val isVisibleBottomSheet = folderType == FolderManageType.CREATE
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", isVisibleBottomSheet)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", "")
                 appState.navController.popBackStack()
             },
             onClickSaveButton = { folderName ->
