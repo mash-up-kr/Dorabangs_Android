@@ -16,13 +16,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.media3.exoplayer.ExoPlayer
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
@@ -33,12 +35,17 @@ import com.mashup.dorabangs.home.R
 fun HomeTutorialRoute(
     onClickBackIcon: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build()
+    }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {},
     )
 
     HomeTutorialScreen(
+        exoPlayer = exoPlayer,
         onClickBackIcon = onClickBackIcon,
         onClickSettingButton = { sendSystemModal()?.let { launcher.launch(it) } },
     )
@@ -46,6 +53,7 @@ fun HomeTutorialRoute(
 
 @Composable
 fun HomeTutorialScreen(
+    exoPlayer: ExoPlayer,
     onClickBackIcon: () -> Unit,
     onClickSettingButton: () -> Unit,
 ) {
@@ -74,7 +82,10 @@ fun HomeTutorialScreen(
             Spacer(modifier = Modifier.height(18.5.dp))
             HomeTutorialCont(modifier = Modifier.padding(horizontal = 20.dp))
             Spacer(modifier = Modifier.height(20.dp))
-            TutorialVideo(modifier = Modifier)
+            TutorialVideo(
+                exoPlayer = exoPlayer,
+                modifier = Modifier,
+            )
             Spacer(modifier = Modifier.weight(1f))
             DoraButtons.DoraBtnMaxFull(
                 modifier = Modifier
