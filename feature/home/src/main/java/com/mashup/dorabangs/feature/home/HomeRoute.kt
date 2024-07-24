@@ -35,6 +35,7 @@ fun HomeRoute(
     navigateToSaveScreenWithLink: (String) -> Unit = {},
     navigateToSaveScreenWithoutLink: () -> Unit = {},
     navigateToCreateFolder: () -> Unit,
+    navigateToHomeTutorial: () -> Unit,
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -70,6 +71,7 @@ fun HomeRoute(
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
+            navigateToHomeTutorial = navigateToHomeTutorial,
         )
 
         HomeDoraSnackBar(

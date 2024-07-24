@@ -17,6 +17,7 @@ fun NavGraphBuilder.homeNavigation(
     navigateToSaveScreenWithLink: (String) -> Unit,
     navigateToSaveScreenWithoutLink: () -> Unit,
     navigateToCreateFolder: () -> Unit,
+    navigateToHomeTutorial: () -> Unit,
 ) {
     composable(
         route = "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}",
@@ -32,6 +33,7 @@ fun NavGraphBuilder.homeNavigation(
             navigateToSaveScreenWithLink = navigateToSaveScreenWithLink,
             navigateToSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToCreateFolder = navigateToCreateFolder,
+            navigateToHomeTutorial = navigateToHomeTutorial,
         )
     }
 }
