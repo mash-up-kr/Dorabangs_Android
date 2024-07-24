@@ -4,7 +4,7 @@
 
     <application>
         <activity
-            android:name="com.dorabangs.share.DoraShareActivity"
+            android:name="com.mashup.dorabangs.DoraShareActivity"
             android:theme="@style/Theme.TransparentActivity"
             android:exported="true">
             <intent-filter>
@@ -14,7 +14,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name="com.dorabangs.share.DoraOverlayService"
+            android:name="com.mashup.dorabangs.DoraOverlayService"
             android:enabled="true"
             android:exported="false" />
     </application>

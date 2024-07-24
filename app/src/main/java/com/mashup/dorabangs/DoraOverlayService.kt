@@ -1,4 +1,4 @@
-package com.dorabangs.share
+package com.mashup.dorabangs
 
 import android.app.Service
 import android.content.Intent
@@ -15,6 +15,7 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.dorabangs.share.DoraSnackBarWithShareScreen
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetIdFromLinkToReadLaterUseCase
