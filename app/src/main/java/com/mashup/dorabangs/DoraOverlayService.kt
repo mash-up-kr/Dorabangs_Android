@@ -94,7 +94,12 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
                 DoraSnackBarWithShareScreen(
                     onClick = {
                         job.cancel()
-                        // startActivity를 통해 이동해보자 ~ with url
+                        Intent(this@DoraOverlayService, MainActivity::class.java).apply {
+                            putExtra("SERVICE_URL", url)
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        }.also {
+                            startActivity(it)
+                        }.run { stopSelf() }
                     },
                 )
             }

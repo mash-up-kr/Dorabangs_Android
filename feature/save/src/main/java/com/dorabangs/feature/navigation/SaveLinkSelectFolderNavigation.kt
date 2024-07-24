@@ -34,6 +34,8 @@ fun NavGraphBuilder.saveLinkSelectFolder(
             },
         ),
     ) {
+        println("tjrwn ${it.arguments?.getString("copiedUrl").orEmpty()}")
+        // ==> 이거 null 인거 해결해주실분~
         DoraLinkSaveSelectFolderRoute(
             modifier = Modifier,
             finishSaveLink = finishSaveLink,

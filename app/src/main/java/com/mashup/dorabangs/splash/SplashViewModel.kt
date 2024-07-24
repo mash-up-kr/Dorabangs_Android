@@ -57,5 +57,5 @@ class SplashViewModel @Inject constructor(
 }
 
 enum class FirstEntryScreen {
-    Splash, Onboarding, Home
+    Splash, Onboarding, Home, SaveLink
 }
