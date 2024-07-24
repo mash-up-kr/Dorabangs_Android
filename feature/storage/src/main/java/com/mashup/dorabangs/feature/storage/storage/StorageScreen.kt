@@ -50,7 +50,7 @@ fun StorageRoute(
     }
 
     LaunchedEffect(Unit) {
-        if (editFolder.isNotEmpty()) storageViewModel.getFolderList()
+        if (editFolder.isNotEmpty() || editFolder.isNotBlank()) storageViewModel.getFolderList()
     }
 
     Box {
