@@ -14,6 +14,7 @@ import com.mashup.dorabangs.feature.navigation.homeNavigation
 import com.mashup.dorabangs.feature.navigation.homeTutorialNavigation
 import com.mashup.dorabangs.feature.navigation.navigateToHome
 import com.mashup.dorabangs.feature.navigation.navigateToHomeCrateFolder
+import com.mashup.dorabangs.feature.navigation.navigateToHomeTutorial
 import com.mashup.dorabangs.feature.navigation.navigateToStorageDetail
 import com.mashup.dorabangs.feature.navigation.navigateToStorageFolderManage
 import com.mashup.dorabangs.feature.navigation.onBoardingNavigation
@@ -44,6 +45,7 @@ fun MainNavHost(
                 appState.navController.navigateToSaveLink()
             },
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
+            navigateToHomeTutorial = { appState.navController.navigateToHomeTutorial() },
         )
         homeCreateFolderNavigation(
             navController = appState.navController,
@@ -56,7 +58,7 @@ fun MainNavHost(
             },
         )
         homeTutorialNavigation(
-            onClickBackIcon = { appState.navController.popBackStack() }
+            onClickBackIcon = { appState.navController.popBackStack() },
         )
         storageNavigation(
             navigateToStorageDetail = { folder ->

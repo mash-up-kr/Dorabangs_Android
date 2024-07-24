@@ -69,6 +69,7 @@ fun HomeScreen(
     onClickMoreButton: (Int) -> Unit = {},
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
+    navigateToHomeTutorial: () -> Unit = {},
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -147,7 +148,7 @@ fun HomeScreen(
                                         append(stringResource(id = R.string.home_carousel_save_introduce))
                                     }
                                 },
-                                onClickButton = navigateToClassification,
+                                onClickButton = navigateToHomeTutorial,
                             ),
                         ).filter { it.isVisible },
                         modifier = Modifier
