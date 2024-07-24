@@ -52,7 +52,7 @@ fun HomeTutorialScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(color = DoraColorTokens.White),
     ) {
         Column(
             modifier = Modifier

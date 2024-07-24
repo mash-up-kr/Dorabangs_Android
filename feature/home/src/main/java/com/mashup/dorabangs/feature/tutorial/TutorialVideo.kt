@@ -45,7 +45,7 @@ fun TutorialVideo(
             .fillMaxWidth()
             .aspectRatio(1f),
     )
-    LifecycleStartEffect(Lifecycle.Event.ON_START) {
+    LifecycleStartEffect(Unit) {
         onStopOrDispose {
             exoplayer.release()
         }
