@@ -58,7 +58,7 @@ fun MainNavHost(
             },
         )
         homeTutorialNavigation(
-            onClickBackIcon = { appState.navController.popBackStack() },
+            navigateToHome = { appState.navController.popBackStack() },
         )
         storageNavigation(
             navigateToStorageDetail = { folder ->

@@ -11,13 +11,13 @@ fun NavController.navigateToHomeTutorial(navOptions: NavOptions? = null) =
     navigate(NavigationRoute.HomeScreen.HomeTutorial.route, navOptions)
 
 fun NavGraphBuilder.homeTutorialNavigation(
-    onClickBackIcon: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     composable(
         route = NavigationRoute.HomeScreen.HomeTutorial.route,
     ) {
         HomeTutorialRoute(
-            onClickBackIcon = onClickBackIcon,
+            onClickBackIcon = navigateToHome,
         )
     }
 }
