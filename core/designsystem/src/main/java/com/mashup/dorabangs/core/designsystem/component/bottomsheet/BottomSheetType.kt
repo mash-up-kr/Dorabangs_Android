@@ -80,7 +80,9 @@ object DoraBottomSheet : BottomSheetType {
                 containerColor = BottomSheetColorTokens.MovingFolderColor,
                 onDismissRequest = onDismissRequest,
             ) {
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier.padding(bottom = 50.dp)
+                ) {
                     item {
                         Text(
                             modifier = Modifier
