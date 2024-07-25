@@ -29,7 +29,6 @@ class DoraSaveViewModel @Inject constructor(
 
     init {
         val copiedUrl = savedStateHandle.get<String>("copiedUrl").orEmpty()
-        println("tjrwn 전달받은 copiedUrl? $copiedUrl")
         if (copiedUrl.isNotBlank()) checkUrl(copiedUrl)
     }
 

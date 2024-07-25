@@ -7,8 +7,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.dorabangs.feature.save.screen.DoraLinkSaveSelectFolderRoute
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.domain.utils.isValidUrl
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -33,14 +35,22 @@ fun NavGraphBuilder.saveLinkSelectFolder(
                 defaultValue = ""
             },
         ),
-    ) {
-        println("tjrwn ${it.arguments?.getString("copiedUrl").orEmpty()}")
-        // ==> 이거 null 인거 해결해주실분~
-        DoraLinkSaveSelectFolderRoute(
-            modifier = Modifier,
-            finishSaveLink = finishSaveLink,
-            onClickBackIcon = onClickBackButton,
-            onClickAddNewFolder = onClickAddNewFolder,
+        deepLinks = listOf(
+            navDeepLink {
+                uriPattern = "linkit://linksave/{copiedUrl}"
+            }
         )
+    ) {
+        val linkUrl = it.arguments?.getString("copiedUrl").orEmpty()
+        if (linkUrl.isNotBlank() && linkUrl.isValidUrl()) {
+            DoraLinkSaveSelectFolderRoute(
+                modifier = Modifier,
+                finishSaveLink = finishSaveLink,
+                onClickBackIcon = onClickBackButton,
+                onClickAddNewFolder = onClickAddNewFolder,
+            )
+        } else {
+            onClickBackButton()
+        }
     }
 }
