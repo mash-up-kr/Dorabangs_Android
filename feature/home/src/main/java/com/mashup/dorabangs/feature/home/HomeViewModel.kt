@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.feature.home
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,12 +9,15 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
+import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
+import com.mashup.dorabangs.domain.usecase.posts.DeletePost
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetIdFromLinkToReadLaterUseCase
@@ -41,6 +46,8 @@ class HomeViewModel @Inject constructor(
     private val getAIClassificationCount: GetAIClassificationCountUseCase,
     private val getIdFromLinkToReadLaterUseCase: GetIdFromLinkToReadLaterUseCase,
     private val setIdFromLinkToReadLaterUseCase: SetIdLinkToReadLaterUseCase,
+    private val deletePostUseCase: DeletePost,
+    private val changePostFolderUseCase: ChangePostFolder,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -233,13 +240,48 @@ class HomeViewModel @Inject constructor(
      * 현재 폴더 리스트 가져오기
      */
     fun getCustomFolderList() = viewModelScope.doraLaunch {
-        val customFolderList = getFolderList().customFolders
+        val folderList = getFolderList()
         intent {
             reduce {
-                state.copy(folderList = customFolderList)
+                state.copy(folderList = filterDefaultList(folderList) + folderList.customFolders)
             }
             setVisibleMovingFolderBottomSheet(true)
         }
+    }
+
+    private fun filterDefaultList(list: FolderList) =
+        listOf(
+            list.defaultFolders.firstOrNull { it.folderType == FolderType.DEFAULT }
+                ?: error("여기는 서버 잘못임 우리 탓 아님 ㄹㅇ"),
+        )
+
+    /**
+     * 링크 삭제
+     */
+    fun deletePost(postId: String) = viewModelScope.doraLaunch {
+        deletePostUseCase(postId)
+        setVisibleDialog(false)
+        intent { }
+    }
+
+    /**
+     * 변환하고 싶은 링크의 postId와 folderId 임시 저장
+     */
+    fun updateSelectedPostItem(postId: String, folderId: String) = intent {
+        reduce { state.copy(selectedPostId = postId, selectedFolderId = folderId) }
+    }
+
+    fun updateSelectFolderId(folderId: String) = intent {
+        reduce { state.copy(changeFolderId = folderId) }
+    }
+
+    /**
+     * 링크 폴더 이동
+     */
+    fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
+        changePostFolderUseCase(postId = postId, folderId = folderId)
+        setVisibleMovingFolderBottomSheet(false)
+        // TODO - 실패 성공 여부 리스트 업데이트
     }
 
     init {
@@ -256,6 +298,7 @@ class HomeViewModel @Inject constructor(
                             createdAt = "2024-07-18T15:50:36.181Z",
                             thumbnail = "",
                             isLoading = true,
+                            folderId = "",
                         ),
                         FeedCardUiModel(
                             id = "",
@@ -265,6 +308,7 @@ class HomeViewModel @Inject constructor(
                             category = "디자인",
                             createdAt = "2024-07-18T15:50:36.181Z",
                             thumbnail = "",
+                            folderId = "",
                         ),
                         FeedCardUiModel(
                             id = "",
@@ -274,6 +318,7 @@ class HomeViewModel @Inject constructor(
                             category = "디자인",
                             createdAt = "2024-07-18T15:50:36.181Z",
                             thumbnail = "",
+                            folderId = "",
                         ),
                         FeedCardUiModel(
                             id = "",
@@ -283,6 +328,7 @@ class HomeViewModel @Inject constructor(
                             category = "디자인",
                             createdAt = "2024-07-18T15:50:36.181Z",
                             thumbnail = "",
+                            folderId = "",
                         ),
                         FeedCardUiModel(
                             id = "",
@@ -292,6 +338,7 @@ class HomeViewModel @Inject constructor(
                             category = "디자인",
                             createdAt = "2024-07-18T15:50:36.181Z",
                             thumbnail = "",
+                            folderId = "",
                         ),
                     ),
                 )

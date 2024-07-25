@@ -43,7 +43,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
@@ -66,7 +65,7 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     onClickChip: (Int) -> Unit = {},
-    onClickMoreButton: (Int) -> Unit = {},
+    onClickMoreButton: (String, String) -> Unit,
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
@@ -159,8 +158,8 @@ fun HomeScreen(
                 Feeds(
                     modifier = Modifier,
                     feeds = state.feedCards,
-                    onClickMoreButton = { index ->
-                        onClickMoreButton(index)
+                    onClickMoreButton = { postId, folderId ->
+                        onClickMoreButton(postId, folderId)
                     },
                 )
             }
@@ -201,13 +200,13 @@ fun HomeScreen(
 private fun LazyListScope.Feeds(
     feeds: List<FeedCardUiModel>,
     modifier: Modifier = Modifier,
-    onClickMoreButton: (Int) -> Unit = {},
+    onClickMoreButton: (String, String) -> Unit,
 ) {
     items(feeds.size) { index ->
         FeedCard(
             cardInfo = feeds[index],
             onClickMoreButton = {
-                onClickMoreButton(index)
+                onClickMoreButton(feeds[index].id, feeds[index].folderId)
             },
         )
         if (index != feeds.lastIndex) {
@@ -388,6 +387,7 @@ fun HomeCarouselPreview() {
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
+        onClickMoreButton = { postId, folderId -> },
         state = HomeState(
             tapElements = listOf(
                 DoraChipUiModel(
@@ -415,26 +415,3 @@ fun HomeScreenPreview() {
         ),
     )
 }
-
-val testFolderListData = listOf(
-    SelectableBottomSheetItemUIModel(
-        R.drawable.ic_plus,
-        "폴더이름",
-        false,
-    ),
-    SelectableBottomSheetItemUIModel(
-        R.drawable.ic_plus,
-        "폴더이름",
-        false,
-    ),
-    SelectableBottomSheetItemUIModel(
-        R.drawable.ic_plus,
-        "폴더이름",
-        true,
-    ),
-    SelectableBottomSheetItemUIModel(
-        R.drawable.ic_plus,
-        "폴더이름",
-        false,
-    ),
-)

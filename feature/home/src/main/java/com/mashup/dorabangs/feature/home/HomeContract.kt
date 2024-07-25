@@ -13,19 +13,23 @@ data class HomeState(
     val feedCards: List<FeedCardUiModel> = emptyList(),
     val folderList: List<Folder> = listOf(),
     val selectedIndex: Int = 0,
-    val isShowMoreButtonSheet: Boolean = true,
+    val selectedPostId: String = "",
+    val selectedFolderId: String = "",
+    val changeFolderId: String = "",
+    val isShowMoreButtonSheet: Boolean = false,
     val isShowDialog: Boolean = false,
     val isShowMovingFolderSheet: Boolean = false,
     val homeCreateFolder: HomeCreateFolder = HomeCreateFolder(),
     val aiClassificationCount: Int = 0,
 ) {
     companion object {
-        fun List<Folder>.toSelectBottomSheetModel(): List<SelectableBottomSheetItemUIModel> {
+        // TODO - 추후 sotrageMapper와 합치기
+        fun List<Folder>.toSelectBottomSheetModel(folderId: String): List<SelectableBottomSheetItemUIModel> {
             return this.map { item ->
                 SelectableBottomSheetItemUIModel(
                     icon = coreR.drawable.ic_3d_folder_big,
                     itemName = item.name,
-                    isSelected = false, // TODO - folderId 같은지 체크
+                    isSelected = item.id == folderId,
                 )
             }
         }

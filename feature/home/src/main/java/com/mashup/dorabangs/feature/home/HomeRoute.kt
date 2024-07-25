@@ -69,7 +69,8 @@ fun HomeRoute(
             modifier = modifier,
             onClickChip = viewModel::changeSelectedTapIdx,
             navigateToClassification = navigateToClassification,
-            onClickMoreButton = {
+            onClickMoreButton = { postId, folderId ->
+                viewModel.updateSelectedPostItem(postId = postId, folderId)
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
@@ -117,7 +118,7 @@ fun HomeRoute(
         DoraBottomSheet.MovingFolderBottomSheet(
             modifier = Modifier.height(441.dp),
             isShowSheet = state.isShowMovingFolderSheet,
-            folderList = state.folderList.toSelectBottomSheetModel(),
+            folderList = state.folderList.toSelectBottomSheetModel(state.changeFolderId.ifEmpty { state.selectedFolderId }),
             onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
             onClickCreateFolder = {
                 viewModel.setVisibleMovingFolderBottomSheet(
@@ -125,7 +126,9 @@ fun HomeRoute(
                     isNavigate = true,
                 )
             },
-            onClickMoveFolder = {},
+            onClickMoveFolder = { selectFolder -> viewModel.updateSelectFolderId(selectFolder) },
+            btnEnable = state.selectedFolderId != state.changeFolderId,
+            onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId) },
         )
 
         DoraDialog(
@@ -135,7 +138,7 @@ fun HomeRoute(
             confirmBtnText = stringResource(R.string.remove_dialog_confirm),
             disMissBtnText = stringResource(R.string.remove_dialog_cancil),
             onDisMissRequest = { viewModel.setVisibleDialog(false) },
-            onClickConfirmBtn = { viewModel.setVisibleDialog(false) },
+            onClickConfirmBtn = { viewModel.deletePost(state.selectedPostId) },
         )
     }
 }
