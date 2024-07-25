@@ -22,6 +22,7 @@ data class SavedLinkInfoResponseModel(
     val title: String? = "",
     val url: String? = "",
     val userId: String? = "",
+    val aiStatusResponseModel: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
 )
 
 @Serializable
@@ -51,6 +52,7 @@ fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
         title = title,
         url = url,
         userId = userId,
+        aiStatus = aiStatusResponseModel.toDomain()
     )
 }
 

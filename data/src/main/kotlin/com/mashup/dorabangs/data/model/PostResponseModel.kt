@@ -1,10 +1,12 @@
 package com.mashup.dorabangs.data.model
 
+import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.PostsMetaData
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,8 +24,20 @@ data class PostResponseModel(
     val description: String = "",
     val isFavorite: Boolean = false,
     val createAt: String = "",
-    val aiStatus: String,
+    val aiStatus: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
+    val readAt: String = "",
 )
+
+@Serializable
+enum class AIStatusResponseModel {
+    @SerialName("in_progress")
+    IN_PROGRESS,
+
+    @SerialName("success")
+    SUCCESS,
+
+    NOTHING,
+}
 
 fun PostResponseModel.toDomain() = Post(
     id = id,
@@ -33,7 +47,7 @@ fun PostResponseModel.toDomain() = Post(
     description = description,
     isFavorite = isFavorite,
     createAt = createAt,
-    aiStatus = aiStatus,
+    aiStatus = aiStatus.toDomain(),
 )
 
 fun PagingMetaDataResponseModel.toDomain() = PostsMetaData(
@@ -54,4 +68,10 @@ fun PostsResponseModel.toPagingDomain(): PageData<List<Post>> {
             hasNext = metadata.hasNext,
         ),
     )
+}
+
+fun AIStatusResponseModel.toDomain() = when(this) {
+    AIStatusResponseModel.IN_PROGRESS -> AIStatus.IN_PROGRESS
+    AIStatusResponseModel.SUCCESS -> AIStatus.SUCCESS
+    AIStatusResponseModel.NOTHING -> AIStatus.NOTHING
 }

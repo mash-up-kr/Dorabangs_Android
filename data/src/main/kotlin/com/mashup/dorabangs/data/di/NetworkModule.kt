@@ -48,7 +48,7 @@ object NetworkModule {
         OkHttpClient.Builder().apply {
             addInterceptor(DoraInterceptor(json))
             addInterceptor(httpLoggingInterceptor)
-            addNetworkInterceptor(flipperOkhttpInterceptor)
+            addInterceptor(flipperOkhttpInterceptor)
             addInterceptor(
                 Interceptor { chain ->
                     val token = runBlocking {

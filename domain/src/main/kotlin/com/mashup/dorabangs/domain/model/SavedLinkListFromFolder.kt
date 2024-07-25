@@ -10,6 +10,7 @@ data class SavedLinkDetailInfo(
     val userId: String?,
     val createdAt: String?,
     val keywords: List<LinkKeywordInfo>?,
+    val aiStatus: AIStatus,
 )
 
 data class LinkKeywordInfo(

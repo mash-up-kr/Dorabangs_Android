@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.feature.model
 
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 
@@ -13,6 +14,7 @@ fun Post.toUiModel(): FeedCardUiModel {
         keywordList = listOf(),
         isFavorite = isFavorite,
         thumbnail = "",
+        isLoading = this.aiStatus == AIStatus.IN_PROGRESS
     )
 }
 
@@ -25,5 +27,6 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
         keywordList = emptyList(),
         isFavorite = this.isFavorite ?: false,
         thumbnail = "",
+        isLoading = this.aiStatus == AIStatus.IN_PROGRESS
     )
 }
