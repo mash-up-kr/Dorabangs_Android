@@ -69,10 +69,12 @@ object DoraBottomSheet : BottomSheetType {
     override fun MovingFolderBottomSheet(
         modifier: Modifier,
         isShowSheet: Boolean,
+        btnEnable: Boolean,
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
         onClickCreateFolder: () -> Unit,
-        onClickMoveFolder: () -> Unit,
+        onClickMoveFolder: (String) -> Unit,
+        onClickCompleteButton: () -> Unit,
     ) {
         if (isShowSheet) {
             DoraBaseBottomSheet(
@@ -81,7 +83,7 @@ object DoraBottomSheet : BottomSheetType {
                 onDismissRequest = onDismissRequest,
             ) {
                 LazyColumn(
-                    modifier = Modifier.padding(bottom = 50.dp)
+                    modifier = Modifier.padding(bottom = 50.dp),
                 ) {
                     item {
                         Text(
@@ -112,7 +114,7 @@ object DoraBottomSheet : BottomSheetType {
                         DoraBottomSheetFolderItem(
                             modifier = Modifier.fillMaxWidth(),
                             data = folderList[index],
-                            onClickItem = onClickMoveFolder,
+                            onClickItem = { onClickMoveFolder(folderList[index].id) },
                             isLastItem = index == folderList.lastIndex,
                         )
                     }
@@ -123,8 +125,8 @@ object DoraBottomSheet : BottomSheetType {
                                 .fillMaxWidth()
                                 .padding(horizontal = 20.dp, vertical = 16.dp),
                             buttonText = stringResource(id = R.string.moving_folder_bottom_sheet_complete),
-                            enabled = true,
-                            onClickButton = onDismissRequest,
+                            enabled = btnEnable,
+                            onClickButton = onClickCompleteButton,
                         )
                     }
                 }
@@ -150,10 +152,12 @@ sealed interface BottomSheetType {
     fun MovingFolderBottomSheet(
         modifier: Modifier,
         isShowSheet: Boolean,
+        btnEnable: Boolean,
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
         onClickCreateFolder: () -> Unit,
-        onClickMoveFolder: () -> Unit,
+        onClickMoveFolder: (String) -> Unit,
+        onClickCompleteButton: () -> Unit,
     )
 }
 

@@ -26,7 +26,7 @@ data class FeedCardUiModel(
                     category = "디자인",
                     createdAt = "2024-07-18T15:50:36.181Z",
                     thumbnail = "",
-                    folderId = ""
+                    folderId = "",
                 ),
                 FeedCardUiModel(
                     id = "",
@@ -36,7 +36,7 @@ data class FeedCardUiModel(
                     category = "디자인",
                     createdAt = "2024-07-18T15:50:36.181Z",
                     thumbnail = "",
-                    folderId = ""
+                    folderId = "",
                 ),
                 FeedCardUiModel(
                     id = "",
@@ -46,7 +46,7 @@ data class FeedCardUiModel(
                     category = "디자인",
                     createdAt = "2024-07-18T15:50:36.181Z",
                     thumbnail = "",
-                    folderId = ""
+                    folderId = "",
                 ),
             )
         }

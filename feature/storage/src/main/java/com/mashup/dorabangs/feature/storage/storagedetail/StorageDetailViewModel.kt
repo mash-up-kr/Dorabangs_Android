@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +11,7 @@ import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.domain.model.Folder
+import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
@@ -208,15 +211,21 @@ class StorageDetailViewModel @Inject constructor(
     /**
      * 현재 폴더 리스트 가져오기
      */
-    fun getFolderList() = viewModelScope.doraLaunch {
-        val customFolderList = getFolderListUseCase().customFolders
+    fun getCustomFolderList() = viewModelScope.doraLaunch {
+        val folderList = getFolderListUseCase()
         intent {
             reduce {
-                state.copy(folderList = customFolderList)
+                state.copy(folderList = filterDefaultList(folderList) + folderList.customFolders)
             }
             setVisibleMovingFolderBottomSheet(true)
         }
     }
+
+    private fun filterDefaultList(list: FolderList) =
+        listOf(
+            list.defaultFolders.firstOrNull { it.folderType == FolderType.DEFAULT }
+                ?: error("여기는 서버 잘못임 우리 탓 아님 ㄹㅇ"),
+        )
 
     /**
      * 링크 폴더 이동
@@ -274,6 +283,11 @@ class StorageDetailViewModel @Inject constructor(
 
     fun setActionType(type: EditActionType, postId: String = "") = intent {
         reduce { state.copy(editActionType = type, currentClickPostId = postId) }
+    }
+
+    fun updateSelectFolderId(folderId: String) = intent {
+        Log.d(TAG, "updateSelectFolderId: $folderId")
+        reduce { state.copy(changeClickFolderId = folderId) }
     }
 
     fun moveToEditFolderName(folderId: String?) = intent {

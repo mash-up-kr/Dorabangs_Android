@@ -283,7 +283,7 @@ private fun PreviewFeedCard() {
             category = "디자인",
             createdAt = "2024-07-18T15:50:36.181Z",
             thumbnail = "",
-            folderId = ""
+            folderId = "",
         )
     FeedCard(cardInfo = cardInfo)
 }
@@ -301,7 +301,7 @@ private fun PreviewLoadingFeedCard() {
             createdAt = "2024-07-18T15:50:36.181Z",
             thumbnail = "",
             isLoading = true,
-            folderId = ""
+            folderId = "",
         )
     FeedCard(cardInfo = cardInfo)
 }
