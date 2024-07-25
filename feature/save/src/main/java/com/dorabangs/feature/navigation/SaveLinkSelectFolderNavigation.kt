@@ -38,8 +38,8 @@ fun NavGraphBuilder.saveLinkSelectFolder(
         deepLinks = listOf(
             navDeepLink {
                 uriPattern = "linkit://linksave/{copiedUrl}"
-            }
-        )
+            },
+        ),
     ) {
         val linkUrl = it.arguments?.getString("copiedUrl").orEmpty()
         if (linkUrl.isNotBlank() && linkUrl.isValidUrl()) {

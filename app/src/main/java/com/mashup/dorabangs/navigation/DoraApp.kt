@@ -14,13 +14,10 @@ import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.BottomNavigationDestination
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.BottomNavigationItems
 import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.DoraBottomNavigation
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun DoraApp(
     isFirstEntry: Boolean,
-    urlLink: String,
     appState: DoraAppState = rememberDoraAppState(),
 ) {
     Scaffold(
@@ -45,10 +42,6 @@ fun DoraApp(
                     startDestination =
                     if (isFirstEntry) {
                         NavigationRoute.OnBoardingScreen.route
-                    } else if (urlLink.isNotBlank()) {
-                        val copiedUrl =
-                            URLEncoder.encode(urlLink, StandardCharsets.UTF_8.toString())
-                        "${NavigationRoute.SaveLink.SelectFolder.route}/$copiedUrl"
                     } else {
                         "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}"
                     },

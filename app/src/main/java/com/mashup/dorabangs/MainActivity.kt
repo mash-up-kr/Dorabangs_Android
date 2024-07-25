@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         val userId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         splashViewModel.checkUserToken(userId)
 
-        val url = intent.getStringExtra("SERVICE_URL").orEmpty()
+        val url = intent.data?.path?.substring(1).orEmpty()
 
         installSplashScreen().apply {
             setKeepOnScreenCondition {
@@ -52,7 +52,6 @@ class MainActivity : ComponentActivity() {
                 DorabangsTheme {
                     DoraApp(
                         isFirstEntry = firstEntryScreen.value == FirstEntryScreen.Onboarding,
-                        urlLink = url,
                     )
                 }
             }

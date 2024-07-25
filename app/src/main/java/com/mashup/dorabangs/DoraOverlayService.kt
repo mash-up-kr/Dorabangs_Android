@@ -3,6 +3,7 @@ package com.mashup.dorabangs
 import android.app.Service
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.net.Uri
 import android.os.IBinder
 import android.view.Gravity
 import android.view.WindowManager
@@ -25,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -83,7 +85,7 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         return START_NOT_STICKY
     }
 
-    private fun showOverlay(url: String) {
+    private fun showOverlay(copiedUrl: String) {
         _lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
         _lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
@@ -94,8 +96,9 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
                 DoraSnackBarWithShareScreen(
                     onClick = {
                         job.cancel()
-                        Intent(this@DoraOverlayService, MainActivity::class.java).apply {
-                            putExtra("SERVICE_URL", url)
+                        val encodedUrl = URLEncoder.encode(copiedUrl, "UTF-8")
+                        val deepLinkUri = Uri.parse("linkit://linksave/$encodedUrl")
+                        Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                         }.also {
                             startActivity(it)
