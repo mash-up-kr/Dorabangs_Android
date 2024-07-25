@@ -26,7 +26,7 @@ class StorageViewModel @Inject constructor(
         getFolderList()
     }
 
-    private fun getFolderList() = viewModelScope.doraLaunch {
+    fun getFolderList() = viewModelScope.doraLaunch {
         val folderList = getFolderListUseCase()
         intent {
             reduce {

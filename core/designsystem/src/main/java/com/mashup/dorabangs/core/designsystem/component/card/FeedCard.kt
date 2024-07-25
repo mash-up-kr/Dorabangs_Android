@@ -250,6 +250,7 @@ fun FeedCardMenuItems(
     onClickMoreButton: () -> Unit = {},
 ) {
     Row {
+        val favoriteIcon = if (cardInfo.isFavorite) R.drawable.ic_bookmark_active else R.drawable.ic_bookmark_default
         Icon(
             modifier = Modifier
                 .size(24.dp)

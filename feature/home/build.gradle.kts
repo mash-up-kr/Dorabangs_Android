@@ -76,4 +76,9 @@ dependencies {
     // Paging
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)
+
+    // ExoPlayer
+    implementation(libs.exoplayer)
+    implementation(libs.exoplayer.dash)
+    implementation(libs.exoplayer.ui)
 }

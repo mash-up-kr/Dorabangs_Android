@@ -5,6 +5,7 @@ sealed class NavigationRoute(val route: String) {
     object HomeScreen : NavigationRoute("home") {
         object HomeCreateFolder : NavigationRoute("home/createFolder")
         object HomeCreateFolderWithLink : NavigationRoute("home/createFolderWithLink")
+        object HomeTutorial : NavigationRoute("home/tutorial")
     }
     object StorageScreen : NavigationRoute("storage") {
         object StorageDetailScreen : NavigationRoute("storage/detail")
