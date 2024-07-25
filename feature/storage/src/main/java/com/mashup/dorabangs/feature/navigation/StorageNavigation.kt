@@ -18,8 +18,11 @@ fun NavGraphBuilder.storageNavigation(
 ) {
     composable(
         route = NavigationRoute.StorageScreen.route,
-    ) {
+    ) { navBackStackEntry ->
+        val editFolderName = navBackStackEntry.savedStateHandle.get<String>("editFolderName").orEmpty()
+
         StorageRoute(
+            editFolder = editFolderName,
             navigateToStorageDetail = navigateToStorageDetail,
             navigateToFolderManage = navigateToFolderManage,
         )

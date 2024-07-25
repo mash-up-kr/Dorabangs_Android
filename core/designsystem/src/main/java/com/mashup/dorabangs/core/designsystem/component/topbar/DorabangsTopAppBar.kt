@@ -117,6 +117,7 @@ fun PreviewBackWithActionIconTopBar() {
         actionIcon = R.drawable.ic_plus,
         onClickBackIcon = {},
         onClickActonIcon = {},
+        isTitleCenter = true,
     )
 }
 
