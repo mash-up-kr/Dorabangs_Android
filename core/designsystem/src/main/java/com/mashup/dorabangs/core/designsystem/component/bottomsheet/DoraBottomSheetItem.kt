@@ -101,6 +101,7 @@ fun DoraBottomSheetFolderItem(
         Row(
             modifier = modifier
                 .background(background)
+                .clickable { onClickItem() }
                 .padding(vertical = 14.dp, horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -111,7 +112,6 @@ fun DoraBottomSheetFolderItem(
                     itemName = data.itemName,
                     color = data.color,
                 ),
-                modifier = Modifier.clickable { onClickItem() },
             )
             if (data.isSelected) {
                 Image(
