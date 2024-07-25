@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,48 +46,68 @@ fun StorageDetailList(
     contentPadding: PaddingValues = PaddingValues(),
     onClickBackIcon: () -> Unit,
     onClickTabItem: (Int) -> Unit,
+    onClickActionIcon: () -> Unit,
+    onClickMoreButton: (String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
-    LazyColumn(
-        state = listState,
-        contentPadding = contentPadding,
-        modifier = modifier,
-    ) {
-        item {
+    if (linksPagingList.itemCount == 0) {
+        Column {
             StorageDetailExpandedHeader(
                 state = state,
                 onClickBackIcon = onClickBackIcon,
                 onClickTabItem = onClickTabItem,
+                onClickActionIcon = onClickActionIcon,
             )
+            StorageDetailEmpty(modifier = modifier)
         }
-        item {
-            SortButtonRow(
-                isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
-                onClickSortedIcon = onClickSortedIcon,
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-        }
-        items(
-            count = linksPagingList.itemCount,
-            key = linksPagingList.itemKey(FeedCardUiModel::id),
-            contentType = linksPagingList.itemContentType { "SavedLinks" },
-        ) { idx ->
-            linksPagingList[idx]?.let { cardItem ->
-                FeedCard(cardInfo = cardItem, onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) })
+    } else {
+        LazyColumn(
+            state = listState,
+            contentPadding = contentPadding,
+            modifier = modifier,
+        ) {
+            item {
+                StorageDetailExpandedHeader(
+                    state = state,
+                    onClickBackIcon = onClickBackIcon,
+                    onClickTabItem = onClickTabItem,
+                    onClickActionIcon = onClickActionIcon,
+                )
             }
-            // TODO - 마지막 처리 필요
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                thickness = 0.5.dp,
-            )
+            item {
+                SortButtonRow(
+                    isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
+                    onClickSortedIcon = onClickSortedIcon,
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+            items(
+                count = linksPagingList.itemCount,
+                key = linksPagingList.itemKey(FeedCardUiModel::id),
+                contentType = linksPagingList.itemContentType { "SavedLinks" },
+            ) { idx ->
+                linksPagingList[idx]?.let { cardItem ->
+                    FeedCard(
+                        cardInfo = cardItem,
+                        onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) },
+                        onClickMoreButton = { onClickMoreButton(cardItem.id) },
+                    )
+                    if (idx != state.folderInfo.postCount - 1) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                            thickness = 0.5.dp,
+                        )
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
 fun SortButtonRow(
-    items: List<StorageDetailSort> = listOf(StorageDetailSort.DESC, StorageDetailSort.ASC),
+    items: List<StorageDetailSort> = listOf(StorageDetailSort.ASC, StorageDetailSort.DESC),
     isLatestSort: Boolean = false,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {

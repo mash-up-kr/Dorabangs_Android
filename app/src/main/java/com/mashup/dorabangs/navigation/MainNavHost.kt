@@ -9,10 +9,13 @@ import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.navigation.homeCreateFolderNavigation
 import com.mashup.dorabangs.feature.navigation.homeNavigation
+import com.mashup.dorabangs.feature.navigation.homeTutorialNavigation
 import com.mashup.dorabangs.feature.navigation.navigateToHome
 import com.mashup.dorabangs.feature.navigation.navigateToHomeCrateFolder
+import com.mashup.dorabangs.feature.navigation.navigateToHomeTutorial
 import com.mashup.dorabangs.feature.navigation.navigateToStorageDetail
 import com.mashup.dorabangs.feature.navigation.navigateToStorageFolderManage
 import com.mashup.dorabangs.feature.navigation.onBoardingNavigation
@@ -43,6 +46,7 @@ fun MainNavHost(
                 appState.navController.navigateToSaveLink()
             },
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
+            navigateToHomeTutorial = { appState.navController.navigateToHomeTutorial() },
         )
         homeCreateFolderNavigation(
             navController = appState.navController,
@@ -53,6 +57,9 @@ fun MainNavHost(
                     isVisibleMovingBottomSheet = false,
                 )
             },
+        )
+        homeTutorialNavigation(
+            navigateToHome = { appState.navController.popBackStack() },
         )
         storageNavigation(
             navigateToStorageDetail = { folder ->
@@ -65,11 +72,36 @@ fun MainNavHost(
                 )
             },
         )
+
         storageFolderManageNavigation(
-            onClickBackIcon = { appState.navController.popBackStack() },
+            onClickBackIcon = { folderType ->
+                val isVisibleBottomSheet = folderType == FolderManageType.CREATE
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", isVisibleBottomSheet)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", "")
+                appState.navController.popBackStack()
+            },
+            onClickSaveButton = { folderName ->
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", folderName)
+                appState.navController.popBackStack()
+            },
         )
         storageDetailNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
+            navigateToFolderManager = { folderId ->
+                appState.navController.navigateToStorageFolderManage(folderManageType = FolderManageType.CHANGE, folderId = folderId)
+            },
+            navigateToCreateFolder = {
+                appState.navController.navigateToStorageFolderManage(folderManageType = FolderManageType.CREATE)
+            },
+            navigateToHome = {
+                appState.navController.navigateToHome(
+                    navOptions = navOptions {
+                        popUpTo(appState.navController.graph.id) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
         )
         classificationNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
@@ -83,8 +115,7 @@ fun MainNavHost(
             onClickBackButton = {
                 appState.navController.popBackStack()
             },
-            onClickSaveButton = {
-                // TODO 클릭 때 데이터 스토어에 저장해서 다시 클립보드 안뜨게 하기?
+            finishSaveLink = {
                 appState.navController.navigateToHome(
                     navOptions = navOptions {
                         popUpTo(appState.navController.graph.id) {

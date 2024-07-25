@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,16 +37,20 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageRoute(
+    editFolder: String = "",
     storageViewModel: StorageViewModel = hiltViewModel(),
     navigateToStorageDetail: (Folder) -> Unit,
     navigateToFolderManage: (FolderManageType, String) -> Unit,
 ) {
     val storageState by storageViewModel.collectAsState()
-
     storageViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             StorageListSideEffect.NavigateToFolderManage -> navigateToFolderManage(FolderManageType.CHANGE, storageState.selectedFolderId)
         }
+    }
+
+    LaunchedEffect(Unit) {
+        if (editFolder.isNotEmpty() || editFolder.isNotBlank()) storageViewModel.getFolderList()
     }
 
     Box {

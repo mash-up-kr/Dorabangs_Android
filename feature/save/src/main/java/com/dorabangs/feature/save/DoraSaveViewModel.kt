@@ -127,6 +127,7 @@ class DoraSaveViewModel @Inject constructor(
 
     fun saveLink(id: String) = intent {
         postSaveLinkUseCase.invoke(Link(folderId = id, url = state.urlLink))
+        postSideEffect(DoraSaveSideEffect.FinishSaveLink)
     }
 
     companion object {

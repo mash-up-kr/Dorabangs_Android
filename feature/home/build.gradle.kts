@@ -72,4 +72,9 @@ dependencies {
 
     // Blur
     implementation(libs.haze)
+
+    // ExoPlayer
+    implementation(libs.exoplayer)
+    implementation(libs.exoplayer.dash)
+    implementation(libs.exoplayer.ui)
 }

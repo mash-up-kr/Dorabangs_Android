@@ -43,4 +43,5 @@ data class HomeCreateFolder(
     val helperEnable: Boolean = false,
     val helperMessage: String = "",
     val urlLink: String = "",
+    val lastCheckedFolderName: String = "",
 )

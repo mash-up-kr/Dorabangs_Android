@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.data.network.service
 
 import com.mashup.dorabangs.data.model.CreateFolderRequestModel
+import com.mashup.dorabangs.data.model.CreateFolderResponseModel
 import com.mashup.dorabangs.data.model.EditFolderNameRequestModel
 import com.mashup.dorabangs.data.model.FolderListResponseModel
 import com.mashup.dorabangs.data.model.FolderResponseModel
@@ -24,7 +25,7 @@ interface FolderService {
     @POST("folders")
     suspend fun createFolder(
         @Body createFolderRequest: CreateFolderRequestModel,
-    )
+    ): CreateFolderResponseModel
 
     @PATCH("folders/{folderId}")
     suspend fun editFolderName(
