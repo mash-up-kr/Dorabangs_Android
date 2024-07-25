@@ -35,6 +35,21 @@
                     android:scheme="linkit" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.mashup.dorabangs.DoraShareActivity"
+            android:exported="true"
+            android:theme="@style/Theme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.mashup.dorabangs.DoraOverlayService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
