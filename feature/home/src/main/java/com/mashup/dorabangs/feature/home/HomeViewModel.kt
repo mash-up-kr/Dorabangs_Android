@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.home
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -57,7 +55,7 @@ class HomeViewModel @Inject constructor(
                 savedStateHandle.getStateFlow(
                     "isVisibleMovingBottomSheet",
                     initialValue = false,
-                ).collect { isVisible -> setVisibleMovingFolderBottomSheet(visible = isVisible) }
+                ).collect { isVisible -> if (isVisible) getCustomFolderList() }
             }
             launch {
                 savedStateHandle.getStateFlow(
