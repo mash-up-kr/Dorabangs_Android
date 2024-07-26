@@ -116,7 +116,7 @@ fun HomeRoute(
         )
 
         DoraBottomSheet.MovingFolderBottomSheet(
-            modifier = Modifier.height(441.dp),
+            modifier = Modifier,
             isShowSheet = state.isShowMovingFolderSheet,
             folderList = state.folderList.toSelectBottomSheetModel(state.changeFolderId.ifEmpty { state.selectedFolderId }),
             onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
