@@ -128,11 +128,13 @@ fun StorageDetailRoute(
     DoraBottomSheet.MovingFolderBottomSheet(
         modifier = modifier,
         isShowSheet = state.isShowMovingFolderSheet,
-        folderList = state.folderList.toSelectBottomSheetModel(state.changeClickFolderId.ifEmpty {
-            val originFolder = state.folderInfo.folderId.orEmpty()
-            storageDetailViewModel.updateSelectFolderId(originFolder)
-            originFolder
-        }),
+        folderList = state.folderList.toSelectBottomSheetModel(
+            state.changeClickFolderId.ifEmpty {
+                val originFolder = state.folderInfo.folderId.orEmpty()
+                storageDetailViewModel.updateSelectFolderId(originFolder)
+                originFolder
+            },
+        ),
         onDismissRequest = { storageDetailViewModel.setVisibleMovingFolderBottomSheet(false) },
         onClickCreateFolder = {
             storageDetailViewModel.setVisibleMovingFolderBottomSheet(
