@@ -1,8 +1,9 @@
-package com.dorabangs.share
+package com.mashup.dorabangs
 
 import android.app.Service
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.net.Uri
 import android.os.IBinder
 import android.view.Gravity
 import android.view.WindowManager
@@ -15,17 +16,30 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.dorabangs.share.DoraSnackBarWithShareScreen
+import com.mashup.dorabangs.domain.model.Link
+import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
+import com.mashup.dorabangs.domain.usecase.user.GetIdFromLinkToReadLaterUseCase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
 
     private lateinit var windowManager: WindowManager
     private lateinit var overlayView: ComposeView
+
+    @Inject
+    lateinit var saveLinkUseCase: SaveLinkUseCase
+
+    @Inject
+    lateinit var getFolderId: GetIdFromLinkToReadLaterUseCase
 
     private val _lifecycleRegistry = LifecycleRegistry(this)
     private val _savedStateRegistryController: SavedStateRegistryController =
@@ -33,8 +47,8 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     override val savedStateRegistry: SavedStateRegistry =
         _savedStateRegistryController.savedStateRegistry
     override val lifecycle: Lifecycle = _lifecycleRegistry
-    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private lateinit var job: Job
+    private val job = SupervisorJob()
+    private val serviceScope = CoroutineScope(job + Dispatchers.IO)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -52,9 +66,17 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val url = intent?.getStringExtra(URL).orEmpty()
         if (url.isNotBlank()) {
-            job = serviceScope.launch {
+            serviceScope.launch {
+                val localFolderId = getFolderId.invoke()
                 delay(3000L)
-                // 3초뒤에 아무것도 없으면? 그냥 api 쏘고 finish
+                if (localFolderId.isNotBlank()) {
+                    saveLinkUseCase.invoke(
+                        Link(
+                            folderId = localFolderId,
+                            url = url,
+                        ),
+                    )
+                }
                 stopSelf()
             }
         }
@@ -63,7 +85,7 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         return START_NOT_STICKY
     }
 
-    private fun showOverlay(url: String) {
+    private fun showOverlay(copiedUrl: String) {
         _lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
         _lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
@@ -71,10 +93,18 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
             setViewTreeLifecycleOwner(this@DoraOverlayService)
             setViewTreeSavedStateRegistryOwner(this@DoraOverlayService)
             setContent {
-                DoraSnackBarWithShareScreen(onClick = {
-                    job.cancel()
-                    // startActivity를 통해 이동해보자 ~ with url
-                })
+                DoraSnackBarWithShareScreen(
+                    onClick = {
+                        job.cancel()
+                        val encodedUrl = URLEncoder.encode(copiedUrl, "UTF-8")
+                        val deepLinkUri = Uri.parse("linkit://linksave/$encodedUrl")
+                        Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        }.also {
+                            startActivity(it)
+                        }.run { stopSelf() }
+                    },
+                )
             }
         }
 
@@ -93,6 +123,7 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     override fun onDestroy() {
         super.onDestroy()
         windowManager.removeView(overlayView)
+        job.cancel()
     }
 
     companion object {
