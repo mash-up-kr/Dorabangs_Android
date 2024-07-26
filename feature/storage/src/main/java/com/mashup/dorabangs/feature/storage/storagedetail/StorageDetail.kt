@@ -41,6 +41,7 @@ fun StorageDetailRoute(
     navigateToFolderManager: (String) -> Unit,
     navigateToCreateFolder: () -> Unit,
     onClickBackIcon: () -> Unit,
+    modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
 ) {
@@ -125,7 +126,7 @@ fun StorageDetailRoute(
     )
 
     DoraBottomSheet.MovingFolderBottomSheet(
-        modifier = Modifier.height(441.dp),
+        modifier = modifier,
         isShowSheet = state.isShowMovingFolderSheet,
         folderList = state.folderList.toSelectBottomSheetModel(state.changeClickFolderId.ifEmpty { state.folderInfo.folderId.orEmpty() }),
         onDismissRequest = { storageDetailViewModel.setVisibleMovingFolderBottomSheet(false) },
