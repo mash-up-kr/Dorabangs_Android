@@ -33,7 +33,7 @@ fun DoraToast(
 ) {
     SnackbarHost(
         modifier = modifier,
-        hostState = snackBarHostState
+        hostState = snackBarHostState,
     ) {
         ToastContent(text)
     }
@@ -62,7 +62,7 @@ fun ToastContent(
             contentDescription = "",
         )
         Spacer(
-            modifier = Modifier.width(width = 8.dp)
+            modifier = Modifier.width(width = 8.dp),
         )
         Text(
             text = text,
