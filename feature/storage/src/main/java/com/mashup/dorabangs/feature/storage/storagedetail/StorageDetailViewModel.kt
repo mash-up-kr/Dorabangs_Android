@@ -286,7 +286,6 @@ class StorageDetailViewModel @Inject constructor(
     }
 
     fun updateSelectFolderId(folderId: String) = intent {
-        Log.d(TAG, "updateSelectFolderId: $folderId")
         reduce { state.copy(changeClickFolderId = folderId) }
     }
 
