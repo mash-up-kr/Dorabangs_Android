@@ -15,11 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mashup.dorabangs.core.designsystem.component.folder.icselect.IcSelect
-import com.mashup.dorabangs.core.designsystem.component.folder.icselect.ImgSelect
+import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens.caption3Bold
@@ -28,6 +28,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DorabangsTheme
 @Composable
 fun DoraToast(
     text: String,
+    toastStyle: ToastStyle,
     snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
@@ -35,7 +36,10 @@ fun DoraToast(
         modifier = modifier,
         hostState = snackBarHostState,
     ) {
-        ToastContent(text)
+        ToastContent(
+            text = text,
+            toastStyle = toastStyle,
+        )
     }
 }
 
@@ -45,8 +49,8 @@ fun DoraToast(
 @Composable
 fun ToastContent(
     text: String,
+    toastStyle: ToastStyle,
     modifier: Modifier = Modifier,
-    style: ToastStyle = ToastStyle.CHECK, // style보고 앞에 v인지 ! 인지 구분 예정
 ) {
     Row(
         modifier = modifier
@@ -58,7 +62,11 @@ fun ToastContent(
     ) {
         Image(
             modifier = Modifier.size(24.dp),
-            imageVector = if (style == ToastStyle.CHECK) ImgSelect.IcSelect else ImgSelect.IcSelect,
+            painter = if (toastStyle == ToastStyle.CHECK) {
+                painterResource(id = R.drawable.ic_check_circle)
+            } else {
+                painterResource(id = R.drawable.ic_error)
+            },
             contentDescription = "",
         )
         Spacer(
@@ -74,15 +82,27 @@ fun ToastContent(
 }
 
 enum class ToastStyle {
-    CHECK, ALERT
+    CHECK, ERROR
 }
 
 @Composable
 @Preview
-fun DoraToastPreview() {
+fun DoraToastPreviewError() {
     DorabangsTheme {
         ToastContent(
             text = "글자 수에 따라 Toast 가변 최대 마진 2 durl",
+            toastStyle = ToastStyle.ERROR,
+        )
+    }
+}
+
+@Composable
+@Preview
+fun DoraToastPreviewCheck() {
+    DorabangsTheme {
+        ToastContent(
+            text = "글자 수에 따라 Toast 가변 최대 마진 2 durl",
+            toastStyle = ToastStyle.CHECK,
         )
     }
 }
