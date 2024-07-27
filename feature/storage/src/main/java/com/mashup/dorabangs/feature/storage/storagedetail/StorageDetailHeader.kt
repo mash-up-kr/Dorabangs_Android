@@ -53,6 +53,7 @@ fun StorageDetailCollapsingHeader(
         if (isCollapsed) {
             StorageDetailTopBarByFolderType(
                 state = state,
+                isCollapsed = true,
                 onClickBackIcon = onClickBackIcon,
                 onClickActionIcon = onClickActionIcon,
             )
@@ -77,6 +78,7 @@ fun StorageDetailExpandedHeader(
     ) {
         StorageDetailTopBarByFolderType(
             state = state,
+            isCollapsed = false,
             onClickBackIcon = onClickBackIcon,
             onClickActionIcon = onClickActionIcon,
         )
@@ -131,7 +133,7 @@ fun StorageDetailHeaderContent(
         ) {
             Text(
                 text = state.folderInfo.title,
-                style = DoraTypoTokens.base2Bold,
+                style = DoraTypoTokens.Subtitle2Bold,
             )
             Text(
                 text = "${state.folderInfo.postCount} 게시물",
@@ -194,14 +196,16 @@ fun StorageDetailHeaderTabBar(
 @Composable
 fun StorageDetailTopBarByFolderType(
     state: StorageDetailState,
+    isCollapsed: Boolean,
     onClickActionIcon: () -> Unit = {},
     onClickBackIcon: () -> Unit,
 ) {
+    val title = if(isCollapsed) state.folderInfo.title else ""
     when (state.folderInfo.folderType) {
         FolderType.CUSTOM -> {
             DoraTopBar.BackWithActionIconTopBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = state.folderInfo.title,
+                title = title,
                 isTitleCenter = true,
                 actionIcon = coreR.drawable.ic_more_black,
                 onClickBackIcon = onClickBackIcon,
@@ -211,7 +215,7 @@ fun StorageDetailTopBarByFolderType(
         else -> {
             DoraTopBar.BackNavigationTopBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = state.folderInfo.title,
+                title = title,
                 isTitleCenter = true,
                 onClickBackIcon = onClickBackIcon,
             )
