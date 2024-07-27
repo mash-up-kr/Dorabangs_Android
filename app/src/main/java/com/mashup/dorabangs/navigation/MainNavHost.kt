@@ -22,6 +22,7 @@ import com.mashup.dorabangs.feature.navigation.onBoardingNavigation
 import com.mashup.dorabangs.feature.navigation.storageDetailNavigation
 import com.mashup.dorabangs.feature.navigation.storageFolderManageNavigation
 import com.mashup.dorabangs.feature.navigation.storageNavigation
+import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
 import com.mashup.feature.classification.navigation.classificationNavigation
 import com.mashup.feature.classification.navigation.navigateToClassification
 
@@ -66,13 +67,14 @@ fun MainNavHost(
             navigateToHome = { appState.navController.popBackStack() },
         )
         storageNavigation(
-            navigateToStorageDetail = { folder ->
-                appState.navController.navigateToStorageDetail(folder = folder)
+            navigateToStorageDetail = { folderId ->
+                appState.navController.navigateToStorageDetail(folderId = folderId)
             },
             navigateToFolderManage = { folderManageType, folderId ->
                 appState.navController.navigateToStorageFolderManage(
                     folderManageType = folderManageType,
-                    folderId = folderId,
+                    actionType = EditActionType.FolderEdit,
+                    itemId = folderId,
                 )
             },
         )
@@ -81,21 +83,18 @@ fun MainNavHost(
             onClickBackIcon = { folderType ->
                 val isVisibleBottomSheet = folderType == FolderManageType.CREATE
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", isVisibleBottomSheet)
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", "")
                 appState.navController.popBackStack()
             },
-            onClickSaveButton = { folderName ->
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("editFolderName", folderName)
+            navigateToComplete = {
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChange", true)
                 appState.navController.popBackStack()
             },
         )
         storageDetailNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
-            navigateToFolderManager = { folderId ->
-                appState.navController.navigateToStorageFolderManage(folderManageType = FolderManageType.CHANGE, folderId = folderId)
-            },
-            navigateToCreateFolder = {
-                appState.navController.navigateToStorageFolderManage(folderManageType = FolderManageType.CREATE)
+            navigateToFolderManager = { itemId, type ->
+                val folderManageType = if(type == EditActionType.FolderEdit) FolderManageType.CHANGE else FolderManageType.CREATE
+                appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType, actionType = type, itemId = itemId)
             },
             navigateToHome = {
                 appState.navController.navigateToHome(

@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.domain.repository
 
 import androidx.paging.PagingData
+import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
@@ -28,5 +29,5 @@ interface PostsRepository {
     suspend fun changePostFolder(
         postId: String,
         folderId: String,
-    )
+    ): DoraSampleResponse
 }

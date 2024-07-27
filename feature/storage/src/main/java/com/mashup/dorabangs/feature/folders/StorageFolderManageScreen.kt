@@ -21,21 +21,24 @@ import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
 import com.mashup.dorabangs.feature.folders.model.FolderManageState
 import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.R
+import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun StorageFolderManageRoute(
-    folderId: String = "",
+    itemId: String = "",
     folderManageType: String,
+    editType: EditActionType?,
     onClickBackIcon: (FolderManageType) -> Unit,
-    onClickSaveButton: (String) -> Unit,
+    navigateToComplete: () -> Unit,
     folderManageViewModel: FolderManageViewModel = hiltViewModel(),
 ) {
     val folderManageState by folderManageViewModel.collectAsState()
     folderManageViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is FolderManageSideEffect.NavigateToBackStack -> onClickSaveButton(sideEffect.folderName)
+            is FolderManageSideEffect.NavigateToComplete -> navigateToComplete()
+            is FolderManageSideEffect.NavigateToBackStack -> onClickBackIcon(folderManageState.type)
         }
     }
 
@@ -47,11 +50,18 @@ fun StorageFolderManageRoute(
         folderManageState = folderManageState,
         onClickBackIcon = { onClickBackIcon(folderManageState.type) },
         onClickSaveButton = {
-            folderManageViewModel.createOrEditFolder(
-                folderId = folderId,
-                folderName = folderManageState.folderName,
-                folderType = folderManageState.type,
-            )
+            if(editType ==  EditActionType.LinkEdit) {
+                folderManageViewModel.createFolderWithMoveLink(
+                    folderName = folderManageState.folderName,
+                    postId = itemId
+                )
+            } else {
+                folderManageViewModel.createOrEditFolder(
+                    folderId = itemId,
+                    folderName = folderManageState.folderName,
+                    folderType = folderManageState.type,
+                )
+            }
         },
         onValueChanged = folderManageViewModel::setFolderName,
     )

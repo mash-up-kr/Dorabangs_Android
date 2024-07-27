@@ -34,7 +34,7 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 @Composable
 fun StorageFolderList(
     storageState: StorageListState,
-    navigateToStorageDetail: (Folder) -> Unit,
+    navigateToStorageDetail: (String) -> Unit,
     onClickSettingButton: (Folder) -> Unit = {},
 ) {
     LazyColumn(
@@ -53,7 +53,7 @@ fun StorageFolderList(
                 item = item,
                 isFirstItem = idx == 0,
                 isLastItem = idx == storageState.customStorageFolderList.lastIndex,
-                navigateToStorageDetail = { navigateToStorageDetail(item) },
+                navigateToStorageDetail = { navigateToStorageDetail(item.id.orEmpty()) },
                 onClickSettingButton = { onClickSettingButton(item) },
             )
             if (idx != storageState.customStorageFolderList.lastIndex) {
@@ -74,7 +74,7 @@ fun StorageFolderList(
 @Composable
 fun StorageDefaultFolder(
     defaultFolderList: List<Folder>,
-    navigateToStorageDetail: (Folder) -> Unit,
+    navigateToStorageDetail: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -85,7 +85,7 @@ fun StorageDefaultFolder(
                 item = item,
                 isFirstItem = idx == 0,
                 isLastItem = idx == defaultFolderList.lastIndex,
-                navigateToStorageDetail = { navigateToStorageDetail(item) },
+                navigateToStorageDetail = { navigateToStorageDetail(item.id.orEmpty()) },
             )
             if (idx != defaultFolderList.lastIndex) {
                 HorizontalDivider(

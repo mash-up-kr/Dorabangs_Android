@@ -36,13 +36,12 @@ val MaxToolbarHeight = 161.dp
 
 @Composable
 fun StorageDetailRoute(
-    folderItem: Folder,
     navigateToHome: () -> Unit,
-    navigateToFolderManager: (String) -> Unit,
-    navigateToCreateFolder: () -> Unit,
+    navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
+    isChangeData: Boolean = false,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
 ) {
     val listState = rememberLazyListState()
@@ -50,8 +49,11 @@ fun StorageDetailRoute(
     val state by storageDetailViewModel.collectAsState()
     val linksPagingList = state.pagingList.collectAsLazyPagingItems()
 
-    LaunchedEffect(key1 = Unit) {
-        storageDetailViewModel.setFolderInfo(folderItem)
+    LaunchedEffect(Unit) {
+        if(isChangeData) {
+            if(state.editActionType == EditActionType.FolderEdit) storageDetailViewModel.getFolderInfoById(state.folderInfo.folderId.orEmpty())
+            else linksPagingList.refresh()
+        }
         storageDetailViewModel.setVisibleMovingFolderBottomSheet(isVisibleBottomSheet)
     }
 
@@ -66,9 +68,11 @@ fun StorageDetailRoute(
         handleSideEffect(
             sideEffect = sideEffect,
             navigateToHome = navigateToHome,
-            navigateToFolderManager = navigateToFolderManager,
-            navigateToCreateFolder = navigateToCreateFolder,
-            refreshPagingList = { linksPagingList.refresh() },
+            navigateToFolderManager = { id -> navigateToFolderManager(id, state.editActionType) },
+            refreshPagingList = {
+                storageDetailViewModel.getFolderInfoById(folderId = state.folderInfo.folderId.orEmpty())
+                linksPagingList.refresh()
+                                },
         )
     }
 
@@ -156,15 +160,13 @@ fun StorageDetailRoute(
 private fun handleSideEffect(
     sideEffect: StorageDetailSideEffect,
     navigateToHome: () -> Unit,
-    navigateToCreateFolder: () -> Unit,
     navigateToFolderManager: (String) -> Unit,
     refreshPagingList: () -> Unit,
 ) {
     when (sideEffect) {
         // TODO - SnackBarToast 띄우기
         is StorageDetailSideEffect.NavigateToHome -> navigateToHome()
-        is StorageDetailSideEffect.NavigateToEditFolder -> navigateToFolderManager(sideEffect.folderId)
-        is StorageDetailSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+        is StorageDetailSideEffect.NavigateToFolderManage -> navigateToFolderManager(sideEffect.itemId)
         is StorageDetailSideEffect.RefreshPagingList -> refreshPagingList()
     }
 }
@@ -213,10 +215,8 @@ fun StorageDetailScreen(
 @Composable
 fun PreviewStorageDetailScreen() {
     StorageDetailRoute(
-        folderItem = Folder(),
         navigateToHome = {},
-        navigateToFolderManager = {},
-        navigateToCreateFolder = {},
+        navigateToFolderManager = {id, type ->},
         onClickBackIcon = {},
     )
 }

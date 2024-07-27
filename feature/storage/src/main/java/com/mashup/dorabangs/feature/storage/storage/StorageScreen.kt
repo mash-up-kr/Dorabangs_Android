@@ -37,9 +37,9 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageRoute(
-    editFolder: String = "",
+    isChangeData: Boolean = false,
     storageViewModel: StorageViewModel = hiltViewModel(),
-    navigateToStorageDetail: (Folder) -> Unit,
+    navigateToStorageDetail: (String) -> Unit,
     navigateToFolderManage: (FolderManageType, String) -> Unit,
 ) {
     val storageState by storageViewModel.collectAsState()
@@ -50,7 +50,7 @@ fun StorageRoute(
     }
 
     LaunchedEffect(Unit) {
-        if (editFolder.isNotEmpty() || editFolder.isNotBlank()) storageViewModel.getFolderList()
+        if (isChangeData) storageViewModel.getFolderList()
     }
 
     Box {
@@ -96,7 +96,7 @@ fun StorageRoute(
 @Composable
 fun StorageScreen(
     storageState: StorageListState,
-    navigateToStorageDetail: (Folder) -> Unit,
+    navigateToStorageDetail: (String) -> Unit,
     onClickSettingButton: (Folder) -> Unit,
     onClickAddFolderIcon: () -> Unit = {},
 ) {

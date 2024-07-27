@@ -12,17 +12,17 @@ import com.mashup.dorabangs.feature.storage.storage.StorageRoute
 fun NavController.navigateToStorage(navOptions: NavOptions) = navigate(NavigationRoute.StorageScreen.route, navOptions)
 
 fun NavGraphBuilder.storageNavigation(
-    navigateToStorageDetail: (Folder) -> Unit,
+    navigateToStorageDetail: (String) -> Unit,
     navigateToFolderManage: (FolderManageType, String) -> Unit,
 
 ) {
     composable(
         route = NavigationRoute.StorageScreen.route,
     ) { navBackStackEntry ->
-        val editFolderName = navBackStackEntry.savedStateHandle.get<String>("editFolderName").orEmpty()
+        val isChangeData = navBackStackEntry.savedStateHandle.get<Boolean>("isChange") ?: false
 
         StorageRoute(
-            editFolder = editFolderName,
+            isChangeData = isChangeData,
             navigateToStorageDetail = navigateToStorageDetail,
             navigateToFolderManage = navigateToFolderManage,
         )
