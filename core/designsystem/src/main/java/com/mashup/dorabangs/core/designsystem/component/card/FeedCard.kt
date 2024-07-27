@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +34,7 @@ import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Com
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
+import kotlinx.coroutines.delay
 
 @Composable
 fun FeedCard(
@@ -41,7 +43,16 @@ fun FeedCard(
     onClickCardItem: () -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
+    updateCardState: () -> Unit = {},
 ) {
+
+    LaunchedEffect(cardInfo.isLoading) {
+        while (cardInfo.isLoading) {
+            delay(8000)
+            updateCardState()
+        }
+    }
+
     Column(
         modifier = modifier
             .background(DoraColorTokens.P1, shape = RectangleShape)

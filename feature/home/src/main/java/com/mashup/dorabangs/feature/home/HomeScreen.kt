@@ -43,7 +43,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.R
@@ -69,20 +68,22 @@ import dev.chrisbanes.haze.hazeChild
 fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
+    postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (Int) -> Unit = {},
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
+    updateFeedState: (Int) -> Unit = {},
+    refreshPostPagingList: () -> Unit = {},
 ) {
-    val postsPagingList = state.feedCards.collectAsLazyPagingItems()
 
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
         val hazeState = remember { HazeState() }
 
-        if (postsPagingList.itemCount == 0) {
+        if (postsPagingList?.itemCount == 0) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -168,6 +169,7 @@ fun HomeScreen(
                     onClickMoreButton = { index ->
                         onClickMoreButton(index)
                     },
+                    updateFeedState = { index -> refreshPostPagingList() }
                 )
             }
 
@@ -205,26 +207,31 @@ fun HomeScreen(
 }
 
 private fun LazyListScope.Feeds(
-    feeds: LazyPagingItems<FeedCardUiModel>,
+    feeds: LazyPagingItems<FeedCardUiModel>?,
     onClickMoreButton: (Int) -> Unit = {},
+    updateFeedState: (Int) -> Unit = {},
 ) {
-    items(
-        count = feeds.itemCount,
-        key = feeds.itemKey(FeedCardUiModel::id),
-        contentType = feeds.itemContentType { "SavedLinks" },
-    ) { index ->
-        feeds[index]?.let { cardInfo ->
-            FeedCard(
-                cardInfo = cardInfo,
-                onClickMoreButton = {
-                    onClickMoreButton(index)
-                },
-            )
+    if (feeds != null) {
+        items(
+            count = feeds.itemCount,
+            key = feeds.itemKey(FeedCardUiModel::id),
+            contentType = feeds.itemContentType { "SavedLinks" },
+        ) { index ->
 
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                thickness = 0.5.dp,
-            )
+            feeds[index]?.let { cardInfo ->
+                FeedCard(
+                    cardInfo = cardInfo,
+                    onClickMoreButton = {
+                        onClickMoreButton(index)
+                    },
+                    updateCardState = { updateFeedState(index) }
+                )
+
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                    thickness = 0.5.dp,
+                )
+            }
         }
     }
 }

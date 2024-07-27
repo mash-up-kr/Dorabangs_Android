@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
@@ -40,6 +41,7 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
+    val pagingList =  state.feedCards.collectAsLazyPagingItems()
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -65,13 +67,15 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
+            postsPagingList = pagingList,
             onClickChip = viewModel::changeSelectedTapIdx,
-            navigateToClassification = navigateToClassification,
             onClickMoreButton = {
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
+            navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
+            refreshPostPagingList  = { pagingList.refresh() }
         )
 
         HomeDoraSnackBar(
