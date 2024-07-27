@@ -16,6 +16,7 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
         keywordList = this.keywords?.map { it.name },
         isFavorite = isFavorite ?: false,
         thumbnail = "",
+        folderId = this.folderId.orEmpty(),
     )
 }
 
@@ -28,13 +29,17 @@ fun Post.toUiModel(): FeedCardUiModel {
         keywordList = listOf(),
         isFavorite = isFavorite,
         thumbnail = "",
+        folderId = this.folderId,
     )
 }
 
-fun Folder.toBottomSheetModel(currentFolderId: String): SelectableBottomSheetItemUIModel {
-    return SelectableBottomSheetItemUIModel(
-        icon = coreR.drawable.ic_3d_folder_small,
-        itemName = name,
-        isSelected = id == currentFolderId,
-    )
+fun List<Folder>.toSelectBottomSheetModel(folderId: String): List<SelectableBottomSheetItemUIModel> {
+    return this.map { item ->
+        SelectableBottomSheetItemUIModel(
+            id = item.id.orEmpty(),
+            icon = coreR.drawable.ic_3d_folder_big,
+            itemName = item.name,
+            isSelected = item.id == folderId,
+        )
+    }
 }

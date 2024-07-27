@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit
 
 data class FeedCardUiModel(
     val id: String,
+    val folderId: String,
     val title: String?,
     val content: String?,
     val category: String? = "",
@@ -25,6 +26,7 @@ data class FeedCardUiModel(
                     category = "디자인",
                     createdAt = "2024-07-18T15:50:36.181Z",
                     thumbnail = "",
+                    folderId = "",
                 ),
                 FeedCardUiModel(
                     id = "",
@@ -34,6 +36,7 @@ data class FeedCardUiModel(
                     category = "디자인",
                     createdAt = "2024-07-18T15:50:36.181Z",
                     thumbnail = "",
+                    folderId = "",
                 ),
                 FeedCardUiModel(
                     id = "",
@@ -43,6 +46,7 @@ data class FeedCardUiModel(
                     category = "디자인",
                     createdAt = "2024-07-18T15:50:36.181Z",
                     thumbnail = "",
+                    folderId = "",
                 ),
             )
         }

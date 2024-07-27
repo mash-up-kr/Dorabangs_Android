@@ -50,7 +50,11 @@ fun MainNavHost(
         )
         homeCreateFolderNavigation(
             navController = appState.navController,
-            onClickBackIcon = { appState.navController.popBackStack() },
+            onClickBackIcon = {
+                appState.navController.navigateToHome(
+                    isVisibleMovingBottomSheet = true,
+                )
+            },
             navigateToHome = { appState.navController.popBackStack() },
             navigateToHomeAfterSaveLink = {
                 appState.navController.navigateToHome(

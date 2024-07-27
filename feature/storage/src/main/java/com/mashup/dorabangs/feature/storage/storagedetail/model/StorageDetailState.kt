@@ -18,6 +18,7 @@ data class StorageDetailState(
     val isLatestSort: StorageDetailSort = StorageDetailSort.ASC,
     val editActionType: EditActionType = EditActionType.FolderEdit,
     val currentClickPostId: String = "",
+    val changeClickFolderId: String = folderInfo.folderId.orEmpty(),
     val folderList: List<Folder> = listOf(),
     val pagingList: Flow<PagingData<FeedCardUiModel>> = emptyFlow(),
 
@@ -26,7 +27,6 @@ data class StorageDetailState(
         fun getDefaultTabTitleList() = listOf(StorageDetailTab.ALL, StorageDetailTab.UNREAD)
     }
 }
-
 data class TabInfo(
     val tabTitleList: List<StorageDetailTab> = StorageDetailState.getDefaultTabTitleList(),
     val selectedTabIdx: Int = 0,
