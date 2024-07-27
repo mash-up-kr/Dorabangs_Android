@@ -56,10 +56,11 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun moveSinglePostToRecommendedFolder(
         postId: String,
-        suggestionFolderId: String
+        suggestionFolderId: String,
     ): AiClassificationMoveSinglePostResponseModel = service.moveSinglePostToRecommendedFolder(
-        postId = postId, requestModel = AiClassificationMoveSinglePostRequestModel(
+        postId = postId,
+        requestModel = AiClassificationMoveSinglePostRequestModel(
             suggestionFolderId = suggestionFolderId,
-        )
+        ),
     )
 }

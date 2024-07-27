@@ -44,6 +44,7 @@ fun ClassificationScreen(
     navigateToHome: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val totalCount = if (state.chipState.totalCount > 99) "99+" else state.chipState.totalCount.toString()
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -57,14 +58,11 @@ fun ClassificationScreen(
             modifier = modifier.fillMaxWidth(),
             chipList = listOf(
                 DoraChipUiModel(
-                    title = "전체 99+",
-                    icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_plus,
+                    "",
+                    "전체 $totalCount",
+                    com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_small,
                 ),
-                DoraChipUiModel(
-                    title = "전체 99+",
-                    icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_plus,
-                ),
-            ),
+            ) + state.chipState.chipList,
             selectedIndex = 0,
             onClickChip = { onClickChip() },
         )
