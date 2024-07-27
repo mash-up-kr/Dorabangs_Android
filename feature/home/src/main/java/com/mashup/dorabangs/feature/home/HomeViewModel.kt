@@ -259,7 +259,6 @@ class HomeViewModel @Inject constructor(
     fun deletePost(postId: String) = viewModelScope.doraLaunch {
         deletePostUseCase(postId)
         setVisibleDialog(false)
-        intent { }
     }
 
     /**

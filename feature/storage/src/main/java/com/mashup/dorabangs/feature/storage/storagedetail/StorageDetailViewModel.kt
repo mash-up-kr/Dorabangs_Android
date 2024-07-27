@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -286,7 +284,6 @@ class StorageDetailViewModel @Inject constructor(
     }
 
     fun updateSelectFolderId(folderId: String) = intent {
-        Log.d(TAG, "updateSelectFolderId: $folderId")
         reduce { state.copy(changeClickFolderId = folderId) }
     }
 
