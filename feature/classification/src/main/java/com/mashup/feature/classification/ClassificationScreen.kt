@@ -36,7 +36,7 @@ fun ClassificationRoute(
 @Composable
 fun ClassificationScreen(
     state: ClassificationState,
-    onClickChip: () -> Unit,
+    onClickChip: (Int) -> Unit,
     onClickDeleteButton: (Int) -> Unit,
     onClickMoveButton: (Int) -> Unit,
     onClickAllItemMoveButton: () -> Unit,
@@ -63,8 +63,8 @@ fun ClassificationScreen(
                     com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_small,
                 ),
             ) + state.chipState.chipList,
-            selectedIndex = 0,
-            onClickChip = { onClickChip() },
+            selectedIndex = state.chipState.currentIndex,
+            onClickChip = { onClickChip(it) },
         )
         if (state.isClassificationComplete) {
             ClassificationCompleteScreen(navigateToHome = navigateToHome)

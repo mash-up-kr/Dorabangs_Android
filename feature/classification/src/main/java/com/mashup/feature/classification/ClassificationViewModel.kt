@@ -47,7 +47,13 @@ class ClassificationViewModel @Inject constructor(
         }
     }
 
-    fun changeCategory() = intent {}
+    fun changeCategory(idx: Int) = intent {
+        reduce {
+            state.copy(
+                chipState = state.chipState.copy(currentIndex = idx),
+            )
+        }
+    }
 
     fun moveAllItems() = intent {
     }

@@ -12,5 +12,6 @@ data class ClassificationState(
 
 data class ChipState(
     val totalCount: Int = 0,
+    val currentIndex: Int = 0,
     val chipList: List<DoraChipUiModel> = listOf(),
 )
