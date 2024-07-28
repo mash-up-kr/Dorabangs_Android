@@ -59,7 +59,7 @@ fun ClassificationScreen(
             chipList = listOf(
                 DoraChipUiModel(
                     "",
-                    "전체 $totalCount",
+                    stringResource(R.string.ai_classification_chips_count, totalCount),
                     com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_small,
                 ),
             ) + state.chipState.chipList,

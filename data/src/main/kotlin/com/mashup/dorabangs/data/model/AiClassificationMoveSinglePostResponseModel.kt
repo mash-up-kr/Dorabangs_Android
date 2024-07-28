@@ -8,7 +8,7 @@ data class AiClassificationMoveSinglePostResponseModel(
     @SerialName("list")
     val list: List<AiClassificationState?>?,
     @SerialName("metadata")
-    val metadata: Metadata?,
+    val metadata: PagingMetaDataResponseModel?,
 ) {
     @Serializable
     data class AiClassificationState(
@@ -32,13 +32,5 @@ data class AiClassificationMoveSinglePostResponseModel(
         val title: String?,
         @SerialName("url")
         val url: String?,
-    )
-
-    @Serializable
-    data class Metadata(
-        @SerialName("hasNext")
-        val hasNext: Boolean?,
-        @SerialName("total")
-        val total: Int?,
     )
 }
