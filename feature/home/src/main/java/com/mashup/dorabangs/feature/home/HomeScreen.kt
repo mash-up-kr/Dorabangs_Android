@@ -164,7 +164,6 @@ fun HomeScreen(
                 }
 
                 Feeds(
-                    modifier = Modifier,
                     feeds = postsPagingList,
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
@@ -222,7 +221,7 @@ private fun LazyListScope.Feeds(
                 FeedCard(
                     cardInfo = cardInfo,
                     onClickMoreButton = {
-                        onClickMoreButton(index)
+                        onClickMoreButton(cardInfo.id, cardInfo.folderId)
                     },
                     updateCardState = { updateFeedState(index) }
                 )
