@@ -13,6 +13,7 @@ interface PostsRepository {
         order: String? = null,
         favorite: Boolean? = null,
         isRead: Boolean? = null,
+        totalCount: (Int) -> Unit,
     ): Flow<PagingData<Post>>
 
     suspend fun saveLink(

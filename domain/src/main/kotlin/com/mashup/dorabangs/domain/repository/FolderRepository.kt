@@ -21,5 +21,6 @@ interface FolderRepository {
         folderId: String?,
         order: String,
         isRead: Boolean?,
+        totalCount: (Int) -> Unit,
     ): Flow<PagingData<SavedLinkDetailInfo>>
 }

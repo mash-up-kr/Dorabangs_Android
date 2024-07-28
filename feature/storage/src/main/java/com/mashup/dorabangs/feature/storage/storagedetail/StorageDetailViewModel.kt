@@ -57,7 +57,6 @@ class StorageDetailViewModel @Inject constructor(
                 folderInfo = state.folderInfo.copy(
                     folderId = folderItem.id,
                     title = folderItem.name,
-                    postCount = folderItem.postCount,
                     folderType = folderItem.folderType,
                 ),
             )
@@ -111,7 +110,19 @@ class StorageDetailViewModel @Inject constructor(
         order: String = StorageDetailSort.ASC.name,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-        val pagingData = savedLinksFromFolderUseCase.invoke(folderId = folderId, order = order, isRead = isRead)
+        val pagingData = savedLinksFromFolderUseCase.invoke(
+            folderId = folderId,
+            order = order,
+            isRead = isRead,
+            totalCount = { total ->
+                intent {
+                    reduce {
+                        val folderInfo = state.folderInfo.copy(postCount = total)
+                        state.copy(folderInfo = folderInfo)
+                    }
+                }
+            },
+        )
             .cachedIn(viewModelScope).map { pagedData ->
                 pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
             }.stateIn(
@@ -135,7 +146,19 @@ class StorageDetailViewModel @Inject constructor(
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
         val pagingData =
-            getPostsUseCase.invoke(order = order, favorite = favorite, isRead = isRead)
+            getPostsUseCase.invoke(
+                order = order,
+                favorite = favorite,
+                isRead = isRead,
+                totalCount = { total ->
+                    intent {
+                        reduce {
+                            val folderInfo = state.folderInfo.copy(postCount = total)
+                            state.copy(folderInfo = folderInfo)
+                        }
+                    }
+                },
+            )
                 .cachedIn(viewModelScope).map { pagedData ->
                     pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
                 }.stateIn(

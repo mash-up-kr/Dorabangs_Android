@@ -18,15 +18,19 @@ class PostsRepositoryImpl @Inject constructor(
         order: String?,
         favorite: Boolean?,
         isRead: Boolean?,
+        totalCount: (Int) -> Unit,
     ): Flow<PagingData<Post>> =
-        doraPager { page ->
-            postsRemoteDataSource.getPosts(
-                page = page,
-                order = order,
-                favorite = favorite,
-                isRead = isRead,
-            )
-        }.flow
+        doraPager(
+            apiExecutor = { page ->
+                postsRemoteDataSource.getPosts(
+                    page = page,
+                    order = order,
+                    favorite = favorite,
+                    isRead = isRead,
+                )
+            },
+            totalCount = { total -> totalCount(total) },
+        ).flow
 
     override suspend fun saveLink(link: Link) =
         postsRemoteDataSource.saveLink(link)

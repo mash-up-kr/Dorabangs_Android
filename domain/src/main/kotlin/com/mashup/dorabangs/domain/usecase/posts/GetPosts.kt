@@ -14,9 +14,11 @@ class GetPosts @Inject constructor(
         order: String? = null,
         favorite: Boolean? = null,
         isRead: Boolean? = null,
+        totalCount: (Int) -> Unit = {},
     ): Flow<PagingData<Post>> = postsRepository.getPosts(
         order = order?.lowercase(),
         favorite = favorite,
         isRead = isRead,
+        totalCount = totalCount,
     )
 }
