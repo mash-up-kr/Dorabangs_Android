@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.data.model
 
+import android.util.Log
 import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo
@@ -23,7 +24,7 @@ data class PostResponseModel(
     val title: String = "",
     val description: String = "",
     val isFavorite: Boolean = false,
-    val createAt: String = "",
+    val createdAt: String = "",
     val aiStatus: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
     val readAt: String = "",
 )
@@ -46,7 +47,7 @@ fun PostResponseModel.toDomain() = Post(
     title = title,
     description = description,
     isFavorite = isFavorite,
-    createAt = createAt,
+    createdAt = createdAt,
     aiStatus = aiStatus.toDomain(),
 )
 
@@ -67,7 +68,10 @@ fun PostsResponseModel.toPagingDomain(): PageData<List<Post>> {
             total = metadata.total,
             hasNext = metadata.hasNext,
         ),
-    )
+    ).also {
+        Log.d("TAG", "before: $this")
+        Log.d("TAG", "after: $it")
+    }
 }
 
 fun AIStatusResponseModel.toDomain() = when(this) {

@@ -17,7 +17,7 @@ data class Post(
     val title: String = "",
     val description: String = "",
     val isFavorite: Boolean = false,
-    val createAt: String = "",
+    val createdAt: String = "",
     val aiStatus: AIStatus = AIStatus.NOTHING,
 )
 

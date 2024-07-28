@@ -25,7 +25,7 @@ fun Post.toUiModel(): FeedCardUiModel {
         id = this.id,
         title = this.title,
         content = this.description,
-        createdAt = this.createAt,
+        createdAt = this.createdAt,
         keywordList = listOf(),
         isFavorite = isFavorite,
         thumbnail = "",

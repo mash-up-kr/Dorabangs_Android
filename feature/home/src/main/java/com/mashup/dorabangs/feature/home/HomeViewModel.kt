@@ -297,6 +297,7 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
     /**
      * 현재 폴더 리스트 가져오기
      */
