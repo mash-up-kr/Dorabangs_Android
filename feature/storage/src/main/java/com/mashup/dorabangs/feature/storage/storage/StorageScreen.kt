@@ -39,7 +39,7 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 fun StorageRoute(
     isChangeData: Boolean = false,
     storageViewModel: StorageViewModel = hiltViewModel(),
-    navigateToStorageDetail: (String) -> Unit,
+    navigateToStorageDetail: (Folder) -> Unit,
     navigateToFolderManage: (FolderManageType, String) -> Unit,
 ) {
     val storageState by storageViewModel.collectAsState()
@@ -96,7 +96,7 @@ fun StorageRoute(
 @Composable
 fun StorageScreen(
     storageState: StorageListState,
-    navigateToStorageDetail: (String) -> Unit,
+    navigateToStorageDetail: (Folder) -> Unit,
     onClickSettingButton: (Folder) -> Unit,
     onClickAddFolderIcon: () -> Unit = {},
 ) {

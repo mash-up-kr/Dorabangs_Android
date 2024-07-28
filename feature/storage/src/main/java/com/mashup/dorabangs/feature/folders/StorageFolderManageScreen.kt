@@ -50,10 +50,10 @@ fun StorageFolderManageRoute(
         folderManageState = folderManageState,
         onClickBackIcon = { onClickBackIcon(folderManageState.type) },
         onClickSaveButton = {
-            if(editType ==  EditActionType.LinkEdit) {
+            if (editType == EditActionType.LinkEdit) {
                 folderManageViewModel.createFolderWithMoveLink(
                     folderName = folderManageState.folderName,
-                    postId = itemId
+                    postId = itemId,
                 )
             } else {
                 folderManageViewModel.createOrEditFolder(

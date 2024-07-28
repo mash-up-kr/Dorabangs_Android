@@ -67,8 +67,8 @@ fun MainNavHost(
             navigateToHome = { appState.navController.popBackStack() },
         )
         storageNavigation(
-            navigateToStorageDetail = { folderId ->
-                appState.navController.navigateToStorageDetail(folderId = folderId)
+            navigateToStorageDetail = { folder ->
+                appState.navController.navigateToStorageDetail(folder = folder)
             },
             navigateToFolderManage = { folderManageType, folderId ->
                 appState.navController.navigateToStorageFolderManage(
@@ -93,7 +93,7 @@ fun MainNavHost(
         storageDetailNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
             navigateToFolderManager = { itemId, type ->
-                val folderManageType = if(type == EditActionType.FolderEdit) FolderManageType.CHANGE else FolderManageType.CREATE
+                val folderManageType = if (type == EditActionType.FolderEdit) FolderManageType.CHANGE else FolderManageType.CREATE
                 appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType, actionType = type, itemId = itemId)
             },
             navigateToHome = {

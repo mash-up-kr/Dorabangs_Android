@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.PostInfo
@@ -46,21 +47,31 @@ class StorageDetailViewModel @Inject constructor(
     private val deletePostUseCase: DeletePost,
     private val getFolderListUseCase: GetFolderListUseCase,
     private val changePostFolderUseCase: ChangePostFolder,
-    private val getFolderByIdUseCase: GetFolderById
+    private val getFolderByIdUseCase: GetFolderById,
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
-
-    init {
-        val folderId = savedStateHandle.get<String>("folderId").orEmpty()
-        getFolderInfoById(folderId = folderId, isFirst = true)
+    fun setFolderInfo(folderItem: Folder) = intent {
+        reduce {
+            state.copy(
+                folderInfo = state.folderInfo.copy(
+                    folderId = folderItem.id,
+                    title = folderItem.name,
+                    postCount = folderItem.postCount,
+                    folderType = folderItem.folderType,
+                ),
+            )
+        }
+        fetchSavedLinkFromType(
+            type = folderItem.folderType,
+            folderId = folderItem.id,
+        )
     }
-
 
     /**
      * 현재 폴더 정보 가져오기
      */
-    fun getFolderInfoById(folderId: String, isFirst: Boolean = false) = viewModelScope.doraLaunch {
+    fun getFolderInfoById(folderId: String) = viewModelScope.doraLaunch {
         val folderInfo = getFolderByIdUseCase(folderId = folderId)
         intent {
             reduce {
@@ -71,12 +82,6 @@ class StorageDetailViewModel @Inject constructor(
                         postCount = folderInfo.postCount,
                         folderType = folderInfo.folderType,
                     ),
-                )
-            }
-            if(isFirst) {
-                fetchSavedLinkFromType(
-                    type = folderInfo.folderType,
-                    folderId = folderInfo.id,
                 )
             }
         }
@@ -247,8 +252,9 @@ class StorageDetailViewModel @Inject constructor(
     fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
-        if(isSuccess)
+        if (isSuccess) {
             intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+        }
     }
 
     fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {

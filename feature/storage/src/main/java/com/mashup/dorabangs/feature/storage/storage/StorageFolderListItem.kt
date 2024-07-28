@@ -29,12 +29,13 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
+import com.mashup.dorabangs.util.getFolderIcon
 import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageFolderList(
     storageState: StorageListState,
-    navigateToStorageDetail: (String) -> Unit,
+    navigateToStorageDetail: (Folder) -> Unit,
     onClickSettingButton: (Folder) -> Unit = {},
 ) {
     LazyColumn(
@@ -53,7 +54,7 @@ fun StorageFolderList(
                 item = item,
                 isFirstItem = idx == 0,
                 isLastItem = idx == storageState.customStorageFolderList.lastIndex,
-                navigateToStorageDetail = { navigateToStorageDetail(item.id.orEmpty()) },
+                navigateToStorageDetail = { navigateToStorageDetail(item) },
                 onClickSettingButton = { onClickSettingButton(item) },
             )
             if (idx != storageState.customStorageFolderList.lastIndex) {
@@ -74,7 +75,7 @@ fun StorageFolderList(
 @Composable
 fun StorageDefaultFolder(
     defaultFolderList: List<Folder>,
-    navigateToStorageDetail: (String) -> Unit,
+    navigateToStorageDetail: (Folder) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -85,7 +86,7 @@ fun StorageDefaultFolder(
                 item = item,
                 isFirstItem = idx == 0,
                 isLastItem = idx == defaultFolderList.lastIndex,
-                navigateToStorageDetail = { navigateToStorageDetail(item.id.orEmpty()) },
+                navigateToStorageDetail = { navigateToStorageDetail(item) },
             )
             if (idx != defaultFolderList.lastIndex) {
                 HorizontalDivider(
@@ -159,16 +160,6 @@ fun StorageListItem(
                 contentDescription = "folderIcon",
             )
         }
-    }
-}
-
-private fun getFolderIcon(type: FolderType): Int {
-    return when (type) {
-        FolderType.ALL -> coreR.drawable.ic_3d_all_big
-        FolderType.FAVORITE -> coreR.drawable.ic_3d_bookmark_big
-        FolderType.DEFAULT -> coreR.drawable.ic_3d_pin_big
-        FolderType.CUSTOM -> coreR.drawable.ic_3d_folder_big
-        else -> coreR.drawable.ic_3d_folder_big
     }
 }
 

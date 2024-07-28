@@ -36,6 +36,7 @@ val MaxToolbarHeight = 161.dp
 
 @Composable
 fun StorageDetailRoute(
+    folderItem: Folder,
     navigateToHome: () -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: () -> Unit,
@@ -50,9 +51,13 @@ fun StorageDetailRoute(
     val linksPagingList = state.pagingList.collectAsLazyPagingItems()
 
     LaunchedEffect(Unit) {
-        if(isChangeData) {
-            if(state.editActionType == EditActionType.FolderEdit) storageDetailViewModel.getFolderInfoById(state.folderInfo.folderId.orEmpty())
-            else linksPagingList.refresh()
+        storageDetailViewModel.setFolderInfo(folderItem)
+
+        if (isChangeData) {
+            if (state.editActionType == EditActionType.FolderEdit) {
+                storageDetailViewModel.getFolderInfoById(state.folderInfo.folderId.orEmpty())
+            } else
+                linksPagingList.refresh()
         }
         storageDetailViewModel.setVisibleMovingFolderBottomSheet(isVisibleBottomSheet)
     }
@@ -69,10 +74,7 @@ fun StorageDetailRoute(
             sideEffect = sideEffect,
             navigateToHome = navigateToHome,
             navigateToFolderManager = { id -> navigateToFolderManager(id, state.editActionType) },
-            refreshPagingList = {
-                storageDetailViewModel.getFolderInfoById(folderId = state.folderInfo.folderId.orEmpty())
-                linksPagingList.refresh()
-                                },
+            refreshPagingList = { linksPagingList.refresh() },
         )
     }
 
@@ -215,8 +217,9 @@ fun StorageDetailScreen(
 @Composable
 fun PreviewStorageDetailScreen() {
     StorageDetailRoute(
+        folderItem = Folder(),
         navigateToHome = {},
-        navigateToFolderManager = {id, type ->},
+        navigateToFolderManager = { id, type -> },
         onClickBackIcon = {},
     )
 }

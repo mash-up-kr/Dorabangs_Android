@@ -32,6 +32,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailTab
+import com.mashup.dorabangs.util.getFolderIcon
 import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
@@ -121,7 +122,7 @@ fun StorageDetailHeaderContent(
                     .padding(6.dp)
                     .size(40.dp)
                     .aspectRatio(1f),
-                painter = painterResource(id = coreR.drawable.ic_3d_all_big),
+                painter = painterResource(id = getFolderIcon(state.folderInfo.folderType)),
                 contentDescription = "상단바 아이콘",
             )
         }
@@ -200,7 +201,7 @@ fun StorageDetailTopBarByFolderType(
     onClickActionIcon: () -> Unit = {},
     onClickBackIcon: () -> Unit,
 ) {
-    val title = if(isCollapsed) state.folderInfo.title else ""
+    val title = if (isCollapsed) state.folderInfo.title else ""
     when (state.folderInfo.folderType) {
         FolderType.CUSTOM -> {
             DoraTopBar.BackWithActionIconTopBar(

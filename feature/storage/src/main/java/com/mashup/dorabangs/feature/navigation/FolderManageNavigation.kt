@@ -10,7 +10,6 @@ import androidx.navigation.navArgument
 import com.mashup.core.navigation.NavigationRoute
 import com.mashup.core.navigation.bundleSerializable
 import com.mashup.core.navigation.serializableNavType
-import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.folders.StorageFolderManageRoute
 import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType

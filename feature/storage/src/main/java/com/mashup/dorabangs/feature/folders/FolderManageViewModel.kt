@@ -23,7 +23,7 @@ import javax.inject.Inject
 class FolderManageViewModel @Inject constructor(
     private val createFolderUseCase: CreateFolderUseCase,
     private val editFolderNameUseCase: EditFolderNameUseCase,
-    private val changePostFolderUseCase: ChangePostFolder
+    private val changePostFolderUseCase: ChangePostFolder,
 ) : ViewModel(), ContainerHost<FolderManageState, FolderManageSideEffect> {
     override val container = container<FolderManageState, FolderManageSideEffect>(FolderManageState())
 
@@ -65,21 +65,19 @@ class FolderManageViewModel @Inject constructor(
         }
     }
 
-
     /**
      * 링크 수정 - 새 폴더 추가 후 폴더 이동
      */
     fun createFolderWithMoveLink(folderName: String, postId: String) = viewModelScope.doraLaunch {
         val newFolder = createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
-        if(newFolder.isSuccess) {
+        if (newFolder.isSuccess) {
             val newFolderId = newFolder.result.firstOrNull()?.id.orEmpty()
             val moveFolder = changePostFolderUseCase.invoke(postId = postId, folderId = newFolderId)
-            if(moveFolder.isSuccess) {
+            if (moveFolder.isSuccess) {
                 intent { postSideEffect(FolderManageSideEffect.NavigateToComplete) }
             }
         }
     }
-
 
     private fun setTextHelperEnable(isEnable: Boolean, helperMessage: String) = intent {
         reduce { state.copy(helperEnable = isEnable, helperMessage = helperMessage) }
