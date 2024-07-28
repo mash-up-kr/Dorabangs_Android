@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets
 
 fun NavController.navigateToHomeCrateFolder(navOptions: NavOptions? = null, urlLink: String = "") {
     val encodedUrl = URLEncoder.encode(urlLink, StandardCharsets.UTF_8.toString())
-    navigate("${NavigationRoute.HomeScreen.HomeCreateFolderWithLink.route}/$encodedUrl", navOptions)
+    navigate("${NavigationRoute.HomeScreen.HomeCreateFolderWithLink.route}/$encodedUrl?", navOptions)
 }
 
 fun NavGraphBuilder.homeCreateFolderNavigation(
@@ -25,7 +25,7 @@ fun NavGraphBuilder.homeCreateFolderNavigation(
     navigateToHomeAfterSaveLink: () -> Unit,
 ) {
     composable(
-        route = "${NavigationRoute.HomeScreen.HomeCreateFolderWithLink.route}/{urlLink}",
+        route = "${NavigationRoute.HomeScreen.HomeCreateFolderWithLink.route}/{urlLink}?",
         arguments = listOf(
             navArgument("urlLink") {
                 type = NavType.StringType
@@ -37,7 +37,7 @@ fun NavGraphBuilder.homeCreateFolderNavigation(
             val homeViewModel: HomeViewModel = hiltViewModel(backStackEntry)
             val urlLink = it.arguments?.getString("urlLink").orEmpty()
             homeViewModel.savedStateHandle["urlLink"] = urlLink
-            homeViewModel.savedStateHandle["isVisibleMovingBottomSheet"] = urlLink.isBlank()
+            homeViewModel.savedStateHandle["isVisibleMovingBottomSheet"] = urlLink.isEmpty()
 
             HomeCreateFolderRoute(
                 homeViewModel = homeViewModel,

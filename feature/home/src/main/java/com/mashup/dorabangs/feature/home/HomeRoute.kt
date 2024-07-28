@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -22,6 +23,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
+import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -69,7 +71,8 @@ fun HomeRoute(
             modifier = modifier,
             postsPagingList = pagingList,
             onClickChip = viewModel::changeSelectedTapIdx,
-            onClickMoreButton = {
+            onClickMoreButton = { postId, folderId ->
+                viewModel.updateSelectedPostItem(postId = postId, folderId)
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
             navigateToClassification = navigateToClassification,
@@ -111,15 +114,15 @@ fun HomeRoute(
             },
             onClickMoveFolderButton = {
                 viewModel.setVisibleMoreButtonBottomSheet(false)
-                viewModel.setVisibleMovingFolderBottomSheet(true)
+                viewModel.getCustomFolderList()
             },
             onDismissRequest = { viewModel.setVisibleMoreButtonBottomSheet(false) },
         )
 
         DoraBottomSheet.MovingFolderBottomSheet(
-            modifier = Modifier.height(441.dp),
+            modifier = modifier,
             isShowSheet = state.isShowMovingFolderSheet,
-            folderList = testFolderListData,
+            folderList = state.folderList.toSelectBottomSheetModel(state.changeFolderId.ifEmpty { state.selectedFolderId }),
             onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
             onClickCreateFolder = {
                 viewModel.setVisibleMovingFolderBottomSheet(
@@ -127,7 +130,9 @@ fun HomeRoute(
                     isNavigate = true,
                 )
             },
-            onClickMoveFolder = {},
+            onClickMoveFolder = { selectFolder -> viewModel.updateSelectFolderId(selectFolder) },
+            btnEnable = state.selectedFolderId != state.changeFolderId,
+            onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId) },
         )
 
         DoraDialog(
@@ -137,7 +142,7 @@ fun HomeRoute(
             confirmBtnText = stringResource(R.string.remove_dialog_confirm),
             disMissBtnText = stringResource(R.string.remove_dialog_cancil),
             onDisMissRequest = { viewModel.setVisibleDialog(false) },
-            onClickConfirmBtn = { viewModel.setVisibleDialog(false) },
+            onClickConfirmBtn = { viewModel.deletePost(state.selectedPostId) },
         )
     }
 }

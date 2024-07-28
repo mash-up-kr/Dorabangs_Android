@@ -27,7 +27,7 @@ import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
-import com.mashup.dorabangs.feature.storage.storagedetail.model.toBottomSheetModel
+import com.mashup.dorabangs.feature.storage.storagedetail.model.toSelectBottomSheetModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -41,6 +41,7 @@ fun StorageDetailRoute(
     navigateToFolderManager: (String) -> Unit,
     navigateToCreateFolder: () -> Unit,
     onClickBackIcon: () -> Unit,
+    modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
 ) {
@@ -103,7 +104,7 @@ fun StorageDetailRoute(
             storageDetailViewModel.setVisibleMoreButtonBottomSheet(false)
             when (state.editActionType) {
                 EditActionType.FolderEdit -> storageDetailViewModel.moveToEditFolderName(state.folderInfo.folderId)
-                EditActionType.LinkEdit -> storageDetailViewModel.getFolderList()
+                EditActionType.LinkEdit -> storageDetailViewModel.getCustomFolderList()
             }
         },
         onDismissRequest = { storageDetailViewModel.setVisibleMoreButtonBottomSheet(false) },
@@ -125,9 +126,15 @@ fun StorageDetailRoute(
     )
 
     DoraBottomSheet.MovingFolderBottomSheet(
-        modifier = Modifier.height(441.dp),
+        modifier = modifier,
         isShowSheet = state.isShowMovingFolderSheet,
-        folderList = state.folderList.map { it.toBottomSheetModel(state.folderInfo.folderId.orEmpty()) },
+        folderList = state.folderList.toSelectBottomSheetModel(
+            state.changeClickFolderId.ifEmpty {
+                val originFolder = state.folderInfo.folderId.orEmpty()
+                storageDetailViewModel.updateSelectFolderId(originFolder)
+                originFolder
+            },
+        ),
         onDismissRequest = { storageDetailViewModel.setVisibleMovingFolderBottomSheet(false) },
         onClickCreateFolder = {
             storageDetailViewModel.setVisibleMovingFolderBottomSheet(
@@ -135,7 +142,14 @@ fun StorageDetailRoute(
                 isNavigate = true,
             )
         },
-        onClickMoveFolder = {},
+        onClickMoveFolder = { selectFolderId -> storageDetailViewModel.updateSelectFolderId(selectFolderId) },
+        btnEnable = state.folderInfo.folderId != state.changeClickFolderId,
+        onClickCompleteButton = {
+            storageDetailViewModel.moveFolder(
+                postId = state.currentClickPostId,
+                folderId = state.changeClickFolderId,
+            )
+        },
     )
 }
 

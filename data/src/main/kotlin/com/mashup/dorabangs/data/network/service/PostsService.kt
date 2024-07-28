@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.data.network.service
 
+import com.mashup.dorabangs.data.model.ChangePostFolderIdRequestModel
 import com.mashup.dorabangs.data.model.LinkRequestModel
 import com.mashup.dorabangs.data.model.PostInfoRequestModel
 import com.mashup.dorabangs.data.model.PostsResponseModel
@@ -37,7 +38,7 @@ interface PostsService {
     @PATCH("posts/{postId}/move")
     suspend fun changePostFolder(
         @Path("postId") postId: String,
-        @Body folderId: String,
+        @Body folderId: ChangePostFolderIdRequestModel,
     )
 
     @GET("posts/count")

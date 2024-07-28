@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.data.datasource.remote.impl
 
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
+import com.mashup.dorabangs.data.model.ChangePostFolderIdRequestModel
 import com.mashup.dorabangs.data.model.toData
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.model.toPagingDomain
@@ -38,7 +39,7 @@ class PostsRemoteDataSourceImpl @Inject constructor(
         postsService.deletePost(postId)
 
     override suspend fun changePostFolder(postId: String, folderId: String) =
-        postsService.changePostFolder(postId, folderId)
+        postsService.changePostFolder(postId, ChangePostFolderIdRequestModel(folderId = folderId))
 
     override suspend fun getPostsCount(isRead: Boolean?): Int =
         postsService.getPostsCount(isRead)

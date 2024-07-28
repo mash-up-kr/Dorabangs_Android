@@ -46,7 +46,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
@@ -70,7 +69,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
     onClickChip: (Int) -> Unit = {},
-    onClickMoreButton: (Int) -> Unit = {},
+    onClickMoreButton: (String, String) -> Unit,
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
@@ -165,9 +164,10 @@ fun HomeScreen(
                 }
 
                 Feeds(
+                    modifier = Modifier,
                     feeds = postsPagingList,
-                    onClickMoreButton = { index ->
-                        onClickMoreButton(index)
+                    onClickMoreButton = { postId, folderId ->
+                        onClickMoreButton(postId, folderId)
                     },
                     updateFeedState = { index -> refreshPostPagingList() }
                 )
@@ -208,7 +208,7 @@ fun HomeScreen(
 
 private fun LazyListScope.Feeds(
     feeds: LazyPagingItems<FeedCardUiModel>?,
-    onClickMoreButton: (Int) -> Unit = {},
+    onClickMoreButton: (String, String) -> Unit,
     updateFeedState: (Int) -> Unit = {},
 ) {
     if (feeds != null) {
@@ -405,6 +405,7 @@ fun HomeCarouselPreview() {
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
+        onClickMoreButton = { postId, folderId -> },
         state = HomeState(
             tapElements = listOf(
                 DoraChipUiModel(
@@ -432,26 +433,3 @@ fun HomeScreenPreview() {
         ),
     )
 }
-
-val testFolderListData = listOf(
-    SelectableBottomSheetItemUIModel(
-        R.drawable.ic_plus,
-        "폴더이름",
-        false,
-    ),
-    SelectableBottomSheetItemUIModel(
-        R.drawable.ic_plus,
-        "폴더이름",
-        false,
-    ),
-    SelectableBottomSheetItemUIModel(
-        R.drawable.ic_plus,
-        "폴더이름",
-        true,
-    ),
-    SelectableBottomSheetItemUIModel(
-        R.drawable.ic_plus,
-        "폴더이름",
-        false,
-    ),
-)

@@ -37,15 +37,22 @@ class MainActivity : ComponentActivity() {
         val userId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         splashViewModel.checkUserToken(userId)
 
+        val url = intent.data?.path?.substring(1).orEmpty()
+
         installSplashScreen().apply {
-            setKeepOnScreenCondition { splashViewModel.isSplashShow.value || splashViewModel.firstEntryScreen.value == FirstEntryScreen.Splash }
+            setKeepOnScreenCondition {
+                (splashViewModel.isSplashShow.value || splashViewModel.firstEntryScreen.value == FirstEntryScreen.Splash) &&
+                    url.isBlank()
+            }
         }
 
         setContent {
             val firstEntryScreen = splashViewModel.firstEntryScreen.collectAsState()
             if (firstEntryScreen.value != FirstEntryScreen.Splash) {
                 DorabangsTheme {
-                    DoraApp(isFirstEntry = firstEntryScreen.value == FirstEntryScreen.Onboarding)
+                    DoraApp(
+                        isFirstEntry = firstEntryScreen.value == FirstEntryScreen.Onboarding,
+                    )
                 }
             }
         }
