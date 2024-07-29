@@ -14,9 +14,9 @@ class AIClassificationRepositoryImpl @Inject constructor(
         remoteDataSource.getAIClassificationsFolderList()
 
     override suspend fun getAIClassificationPosts(
-        page: Int?,
-        limit: Int?,
-        order: String?,
+        page: Int,
+        limit: Int,
+        order: String,
     ): AIClassificationPosts =
         remoteDataSource.getAIClassificationPosts(
             page = page,

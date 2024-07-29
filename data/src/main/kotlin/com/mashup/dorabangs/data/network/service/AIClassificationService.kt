@@ -18,9 +18,9 @@ interface AIClassificationService {
 
     @GET("classification/posts")
     suspend fun getAIClassificationPosts(
-        @Query("page") page: Int? = null,
-        @Query("limit") limit: Int? = null,
-        @Query("order") order: String? = null,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("order") order: String,
     ): AIClassificationPostsResponseModel
 
     @PATCH("classification/posts")

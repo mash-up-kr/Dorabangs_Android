@@ -9,9 +9,9 @@ interface AIClassificationRemoteDataSource {
     suspend fun getAIClassificationsFolderList(): AIClassificationFolders
 
     suspend fun getAIClassificationPosts(
-        page: Int? = null,
-        limit: Int? = null,
-        order: String? = null,
+        page: Int,
+        limit: Int,
+        order: String,
     ): AIClassificationPosts
 
     suspend fun moveAllPostsToRecommendedFolder(

@@ -18,9 +18,9 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
             .toDomain()
 
     override suspend fun getAIClassificationPosts(
-        page: Int?,
-        limit: Int?,
-        order: String?,
+        page: Int,
+        limit: Int,
+        order: String,
     ): AIClassificationPosts =
         service.getAIClassificationPosts(
             page = page,

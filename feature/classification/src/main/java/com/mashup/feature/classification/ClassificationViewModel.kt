@@ -22,6 +22,7 @@ class ClassificationViewModel @Inject constructor(
 
     init {
         getInitialChipData()
+        getInitialListData()
     }
 
     private fun getInitialChipData() = viewModelScope.doraLaunch {
@@ -45,6 +46,10 @@ class ClassificationViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun getInitialListData() = viewModelScope.doraLaunch {
+
     }
 
     fun changeCategory(idx: Int) = intent {
