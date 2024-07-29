@@ -37,7 +37,7 @@ val MaxToolbarHeight = 161.dp
 @Composable
 fun StorageDetailRoute(
     folderItem: Folder,
-    navigateToHome: () -> Unit,
+    navigateToHome: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
@@ -161,13 +161,13 @@ fun StorageDetailRoute(
 
 private fun handleSideEffect(
     sideEffect: StorageDetailSideEffect,
-    navigateToHome: () -> Unit,
+    navigateToHome: (Boolean) -> Unit,
     navigateToFolderManager: (String) -> Unit,
     refreshPagingList: () -> Unit,
 ) {
     when (sideEffect) {
         // TODO - SnackBarToast 띄우기
-        is StorageDetailSideEffect.NavigateToHome -> navigateToHome()
+        is StorageDetailSideEffect.NavigateToHome -> navigateToHome(true)
         is StorageDetailSideEffect.NavigateToFolderManage -> navigateToFolderManager(sideEffect.itemId)
         is StorageDetailSideEffect.RefreshPagingList -> refreshPagingList()
     }

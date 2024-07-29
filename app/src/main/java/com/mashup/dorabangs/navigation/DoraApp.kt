@@ -43,7 +43,7 @@ fun DoraApp(
                     if (isFirstEntry) {
                         NavigationRoute.OnBoardingScreen.route
                     } else {
-                        "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}"
+                        "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}"
                     },
                 )
             }

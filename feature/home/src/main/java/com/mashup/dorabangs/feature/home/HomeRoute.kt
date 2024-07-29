@@ -3,6 +3,7 @@ package com.mashup.dorabangs.feature.home
 import android.view.View
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
+import com.mashup.dorabangs.core.designsystem.component.toast.DoraToast
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
@@ -40,6 +42,7 @@ fun HomeRoute(
     navigateToHomeTutorial: () -> Unit,
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
+    val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
 
@@ -59,6 +62,11 @@ fun HomeRoute(
             }
 
             is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+            is HomeSideEffect.ShowFolderRemoveToastSnackBar -> {
+                scope.launch {
+                    toastSnackBarHostState.showSnackbar(message = state.toastState.text)
+                }
+            }
             else -> {}
         }
     }
@@ -139,6 +147,13 @@ fun HomeRoute(
             disMissBtnText = stringResource(R.string.remove_dialog_cancil),
             onDisMissRequest = { viewModel.setVisibleDialog(false) },
             onClickConfirmBtn = { viewModel.deletePost(state.selectedPostId) },
+        )
+
+        DoraToast(
+            text = state.toastState.text,
+            toastStyle = state.toastState.toastStyle,
+            snackBarHostState = toastSnackBarHostState,
+            modifier = modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
         )
     }
 }

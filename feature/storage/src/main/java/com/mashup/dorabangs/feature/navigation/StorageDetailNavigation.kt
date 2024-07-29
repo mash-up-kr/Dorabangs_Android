@@ -21,7 +21,7 @@ fun NavController.navigateToStorageDetail(folder: Folder) {
 
 fun NavGraphBuilder.storageDetailNavigation(
     onClickBackIcon: () -> Unit,
-    navigateToHome: () -> Unit,
+    navigateToHome: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
 ) {
     composable(

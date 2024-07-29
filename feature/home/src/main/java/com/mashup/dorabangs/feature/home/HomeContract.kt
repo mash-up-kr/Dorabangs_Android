@@ -3,6 +3,7 @@ package com.mashup.dorabangs.feature.home
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.utils.isValidUrl
 import com.mashup.dorabangs.core.designsystem.R as coreR
@@ -21,6 +22,7 @@ data class HomeState(
     val isShowMovingFolderSheet: Boolean = false,
     val homeCreateFolder: HomeCreateFolder = HomeCreateFolder(),
     val aiClassificationCount: Int = 0,
+    val toastState: ToastState = ToastState(),
 ) {
     companion object {
         // TODO - 추후 sotrageMapper와 합치기
@@ -48,4 +50,9 @@ data class HomeCreateFolder(
     val helperMessage: String = "",
     val urlLink: String = "",
     val lastCheckedFolderName: String = "",
+)
+
+data class ToastState(
+    val text: String = "",
+    val toastStyle: ToastStyle = ToastStyle.CHECK,
 )

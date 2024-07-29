@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -57,7 +55,6 @@ fun StorageDetailList(
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
-
     val isLoading = linksPagingList.loadState.refresh is LoadState.Loading
     if (linksPagingList.itemCount == 0) {
         Column {
@@ -67,9 +64,9 @@ fun StorageDetailList(
                 onClickTabItem = onClickTabItem,
                 onClickActionIcon = onClickActionIcon,
             )
-            if(isLoading.not())
+            if (isLoading.not()) {
                 StorageDetailEmpty(modifier = modifier)
-            else {
+            } else {
                 Box(modifier = Modifier.fillMaxSize()) {
                     LottieLoader(
                         lottieRes = coreR.raw.spinner,
@@ -94,7 +91,7 @@ fun StorageDetailList(
                     onClickActionIcon = onClickActionIcon,
                 )
             }
-            if(isLoading.not()) {
+            if (isLoading.not()) {
                 item {
                     SortButtonRow(
                         isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
@@ -133,10 +130,8 @@ fun StorageDetailList(
                     }
                 }
             }
-
         }
     }
-
 }
 
 @Composable
