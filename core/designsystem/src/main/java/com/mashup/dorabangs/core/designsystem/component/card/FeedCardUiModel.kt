@@ -55,10 +55,18 @@ data class FeedCardUiModel(
             this?.let {
                 val givenDate = Instant.parse(this)
                 val currentDate = Instant.now()
-                val daysBetween = ChronoUnit.DAYS.between(givenDate, currentDate)
-                return daysBetween
+                return ChronoUnit.DAYS.between(givenDate, currentDate)
             }
             return 0L
+        }
+
+        fun String?.convertCreatedSecond(): Int {
+            this?.let {
+                val givenDate = Instant.parse(this)
+                val currentDate = Instant.now()
+                return ChronoUnit.SECONDS.between(givenDate, currentDate).toInt()
+            }
+            return 0
         }
     }
 }

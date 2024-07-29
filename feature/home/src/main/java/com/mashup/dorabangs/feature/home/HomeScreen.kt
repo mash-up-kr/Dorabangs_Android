@@ -73,8 +73,7 @@ fun HomeScreen(
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
-    updateFeedState: (Int) -> Unit = {},
-    refreshPostPagingList: () -> Unit = {},
+    refreshPostPagingListAfterSecond: (String?) -> Unit = {},
 ) {
 
     Box(
@@ -168,7 +167,7 @@ fun HomeScreen(
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
-                    updateFeedState = { index -> refreshPostPagingList() }
+                    refreshAfterSecond = { createdAt -> refreshPostPagingListAfterSecond(createdAt) }
                 )
             }
 
@@ -208,7 +207,7 @@ fun HomeScreen(
 private fun LazyListScope.Feeds(
     feeds: LazyPagingItems<FeedCardUiModel>?,
     onClickMoreButton: (String, String) -> Unit,
-    updateFeedState: (Int) -> Unit = {},
+    refreshAfterSecond: (String?) -> Unit = {},
 ) {
     if (feeds != null) {
         items(
@@ -223,7 +222,7 @@ private fun LazyListScope.Feeds(
                     onClickMoreButton = {
                         onClickMoreButton(cardInfo.id, cardInfo.folderId)
                     },
-                    updateCardState = { updateFeedState(index) }
+                    updateCardState = { refreshAfterSecond(cardInfo.createdAt) }
                 )
 
                 HorizontalDivider(

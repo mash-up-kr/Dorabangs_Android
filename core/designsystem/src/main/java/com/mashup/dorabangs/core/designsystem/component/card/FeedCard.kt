@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedDate
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedSecond
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -45,10 +46,23 @@ fun FeedCard(
     onClickMoreButton: () -> Unit = {},
     updateCardState: () -> Unit = {},
 ) {
+    val loadingSecond = if (!cardInfo.createdAt.isNullOrBlank()) {
+        cardInfo.createdAt.convertCreatedSecond()
+    } else {
+        8
+    }.between(0, 8)
 
     LaunchedEffect(cardInfo.isLoading) {
+        var requested = false
+
         while (cardInfo.isLoading) {
-            delay(8000)
+            val currentLoadingSecond = if (requested) {
+                8000
+            } else {
+                requested = true
+                loadingSecond * 1000L
+            }
+            delay(currentLoadingSecond)
             updateCardState()
         }
     }
@@ -83,7 +97,7 @@ fun FeedCard(
                     .height(4.dp),
                 completedColor = DoraColorTokens.Primary,
                 remainColor = DoraGradientToken.Gradient2,
-                current = 10,
+                initial = loadingSecond * 100,
             )
             FeedCardCategoryAndDayLabel(
                 cardInfo = cardInfo,
@@ -261,12 +275,15 @@ fun FeedCardMenuItems(
     onClickMoreButton: () -> Unit = {},
 ) {
     Row {
-        val favoriteIcon = if (cardInfo.isFavorite) R.drawable.ic_bookmark_active else R.drawable.ic_bookmark_default
+        val favoriteIcon =
+            if (cardInfo.isFavorite) R.drawable.ic_bookmark_active else R.drawable.ic_bookmark_default
         Icon(
             modifier = Modifier
                 .size(24.dp)
                 .clickable { onClickBookMarkButton() },
-            painter = if (cardInfo.isFavorite) painterResource(id = R.drawable.ic_bookmark_active) else painterResource(id = R.drawable.ic_bookmark_default),
+            painter = if (cardInfo.isFavorite) painterResource(id = R.drawable.ic_bookmark_active) else painterResource(
+                id = R.drawable.ic_bookmark_default
+            ),
             contentDescription = "menuIcon",
             tint = Color.Unspecified,
         )
@@ -315,4 +332,10 @@ private fun PreviewLoadingFeedCard() {
             folderId = "",
         )
     FeedCard(cardInfo = cardInfo)
+}
+
+private fun Int.between(min: Int, max: Int): Int {
+    if (this < min) return min
+    if (this > max) return max
+    return this
 }

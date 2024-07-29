@@ -1,6 +1,5 @@
 package com.mashup.dorabangs.data.model
 
-import android.util.Log
 import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo
@@ -68,10 +67,7 @@ fun PostsResponseModel.toPagingDomain(): PageData<List<Post>> {
             total = metadata.total,
             hasNext = metadata.hasNext,
         ),
-    ).also {
-        Log.d("TAG", "before: $this")
-        Log.d("TAG", "after: $it")
-    }
+    )
 }
 
 fun AIStatusResponseModel.toDomain() = when(this) {

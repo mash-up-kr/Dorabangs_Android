@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -61,6 +60,8 @@ fun HomeRoute(
             }
 
             is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+
+            is HomeSideEffect.RefreshPostList -> pagingList.refresh()
             else -> {}
         }
     }
@@ -78,7 +79,7 @@ fun HomeRoute(
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
-            refreshPostPagingList  = { pagingList.refresh() }
+            refreshPostPagingListAfterSecond  = viewModel::refreshPostListAfterSecond,
         )
 
         HomeDoraSnackBar(
