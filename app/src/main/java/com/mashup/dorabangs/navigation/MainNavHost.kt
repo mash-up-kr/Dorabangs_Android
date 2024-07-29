@@ -83,6 +83,7 @@ fun MainNavHost(
             onClickBackIcon = { folderType ->
                 val isVisibleBottomSheet = folderType == FolderManageType.CREATE
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", isVisibleBottomSheet)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChange", false)
                 appState.navController.popBackStack()
             },
             navigateToComplete = {
@@ -91,8 +92,9 @@ fun MainNavHost(
             },
         )
         storageDetailNavigation(
-            onClickBackIcon = {
+            onClickBackIcon = { isChange ->
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isRemoveSuccess", false)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChange", isChange)
                 appState.navController.popBackStack()
                               },
             navigateToFolderManager = { itemId, type ->
@@ -100,6 +102,7 @@ fun MainNavHost(
                 appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType, actionType = type, itemId = itemId)
             },
             navigateToStorage = { isRemoveSuccess ->
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChange", isRemoveSuccess)
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isRemoveSuccess", isRemoveSuccess)
                 appState.navController.popBackStack()
             },

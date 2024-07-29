@@ -20,7 +20,7 @@ fun NavController.navigateToStorageDetail(folder: Folder) {
 }
 
 fun NavGraphBuilder.storageDetailNavigation(
-    onClickBackIcon: () -> Unit,
+    onClickBackIcon: (Boolean) -> Unit,
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
 ) {
@@ -41,7 +41,7 @@ fun NavGraphBuilder.storageDetailNavigation(
                 folderItem = item,
                 isVisibleBottomSheet = isVisibleBottomSheet,
                 isChangeData = isChangeData,
-                onClickBackIcon = onClickBackIcon,
+                onClickBackIcon = { onClickBackIcon(isChangeData) },
                 navigateToStorage = navigateToStorage,
                 navigateToFolderManager = navigateToFolderManager,
             )
