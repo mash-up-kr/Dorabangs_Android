@@ -37,7 +37,7 @@ interface FolderService {
     suspend fun getLinkFolderList(
         @Path("folderId") folderId: String?,
         @Query("page") page: Int,
-        @Query("limit") limit: Int = 10,
+        @Query("limit") limit: Int,
         @Query("order") order: String,
         @Query("isRead") isRead: Boolean?,
     ): LinksFromFolderResponseModel
