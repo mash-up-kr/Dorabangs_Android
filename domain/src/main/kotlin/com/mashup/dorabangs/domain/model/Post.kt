@@ -18,6 +18,7 @@ data class Post(
     val description: String = "",
     val isFavorite: Boolean = false,
     val createdAt: String = "",
+    val thumbnailImgUrl: String = "",
     val aiStatus: AIStatus = AIStatus.NOTHING,
 )
 

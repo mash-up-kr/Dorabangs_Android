@@ -25,6 +25,7 @@ data class PostResponseModel(
     val isFavorite: Boolean = false,
     val createdAt: String = "",
     val aiStatus: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
+    val thumbnailImgUrl: String = "",
     val readAt: String = "",
 )
 
@@ -39,16 +40,19 @@ enum class AIStatusResponseModel {
     NOTHING,
 }
 
-fun PostResponseModel.toDomain() = Post(
-    id = id,
-    folderId = folderId,
-    url = url,
-    title = title,
-    description = description,
-    isFavorite = isFavorite,
-    createdAt = createdAt,
-    aiStatus = aiStatus.toDomain(),
-)
+fun PostResponseModel.toDomain(): Post {
+    return Post(
+        id = id,
+        folderId = folderId,
+        url = url,
+        title = title,
+        description = description,
+        isFavorite = isFavorite,
+        createdAt = createdAt,
+        thumbnailImgUrl = thumbnailImgUrl,
+        aiStatus = aiStatus.toDomain(),
+    )
+}
 
 fun PagingMetaDataResponseModel.toDomain() = PostsMetaData(
     hasNext = hasNext,

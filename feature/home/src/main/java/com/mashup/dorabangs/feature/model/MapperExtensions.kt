@@ -14,7 +14,7 @@ fun Post.toUiModel(): FeedCardUiModel {
         createdAt = this.createdAt,
         keywordList = listOf(),
         isFavorite = isFavorite,
-        thumbnail = "",
+        thumbnail = thumbnailImgUrl,
         isLoading = this.aiStatus == AIStatus.IN_PROGRESS
     )
 }
@@ -28,7 +28,7 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
         createdAt = this.createdAt,
         keywordList = emptyList(),
         isFavorite = this.isFavorite ?: false,
-        thumbnail = "",
+        thumbnail = thumbnailImgUrl,
         isLoading = this.aiStatus == AIStatus.IN_PROGRESS
     )
 }

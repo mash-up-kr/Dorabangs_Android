@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -84,8 +85,11 @@ fun FeedCard(
             )
             Spacer(modifier = Modifier.width(13.dp))
             AsyncImage(
-                modifier = Modifier.size(size = 65.dp),
+                modifier = Modifier
+                    .size(size = 65.dp)
+                    .background(color = DoraColorTokens.G1),
                 model = cardInfo.thumbnail,
+                contentScale = ContentScale.Crop,
                 contentDescription = "url 썸네일",
             )
         }
