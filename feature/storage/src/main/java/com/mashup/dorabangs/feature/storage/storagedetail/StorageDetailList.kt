@@ -4,10 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,11 +28,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
@@ -51,57 +55,73 @@ fun StorageDetailList(
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
-    if (linksPagingList.itemCount == 0) {
-        Column {
-            StorageDetailExpandedHeader(
-                state = state,
-                onClickBackIcon = onClickBackIcon,
-                onClickTabItem = onClickTabItem,
-                onClickActionIcon = onClickActionIcon,
-            )
-            StorageDetailEmpty(modifier = modifier)
+    when(linksPagingList.loadState.refresh) {
+        is LoadState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                LottieLoader(
+                    lottieRes = coreR.raw.spinner,
+                    modifier = Modifier
+                        .width(50.dp)
+                        .height(50.dp)
+                        .align(Alignment.Center),
+                )
+            }
         }
-    } else {
-        LazyColumn(
-            state = listState,
-            contentPadding = contentPadding,
-            modifier = modifier,
-        ) {
-            item {
-                StorageDetailExpandedHeader(
-                    state = state,
-                    onClickBackIcon = onClickBackIcon,
-                    onClickTabItem = onClickTabItem,
-                    onClickActionIcon = onClickActionIcon,
-                )
-            }
-            item {
-                SortButtonRow(
-                    isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
-                    onClickSortedIcon = onClickSortedIcon,
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-            items(
-                count = linksPagingList.itemCount,
-                key = linksPagingList.itemKey(FeedCardUiModel::id),
-                contentType = linksPagingList.itemContentType { "SavedLinks" },
-            ) { idx ->
-                linksPagingList[idx]?.let { cardItem ->
-                    FeedCard(
-                        cardInfo = cardItem,
-                        onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) },
-                        onClickMoreButton = { onClickMoreButton(cardItem.id) },
+        is LoadState.NotLoading -> {
+            if (linksPagingList.itemCount == 0) {
+                Column {
+                    StorageDetailExpandedHeader(
+                        state = state,
+                        onClickBackIcon = onClickBackIcon,
+                        onClickTabItem = onClickTabItem,
+                        onClickActionIcon = onClickActionIcon,
                     )
-                    if (idx != state.folderInfo.postCount - 1) {
-                        HorizontalDivider(
-                            modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                            thickness = 0.5.dp,
+                    StorageDetailEmpty(modifier = modifier)
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    contentPadding = contentPadding,
+                    modifier = modifier,
+                ) {
+                    item {
+                        StorageDetailExpandedHeader(
+                            state = state,
+                            onClickBackIcon = onClickBackIcon,
+                            onClickTabItem = onClickTabItem,
+                            onClickActionIcon = onClickActionIcon,
                         )
+                    }
+                    item {
+                        SortButtonRow(
+                            isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
+                            onClickSortedIcon = onClickSortedIcon,
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                    items(
+                        count = linksPagingList.itemCount,
+                        key = linksPagingList.itemKey(FeedCardUiModel::id),
+                        contentType = linksPagingList.itemContentType { "SavedLinks" },
+                    ) { idx ->
+                        linksPagingList[idx]?.let { cardItem ->
+                            FeedCard(
+                                cardInfo = cardItem,
+                                onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) },
+                                onClickMoreButton = { onClickMoreButton(cardItem.id) },
+                            )
+                            if (idx != state.folderInfo.postCount - 1) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                                    thickness = 0.5.dp,
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
+        is LoadState.Error -> {}
     }
 }
 
