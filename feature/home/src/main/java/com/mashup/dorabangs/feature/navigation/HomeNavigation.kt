@@ -26,10 +26,6 @@ fun NavGraphBuilder.homeNavigation(
                 type = NavType.BoolType
                 defaultValue = false
             },
-            navArgument(name = "folderRemoveSuccess") {
-                type = NavType.BoolType
-                defaultValue = false
-            },
         ),
     ) {
         HomeRoute(

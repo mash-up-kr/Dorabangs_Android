@@ -44,7 +44,7 @@ val MaxToolbarHeight = 161.dp
 @Composable
 fun StorageDetailRoute(
     folderItem: Folder,
-    navigateToHome: (Boolean) -> Unit,
+    navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
@@ -81,7 +81,7 @@ fun StorageDetailRoute(
     storageDetailViewModel.collectSideEffect { sideEffect ->
         handleSideEffect(
             sideEffect = sideEffect,
-            navigateToHome = navigateToHome,
+            navigateToStorage = navigateToStorage,
             navigateToFolderManager = { id -> navigateToFolderManager(id, state.editActionType) },
             refreshPagingList = { linksPagingList.refresh() },
             showToastSnackBar = {
@@ -180,13 +180,13 @@ fun StorageDetailRoute(
 
 private fun handleSideEffect(
     sideEffect: StorageDetailSideEffect,
-    navigateToHome: (Boolean) -> Unit,
+    navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String) -> Unit,
     refreshPagingList: () -> Unit,
     showToastSnackBar: () -> Unit,
 ) {
     when (sideEffect) {
-        is StorageDetailSideEffect.NavigateToHome -> navigateToHome(true)
+        is StorageDetailSideEffect.NavigateToHome -> navigateToStorage(true)
         is StorageDetailSideEffect.NavigateToFolderManage -> navigateToFolderManager(sideEffect.itemId)
         is StorageDetailSideEffect.RefreshPagingList -> refreshPagingList()
         is StorageDetailSideEffect.ShowToastSnackBarRenameFolder -> showToastSnackBar()
@@ -238,7 +238,7 @@ fun StorageDetailScreen(
 fun PreviewStorageDetailScreen() {
     StorageDetailRoute(
         folderItem = Folder(),
-        navigateToHome = {},
+        navigateToStorage = {},
         navigateToFolderManager = { id, type -> },
         onClickBackIcon = {},
     )

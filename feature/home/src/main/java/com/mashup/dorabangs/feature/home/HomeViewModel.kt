@@ -7,7 +7,6 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
-import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
@@ -63,17 +62,6 @@ class HomeViewModel @Inject constructor(
                     "urlLink",
                     initialValue = "",
                 ).collect { urlLink -> setStateUrlLink(urlLink) }
-            }
-            launch {
-                savedStateHandle.getStateFlow(
-                    "folderRemoveSuccess",
-                    initialValue = false,
-                ).collect { isSuccess ->
-                    intent {
-                        reduce { state.copy(toastState = state.toastState.copy(text = "삭제 완료했어요.", toastStyle = ToastStyle.CHECK)) }
-                        postSideEffect(HomeSideEffect.ShowFolderRemoveToastSnackBar)
-                    }
-                }
             }
         }
 

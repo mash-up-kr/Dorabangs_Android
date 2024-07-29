@@ -21,7 +21,7 @@ fun NavController.navigateToStorageDetail(folder: Folder) {
 
 fun NavGraphBuilder.storageDetailNavigation(
     onClickBackIcon: () -> Unit,
-    navigateToHome: (Boolean) -> Unit,
+    navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
 ) {
     composable(
@@ -42,7 +42,7 @@ fun NavGraphBuilder.storageDetailNavigation(
                 isVisibleBottomSheet = isVisibleBottomSheet,
                 isChangeData = isChangeData,
                 onClickBackIcon = onClickBackIcon,
-                navigateToHome = navigateToHome,
+                navigateToStorage = navigateToStorage,
                 navigateToFolderManager = navigateToFolderManager,
             )
         }

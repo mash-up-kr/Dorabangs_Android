@@ -8,5 +8,4 @@ sealed class HomeSideEffect {
     data class SaveLink(val folderId: String, val urlLink: String) : HomeSideEffect()
     object NavigateHomeAfterSaveLink : HomeSideEffect()
     data class NavigateSelectLinkFromService(val urlLink: String) : HomeSideEffect()
-    object ShowFolderRemoveToastSnackBar : HomeSideEffect()
 }
