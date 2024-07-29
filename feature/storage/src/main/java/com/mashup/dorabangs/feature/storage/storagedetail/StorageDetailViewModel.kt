@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
@@ -81,8 +82,13 @@ class StorageDetailViewModel @Inject constructor(
                         postCount = folderInfo.postCount,
                         folderType = folderInfo.folderType,
                     ),
+                    toastState = state.toastState.copy(
+                        text = "폴더 이름을 변경했어요.",
+                        toastStyle = ToastStyle.CHECK,
+                    ),
                 )
             }
+            postSideEffect(StorageDetailSideEffect.ShowToastSnackBarRenameFolder)
         }
     }
 
