@@ -76,7 +76,6 @@ fun HomeScreen(
     navigateToHomeTutorial: () -> Unit = {},
     refreshPostPagingListAfterSecond: (String?) -> Unit = {},
 ) {
-
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -103,15 +102,15 @@ fun HomeScreen(
                                     }
                                 },
                                 onClickButton = navigateToHomeTutorial,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 }
 
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_empty),
@@ -152,8 +151,8 @@ fun HomeScreen(
                                             append(
                                                 stringResource(
                                                     id = R.string.home_carousel_count,
-                                                    state.aiClassificationCount
-                                                ) + " "
+                                                    state.aiClassificationCount,
+                                                ) + " ",
                                             )
                                         }
                                         withStyle(SpanStyle(color = DoraColorTokens.Black)) {
@@ -173,8 +172,8 @@ fun HomeScreen(
                                             append(
                                                 stringResource(
                                                     id = R.string.home_carousel_count,
-                                                    state.unReadPostCount
-                                                ) + " "
+                                                    state.unReadPostCount,
+                                                ) + " ",
                                             )
                                         }
                                         withStyle(SpanStyle(color = DoraColorTokens.Black)) {
@@ -206,7 +205,7 @@ fun HomeScreen(
                         onClickMoreButton(postId, folderId)
                     },
                     onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
-                    refreshAfterSecond = { createdAt -> refreshPostPagingListAfterSecond(createdAt) }
+                    refreshAfterSecond = { createdAt -> refreshPostPagingListAfterSecond(createdAt) },
                 )
             }
 
@@ -263,7 +262,7 @@ private fun LazyListScope.Feeds(
                         onClickMoreButton(cardInfo.id, cardInfo.folderId)
                     },
                     onClickBookMarkButton = { onClickBookMarkButton(cardInfo.id, !cardInfo.isFavorite) },
-                    updateCardState = { refreshAfterSecond(cardInfo.createdAt) }
+                    updateCardState = { refreshAfterSecond(cardInfo.createdAt) },
                 )
 
                 Box(
@@ -271,7 +270,7 @@ private fun LazyListScope.Feeds(
                         .padding(horizontal = 20.dp)
                         .fillMaxWidth()
                         .height(0.5.dp)
-                        .background(DoraColorTokens.G2)
+                        .background(DoraColorTokens.G2),
                 )
             }
         }

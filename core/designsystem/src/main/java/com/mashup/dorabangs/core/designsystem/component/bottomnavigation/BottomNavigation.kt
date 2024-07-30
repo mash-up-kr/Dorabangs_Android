@@ -35,7 +35,7 @@ fun DoraBottomNavigation(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(1.dp)
-                .background(DoraColorTokens.G1)
+                .background(DoraColorTokens.G1),
         )
 
         NavigationBar(

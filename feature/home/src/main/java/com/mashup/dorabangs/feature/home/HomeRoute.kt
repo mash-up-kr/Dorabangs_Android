@@ -42,7 +42,7 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
-    val pagingList =  state.feedCards.collectAsLazyPagingItems()
+    val pagingList = state.feedCards.collectAsLazyPagingItems()
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -80,7 +80,7 @@ fun HomeRoute(
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
-            refreshPostPagingListAfterSecond  = viewModel::refreshPostListAfterSecond,
+            refreshPostPagingListAfterSecond = viewModel::refreshPostListAfterSecond,
         )
 
         HomeDoraSnackBar(

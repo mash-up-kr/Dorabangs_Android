@@ -35,7 +35,7 @@ fun CardProgressBar(
     var percentage by rememberSaveable { mutableFloatStateOf(0f) }
 
     LaunchedEffect(Unit) {
-        for (time in initial .. (total * 0.8).toInt() ) {
+        for (time in initial..(total * 0.8).toInt()) {
             delay(10)
             percentage = time.toFloat() / total
         }

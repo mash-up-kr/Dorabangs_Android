@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class DelayTimer(
     private val scope: CoroutineScope,
-    private val action: () -> Unit
+    private val action: () -> Unit,
 ) {
     private var isDelaying = false
     private val timerQueueChannel = Channel<DelayRequest>()
@@ -37,7 +37,7 @@ class DelayTimer(
     private suspend fun processDelayTime(delayRequest: DelayRequest) {
         timerQueue.add(delayRequest)
 
-        if( isDelaying) return
+        if (isDelaying) return
         isDelaying = true
 
         scope.launch {

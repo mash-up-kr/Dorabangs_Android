@@ -283,9 +283,13 @@ fun FeedCardMenuItems(
             modifier = Modifier
                 .size(24.dp)
                 .clickable { onClickBookMarkButton() },
-            painter = if (cardInfo.isFavorite) painterResource(id = R.drawable.ic_bookmark_active) else painterResource(
-                id = R.drawable.ic_bookmark_default
-            ),
+            painter = if (cardInfo.isFavorite) {
+                painterResource(id = R.drawable.ic_bookmark_active)
+            } else {
+                painterResource(
+                    id = R.drawable.ic_bookmark_default,
+                )
+            },
             contentDescription = "menuIcon",
             tint = Color.Unspecified,
         )

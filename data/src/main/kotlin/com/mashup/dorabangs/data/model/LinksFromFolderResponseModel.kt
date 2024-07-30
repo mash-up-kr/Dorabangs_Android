@@ -54,7 +54,7 @@ fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
         url = url,
         userId = userId,
         thumbnailImgUrl = thumbnailImgUrl,
-        aiStatus = aiStatusResponseModel.toDomain()
+        aiStatus = aiStatusResponseModel.toDomain(),
     )
 }
 

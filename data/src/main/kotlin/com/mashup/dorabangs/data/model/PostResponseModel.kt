@@ -74,7 +74,7 @@ fun PostsResponseModel.toPagingDomain(): PageData<List<Post>> {
     )
 }
 
-fun AIStatusResponseModel.toDomain() = when(this) {
+fun AIStatusResponseModel.toDomain() = when (this) {
     AIStatusResponseModel.IN_PROGRESS -> AIStatus.IN_PROGRESS
     AIStatusResponseModel.SUCCESS -> AIStatus.SUCCESS
     AIStatusResponseModel.NOTHING -> AIStatus.NOTHING
