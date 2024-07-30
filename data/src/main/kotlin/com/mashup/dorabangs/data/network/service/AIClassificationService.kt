@@ -2,6 +2,9 @@ package com.mashup.dorabangs.data.network.service
 
 import com.mashup.dorabangs.data.model.AIClassificationFoldersResponseModel
 import com.mashup.dorabangs.data.model.AIClassificationPostsResponseModel
+import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostRequestModel
+import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostResponseModel
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -24,6 +27,12 @@ interface AIClassificationService {
     suspend fun moveAllPostsToRecommendedFolder(
         @Query("suggestionFolderId") suggestionFolderId: String,
     ): AIClassificationPostsResponseModel
+
+    @PATCH("classification/posts/{postId}")
+    suspend fun moveSinglePostToRecommendedFolder(
+        @Path("postId") postId: String,
+        @Body requestModel: AiClassificationMoveSinglePostRequestModel,
+    ): AiClassificationMoveSinglePostResponseModel
 
     @GET("classification/posts/{folderId}")
     suspend fun getAIClassificationPostsByFolder(
