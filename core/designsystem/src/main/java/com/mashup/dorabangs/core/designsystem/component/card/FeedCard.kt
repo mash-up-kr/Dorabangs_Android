@@ -55,10 +55,9 @@ fun FeedCard(
 
     LaunchedEffect(cardInfo.isLoading) {
         var requested = false
-
         while (cardInfo.isLoading) {
             val currentLoadingSecond = if (requested) {
-                8000
+                4000
             } else {
                 requested = true
                 loadingSecond * 1000L

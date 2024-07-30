@@ -74,7 +74,6 @@ fun HomeScreen(
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
-    refreshPostPagingListAfterSecond: (String?) -> Unit = {},
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -205,7 +204,7 @@ fun HomeScreen(
                         onClickMoreButton(postId, folderId)
                     },
                     onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
-                    refreshAfterSecond = { createdAt -> refreshPostPagingListAfterSecond(createdAt) },
+                    refreshPageList = { postsPagingList?.refresh() },
                 )
             }
 
@@ -246,7 +245,7 @@ private fun LazyListScope.Feeds(
     feeds: LazyPagingItems<FeedCardUiModel>?,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
-    refreshAfterSecond: (String?) -> Unit = {},
+    refreshPageList: () -> Unit = {},
 ) {
     if (feeds != null) {
         items(
@@ -262,7 +261,7 @@ private fun LazyListScope.Feeds(
                         onClickMoreButton(cardInfo.id, cardInfo.folderId)
                     },
                     onClickBookMarkButton = { onClickBookMarkButton(cardInfo.id, !cardInfo.isFavorite) },
-                    updateCardState = { refreshAfterSecond(cardInfo.createdAt) },
+                    updateCardState = { refreshPageList() },
                 )
 
                 Box(

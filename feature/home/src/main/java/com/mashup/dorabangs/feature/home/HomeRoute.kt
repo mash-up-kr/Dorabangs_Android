@@ -80,7 +80,6 @@ fun HomeRoute(
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
-            refreshPostPagingListAfterSecond = viewModel::refreshPostListAfterSecond,
         )
 
         HomeDoraSnackBar(

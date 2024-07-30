@@ -30,8 +30,6 @@ import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetIdLinkToReadLaterUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import com.mashup.dorabangs.feature.model.toUiModel
-import com.mashup.dorabangs.feature.util.DelayRequest
-import com.mashup.dorabangs.feature.util.DelayTimer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.firstOrNull
@@ -64,12 +62,6 @@ class HomeViewModel @Inject constructor(
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
-
-    private val delayTimer = DelayTimer(viewModelScope) {
-        intent {
-            postSideEffect(HomeSideEffect.RefreshPostList)
-        }
-    }
 
     init {
         viewModelScope.doraLaunch {
@@ -308,12 +300,6 @@ class HomeViewModel @Inject constructor(
                 state.copy(feedCards = pagingData)
             }
         }
-    }
-
-    fun refreshPostListAfterSecond(timestamp: String?) = viewModelScope.doraLaunch {
-        // Todo :: timestamp에 대한 유효성 검사 필요
-        if (timestamp == null) return@doraLaunch
-        delayTimer.delaySecond(DelayRequest(timestamp))
     }
 
     fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
