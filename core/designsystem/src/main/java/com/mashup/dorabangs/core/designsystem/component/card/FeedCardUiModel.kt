@@ -16,41 +16,6 @@ data class FeedCardUiModel(
     val isLoading: Boolean = false,
 ) {
     companion object {
-        fun getDefaultFeedCard(): List<FeedCardUiModel> {
-            return listOf(
-                FeedCardUiModel(
-                    postId = "",
-                    title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                    content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                    keywordList = listOf("다연", "호현", "석주"),
-                    category = "디자인",
-                    createdAt = "2024-07-18T15:50:36.181Z",
-                    thumbnail = "",
-                    folderId = "",
-                ),
-                FeedCardUiModel(
-                    postId = "",
-                    title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                    content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                    keywordList = listOf("다연", "호현", "석주"),
-                    category = "디자인",
-                    createdAt = "2024-07-18T15:50:36.181Z",
-                    thumbnail = "",
-                    folderId = "",
-                ),
-                FeedCardUiModel(
-                    postId = "",
-                    title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                    content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                    keywordList = listOf("다연", "호현", "석주"),
-                    category = "디자인",
-                    createdAt = "2024-07-18T15:50:36.181Z",
-                    thumbnail = "",
-                    folderId = "",
-                ),
-            )
-        }
-
         fun String?.convertCreatedDate(): Long {
             this?.let {
                 val givenDate = Instant.parse(this)

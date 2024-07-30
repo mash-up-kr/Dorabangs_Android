@@ -8,12 +8,10 @@ class GetAIClassificationPostsUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(
-        page: Int,
         limit: Int,
         order: String,
     ) =
         aiClassificationRepository.getAIClassificationPosts(
-            page = page,
             limit = limit,
             order = order,
         )

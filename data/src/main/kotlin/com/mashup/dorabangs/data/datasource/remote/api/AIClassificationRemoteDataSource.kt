@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.data.datasource.remote.api
 
 import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostResponseModel
+import com.mashup.dorabangs.data.model.classification.AIClassificationAIPostListResponseModel
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
 import com.mashup.dorabangs.domain.model.AIClassificationPosts
 
@@ -12,7 +13,7 @@ interface AIClassificationRemoteDataSource {
         page: Int,
         limit: Int,
         order: String,
-    ): AIClassificationPosts
+    ): AIClassificationAIPostListResponseModel
 
     suspend fun moveAllPostsToRecommendedFolder(
         suggestionFolderId: String,

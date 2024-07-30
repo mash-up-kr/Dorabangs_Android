@@ -9,6 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
@@ -21,9 +24,11 @@ fun ClassificationRoute(
     classificationViewModel: ClassificationViewModel = hiltViewModel(),
 ) {
     val state by classificationViewModel.collectAsState()
+    val pagingList = state.cardInfoList.collectAsLazyPagingItems()
 
     ClassificationScreen(
         state = state,
+        pagingList = pagingList,
         onClickChip = classificationViewModel::changeCategory,
         onClickDeleteButton = classificationViewModel::deleteSelectedItem,
         onClickMoveButton = classificationViewModel::moveSelectedItem,
@@ -36,6 +41,7 @@ fun ClassificationRoute(
 @Composable
 fun ClassificationScreen(
     state: ClassificationState,
+    pagingList: LazyPagingItems<FeedCardUiModel>,
     onClickChip: (Int) -> Unit,
     onClickDeleteButton: (Int) -> Unit,
     onClickMoveButton: (Int) -> Unit,
@@ -71,24 +77,11 @@ fun ClassificationScreen(
         } else {
             ClassificationListScreen(
                 state = state,
+                pagingList = pagingList,
                 onClickDeleteButton = onClickDeleteButton,
                 onClickMoveButton = onClickMoveButton,
                 onClickAllItemMoveButton = onClickAllItemMoveButton,
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewClassificationScreen() {
-    ClassificationScreen(
-        state = ClassificationState(),
-        onClickChip = {},
-        onClickDeleteButton = {},
-        onClickMoveButton = {},
-        onClickAllItemMoveButton = {},
-        onClickBackIcon = {},
-        navigateToHome = {},
-    )
 }
