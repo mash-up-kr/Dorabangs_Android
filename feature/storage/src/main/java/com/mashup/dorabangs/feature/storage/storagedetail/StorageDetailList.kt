@@ -101,7 +101,11 @@ fun StorageDetailList(
                 }
                 items(
                     count = linksPagingList.itemCount,
-                    key = linksPagingList.itemKey(FeedCardUiModel::id),
+                    key = { idx ->
+                        linksPagingList[idx]?.let { item ->
+                            "${item.id}_${item.isFavorite}"
+                        } ?: linksPagingList.itemKey(FeedCardUiModel::id)
+                    },
                     contentType = linksPagingList.itemContentType { "SavedLinks" },
                 ) { idx ->
                     linksPagingList[idx]?.let { cardItem ->

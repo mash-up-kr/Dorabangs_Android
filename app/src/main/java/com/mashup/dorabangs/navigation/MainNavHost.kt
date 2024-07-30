@@ -96,7 +96,7 @@ fun MainNavHost(
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isRemoveSuccess", false)
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChange", isChange)
                 appState.navController.popBackStack()
-                              },
+            },
             navigateToFolderManager = { itemId, type ->
                 val folderManageType = if (type == EditActionType.FolderEdit) FolderManageType.CHANGE else FolderManageType.CREATE
                 appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType, actionType = type, itemId = itemId)

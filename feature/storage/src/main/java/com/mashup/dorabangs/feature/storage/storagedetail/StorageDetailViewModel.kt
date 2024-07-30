@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -222,13 +224,26 @@ class StorageDetailViewModel @Inject constructor(
      * 낙관적 Update추가, 스크롤 위치가 왜 변할까?
      */
     fun addFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
+        Log.d(TAG, "addFavoriteItem: isFavorite$isFavorite")
         intent {
             val postInfo = PostInfo(isFavorite = !isFavorite)
             patchPostInfoUseCase(
                 postId = postId,
                 postInfo = postInfo,
             )
-            intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+            // intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+            reduce {
+                val updateList = state.pagingList.map { pagingData ->
+                    pagingData.map { item ->
+                        if (item.id == postId) {
+                            item.copy(isFavorite = !isFavorite)
+                        } else {
+                            item
+                        }
+                    }
+                }
+                state.copy(pagingList = updateList)
+            }
         }
     }
 

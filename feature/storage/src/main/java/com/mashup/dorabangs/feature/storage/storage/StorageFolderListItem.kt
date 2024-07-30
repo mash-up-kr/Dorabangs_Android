@@ -49,7 +49,7 @@ fun StorageFolderList(
             )
             Spacer(modifier = Modifier.height(20.dp))
         }
-        itemsIndexed(storageState.customStorageFolderList) { idx, item ->
+        itemsIndexed(items = storageState.customStorageFolderList) { idx, item ->
             StorageListItem(
                 item = item,
                 isFirstItem = idx == 0,
