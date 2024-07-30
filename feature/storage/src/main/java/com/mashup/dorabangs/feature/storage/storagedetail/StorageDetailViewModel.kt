@@ -95,7 +95,7 @@ class StorageDetailViewModel @Inject constructor(
             folderId = folderId,
             order = order,
             limit = limit,
-            isRead = isRead
+            isRead = isRead,
         ).cachedIn(viewModelScope)
             .map { pagedData ->
                 pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }

@@ -20,7 +20,7 @@ interface FolderRemoteDataSource {
         page: Int,
         limit: Int,
         order: String,
-        isRead: Boolean?
+        isRead: Boolean?,
     ): LinksFromFolderResponseModel
 
     suspend fun editFolderName(folderName: NewFolderName, folderId: String)

@@ -14,7 +14,7 @@ class GetSavedLinksFromFolderUseCase @Inject constructor(
         folderId: String?,
         order: String,
         limit: Int,
-        isRead: Boolean?
+        isRead: Boolean?,
     ): Flow<PagingData<SavedLinkDetailInfo>> {
         return folderRepository.getLinksFromFolder(
             folderId = folderId,

@@ -6,12 +6,10 @@ import com.mashup.dorabangs.data.model.classification.toPagingDomain
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
 import com.mashup.dorabangs.domain.model.AIClassificationPosts
-import com.mashup.dorabangs.domain.model.PageData
-import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.repository.AIClassificationRepository
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 class AIClassificationRepositoryImpl @Inject constructor(
     private val remoteDataSource: AIClassificationRemoteDataSource,

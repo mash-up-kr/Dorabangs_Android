@@ -34,7 +34,7 @@ class FolderRemoteDataSourceImpl @Inject constructor(
         page: Int,
         limit: Int,
         order: String,
-        isRead: Boolean?
+        isRead: Boolean?,
     ): LinksFromFolderResponseModel =
         folderService.getLinkFolderList(
             folderId = folderId,

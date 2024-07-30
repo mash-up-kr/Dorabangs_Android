@@ -1,16 +1,10 @@
 package com.mashup.dorabangs.data.model.classification
 
-
-import androidx.compose.runtime.key
 import com.mashup.dorabangs.data.model.PagingMetaDataResponseModel
-import com.mashup.dorabangs.data.model.PostsResponseModel
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.model.toPagingMetaDomain
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo
-import com.mashup.dorabangs.domain.model.Post
-import com.mashup.dorabangs.domain.model.Posts
-import com.mashup.dorabangs.domain.model.PostsMetaData
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
