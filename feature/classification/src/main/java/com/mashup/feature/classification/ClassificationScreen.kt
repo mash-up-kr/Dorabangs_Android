@@ -79,7 +79,7 @@ fun ClassificationScreen(
                 onClickChip(it) // UI Update
                 coroutineScope.launch {
                     // 여기서 선택한 칩의 scroll state 구분해줄 방법 만들기
-                    lazyColumnState.scrollToItem(0)
+                    lazyColumnState.animateScrollToItem(0)
                 }
             },
         )
