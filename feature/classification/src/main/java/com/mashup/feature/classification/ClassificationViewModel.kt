@@ -21,11 +21,10 @@ class ClassificationViewModel @Inject constructor(
         container<ClassificationState, ClassificationSideEffect>(ClassificationState())
 
     init {
-        getInitialChipData()
-        getInitialListData()
+        getInitialData()
     }
 
-    private fun getInitialChipData() = viewModelScope.doraLaunch {
+    private fun getInitialData() = viewModelScope.doraLaunch {
         val chips = getAIClassificationFolderListUseCase.invoke()
         intent {
             reduce {
@@ -46,10 +45,6 @@ class ClassificationViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun getInitialListData() = viewModelScope.doraLaunch {
-
     }
 
     fun changeCategory(idx: Int) = intent {
