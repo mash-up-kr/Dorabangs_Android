@@ -206,7 +206,7 @@ private fun LazyListScope.Feeds(
         FeedCard(
             cardInfo = feeds[index],
             onClickMoreButton = {
-                onClickMoreButton(feeds[index].id, feeds[index].folderId)
+                onClickMoreButton(feeds[index].postId, feeds[index].folderId)
             },
         )
         if (index != feeds.lastIndex) {

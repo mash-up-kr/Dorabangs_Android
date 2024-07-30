@@ -4,7 +4,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 data class FeedCardUiModel(
-    val id: String,
+    val postId: String,
     val folderId: String,
     val title: String?,
     val content: String?,
@@ -19,7 +19,7 @@ data class FeedCardUiModel(
         fun getDefaultFeedCard(): List<FeedCardUiModel> {
             return listOf(
                 FeedCardUiModel(
-                    id = "",
+                    postId = "",
                     title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
                     content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
                     keywordList = listOf("다연", "호현", "석주"),
@@ -29,7 +29,7 @@ data class FeedCardUiModel(
                     folderId = "",
                 ),
                 FeedCardUiModel(
-                    id = "",
+                    postId = "",
                     title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
                     content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
                     keywordList = listOf("다연", "호현", "석주"),
@@ -39,7 +39,7 @@ data class FeedCardUiModel(
                     folderId = "",
                 ),
                 FeedCardUiModel(
-                    id = "",
+                    postId = "",
                     title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
                     content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
                     keywordList = listOf("다연", "호현", "석주"),
