@@ -2,8 +2,10 @@ package com.mashup.dorabangs.core.designsystem.component.bottomnavigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -15,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
@@ -23,12 +26,18 @@ fun DoraBottomNavigation(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
-    Box(
-        modifier =
-        Modifier
+    Column(
+        modifier = modifier
             .fillMaxWidth()
             .background(Color.Transparent),
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(DoraColorTokens.G1)
+        )
+
         NavigationBar(
             modifier = modifier,
             containerColor = DoraColorTokens.P1,
