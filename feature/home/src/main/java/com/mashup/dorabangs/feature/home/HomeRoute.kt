@@ -76,6 +76,7 @@ fun HomeRoute(
                 viewModel.updateSelectedPostItem(postId = postId, folderId)
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
+            onClickBookMarkButton = { postId, isFavorite -> viewModel.updateFavoriteItem(postId, isFavorite) },
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,

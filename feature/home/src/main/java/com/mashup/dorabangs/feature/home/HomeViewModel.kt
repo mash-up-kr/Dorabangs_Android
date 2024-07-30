@@ -13,6 +13,7 @@ import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.model.Sort
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
@@ -22,6 +23,7 @@ import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
 import com.mashup.dorabangs.domain.usecase.posts.DeletePost
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.GetUnReadPostsCountUseCase
+import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetIdFromLinkToReadLaterUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
@@ -59,6 +61,7 @@ class HomeViewModel @Inject constructor(
     private val setIdFromLinkToReadLaterUseCase: SetIdLinkToReadLaterUseCase,
     private val deletePostUseCase: DeletePost,
     private val changePostFolderUseCase: ChangePostFolder,
+    private val patchPostInfoUseCase: PatchPostInfoUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -93,6 +96,7 @@ class HomeViewModel @Inject constructor(
     fun changeSelectedTapIdx(index: Int) = intent {
         getSavedLinkFromDefaultFolder(
             folderId = state.tapElements[index].id,
+            favorite = index == FAVORITE_FOLDER_INDEX,
         )
 
         reduce {
@@ -312,6 +316,19 @@ class HomeViewModel @Inject constructor(
         delayTimer.delaySecond(DelayRequest(timestamp))
     }
 
+    fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
+        intent {
+            val postInfo = PostInfo(isFavorite = isFavorite)
+            val response = patchPostInfoUseCase(
+                postId = postId,
+                postInfo = postInfo,
+            )
+            if (response.isSuccess) {
+                postSideEffect(HomeSideEffect.RefreshPostList)
+            }
+        }
+    }
+
     /**
      * 현재 폴더 리스트 가져오기
      */
@@ -357,5 +374,9 @@ class HomeViewModel @Inject constructor(
         changePostFolderUseCase(postId = postId, folderId = folderId)
         setVisibleMovingFolderBottomSheet(false)
         // TODO - 실패 성공 여부 리스트 업데이트
+    }
+
+    companion object {
+        const val FAVORITE_FOLDER_INDEX = 1
     }
 }

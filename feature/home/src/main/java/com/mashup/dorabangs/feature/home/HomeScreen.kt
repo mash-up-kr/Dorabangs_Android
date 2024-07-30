@@ -69,7 +69,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
     onClickChip: (Int) -> Unit = {},
-    onClickMoreButton: (String, String) -> Unit,
+    onClickMoreButton: (String, String) -> Unit = { _, _ -> },
+    onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
@@ -204,6 +205,7 @@ fun HomeScreen(
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
+                    onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
                     refreshAfterSecond = { createdAt -> refreshPostPagingListAfterSecond(createdAt) }
                 )
             }
@@ -244,6 +246,7 @@ fun HomeScreen(
 private fun LazyListScope.Feeds(
     feeds: LazyPagingItems<FeedCardUiModel>?,
     onClickMoreButton: (String, String) -> Unit,
+    onClickBookMarkButton: (String, Boolean) -> Unit,
     refreshAfterSecond: (String?) -> Unit = {},
 ) {
     if (feeds != null) {
@@ -259,6 +262,7 @@ private fun LazyListScope.Feeds(
                     onClickMoreButton = {
                         onClickMoreButton(cardInfo.id, cardInfo.folderId)
                     },
+                    onClickBookMarkButton = { onClickBookMarkButton(cardInfo.id, !cardInfo.isFavorite) },
                     updateCardState = { refreshAfterSecond(cardInfo.createdAt) }
                 )
 
