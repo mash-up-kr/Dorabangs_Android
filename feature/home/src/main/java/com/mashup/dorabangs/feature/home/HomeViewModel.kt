@@ -87,7 +87,7 @@ class HomeViewModel @Inject constructor(
         updateFolderList()
         setAIClassificationCount()
         setPostsCount()
-        getSavedLinkFromDefaultFolder()
+        getSavedLinkFromDefaultFolder(order = Sort.DESC.name)
     }
 
     fun changeSelectedTapIdx(index: Int) = intent {
