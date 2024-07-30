@@ -20,7 +20,7 @@ import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
-import com.mashup.dorabangs.domain.usecase.posts.DeletePost
+import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.GetUnReadPostsCountUseCase
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
@@ -59,7 +59,7 @@ class HomeViewModel @Inject constructor(
     private val getAIClassificationCount: GetAIClassificationCountUseCase,
     private val getIdFromLinkToReadLaterUseCase: GetIdFromLinkToReadLaterUseCase,
     private val setIdFromLinkToReadLaterUseCase: SetIdLinkToReadLaterUseCase,
-    private val deletePostUseCase: DeletePost,
+    private val deletePostUseCase: DeletePostUseCase,
     private val changePostFolderUseCase: ChangePostFolder,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
@@ -352,8 +352,13 @@ class HomeViewModel @Inject constructor(
      * 링크 삭제
      */
     fun deletePost(postId: String) = viewModelScope.doraLaunch {
-        deletePostUseCase(postId)
+        val response = deletePostUseCase(postId)
         setVisibleDialog(false)
+        if (response.isSuccess) {
+            intent {
+                postSideEffect(HomeSideEffect.RefreshPostList)
+            }
+        }
     }
 
     /**

@@ -38,8 +38,12 @@ class PostsRepositoryImpl @Inject constructor(
         DoraSampleResponse(isSuccess = false)
     }
 
-    override suspend fun deletePost(postId: String) =
+    override suspend fun deletePost(postId: String) = runCatching {
         postsRemoteDataSource.deletePost(postId)
+        DoraSampleResponse(isSuccess = true)
+    }.getOrElse {
+        DoraSampleResponse(isSuccess = false)
+    }
 
     override suspend fun changePostFolder(postId: String, folderId: String) =
         postsRemoteDataSource.changePostFolder(postId, folderId)

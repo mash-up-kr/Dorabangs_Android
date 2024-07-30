@@ -24,7 +24,7 @@ interface PostsRepository {
         postInfo: PostInfo,
     ): DoraSampleResponse
 
-    suspend fun deletePost(postId: String)
+    suspend fun deletePost(postId: String): DoraSampleResponse
 
     suspend fun changePostFolder(
         postId: String,
