@@ -21,7 +21,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -263,9 +262,12 @@ private fun LazyListScope.Feeds(
                     updateCardState = { refreshAfterSecond(cardInfo.createdAt) }
                 )
 
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                    thickness = 0.5.dp,
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .fillMaxWidth()
+                        .height(0.5.dp)
+                        .background(DoraColorTokens.G2)
                 )
             }
         }
