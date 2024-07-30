@@ -3,8 +3,10 @@ package com.mashup.feature.classification
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,6 +16,7 @@ import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -50,6 +53,8 @@ fun ClassificationScreen(
     modifier: Modifier = Modifier,
 ) {
     val totalCount = if (state.chipState.totalCount > 99) "99+" else state.chipState.totalCount.toString()
+    val lazyColumnState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -63,19 +68,27 @@ fun ClassificationScreen(
             modifier = modifier.fillMaxWidth(),
             chipList = listOf(
                 DoraChipUiModel(
-                    "",
-                    stringResource(R.string.ai_classification_chips_count, totalCount),
-                    com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_small,
+                    id = "",
+                    title = stringResource(R.string.ai_classification_chips_count, totalCount),
+                    postCount = state.chipState.totalCount,
+                    icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_small,
                 ),
             ) + state.chipState.chipList,
             selectedIndex = state.chipState.currentIndex,
-            onClickChip = { onClickChip(it) },
+            onClickChip = {
+                onClickChip(it) // UI Update
+                coroutineScope.launch {
+                    // 여기서 선택한 칩의 scroll state 구분해줄 방법 만들기
+                    lazyColumnState.scrollToItem(0)
+                }
+            },
         )
         if (state.isClassificationComplete) {
             ClassificationCompleteScreen(navigateToHome = navigateToHome)
         } else {
             ClassificationListScreen(
                 state = state,
+                lazyColumnState = lazyColumnState,
                 pagingList = pagingList,
                 onClickDeleteButton = onClickDeleteButton,
                 onClickMoveButton = onClickMoveButton,

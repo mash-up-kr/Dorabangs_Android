@@ -63,7 +63,8 @@ class ClassificationViewModel @Inject constructor(
                     DoraChipUiModel(
                         id = it.folderId,
                         title = "${it.folderName} $postCount",
-                        icon = null,
+                        icon = it.icon,
+                        postCount = it.postCount,
                     )
                 }.let { chipList ->
                     state.copy(

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -32,6 +33,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 @Composable
 fun ClassificationListScreen(
     state: ClassificationState,
+    lazyColumnState: LazyListState,
     pagingList: LazyPagingItems<FeedCardUiModel>,
     modifier: Modifier = Modifier,
     onClickDeleteButton: (Int) -> Unit = {},
@@ -40,6 +42,7 @@ fun ClassificationListScreen(
 ) {
     LazyColumn(
         modifier = modifier.background(color = DoraColorTokens.White),
+        state = lazyColumnState,
     ) {
         item {
             ClassificationFolderMove(
