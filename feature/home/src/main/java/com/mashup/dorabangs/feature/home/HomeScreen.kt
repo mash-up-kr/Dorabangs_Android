@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -85,20 +86,45 @@ fun HomeScreen(
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
             ) {
-                Icon(
-                    modifier = Modifier.padding(top = 104.dp),
-                    painter = painterResource(id = R.drawable.ic_empty),
-                    contentDescription = "",
-                    tint = Color.Unspecified,
-                )
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = stringResource(id = R.string.home_empty_feed),
-                    style = DoraTypoTokens.caption3Medium,
-                    color = DoraColorTokens.G3,
-                )
+                Spacer(modifier = Modifier.height(104.dp))
+
+                if (state.selectedIndex == 0) {
+                    HomeCarousel(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f),
+                        homeCarouselItems = listOf(
+                            HomeCarouselItem(
+                                lottieRes = R.raw.unread,
+                                description = buildAnnotatedString {
+                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                        append(stringResource(id = R.string.home_carousel_save_introduce))
+                                    }
+                                },
+                                onClickButton = navigateToHomeTutorial,
+                            )
+                        )
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_empty),
+                        contentDescription = "",
+                        tint = Color.Unspecified,
+                    )
+                    Text(
+                        modifier = Modifier.padding(top = 12.dp),
+                        text = stringResource(id = R.string.home_empty_feed),
+                        style = DoraTypoTokens.caption3Medium,
+                        color = DoraColorTokens.G3,
+                    )
+                }
             }
         } else {
             LazyColumn(
@@ -112,54 +138,66 @@ fun HomeScreen(
                         modifier = Modifier.height(104.dp),
                     )
 
-                    HomeCarousel(
-                        homeCarouselItems = listOf(
-                            HomeCarouselItem(
-                                lottieRes = R.raw.ai,
-                                indicatorIcon = R.drawable.ic_ai_8dp,
-                                description = buildAnnotatedString {
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_classified_link_as_ai) + "\n")
-                                    }
-                                    withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
-                                        append(stringResource(id = R.string.home_carousel_count, state.aiClassificationCount) + " ")
-                                    }
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_its_here))
-                                    }
-                                },
-                                onClickButton = navigateToClassification,
-                                isVisible = state.aiClassificationCount > 0,
-                            ),
-                            HomeCarouselItem(
-                                lottieRes = R.raw.unread,
-                                description = buildAnnotatedString {
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_not_read_yet) + "\n")
-                                    }
-                                    withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
-                                        append(stringResource(id = R.string.home_carousel_count, state.unReadPostCount) + " ")
-                                    }
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_its_here))
-                                    }
-                                },
-                                onClickButton = navigateToClassification,
-                                isVisible = state.unReadPostCount > 0,
-                            ),
-                            HomeCarouselItem(
-                                lottieRes = R.raw.unread,
-                                description = buildAnnotatedString {
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_save_introduce))
-                                    }
-                                },
-                                onClickButton = navigateToHomeTutorial,
-                            ),
-                        ).filter { it.isVisible },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
+                    if (state.selectedIndex == 0) {
+                        HomeCarousel(
+                            homeCarouselItems = listOf(
+                                HomeCarouselItem(
+                                    lottieRes = R.raw.ai,
+                                    indicatorIcon = R.drawable.ic_ai_8dp,
+                                    description = buildAnnotatedString {
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_classified_link_as_ai) + "\n")
+                                        }
+                                        withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
+                                            append(
+                                                stringResource(
+                                                    id = R.string.home_carousel_count,
+                                                    state.aiClassificationCount
+                                                ) + " "
+                                            )
+                                        }
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_its_here))
+                                        }
+                                    },
+                                    onClickButton = navigateToClassification,
+                                    isVisible = state.aiClassificationCount > 0,
+                                ),
+                                HomeCarouselItem(
+                                    lottieRes = R.raw.unread,
+                                    description = buildAnnotatedString {
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_not_read_yet) + "\n")
+                                        }
+                                        withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
+                                            append(
+                                                stringResource(
+                                                    id = R.string.home_carousel_count,
+                                                    state.unReadPostCount
+                                                ) + " "
+                                            )
+                                        }
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_its_here))
+                                        }
+                                    },
+                                    onClickButton = navigateToClassification,
+                                    isVisible = state.unReadPostCount > 0,
+                                ),
+                                HomeCarouselItem(
+                                    lottieRes = R.raw.unread,
+                                    description = buildAnnotatedString {
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_save_introduce))
+                                        }
+                                    },
+                                    onClickButton = navigateToHomeTutorial,
+                                ),
+                            ).filter { it.isVisible },
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                        )
+                    }
                 }
 
                 Feeds(
