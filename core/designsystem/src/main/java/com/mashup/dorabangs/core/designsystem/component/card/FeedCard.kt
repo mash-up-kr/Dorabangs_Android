@@ -3,6 +3,7 @@ package com.mashup.dorabangs.core.designsystem.component.card
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -185,7 +187,11 @@ fun FeedCardContent(
 
 @Composable
 fun FeedCardKeyword(keywordList: List<String?>?) {
-    Row {
+    Row(
+        modifier = Modifier.horizontalScroll(
+            state = rememberScrollState(),
+        ),
+    ) {
         keywordList?.forEach { keyword ->
             Box(
                 modifier = Modifier
