@@ -57,7 +57,7 @@ fun StorageDetailRoute(
     val state by storageDetailViewModel.collectAsState()
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val scope = rememberCoroutineScope()
-    val linksPagingList = state.pagingList.collectAsLazyPagingItems()
+    val linksPagingList = storageDetailViewModel.feedListState.collectAsLazyPagingItems()
 
     LaunchedEffect(Unit) {
         storageDetailViewModel.setFolderInfo(folderItem)

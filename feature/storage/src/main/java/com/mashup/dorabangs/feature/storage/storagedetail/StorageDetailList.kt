@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
@@ -101,11 +100,6 @@ fun StorageDetailList(
                 }
                 items(
                     count = linksPagingList.itemCount,
-                    key = { idx ->
-                        linksPagingList[idx]?.let { item ->
-                            "${item.id}_${item.isFavorite}"
-                        } ?: linksPagingList.itemKey(FeedCardUiModel::id)
-                    },
                     contentType = linksPagingList.itemContentType { "SavedLinks" },
                 ) { idx ->
                     linksPagingList[idx]?.let { cardItem ->
