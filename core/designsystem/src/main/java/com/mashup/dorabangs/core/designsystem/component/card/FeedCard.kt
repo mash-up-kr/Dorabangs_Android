@@ -3,6 +3,7 @@ package com.mashup.dorabangs.core.designsystem.component.card
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -185,7 +187,11 @@ fun FeedCardContent(
 
 @Composable
 fun FeedCardKeyword(keywordList: List<String?>?) {
-    Row {
+    Row(
+        modifier = Modifier.horizontalScroll(
+            state = rememberScrollState(),
+        ),
+    ) {
         keywordList?.forEach { keyword ->
             Box(
                 modifier = Modifier
@@ -276,7 +282,7 @@ fun FeedCardMenuItems(
 private fun PreviewFeedCard() {
     val cardInfo =
         FeedCardUiModel(
-            id = "",
+            postId = "",
             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             keywordList = listOf("다연", "호현", "석주"),
@@ -293,7 +299,7 @@ private fun PreviewFeedCard() {
 private fun PreviewLoadingFeedCard() {
     val cardInfo =
         FeedCardUiModel(
-            id = "",
+            postId = "",
             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             keywordList = listOf("다연", "호현", "석주"),
