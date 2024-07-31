@@ -20,6 +20,7 @@ interface FolderRepository {
     suspend fun getLinksFromFolder(
         folderId: String?,
         order: String,
+        limit: Int,
         isRead: Boolean?,
     ): Flow<PagingData<SavedLinkDetailInfo>>
 }

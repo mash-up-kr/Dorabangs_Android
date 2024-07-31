@@ -3,6 +3,7 @@ package com.mashup.dorabangs.data.datasource.remote.impl
 import com.mashup.dorabangs.data.datasource.remote.api.AIClassificationRemoteDataSource
 import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostRequestModel
 import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostResponseModel
+import com.mashup.dorabangs.data.model.classification.AIClassificationAIPostListResponseModel
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.network.service.AIClassificationService
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
@@ -18,15 +19,15 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
             .toDomain()
 
     override suspend fun getAIClassificationPosts(
-        page: Int?,
-        limit: Int?,
-        order: String?,
-    ): AIClassificationPosts =
+        page: Int,
+        limit: Int,
+        order: String,
+    ): AIClassificationAIPostListResponseModel =
         service.getAIClassificationPosts(
             page = page,
             limit = limit,
             order = order,
-        ).toDomain()
+        )
 
     override suspend fun moveAllPostsToRecommendedFolder(suggestionFolderId: String) =
         service.moveAllPostsToRecommendedFolder(

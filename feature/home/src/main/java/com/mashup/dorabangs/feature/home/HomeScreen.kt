@@ -21,6 +21,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,9 +43,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
@@ -242,36 +240,28 @@ fun HomeScreen(
 }
 
 private fun LazyListScope.Feeds(
-    feeds: LazyPagingItems<FeedCardUiModel>?,
+    feeds: List<FeedCardUiModel>,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     refreshPageList: () -> Unit = {},
 ) {
-    if (feeds != null) {
-        items(
-            count = feeds.itemCount,
-            key = feeds.itemKey(FeedCardUiModel::id),
-            contentType = feeds.itemContentType { "SavedLinks" },
-        ) { index ->
-
-            feeds[index]?.let { cardInfo ->
-                FeedCard(
-                    cardInfo = cardInfo,
-                    onClickMoreButton = {
-                        onClickMoreButton(cardInfo.id, cardInfo.folderId)
-                    },
-                    onClickBookMarkButton = { onClickBookMarkButton(cardInfo.id, !cardInfo.isFavorite) },
-                    updateCardState = { refreshPageList() },
-                )
-
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth()
-                        .height(0.5.dp)
-                        .background(DoraColorTokens.G2),
-                )
-            }
+    items(feeds.size) { index ->
+        FeedCard(
+            cardInfo = feeds[index],
+            onClickMoreButton = {
+                onClickMoreButton(feeds[index].postId, feeds[index].folderId)
+            },
+            onClickBookMarkButton = { onClickBookMarkButton(feeds[index].id, !feeds[index].isFavorite) },
+            updateCardState = { refreshPageList() },
+        )
+        if (index != feeds.lastIndex) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .height(0.5.dp)
+                    .background(DoraColorTokens.G2),
+            )
         }
     }
 }

@@ -84,14 +84,14 @@ fun StorageDetailList(
             }
             items(
                 count = linksPagingList.itemCount,
-                key = linksPagingList.itemKey(FeedCardUiModel::id),
+                key = linksPagingList.itemKey(FeedCardUiModel::postId),
                 contentType = linksPagingList.itemContentType { "SavedLinks" },
             ) { idx ->
                 linksPagingList[idx]?.let { cardItem ->
                     FeedCard(
                         cardInfo = cardItem,
-                        onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) },
-                        onClickMoreButton = { onClickMoreButton(cardItem.id) },
+                        onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
+                        onClickMoreButton = { onClickMoreButton(cardItem.postId) },
                     )
                     if (idx != state.folderInfo.postCount - 1) {
                         HorizontalDivider(

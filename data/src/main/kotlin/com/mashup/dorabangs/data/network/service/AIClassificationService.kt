@@ -4,6 +4,7 @@ import com.mashup.dorabangs.data.model.AIClassificationFoldersResponseModel
 import com.mashup.dorabangs.data.model.AIClassificationPostsResponseModel
 import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostRequestModel
 import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostResponseModel
+import com.mashup.dorabangs.data.model.classification.AIClassificationAIPostListResponseModel
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -18,10 +19,10 @@ interface AIClassificationService {
 
     @GET("classification/posts")
     suspend fun getAIClassificationPosts(
-        @Query("page") page: Int? = null,
-        @Query("limit") limit: Int? = null,
-        @Query("order") order: String? = null,
-    ): AIClassificationPostsResponseModel
+        @Query("page") page: Int,
+        @Query("limit") limit: Int,
+        @Query("order") order: String,
+    ): AIClassificationAIPostListResponseModel
 
     @PATCH("classification/posts")
     suspend fun moveAllPostsToRecommendedFolder(

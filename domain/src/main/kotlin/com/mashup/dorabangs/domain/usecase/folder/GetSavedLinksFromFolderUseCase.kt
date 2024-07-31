@@ -13,11 +13,13 @@ class GetSavedLinksFromFolderUseCase @Inject constructor(
     suspend operator fun invoke(
         folderId: String?,
         order: String,
+        limit: Int,
         isRead: Boolean?,
     ): Flow<PagingData<SavedLinkDetailInfo>> {
         return folderRepository.getLinksFromFolder(
             folderId = folderId,
             order = order.lowercase(Locale.ROOT),
+            limit = limit,
             isRead = isRead,
         )
     }

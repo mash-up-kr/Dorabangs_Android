@@ -88,10 +88,16 @@ class StorageDetailViewModel @Inject constructor(
     private fun getSavedLinkFromCustomFolder(
         folderId: String?,
         order: String = StorageDetailSort.ASC.name,
+        limit: Int = 10,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-        val pagingData = savedLinksFromFolderUseCase.invoke(folderId = folderId, order = order, isRead = isRead)
-            .cachedIn(viewModelScope).map { pagedData ->
+        val pagingData = savedLinksFromFolderUseCase.invoke(
+            folderId = folderId,
+            order = order,
+            limit = limit,
+            isRead = isRead,
+        ).cachedIn(viewModelScope)
+            .map { pagedData ->
                 pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
             }.stateIn(
                 scope = viewModelScope,

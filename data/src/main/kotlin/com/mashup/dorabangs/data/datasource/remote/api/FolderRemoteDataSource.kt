@@ -15,7 +15,13 @@ interface FolderRemoteDataSource {
 
     suspend fun createFolder(folderList: NewFolderNameList): CreateFolderResponseModel
 
-    suspend fun getLinksFromFolder(folderId: String?, page: Int, order: String, isRead: Boolean?): LinksFromFolderResponseModel
+    suspend fun getLinksFromFolder(
+        folderId: String?,
+        page: Int,
+        limit: Int,
+        order: String,
+        isRead: Boolean?,
+    ): LinksFromFolderResponseModel
 
     suspend fun editFolderName(folderName: NewFolderName, folderId: String)
 

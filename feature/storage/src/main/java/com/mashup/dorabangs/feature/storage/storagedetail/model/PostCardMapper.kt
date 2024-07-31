@@ -9,7 +9,7 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 
 fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
     return FeedCardUiModel(
-        id = this.id.orEmpty(),
+        postId = this.id.orEmpty(),
         title = this.title,
         content = this.description,
         createdAt = this.createdAt,
@@ -22,7 +22,7 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
 
 fun Post.toUiModel(): FeedCardUiModel {
     return FeedCardUiModel(
-        id = this.id,
+        postId = this.id,
         title = this.title,
         content = this.description,
         createdAt = this.createdAt,
