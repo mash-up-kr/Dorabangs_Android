@@ -17,6 +17,13 @@ data class Post(
     val title: String = "",
     val description: String = "",
     val isFavorite: Boolean = false,
-    val createAt: String = "",
-    val aiStatus: String,
+    val createdAt: String = "",
+    val thumbnailImgUrl: String = "",
+    val aiStatus: AIStatus = AIStatus.NOTHING,
 )
+
+enum class AIStatus {
+    IN_PROGRESS,
+    SUCCESS,
+    NOTHING,
+}

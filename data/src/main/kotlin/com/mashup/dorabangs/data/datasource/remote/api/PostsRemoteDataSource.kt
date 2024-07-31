@@ -29,4 +29,6 @@ interface PostsRemoteDataSource {
         postId: String,
         folderId: String,
     )
+
+    suspend fun getPostsCount(isRead: Boolean? = null): Int
 }

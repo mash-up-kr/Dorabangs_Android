@@ -19,10 +19,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -32,9 +34,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedDate
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedSecond
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
+import kotlinx.coroutines.delay
 
 @Composable
 fun FeedCard(
@@ -43,7 +47,28 @@ fun FeedCard(
     onClickCardItem: () -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
+    updateCardState: () -> Unit = {},
 ) {
+    val loadingSecond = if (!cardInfo.createdAt.isNullOrBlank()) {
+        cardInfo.createdAt.convertCreatedSecond()
+    } else {
+        8
+    }.between(0, 8)
+
+    LaunchedEffect(cardInfo.isLoading) {
+        var requested = false
+        while (cardInfo.isLoading) {
+            val currentLoadingSecond = if (requested) {
+                4000
+            } else {
+                requested = true
+                loadingSecond * 1000L
+            }
+            delay(currentLoadingSecond)
+            updateCardState()
+        }
+    }
+
     Column(
         modifier = modifier
             .background(DoraColorTokens.P1, shape = RectangleShape)
@@ -61,8 +86,11 @@ fun FeedCard(
             )
             Spacer(modifier = Modifier.width(13.dp))
             AsyncImage(
-                modifier = Modifier.size(size = 65.dp),
+                modifier = Modifier
+                    .size(size = 65.dp)
+                    .background(color = DoraColorTokens.G1),
                 model = cardInfo.thumbnail,
+                contentScale = ContentScale.Crop,
                 contentDescription = "url 썸네일",
             )
         }
@@ -74,7 +102,7 @@ fun FeedCard(
                     .height(4.dp),
                 completedColor = DoraColorTokens.Primary,
                 remainColor = DoraGradientToken.Gradient2,
-                current = 10,
+                timeInProgress = minOf(0.8f, cardInfo.createdAt.convertCreatedSecond() / 8f),
             )
             FeedCardCategoryAndDayLabel(
                 cardInfo = cardInfo,
@@ -256,12 +284,17 @@ fun FeedCardMenuItems(
     onClickMoreButton: () -> Unit = {},
 ) {
     Row {
-        val favoriteIcon = if (cardInfo.isFavorite) R.drawable.ic_bookmark_active else R.drawable.ic_bookmark_default
         Icon(
             modifier = Modifier
                 .size(24.dp)
                 .clickable { onClickBookMarkButton() },
-            painter = painterResource(id = favoriteIcon),
+            painter = if (cardInfo.isFavorite) {
+                painterResource(id = R.drawable.ic_bookmark_active)
+            } else {
+                painterResource(
+                    id = R.drawable.ic_bookmark_default,
+                )
+            },
             contentDescription = "menuIcon",
             tint = Color.Unspecified,
         )
@@ -310,4 +343,10 @@ private fun PreviewLoadingFeedCard() {
             folderId = "",
         )
     FeedCard(cardInfo = cardInfo)
+}
+
+private fun Int.between(min: Int, max: Int): Int {
+    if (this < min) return min
+    if (this > max) return max
+    return this
 }

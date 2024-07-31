@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -19,6 +18,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
@@ -42,6 +42,7 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
+    val pagingList = state.feedCards.collectAsLazyPagingItems()
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -59,6 +60,8 @@ fun HomeRoute(
             }
 
             is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+
+            is HomeSideEffect.RefreshPostList -> pagingList.refresh()
             else -> {}
         }
     }
@@ -67,12 +70,14 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
+            postsPagingList = pagingList,
             onClickChip = viewModel::changeSelectedTapIdx,
-            navigateToClassification = navigateToClassification,
             onClickMoreButton = { postId, folderId ->
                 viewModel.updateSelectedPostItem(postId = postId, folderId)
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
+            onClickBookMarkButton = { postId, isFavorite -> viewModel.updateFavoriteItem(postId, isFavorite) },
+            navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
         )

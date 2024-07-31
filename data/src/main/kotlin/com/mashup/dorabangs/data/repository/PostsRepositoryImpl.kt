@@ -3,6 +3,7 @@ package com.mashup.dorabangs.data.repository
 import androidx.paging.PagingData
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.data.utils.doraPager
+import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
@@ -30,12 +31,23 @@ class PostsRepositoryImpl @Inject constructor(
     override suspend fun saveLink(link: Link) =
         postsRemoteDataSource.saveLink(link)
 
-    override suspend fun patchPostInfo(postId: String, postInfo: PostInfo) =
+    override suspend fun patchPostInfo(postId: String, postInfo: PostInfo) = runCatching {
         postsRemoteDataSource.patchPostInfo(postId, postInfo)
+        DoraSampleResponse(isSuccess = true)
+    }.getOrElse {
+        DoraSampleResponse(isSuccess = false)
+    }
 
-    override suspend fun deletePost(postId: String) =
+    override suspend fun deletePost(postId: String) = runCatching {
         postsRemoteDataSource.deletePost(postId)
+        DoraSampleResponse(isSuccess = true)
+    }.getOrElse {
+        DoraSampleResponse(isSuccess = false)
+    }
 
     override suspend fun changePostFolder(postId: String, folderId: String) =
         postsRemoteDataSource.changePostFolder(postId, folderId)
+
+    override suspend fun getPostsCount(isRead: Boolean?): Int =
+        postsRemoteDataSource.getPostsCount(isRead)
 }
