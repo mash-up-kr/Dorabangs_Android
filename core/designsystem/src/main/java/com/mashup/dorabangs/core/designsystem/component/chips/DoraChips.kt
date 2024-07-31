@@ -39,7 +39,7 @@ fun DoraChips(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         item {
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(12.dp))
         }
         items(chipList.size) { index ->
             DoraChip(
@@ -49,7 +49,7 @@ fun DoraChips(
             )
         }
         item {
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(12.dp))
         }
     }
 }

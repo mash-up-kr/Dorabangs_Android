@@ -58,4 +58,7 @@ class PostsRepositoryImpl @Inject constructor(
         }.getOrElse { throwable ->
             DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
         }
+
+    override suspend fun getPostsCount(isRead: Boolean?): Int =
+        postsRemoteDataSource.getPostsCount(isRead)
 }

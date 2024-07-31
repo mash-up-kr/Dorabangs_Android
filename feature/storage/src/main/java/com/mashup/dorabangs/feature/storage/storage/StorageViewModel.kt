@@ -55,8 +55,8 @@ class StorageViewModel @Inject constructor(
         }
     }
 
-    fun setToastState() = intent {
-        reduce { state.copy(toastState = state.toastState.copy(text = "삭제 완료했어요.", toastStyle = ToastStyle.CHECK)) }
+    fun setToastState(toastMsg: String) = intent {
+        reduce { state.copy(toastState = state.toastState.copy(text = toastMsg, toastStyle = ToastStyle.CHECK)) }
         postSideEffect(StorageListSideEffect.ShowFolderRemoveToastSnackBar)
     }
 

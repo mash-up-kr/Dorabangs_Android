@@ -1,9 +1,14 @@
 package com.mashup.dorabangs.data.repository
 
+import androidx.paging.PagingData
 import com.mashup.dorabangs.data.datasource.remote.api.AIClassificationRemoteDataSource
+import com.mashup.dorabangs.data.model.classification.toPagingDomain
+import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
 import com.mashup.dorabangs.domain.model.AIClassificationPosts
+import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.repository.AIClassificationRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AIClassificationRepositoryImpl @Inject constructor(
@@ -14,15 +19,16 @@ class AIClassificationRepositoryImpl @Inject constructor(
         remoteDataSource.getAIClassificationsFolderList()
 
     override suspend fun getAIClassificationPosts(
-        page: Int?,
-        limit: Int?,
-        order: String?,
-    ): AIClassificationPosts =
-        remoteDataSource.getAIClassificationPosts(
-            page = page,
-            limit = limit,
-            order = order,
-        )
+        limit: Int,
+        order: String,
+    ): Flow<PagingData<AIClassificationFeedPost>> =
+        doraPager { page ->
+            remoteDataSource.getAIClassificationPosts(
+                page = page,
+                limit = limit,
+                order = order,
+            ).toPagingDomain()
+        }.flow
 
     override suspend fun moveAllPostsToRecommendedFolder(suggestionFolderId: String): AIClassificationPosts =
         remoteDataSource.moveAllPostsToRecommendedFolder(suggestionFolderId)

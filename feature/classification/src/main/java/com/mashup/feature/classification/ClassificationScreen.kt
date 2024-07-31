@@ -3,15 +3,20 @@ package com.mashup.feature.classification
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -21,9 +26,11 @@ fun ClassificationRoute(
     classificationViewModel: ClassificationViewModel = hiltViewModel(),
 ) {
     val state by classificationViewModel.collectAsState()
+    val pagingList = state.cardInfoList.collectAsLazyPagingItems()
 
     ClassificationScreen(
         state = state,
+        pagingList = pagingList,
         onClickChip = classificationViewModel::changeCategory,
         onClickDeleteButton = classificationViewModel::deleteSelectedItem,
         onClickMoveButton = classificationViewModel::moveSelectedItem,
@@ -36,7 +43,8 @@ fun ClassificationRoute(
 @Composable
 fun ClassificationScreen(
     state: ClassificationState,
-    onClickChip: () -> Unit,
+    pagingList: LazyPagingItems<FeedCardUiModel>,
+    onClickChip: (Int) -> Unit,
     onClickDeleteButton: (Int) -> Unit,
     onClickMoveButton: (Int) -> Unit,
     onClickAllItemMoveButton: () -> Unit,
@@ -44,6 +52,9 @@ fun ClassificationScreen(
     navigateToHome: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val totalCount = if (state.chipState.totalCount > 99) "99+" else state.chipState.totalCount.toString()
+    val lazyColumnState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -57,40 +68,32 @@ fun ClassificationScreen(
             modifier = modifier.fillMaxWidth(),
             chipList = listOf(
                 DoraChipUiModel(
-                    title = "전체 99+",
-                    icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_plus,
+                    id = "",
+                    title = stringResource(R.string.ai_classification_chips_count, totalCount),
+                    postCount = state.chipState.totalCount,
+                    icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_small,
                 ),
-                DoraChipUiModel(
-                    title = "전체 99+",
-                    icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_plus,
-                ),
-            ),
-            selectedIndex = 0,
-            onClickChip = { onClickChip() },
+            ) + state.chipState.chipList,
+            selectedIndex = state.chipState.currentIndex,
+            onClickChip = {
+                onClickChip(it) // UI Update
+                coroutineScope.launch {
+                    // 여기서 선택한 칩의 scroll state 구분해줄 방법 만들기
+                    lazyColumnState.animateScrollToItem(0)
+                }
+            },
         )
         if (state.isClassificationComplete) {
             ClassificationCompleteScreen(navigateToHome = navigateToHome)
         } else {
             ClassificationListScreen(
                 state = state,
+                lazyColumnState = lazyColumnState,
+                pagingList = pagingList,
                 onClickDeleteButton = onClickDeleteButton,
                 onClickMoveButton = onClickMoveButton,
                 onClickAllItemMoveButton = onClickAllItemMoveButton,
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewClassificationScreen() {
-    ClassificationScreen(
-        state = ClassificationState(),
-        onClickChip = {},
-        onClickDeleteButton = {},
-        onClickMoveButton = {},
-        onClickAllItemMoveButton = {},
-        onClickBackIcon = {},
-        navigateToHome = {},
-    )
 }

@@ -19,11 +19,11 @@ fun NavGraphBuilder.storageNavigation(
     composable(
         route = NavigationRoute.StorageScreen.route,
     ) { navBackStackEntry ->
-        val isChangeData = navBackStackEntry.savedStateHandle.get<Boolean>("isChange") ?: false
+        val isChangedData = navBackStackEntry.savedStateHandle.get<Boolean>("isChanged") ?: false
         val isRemoveSuccess = navBackStackEntry.savedStateHandle.get<Boolean>("isRemoveSuccess") ?: false
 
         StorageRoute(
-            isChangeData = isChangeData,
+            isChangeData = isChangedData,
             isRemoveSuccess = isRemoveSuccess,
             navigateToStorageDetail = navigateToStorageDetail,
             navigateToFolderManage = navigateToFolderManage,

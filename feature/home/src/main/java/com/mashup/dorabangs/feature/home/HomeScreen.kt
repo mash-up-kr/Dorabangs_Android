@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +21,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,9 +42,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
@@ -64,8 +68,10 @@ import dev.chrisbanes.haze.hazeChild
 fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
+    postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
     onClickChip: (Int) -> Unit = {},
-    onClickMoreButton: (String, String) -> Unit,
+    onClickMoreButton: (String, String) -> Unit = { _, _ -> },
+    onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
@@ -75,24 +81,49 @@ fun HomeScreen(
     ) {
         val hazeState = remember { HazeState() }
 
-        if (state.feedCards.isEmpty()) {
+        if (postsPagingList?.itemCount == 0) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
             ) {
-                Icon(
-                    modifier = Modifier.padding(top = 104.dp),
-                    painter = painterResource(id = R.drawable.ic_empty),
-                    contentDescription = "",
-                    tint = Color.Unspecified,
-                )
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = stringResource(id = R.string.home_empty_feed),
-                    style = DoraTypoTokens.caption3Medium,
-                    color = DoraColorTokens.G3,
-                )
+                Spacer(modifier = Modifier.height(104.dp))
+
+                if (state.selectedIndex == 0) {
+                    HomeCarousel(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f),
+                        homeCarouselItems = listOf(
+                            HomeCarouselItem(
+                                lottieRes = R.raw.unread,
+                                description = buildAnnotatedString {
+                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                        append(stringResource(id = R.string.home_carousel_save_introduce))
+                                    }
+                                },
+                                onClickButton = navigateToHomeTutorial,
+                            ),
+                        ),
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_empty),
+                        contentDescription = "",
+                        tint = Color.Unspecified,
+                    )
+                    Text(
+                        modifier = Modifier.padding(top = 12.dp),
+                        text = stringResource(id = R.string.home_empty_feed),
+                        style = DoraTypoTokens.caption3Medium,
+                        color = DoraColorTokens.G3,
+                    )
+                }
             }
         } else {
             LazyColumn(
@@ -106,61 +137,75 @@ fun HomeScreen(
                         modifier = Modifier.height(104.dp),
                     )
 
-                    HomeCarousel(
-                        homeCarouselItems = listOf(
-                            HomeCarouselItem(
-                                lottieRes = R.raw.ai,
-                                indicatorIcon = R.drawable.ic_ai_8dp,
-                                description = buildAnnotatedString {
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_classified_link_as_ai) + "\n")
-                                    }
-                                    withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
-                                        append(stringResource(id = R.string.home_carousel_count, state.aiClassificationCount) + " ")
-                                    }
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_its_here))
-                                    }
-                                },
-                                onClickButton = navigateToClassification,
-                                isVisible = state.aiClassificationCount > 0,
-                            ),
-                            HomeCarouselItem(
-                                lottieRes = R.raw.unread,
-                                description = buildAnnotatedString {
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_not_read_yet) + "\n")
-                                    }
-                                    withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
-                                        append(stringResource(id = R.string.home_carousel_count, state.aiClassificationCount) + " ")
-                                    }
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_its_here))
-                                    }
-                                },
-                                onClickButton = navigateToClassification,
-                            ),
-                            HomeCarouselItem(
-                                lottieRes = R.raw.unread,
-                                description = buildAnnotatedString {
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_save_introduce))
-                                    }
-                                },
-                                onClickButton = navigateToHomeTutorial,
-                            ),
-                        ).filter { it.isVisible },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
+                    if (state.selectedIndex == 0) {
+                        HomeCarousel(
+                            homeCarouselItems = listOf(
+                                HomeCarouselItem(
+                                    lottieRes = R.raw.ai,
+                                    indicatorIcon = R.drawable.ic_ai_8dp,
+                                    description = buildAnnotatedString {
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_classified_link_as_ai) + "\n")
+                                        }
+                                        withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
+                                            append(
+                                                stringResource(
+                                                    id = R.string.home_carousel_count,
+                                                    state.aiClassificationCount,
+                                                ) + " ",
+                                            )
+                                        }
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_its_here))
+                                        }
+                                    },
+                                    onClickButton = navigateToClassification,
+                                    isVisible = state.aiClassificationCount > 0,
+                                ),
+                                HomeCarouselItem(
+                                    lottieRes = R.raw.unread,
+                                    description = buildAnnotatedString {
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_not_read_yet) + "\n")
+                                        }
+                                        withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
+                                            append(
+                                                stringResource(
+                                                    id = R.string.home_carousel_count,
+                                                    state.unReadPostCount,
+                                                ) + " ",
+                                            )
+                                        }
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_its_here))
+                                        }
+                                    },
+                                    onClickButton = navigateToClassification,
+                                    isVisible = state.unReadPostCount > 0,
+                                ),
+                                HomeCarouselItem(
+                                    lottieRes = R.raw.unread,
+                                    description = buildAnnotatedString {
+                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
+                                            append(stringResource(id = R.string.home_carousel_save_introduce))
+                                        }
+                                    },
+                                    onClickButton = navigateToHomeTutorial,
+                                ),
+                            ).filter { it.isVisible },
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                        )
+                    }
                 }
 
                 Feeds(
-                    modifier = Modifier,
-                    feeds = state.feedCards,
+                    feeds = postsPagingList,
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
+                    onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
+                    refreshPageList = { postsPagingList?.refresh() },
                 )
             }
 
@@ -198,22 +243,40 @@ fun HomeScreen(
 }
 
 private fun LazyListScope.Feeds(
-    feeds: List<FeedCardUiModel>,
-    modifier: Modifier = Modifier,
+    feeds: LazyPagingItems<FeedCardUiModel>?,
     onClickMoreButton: (String, String) -> Unit,
+    onClickBookMarkButton: (String, Boolean) -> Unit,
+    refreshPageList: () -> Unit = {},
 ) {
-    items(feeds.size) { index ->
-        FeedCard(
-            cardInfo = feeds[index],
-            onClickMoreButton = {
-                onClickMoreButton(feeds[index].id, feeds[index].folderId)
-            },
-        )
-        if (index != feeds.lastIndex) {
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                thickness = 0.5.dp,
-            )
+    if (feeds != null) {
+        items(
+            count = feeds.itemCount,
+            key = feeds.itemKey(FeedCardUiModel::postId),
+            contentType = feeds.itemContentType { "SavedLinks" },
+        ) { index ->
+            feeds[index]?.let { cardInfo ->
+                FeedCard(
+                    cardInfo = cardInfo,
+                    feedCardEntryPoint = FeedCardEntryPoint.Home,
+                    onClickMoreButton = {
+                        onClickMoreButton(cardInfo.postId, cardInfo.folderId)
+                    },
+                    onClickBookMarkButton = {
+                        onClickBookMarkButton(
+                            cardInfo.postId,
+                            !cardInfo.isFavorite,
+                        )
+                    },
+                    updateCardState = { refreshPageList() },
+                )
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .fillMaxWidth()
+                        .height(0.5.dp)
+                        .background(DoraColorTokens.G2),
+                )
+            }
         }
     }
 }

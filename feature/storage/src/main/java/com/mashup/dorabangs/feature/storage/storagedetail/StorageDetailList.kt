@@ -31,7 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
@@ -63,9 +65,7 @@ fun StorageDetailList(
                 onClickTabItem = onClickTabItem,
                 onClickActionIcon = onClickActionIcon,
             )
-            if (isLoading.not()) {
-                StorageDetailEmpty(modifier = modifier)
-            } else {
+            if (isLoading) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     LottieLoader(
                         lottieRes = coreR.raw.spinner,
@@ -74,6 +74,8 @@ fun StorageDetailList(
                             .align(Alignment.Center),
                     )
                 }
+            } else {
+                StorageDetailEmpty(modifier = modifier)
             }
         }
     } else {
@@ -90,7 +92,18 @@ fun StorageDetailList(
                     onClickActionIcon = onClickActionIcon,
                 )
             }
-            if (isLoading.not()) {
+            if (isLoading) {
+                item {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        LottieLoader(
+                            lottieRes = coreR.raw.spinner,
+                            modifier = Modifier
+                                .size(54.dp)
+                                .align(Alignment.Center),
+                        )
+                    }
+                }
+            } else {
                 item {
                     SortButtonRow(
                         isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
@@ -100,13 +113,17 @@ fun StorageDetailList(
                 }
                 items(
                     count = linksPagingList.itemCount,
+                    key = linksPagingList.itemKey { item ->
+                        "${item.postId}_${item.isFavorite}"
+                    },
                     contentType = linksPagingList.itemContentType { "SavedLinks" },
                 ) { idx ->
                     linksPagingList[idx]?.let { cardItem ->
                         FeedCard(
                             cardInfo = cardItem,
-                            onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) },
-                            onClickMoreButton = { onClickMoreButton(cardItem.id) },
+                            onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
+                            onClickMoreButton = { onClickMoreButton(cardItem.postId) },
+                            feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
                         )
                         if (idx != state.folderInfo.postCount - 1) {
                             HorizontalDivider(
@@ -114,17 +131,6 @@ fun StorageDetailList(
                                 thickness = 0.5.dp,
                             )
                         }
-                    }
-                }
-            } else {
-                item {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        LottieLoader(
-                            lottieRes = coreR.raw.spinner,
-                            modifier = Modifier
-                                .size(54.dp)
-                                .align(Alignment.Center),
-                        )
                     }
                 }
             }

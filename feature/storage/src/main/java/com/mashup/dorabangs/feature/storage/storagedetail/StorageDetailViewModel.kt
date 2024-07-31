@@ -20,7 +20,7 @@ import com.mashup.dorabangs.domain.usecase.folder.GetFolderById
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
-import com.mashup.dorabangs.domain.usecase.posts.DeletePost
+import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
@@ -51,7 +51,7 @@ class StorageDetailViewModel @Inject constructor(
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
     private val getPostsUseCase: GetPosts,
     private val deleteFolderUseCase: DeleteFolderUseCase,
-    private val deletePostUseCase: DeletePost,
+    private val deletePostUseCase: DeletePostUseCase,
     private val getFolderListUseCase: GetFolderListUseCase,
     private val changePostFolderUseCase: ChangePostFolder,
     private val getFolderByIdUseCase: GetFolderById,
@@ -80,7 +80,7 @@ class StorageDetailViewModel @Inject constructor(
     /**
      * 현재 폴더 정보 가져오기
      */
-    fun getFolderInfoById(folderId: String) = viewModelScope.doraLaunch {
+    fun getFolderInfoById(folderId: String, toastMsg: String) = viewModelScope.doraLaunch {
         val folderInfo = getFolderByIdUseCase(folderId = folderId)
         intent {
             reduce {
@@ -92,7 +92,7 @@ class StorageDetailViewModel @Inject constructor(
                         folderType = folderInfo.folderType,
                     ),
                     toastState = state.toastState.copy(
-                        text = "폴더 이름을 변경했어요.",
+                        text = toastMsg,
                         toastStyle = ToastStyle.CHECK,
                     ),
                 )
@@ -123,12 +123,14 @@ class StorageDetailViewModel @Inject constructor(
     private fun getSavedLinkFromCustomFolder(
         folderId: String?,
         order: String = StorageDetailSort.ASC.name,
+        limit: Int = 10,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
         savedLinksFromFolderUseCase.invoke(
             folderId = folderId,
             order = order,
             isRead = isRead,
+            limit = limit,
             totalCount = { total ->
                 intent {
                     reduce {
@@ -224,7 +226,7 @@ class StorageDetailViewModel @Inject constructor(
      */
     fun addFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
         _feedListState.value = feedListState.value.map { item ->
-            if (item.id == postId) {
+            if (item.postId == postId) {
                 item.copy(isFavorite = !isFavorite)
             } else {
                 item
@@ -233,7 +235,7 @@ class StorageDetailViewModel @Inject constructor(
         val isSuccessFavorite = patchPostInfoUseCase(postId = postId, postInfo = PostInfo(isFavorite = !isFavorite)).isSuccess
         if (!isSuccessFavorite) {
             _feedListState.value = feedListState.value.map { item ->
-                if (item.id == postId) {
+                if (item.postId == postId) {
                     item.copy(isFavorite = isFavorite)
                 } else {
                     item
@@ -264,7 +266,7 @@ class StorageDetailViewModel @Inject constructor(
         val isSuccessDeleted = deletePostUseCase(postId).isSuccess
         setVisibleDialog(false)
         if (isSuccessDeleted) {
-            _feedListState.value = feedListState.value.filter { item -> item.id != postId }
+            _feedListState.value = feedListState.value.filter { item -> item.postId != postId }
         }
     }
 

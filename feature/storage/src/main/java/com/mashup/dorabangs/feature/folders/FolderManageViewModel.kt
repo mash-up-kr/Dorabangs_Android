@@ -71,10 +71,12 @@ class FolderManageViewModel @Inject constructor(
     fun createFolderWithMoveLink(folderName: String, postId: String) = viewModelScope.doraLaunch {
         val newFolder = createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
         if (newFolder.isSuccess) {
-            val newFolderId = newFolder.result.firstOrNull()?.id.orEmpty()
-            val moveFolder = changePostFolderUseCase.invoke(postId = postId, folderId = newFolderId)
-            if (moveFolder.isSuccess) {
-                intent { postSideEffect(FolderManageSideEffect.NavigateToComplete) }
+            val newFolderId = newFolder.result.firstOrNull()?.id
+            newFolderId?.let { folderId ->
+                val moveFolder = changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
+                if (moveFolder.isSuccess) {
+                    intent { postSideEffect(FolderManageSideEffect.NavigateToComplete) }
+                }
             }
         }
     }

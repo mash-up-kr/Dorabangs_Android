@@ -1,10 +1,12 @@
 package com.mashup.dorabangs.data.model
 
+import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.PostsMetaData
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -21,20 +23,36 @@ data class PostResponseModel(
     val title: String = "",
     val description: String = "",
     val isFavorite: Boolean = false,
-    val createAt: String = "",
-    val aiStatus: String,
+    val createdAt: String = "",
+    val aiStatus: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
+    val thumbnailImgUrl: String = "",
+    val readAt: String = "",
 )
 
-fun PostResponseModel.toDomain() = Post(
-    id = id,
-    folderId = folderId,
-    url = url,
-    title = title,
-    description = description,
-    isFavorite = isFavorite,
-    createAt = createAt,
-    aiStatus = aiStatus,
-)
+@Serializable
+enum class AIStatusResponseModel {
+    @SerialName("in_progress")
+    IN_PROGRESS,
+
+    @SerialName("success")
+    SUCCESS,
+
+    NOTHING,
+}
+
+fun PostResponseModel.toDomain(): Post {
+    return Post(
+        id = id,
+        folderId = folderId,
+        url = url,
+        title = title,
+        description = description,
+        isFavorite = isFavorite,
+        createdAt = createdAt,
+        thumbnailImgUrl = thumbnailImgUrl,
+        aiStatus = aiStatus.toDomain(),
+    )
+}
 
 fun PagingMetaDataResponseModel.toDomain() = PostsMetaData(
     hasNext = hasNext,
@@ -54,4 +72,10 @@ fun PostsResponseModel.toPagingDomain(): PageData<List<Post>> {
             hasNext = metadata.hasNext,
         ),
     )
+}
+
+fun AIStatusResponseModel.toDomain() = when (this) {
+    AIStatusResponseModel.IN_PROGRESS -> AIStatus.IN_PROGRESS
+    AIStatusResponseModel.SUCCESS -> AIStatus.SUCCESS
+    AIStatusResponseModel.NOTHING -> AIStatus.NOTHING
 }

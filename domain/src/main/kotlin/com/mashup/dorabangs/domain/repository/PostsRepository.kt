@@ -31,4 +31,6 @@ interface PostsRepository {
         postId: String,
         folderId: String,
     ): DoraSampleResponse
+
+    suspend fun getPostsCount(isRead: Boolean? = null): Int
 }
