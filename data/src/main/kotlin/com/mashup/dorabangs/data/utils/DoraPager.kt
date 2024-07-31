@@ -8,7 +8,7 @@ import com.mashup.dorabangs.domain.model.PageData
 fun <T : Any> doraPager(
     pageSize: Int = PAGING_SIZE,
     apiExecutor: suspend (Int) -> PageData<List<T>>,
-    totalCount: (Int) -> Unit,
+    totalCount: (Int) -> Unit = {},
 ): Pager<Int, T> = Pager(
     config = PagingConfig(
         pageSize = pageSize,
