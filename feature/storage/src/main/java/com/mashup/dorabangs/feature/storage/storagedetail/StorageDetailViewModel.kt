@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -222,19 +220,21 @@ class StorageDetailViewModel @Inject constructor(
     }
 
     /**
-     * 즐겨찾기 추가
+     * 즐겨찾기 추가 - 낙관적 업데이트 적용
      */
     fun addFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
-        Log.d(TAG, "addFavoriteItem: isFavorite$isFavorite")
-        intent {
-            val postInfo = PostInfo(isFavorite = !isFavorite)
-            patchPostInfoUseCase(
-                postId = postId,
-                postInfo = postInfo,
-            )
+        _feedListState.value = feedListState.value.map { item ->
+            if (item.id == postId) {
+                item.copy(isFavorite = !isFavorite)
+            } else {
+                item
+            }
+        }
+        val isSuccessFavorite = patchPostInfoUseCase(postId = postId, postInfo = PostInfo(isFavorite = !isFavorite)).isSuccess
+        if (!isSuccessFavorite) {
             _feedListState.value = feedListState.value.map { item ->
                 if (item.id == postId) {
-                    item.copy(isFavorite = !isFavorite)
+                    item.copy(isFavorite = isFavorite)
                 } else {
                     item
                 }
@@ -261,9 +261,11 @@ class StorageDetailViewModel @Inject constructor(
      * 링크 삭제
      */
     fun deletePost(postId: String) = viewModelScope.doraLaunch {
-        deletePostUseCase(postId)
+        val isSuccessDeleted = deletePostUseCase(postId).isSuccess
         setVisibleDialog(false)
-        _feedListState.value = feedListState.value.filter { item -> item.id != postId }
+        if (isSuccessDeleted) {
+            _feedListState.value = feedListState.value.filter { item -> item.id != postId }
+        }
     }
 
     /**
