@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +51,7 @@ fun StorageRoute(
     navigateToStorageDetail: (Folder) -> Unit,
     navigateToFolderManage: (FolderManageType, String) -> Unit,
 ) {
+    val context = LocalContext.current
     val storageState by storageViewModel.collectAsState()
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val scope = rememberCoroutineScope()
@@ -67,7 +69,7 @@ fun StorageRoute(
 
     LaunchedEffect(Unit) {
         if (isChangeData) storageViewModel.getFolderList()
-        if (isRemoveSuccess) storageViewModel.setToastState()
+        if (isRemoveSuccess) storageViewModel.setToastState(context.getString(R.string.toast_remove_folder))
     }
 
     Box {
