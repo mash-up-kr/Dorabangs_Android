@@ -23,7 +23,7 @@ fun NavGraphBuilder.storageNavigation(
         val isRemoveSuccess = navBackStackEntry.savedStateHandle.get<Boolean>("isRemoveSuccess") ?: false
 
         StorageRoute(
-            isChangeData = isChangedData,
+            isChangedData = isChangedData,
             isRemoveSuccess = isRemoveSuccess,
             navigateToStorageDetail = navigateToStorageDetail,
             navigateToFolderManage = navigateToFolderManage,
