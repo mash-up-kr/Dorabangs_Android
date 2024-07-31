@@ -33,6 +33,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
@@ -114,16 +115,17 @@ fun StorageDetailList(
                     count = linksPagingList.itemCount,
                     key = { idx ->
                         linksPagingList[idx]?.let { item ->
-                            "${item.id}_${item.isFavorite}"
-                        } ?: linksPagingList.itemKey(FeedCardUiModel::id)
+                            "${item.postId}_${item.isFavorite}"
+                        } ?: linksPagingList.itemKey(FeedCardUiModel::postId)
                     },
                     contentType = linksPagingList.itemContentType { "SavedLinks" },
                 ) { idx ->
                     linksPagingList[idx]?.let { cardItem ->
                         FeedCard(
                             cardInfo = cardItem,
-                            onClickBookMarkButton = { onClickBookMarkButton(cardItem.id, cardItem.isFavorite) },
-                            onClickMoreButton = { onClickMoreButton(cardItem.id) },
+                            onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
+                            onClickMoreButton = { onClickMoreButton(cardItem.postId) },
+                            feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
                         )
                         if (idx != state.folderInfo.postCount - 1) {
                             HorizontalDivider(

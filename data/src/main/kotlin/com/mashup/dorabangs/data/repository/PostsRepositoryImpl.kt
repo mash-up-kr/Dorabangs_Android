@@ -35,11 +35,19 @@ class PostsRepositoryImpl @Inject constructor(
     override suspend fun saveLink(link: Link) =
         postsRemoteDataSource.saveLink(link)
 
-    override suspend fun patchPostInfo(postId: String, postInfo: PostInfo) =
+    override suspend fun patchPostInfo(postId: String, postInfo: PostInfo) = runCatching {
         postsRemoteDataSource.patchPostInfo(postId, postInfo)
+        DoraSampleResponse(isSuccess = true)
+    }.getOrElse {
+        DoraSampleResponse(isSuccess = false)
+    }
 
-    override suspend fun deletePost(postId: String) =
+    override suspend fun deletePost(postId: String) = runCatching {
         postsRemoteDataSource.deletePost(postId)
+        DoraSampleResponse(isSuccess = true)
+    }.getOrElse {
+        DoraSampleResponse(isSuccess = false)
+    }
 
     override suspend fun changePostFolder(postId: String, folderId: String): DoraSampleResponse =
         runCatching {
@@ -48,4 +56,7 @@ class PostsRepositoryImpl @Inject constructor(
         }.getOrElse { throwable ->
             DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
         }
+
+    override suspend fun getPostsCount(isRead: Boolean?): Int =
+        postsRemoteDataSource.getPostsCount(isRead)
 }

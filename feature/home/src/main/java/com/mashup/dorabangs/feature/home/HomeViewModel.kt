@@ -3,27 +3,38 @@ package com.mashup.dorabangs.feature.home
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.model.PostInfo
+import com.mashup.dorabangs.domain.model.Sort
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
+import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
-import com.mashup.dorabangs.domain.usecase.posts.DeletePost
+import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
+import com.mashup.dorabangs.domain.usecase.posts.GetUnReadPostsCountUseCase
+import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetIdFromLinkToReadLaterUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetLastCopiedUrlUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetIdLinkToReadLaterUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
+import com.mashup.dorabangs.feature.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -37,15 +48,18 @@ class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
     private val getFolderList: GetFolderListUseCase,
-    private val getPosts: GetPosts,
+    private val getPostsUseCase: GetPosts,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
     private val createFolderUseCase: CreateFolderUseCase,
     private val saveLinkUseCase: SaveLinkUseCase,
+    private val getSavedLinksFromFolderUseCase: GetSavedLinksFromFolderUseCase,
+    private val getUnReadPostsCountUseCase: GetUnReadPostsCountUseCase,
     private val getAIClassificationCount: GetAIClassificationCountUseCase,
     private val getIdFromLinkToReadLaterUseCase: GetIdFromLinkToReadLaterUseCase,
     private val setIdFromLinkToReadLaterUseCase: SetIdLinkToReadLaterUseCase,
-    private val deletePostUseCase: DeletePost,
+    private val deletePostUseCase: DeletePostUseCase,
     private val changePostFolderUseCase: ChangePostFolder,
+    private val patchPostInfoUseCase: PatchPostInfoUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -67,9 +81,16 @@ class HomeViewModel @Inject constructor(
 
         updateFolderList()
         setAIClassificationCount()
+        setPostsCount()
+        getSavedLinkFromDefaultFolder(order = Sort.DESC.name)
     }
 
     fun changeSelectedTapIdx(index: Int) = intent {
+        getSavedLinkFromDefaultFolder(
+            folderId = state.tapElements[index].id,
+            favorite = index == FAVORITE_FOLDER_INDEX,
+        )
+
         reduce {
             state.copy(selectedIndex = index)
         }
@@ -234,6 +255,67 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun setPostsCount() = viewModelScope.launch {
+        val count = getUnReadPostsCountUseCase()
+        intent {
+            reduce {
+                state.copy(unReadPostCount = count)
+            }
+        }
+    }
+
+    private fun getSavedLinkFromDefaultFolder(
+        order: String = Sort.ASC.name,
+        folderId: String? = null,
+        favorite: Boolean = false,
+        isRead: Boolean? = null,
+    ) = viewModelScope.doraLaunch {
+        val pagingData =
+            if (folderId.isNullOrBlank()) {
+                getPostsUseCase.invoke(order = order, favorite = favorite, isRead = isRead)
+                    .cachedIn(viewModelScope).map { pagedData ->
+                        pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+                    }.stateIn(
+                        scope = viewModelScope,
+                        started = SharingStarted.Lazily,
+                        initialValue = PagingData.empty(),
+                    )
+            } else {
+                getSavedLinksFromFolderUseCase.invoke(
+                    folderId = folderId,
+                    order = order,
+                    limit = 10,
+                    isRead = isRead,
+                )
+                    .cachedIn(viewModelScope).map { pagedData ->
+                        pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+                    }
+                    .stateIn(
+                        scope = viewModelScope,
+                        started = SharingStarted.Lazily,
+                        initialValue = PagingData.empty(),
+                    )
+            }
+        intent {
+            reduce {
+                state.copy(feedCards = pagingData)
+            }
+        }
+    }
+
+    fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
+        intent {
+            val postInfo = PostInfo(isFavorite = isFavorite)
+            val response = patchPostInfoUseCase(
+                postId = postId,
+                postInfo = postInfo,
+            )
+            if (response.isSuccess) {
+                postSideEffect(HomeSideEffect.RefreshPostList)
+            }
+        }
+    }
+
     /**
      * 현재 폴더 리스트 가져오기
      */
@@ -257,8 +339,13 @@ class HomeViewModel @Inject constructor(
      * 링크 삭제
      */
     fun deletePost(postId: String) = viewModelScope.doraLaunch {
-        deletePostUseCase(postId)
+        val response = deletePostUseCase(postId)
         setVisibleDialog(false)
+        if (response.isSuccess) {
+            intent {
+                postSideEffect(HomeSideEffect.RefreshPostList)
+            }
+        }
     }
 
     /**
@@ -281,65 +368,7 @@ class HomeViewModel @Inject constructor(
         // TODO - 실패 성공 여부 리스트 업데이트
     }
 
-    init {
-        intent {
-            reduce {
-                state.copy(
-                    feedCards = listOf(
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                            isLoading = true,
-                            folderId = "",
-                        ),
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                            folderId = "",
-                        ),
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                            folderId = "",
-                        ),
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                            folderId = "",
-                        ),
-                        FeedCardUiModel(
-                            id = "",
-                            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
-                            keywordList = listOf("다연", "호현", "석주"),
-                            category = "디자인",
-                            createdAt = "2024-07-18T15:50:36.181Z",
-                            thumbnail = "",
-                            folderId = "",
-                        ),
-                    ),
-                )
-            }
-        }
+    companion object {
+        const val FAVORITE_FOLDER_INDEX = 1
     }
 }

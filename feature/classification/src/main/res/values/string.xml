@@ -4,4 +4,5 @@
     <string name="ai_classification_all_move">모두 이동</string>
     <string name="ai_classification_navigate_home">홈으로 이동</string>
     <string name="ai_classification_complete">분류한 링크를 모두 확인했어요!</string>
+    <string name="ai_classification_chips_count">전체 %s</string>
 </resources>

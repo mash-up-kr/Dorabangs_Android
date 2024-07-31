@@ -60,6 +60,7 @@ class FolderRepositoryImpl @Inject constructor(
     override suspend fun getLinksFromFolder(
         folderId: String?,
         order: String,
+        limit: Int,
         isRead: Boolean?,
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<SavedLinkDetailInfo>> =
@@ -68,6 +69,7 @@ class FolderRepositoryImpl @Inject constructor(
                 remoteDataSource.getLinksFromFolder(
                     folderId = folderId,
                     page = page,
+                    limit = limit,
                     order = order,
                     isRead = isRead,
                 ).toDomain()

@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +18,7 @@ import com.mashup.dorabangs.domain.usecase.folder.GetFolderById
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
-import com.mashup.dorabangs.domain.usecase.posts.DeletePost
+import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
@@ -47,7 +45,7 @@ class StorageDetailViewModel @Inject constructor(
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
     private val getPostsUseCase: GetPosts,
     private val deleteFolderUseCase: DeleteFolderUseCase,
-    private val deletePostUseCase: DeletePost,
+    private val deletePostUseCase: DeletePostUseCase,
     private val getFolderListUseCase: GetFolderListUseCase,
     private val changePostFolderUseCase: ChangePostFolder,
     private val getFolderByIdUseCase: GetFolderById,
@@ -116,12 +114,14 @@ class StorageDetailViewModel @Inject constructor(
     private fun getSavedLinkFromCustomFolder(
         folderId: String?,
         order: String = StorageDetailSort.ASC.name,
+        limit: Int = 10,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
         val pagingData = savedLinksFromFolderUseCase.invoke(
             folderId = folderId,
             order = order,
             isRead = isRead,
+            limit = limit,
             totalCount = { total ->
                 intent {
                     reduce {
@@ -130,14 +130,13 @@ class StorageDetailViewModel @Inject constructor(
                     }
                 }
             },
+        ).cachedIn(viewModelScope).map { pagedData ->
+            pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = PagingData.empty(),
         )
-            .cachedIn(viewModelScope).map { pagedData ->
-                pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Lazily,
-                initialValue = PagingData.empty(),
-            )
         intent {
             reduce {
                 state.copy(pagingList = pagingData)
@@ -224,7 +223,6 @@ class StorageDetailViewModel @Inject constructor(
      * 낙관적 Update추가, 스크롤 위치가 왜 변할까?
      */
     fun addFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
-        Log.d(TAG, "addFavoriteItem: isFavorite$isFavorite")
         intent {
             val postInfo = PostInfo(isFavorite = !isFavorite)
             patchPostInfoUseCase(
@@ -235,7 +233,7 @@ class StorageDetailViewModel @Inject constructor(
             reduce {
                 val updateList = state.pagingList.map { pagingData ->
                     pagingData.map { item ->
-                        if (item.id == postId) {
+                        if (item.postId == postId) {
                             item.copy(isFavorite = !isFavorite)
                         } else {
                             item
