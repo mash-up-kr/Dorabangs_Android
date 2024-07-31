@@ -1,6 +1,5 @@
 package com.mashup.dorabangs.domain.usecase.aiclassification
 
-import com.mashup.dorabangs.domain.model.Sort
 import com.mashup.dorabangs.domain.repository.AIClassificationRepository
 import javax.inject.Inject
 

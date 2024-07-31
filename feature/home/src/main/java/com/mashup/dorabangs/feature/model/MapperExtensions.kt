@@ -7,7 +7,7 @@ import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 
 fun Post.toUiModel(): FeedCardUiModel {
     return FeedCardUiModel(
-        id = this.id,
+        postId = this.id,
         folderId = this.folderId,
         title = this.title,
         content = this.description,
@@ -21,7 +21,7 @@ fun Post.toUiModel(): FeedCardUiModel {
 
 fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
     return FeedCardUiModel(
-        id = this.id ?: "",
+        postId = this.id ?: "",
         folderId = this.folderId.orEmpty(),
         title = this.title,
         content = this.description,

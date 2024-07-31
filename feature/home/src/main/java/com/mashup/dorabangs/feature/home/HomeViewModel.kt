@@ -284,6 +284,7 @@ class HomeViewModel @Inject constructor(
                 getSavedLinksFromFolderUseCase.invoke(
                     folderId = folderId,
                     order = order,
+                    limit = 10,
                     isRead = isRead,
                 )
                     .cachedIn(viewModelScope).map { pagedData ->
