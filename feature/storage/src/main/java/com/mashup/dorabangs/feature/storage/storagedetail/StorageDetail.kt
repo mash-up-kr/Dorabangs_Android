@@ -51,7 +51,7 @@ fun StorageDetailRoute(
     onClickBackIcon: () -> Unit,
     modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
-    isChangeData: Boolean = false,
+    isChangedData: Boolean = false,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -65,7 +65,7 @@ fun StorageDetailRoute(
     LaunchedEffect(Unit) {
         storageDetailViewModel.setFolderInfo(folderItem)
 
-        if (isChangeData) {
+        if (isChangedData) {
             if (state.editActionType == EditActionType.FolderEdit) {
                 storageDetailViewModel.getFolderInfoById(
                     folderId = state.folderInfo.folderId.orEmpty(),

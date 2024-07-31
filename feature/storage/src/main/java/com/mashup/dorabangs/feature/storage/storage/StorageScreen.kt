@@ -45,7 +45,7 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun StorageRoute(
-    isChangeData: Boolean = false,
+    isChangedData: Boolean = false,
     isRemoveSuccess: Boolean = false,
     storageViewModel: StorageViewModel = hiltViewModel(),
     navigateToStorageDetail: (Folder) -> Unit,
@@ -68,7 +68,7 @@ fun StorageRoute(
     }
 
     LaunchedEffect(Unit) {
-        if (isChangeData) storageViewModel.getFolderList()
+        if (isChangedData) storageViewModel.getFolderList()
         if (isRemoveSuccess) storageViewModel.setToastState(context.getString(R.string.toast_remove_folder))
     }
 
