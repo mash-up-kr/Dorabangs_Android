@@ -22,7 +22,7 @@ fun Post.toUiModel(): FeedCardUiModel {
 fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
     return FeedCardUiModel(
         id = this.id ?: "",
-        folderId = this.folderId ?: "",
+        folderId = this.folderId.orEmpty(),
         title = this.title,
         content = this.description,
         createdAt = this.createdAt,

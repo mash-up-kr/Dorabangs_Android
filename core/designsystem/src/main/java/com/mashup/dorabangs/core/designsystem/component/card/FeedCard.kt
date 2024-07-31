@@ -100,7 +100,7 @@ fun FeedCard(
                     .height(4.dp),
                 completedColor = DoraColorTokens.Primary,
                 remainColor = DoraGradientToken.Gradient2,
-                initial = loadingSecond * 100,
+                timeInProgress = minOf(0.8f, cardInfo.createdAt.convertCreatedSecond() / 8f),
             )
             FeedCardCategoryAndDayLabel(
                 cardInfo = cardInfo,

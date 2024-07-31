@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.core.designsystem.component.card
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -12,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -22,23 +24,24 @@ import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
-import kotlinx.coroutines.delay
 
 @Composable
 fun CardProgressBar(
     completedColor: Color,
     remainColor: Brush,
     modifier: Modifier = Modifier,
-    initial: Int = 0,
-    total: Int = 1000,
+    timeInProgress: Float = 0f,
 ) {
-    var percentage by rememberSaveable { mutableFloatStateOf(0f) }
+    var targetPercentage by remember { mutableFloatStateOf(0.0f) }
+
+    val animatedPercentage by animateFloatAsState(
+        targetValue = targetPercentage,
+        animationSpec = tween(durationMillis = 8000),
+        label = "",
+    )
 
     LaunchedEffect(Unit) {
-        for (time in initial..(total * 0.8).toInt()) {
-            delay(10)
-            percentage = time.toFloat() / total
-        }
+        targetPercentage = 0.8f - timeInProgress
     }
 
     Row(
@@ -46,7 +49,7 @@ fun CardProgressBar(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(percentage)
+                .fillMaxWidth(timeInProgress + animatedPercentage)
                 .fillMaxHeight()
                 .background(
                     color = completedColor,
@@ -75,6 +78,5 @@ fun PreviewCardProgressBar() {
             .height(4.dp),
         completedColor = DoraColorTokens.Black,
         remainColor = DoraGradientToken.Gradient2,
-        initial = 800,
     )
 }
