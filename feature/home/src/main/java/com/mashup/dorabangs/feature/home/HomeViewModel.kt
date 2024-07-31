@@ -270,11 +270,15 @@ class HomeViewModel @Inject constructor(
         favorite: Boolean = false,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
+        val folders = getFolderList.invoke()
         val pagingData =
             if (folderId.isNullOrBlank()) {
                 getPostsUseCase.invoke(order = order, favorite = favorite, isRead = isRead)
                     .cachedIn(viewModelScope).map { pagedData ->
-                        pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+                        pagedData.map { savedLinkInfo ->
+                            val category = folders.toList().firstOrNull { folder -> savedLinkInfo.folderId == folder.id }
+                            savedLinkInfo.toUiModel(category?.name)
+                        }
                     }.stateIn(
                         scope = viewModelScope,
                         started = SharingStarted.Lazily,
@@ -288,7 +292,10 @@ class HomeViewModel @Inject constructor(
                     isRead = isRead,
                 )
                     .cachedIn(viewModelScope).map { pagedData ->
-                        pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+                        pagedData.map { savedLinkInfo ->
+                            val category = folders.toList().firstOrNull { folder -> savedLinkInfo.folderId == folder.id }
+                            savedLinkInfo.toUiModel(category?.name)
+                        }
                     }
                     .stateIn(
                         scope = viewModelScope,
