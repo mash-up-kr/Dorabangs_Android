@@ -216,9 +216,7 @@ fun FeedCardContent(
 @Composable
 fun FeedCardKeyword(keywordList: List<String?>?) {
     Row(
-        modifier = Modifier.horizontalScroll(
-            state = rememberScrollState(),
-        ),
+        modifier = Modifier
     ) {
         keywordList?.forEach { keyword ->
             Box(
