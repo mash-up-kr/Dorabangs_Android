@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +38,7 @@ import com.mashup.dorabangs.feature.storage.storagedetail.model.toSelectBottomSh
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
+import com.mashup.dorabangs.feature.storage.R as storageR
 
 val MinToolbarHeight = 96.dp
 val MaxToolbarHeight = 161.dp
@@ -52,6 +54,7 @@ fun StorageDetailRoute(
     isChangeData: Boolean = false,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val listState = rememberLazyListState()
     val overlapHeightPx = with(LocalDensity.current) { MaxToolbarHeight.toPx() - MinToolbarHeight.toPx() }
     val state by storageDetailViewModel.collectAsState()
@@ -64,7 +67,9 @@ fun StorageDetailRoute(
 
         if (isChangeData) {
             if (state.editActionType == EditActionType.FolderEdit) {
-                storageDetailViewModel.getFolderInfoById(state.folderInfo.folderId.orEmpty())
+                storageDetailViewModel.getFolderInfoById(
+                    folderId = state.folderInfo.folderId.orEmpty(),
+                    toastMsg = context.getString(storageR.string.toast_rename_folder))
             } else
                 linksPagingList.refresh()
         }
