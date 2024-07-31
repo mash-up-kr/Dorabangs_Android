@@ -24,6 +24,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
@@ -139,7 +140,7 @@ fun ClassificationCardItem(
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
-        FeedCard(cardInfo = cardItem)
+        FeedCard(cardInfo = cardItem, feedCardEntryPoint = FeedCardEntryPoint.AiClassification)
         DoraButtons.DoraColorFullMaxBtn(
             modifier = Modifier
                 .fillMaxWidth()

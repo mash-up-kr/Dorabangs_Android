@@ -41,6 +41,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun FeedCard(
     cardInfo: FeedCardUiModel,
+    feedCardEntryPoint: FeedCardEntryPoint,
     modifier: Modifier = Modifier,
     onClickCardItem: () -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
@@ -121,6 +122,7 @@ fun FeedCard(
                     cardInfo = cardInfo,
                     onClickBookMarkButton = onClickBookMarkButton,
                     onClickMoreButton = onClickMoreButton,
+                    feedCardEntryPoint = feedCardEntryPoint,
                 )
             }
         }
@@ -276,34 +278,43 @@ fun FeedCardCategoryAndDayLabel(
 @Composable
 fun FeedCardMenuItems(
     cardInfo: FeedCardUiModel,
+    feedCardEntryPoint: FeedCardEntryPoint,
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
 ) {
-    Row {
-        Icon(
-            modifier = Modifier
-                .size(24.dp)
-                .clickable { onClickBookMarkButton() },
-            painter = if (cardInfo.isFavorite) {
-                painterResource(id = R.drawable.ic_bookmark_active)
-            } else {
-                painterResource(
-                    id = R.drawable.ic_bookmark_default,
-                )
-            },
-            contentDescription = "menuIcon",
-            tint = Color.Unspecified,
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Icon(
-            modifier = Modifier
-                .size(24.dp)
-                .clickable { onClickMoreButton() },
-            painter = painterResource(id = R.drawable.ic_more_gray),
-            contentDescription = "menuIcon",
-            tint = Color.Unspecified,
-        )
+    if (feedCardEntryPoint !is FeedCardEntryPoint.AiClassification) {
+        Row {
+            Icon(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable { onClickBookMarkButton() },
+                painter = if (cardInfo.isFavorite) {
+                    painterResource(id = R.drawable.ic_bookmark_active)
+                } else {
+                    painterResource(
+                        id = R.drawable.ic_bookmark_default,
+                    )
+                },
+                contentDescription = "menuIcon",
+                tint = Color.Unspecified,
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Icon(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable { onClickMoreButton() },
+                painter = painterResource(id = R.drawable.ic_more_gray),
+                contentDescription = "menuIcon",
+                tint = Color.Unspecified,
+            )
+        }
     }
+}
+
+sealed class FeedCardEntryPoint {
+    object StorageDetail : FeedCardEntryPoint()
+    object AiClassification : FeedCardEntryPoint()
+    object Home : FeedCardEntryPoint()
 }
 
 @Preview
@@ -320,7 +331,7 @@ private fun PreviewFeedCard() {
             thumbnail = "",
             folderId = "",
         )
-    FeedCard(cardInfo = cardInfo)
+    FeedCard(cardInfo = cardInfo, feedCardEntryPoint = FeedCardEntryPoint.StorageDetail)
 }
 
 @Preview
@@ -338,7 +349,7 @@ private fun PreviewLoadingFeedCard() {
             isLoading = true,
             folderId = "",
         )
-    FeedCard(cardInfo = cardInfo)
+    FeedCard(cardInfo = cardInfo, feedCardEntryPoint = FeedCardEntryPoint.AiClassification)
 }
 
 private fun Int.between(min: Int, max: Int): Int {

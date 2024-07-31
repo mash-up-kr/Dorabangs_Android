@@ -48,6 +48,7 @@ import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
@@ -256,6 +257,7 @@ private fun LazyListScope.Feeds(
             feeds[index]?.let { cardInfo ->
                 FeedCard(
                     cardInfo = cardInfo,
+                    feedCardEntryPoint = FeedCardEntryPoint.Home,
                     onClickMoreButton = {
                         onClickMoreButton(cardInfo.postId, cardInfo.folderId)
                     },
