@@ -73,7 +73,7 @@ class StorageDetailViewModel @Inject constructor(
     /**
      * 현재 폴더 정보 가져오기
      */
-    fun getFolderInfoById(folderId: String , toastMsg: String) = viewModelScope.doraLaunch {
+    fun getFolderInfoById(folderId: String, toastMsg: String) = viewModelScope.doraLaunch {
         val folderInfo = getFolderByIdUseCase(folderId = folderId)
         intent {
             reduce {

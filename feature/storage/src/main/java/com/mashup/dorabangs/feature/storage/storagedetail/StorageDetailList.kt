@@ -64,9 +64,7 @@ fun StorageDetailList(
                 onClickTabItem = onClickTabItem,
                 onClickActionIcon = onClickActionIcon,
             )
-            if (isLoading.not()) {
-                StorageDetailEmpty(modifier = modifier)
-            } else {
+            if (isLoading) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     LottieLoader(
                         lottieRes = coreR.raw.spinner,
@@ -75,6 +73,8 @@ fun StorageDetailList(
                             .align(Alignment.Center),
                     )
                 }
+            } else {
+                StorageDetailEmpty(modifier = modifier)
             }
         }
     } else {
@@ -91,7 +91,18 @@ fun StorageDetailList(
                     onClickActionIcon = onClickActionIcon,
                 )
             }
-            if (isLoading.not()) {
+            if (isLoading) {
+                item {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        LottieLoader(
+                            lottieRes = coreR.raw.spinner,
+                            modifier = Modifier
+                                .size(54.dp)
+                                .align(Alignment.Center),
+                        )
+                    }
+                }
+            } else {
                 item {
                     SortButtonRow(
                         isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
@@ -120,17 +131,6 @@ fun StorageDetailList(
                                 thickness = 0.5.dp,
                             )
                         }
-                    }
-                }
-            } else {
-                item {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        LottieLoader(
-                            lottieRes = coreR.raw.spinner,
-                            modifier = Modifier
-                                .size(54.dp)
-                                .align(Alignment.Center),
-                        )
                     }
                 }
             }

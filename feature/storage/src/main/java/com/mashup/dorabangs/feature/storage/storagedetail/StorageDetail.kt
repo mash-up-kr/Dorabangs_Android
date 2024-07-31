@@ -69,7 +69,8 @@ fun StorageDetailRoute(
             if (state.editActionType == EditActionType.FolderEdit) {
                 storageDetailViewModel.getFolderInfoById(
                     folderId = state.folderInfo.folderId.orEmpty(),
-                    toastMsg = context.getString(storageR.string.toast_rename_folder))
+                    toastMsg = context.getString(storageR.string.toast_rename_folder),
+                )
             } else
                 linksPagingList.refresh()
         }
