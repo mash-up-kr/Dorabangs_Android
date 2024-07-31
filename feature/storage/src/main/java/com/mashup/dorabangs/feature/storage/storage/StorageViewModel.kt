@@ -3,6 +3,7 @@ package com.mashup.dorabangs.feature.storage.storage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
+import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
@@ -52,6 +53,11 @@ class StorageViewModel @Inject constructor(
         reduce {
             state.copy(selectedFolderId = folderId)
         }
+    }
+
+    fun setToastState(toastMsg: String) = intent {
+        reduce { state.copy(toastState = state.toastState.copy(text = toastMsg, toastStyle = ToastStyle.CHECK)) }
+        postSideEffect(StorageListSideEffect.ShowFolderRemoveToastSnackBar)
     }
 
     fun setVisibleMoreButtonBottomSheet(visible: Boolean, isNavigate: Boolean = false) = intent {

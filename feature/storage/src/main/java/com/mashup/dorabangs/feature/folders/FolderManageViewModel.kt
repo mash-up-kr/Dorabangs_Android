@@ -8,6 +8,7 @@ import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.model.toSampleResponse
 import com.mashup.dorabangs.domain.usecase.folder.CreateFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.EditFolderNameUseCase
+import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
 import com.mashup.dorabangs.feature.folders.model.FolderManageState
 import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class FolderManageViewModel @Inject constructor(
     private val createFolderUseCase: CreateFolderUseCase,
     private val editFolderNameUseCase: EditFolderNameUseCase,
+    private val changePostFolderUseCase: ChangePostFolder,
 ) : ViewModel(), ContainerHost<FolderManageState, FolderManageSideEffect> {
     override val container = container<FolderManageState, FolderManageSideEffect>(FolderManageState())
 
@@ -35,6 +37,9 @@ class FolderManageViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 폴더 수정
+     */
     fun createOrEditFolder(folderName: String, folderType: FolderManageType, folderId: String) = viewModelScope.doraLaunch {
         val isSuccessNewFolder = when (folderType) {
             FolderManageType.CREATE -> {
@@ -47,7 +52,7 @@ class FolderManageViewModel @Inject constructor(
 
         if (isSuccessNewFolder.isSuccess) {
             intent {
-                postSideEffect(FolderManageSideEffect.NavigateToBackStack(state.folderName))
+                postSideEffect(FolderManageSideEffect.NavigateToComplete)
             }
         } else {
             setTextHelperEnable(isEnable = true, helperMessage = isSuccessNewFolder.errorMsg)
@@ -57,6 +62,22 @@ class FolderManageViewModel @Inject constructor(
     fun setFolderName(folderName: String) = intent {
         reduce {
             state.copy(folderName = folderName)
+        }
+    }
+
+    /**
+     * 링크 수정 - 새 폴더 추가 후 폴더 이동
+     */
+    fun createFolderWithMoveLink(folderName: String, postId: String) = viewModelScope.doraLaunch {
+        val newFolder = createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
+        if (newFolder.isSuccess) {
+            val newFolderId = newFolder.result.firstOrNull()?.id
+            newFolderId?.let { folderId ->
+                val moveFolder = changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
+                if (moveFolder.isSuccess) {
+                    intent { postSideEffect(FolderManageSideEffect.NavigateToComplete) }
+                }
+            }
         }
     }
 

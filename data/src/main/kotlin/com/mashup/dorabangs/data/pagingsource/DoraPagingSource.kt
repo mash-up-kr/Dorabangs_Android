@@ -8,6 +8,7 @@ import retrofit2.HttpException
 
 class DoraPagingSource<T : Any> (
     private val apiExecutor: suspend (Int) -> PageData<List<T>>,
+    private val totalCount: (Int) -> Unit,
 ) : PagingSource<Int, T>() {
 
     override fun getRefreshKey(state: PagingState<Int, T>): Int? {
@@ -27,6 +28,7 @@ class DoraPagingSource<T : Any> (
 
             if (result.data.isEmpty()) return LoadResult.Error(DoraException(message = "empty"))
 
+            totalCount(result.pagingInfo.total)
             LoadResult.Page(
                 data = result.data,
                 prevKey = if (page == INITIAL_PAGE) null else page - 1,

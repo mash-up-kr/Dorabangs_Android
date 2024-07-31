@@ -8,11 +8,13 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
+import com.mashup.dorabangs.domain.usecase.folder.GetFolderById
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
@@ -46,6 +48,7 @@ class StorageDetailViewModel @Inject constructor(
     private val deletePostUseCase: DeletePostUseCase,
     private val getFolderListUseCase: GetFolderListUseCase,
     private val changePostFolderUseCase: ChangePostFolder,
+    private val getFolderByIdUseCase: GetFolderById,
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
@@ -55,7 +58,6 @@ class StorageDetailViewModel @Inject constructor(
                 folderInfo = state.folderInfo.copy(
                     folderId = folderItem.id,
                     title = folderItem.name,
-                    postCount = folderItem.postCount,
                     folderType = folderItem.folderType,
                 ),
             )
@@ -64,6 +66,30 @@ class StorageDetailViewModel @Inject constructor(
             type = folderItem.folderType,
             folderId = folderItem.id,
         )
+    }
+
+    /**
+     * 현재 폴더 정보 가져오기
+     */
+    fun getFolderInfoById(folderId: String, toastMsg: String) = viewModelScope.doraLaunch {
+        val folderInfo = getFolderByIdUseCase(folderId = folderId)
+        intent {
+            reduce {
+                state.copy(
+                    folderInfo = state.folderInfo.copy(
+                        folderId = folderInfo.id,
+                        title = folderInfo.name,
+                        postCount = folderInfo.postCount,
+                        folderType = folderInfo.folderType,
+                    ),
+                    toastState = state.toastState.copy(
+                        text = toastMsg,
+                        toastStyle = ToastStyle.CHECK,
+                    ),
+                )
+            }
+            postSideEffect(StorageDetailSideEffect.ShowToastSnackBarRenameFolder)
+        }
     }
 
     /**
@@ -94,16 +120,23 @@ class StorageDetailViewModel @Inject constructor(
         val pagingData = savedLinksFromFolderUseCase.invoke(
             folderId = folderId,
             order = order,
-            limit = limit,
             isRead = isRead,
-        ).cachedIn(viewModelScope)
-            .map { pagedData ->
-                pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Lazily,
-                initialValue = PagingData.empty(),
-            )
+            limit = limit,
+            totalCount = { total ->
+                intent {
+                    reduce {
+                        val folderInfo = state.folderInfo.copy(postCount = total)
+                        state.copy(folderInfo = folderInfo)
+                    }
+                }
+            },
+        ).cachedIn(viewModelScope).map { pagedData ->
+            pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = PagingData.empty(),
+        )
         intent {
             reduce {
                 state.copy(pagingList = pagingData)
@@ -120,7 +153,19 @@ class StorageDetailViewModel @Inject constructor(
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
         val pagingData =
-            getPostsUseCase.invoke(order = order, favorite = favorite, isRead = isRead)
+            getPostsUseCase.invoke(
+                order = order,
+                favorite = favorite,
+                isRead = isRead,
+                totalCount = { total ->
+                    intent {
+                        reduce {
+                            val folderInfo = state.folderInfo.copy(postCount = total)
+                            state.copy(folderInfo = folderInfo)
+                        }
+                    }
+                },
+            )
                 .cachedIn(viewModelScope).map { pagedData ->
                     pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
                 }.stateIn(
@@ -184,7 +229,19 @@ class StorageDetailViewModel @Inject constructor(
                 postId = postId,
                 postInfo = postInfo,
             )
-            intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+            // intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+            reduce {
+                val updateList = state.pagingList.map { pagingData ->
+                    pagingData.map { item ->
+                        if (item.postId == postId) {
+                            item.copy(isFavorite = !isFavorite)
+                        } else {
+                            item
+                        }
+                    }
+                }
+                state.copy(pagingList = updateList)
+            }
         }
     }
 
@@ -235,10 +292,11 @@ class StorageDetailViewModel @Inject constructor(
      * 링크 폴더 이동
      */
     fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
-        changePostFolderUseCase(postId = postId, folderId = folderId)
+        val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
-        // TODO - 실패 성공 여부 리스트 업데이트
-        intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+        if (isSuccess) {
+            intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+        }
     }
 
     fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
@@ -294,13 +352,13 @@ class StorageDetailViewModel @Inject constructor(
     }
 
     fun moveToEditFolderName(folderId: String?) = intent {
-        postSideEffect(StorageDetailSideEffect.NavigateToEditFolder(folderId = folderId.orEmpty()))
+        postSideEffect(StorageDetailSideEffect.NavigateToFolderManage(itemId = folderId.orEmpty()))
     }
 
     fun setVisibleMovingFolderBottomSheet(visible: Boolean, isNavigate: Boolean = false) = intent {
         reduce {
             state.copy(isShowMovingFolderSheet = visible)
         }
-        if (isNavigate) postSideEffect(StorageDetailSideEffect.NavigateToCreateFolder)
+        if (isNavigate) postSideEffect(StorageDetailSideEffect.NavigateToFolderManage(itemId = state.currentClickPostId))
     }
 }
