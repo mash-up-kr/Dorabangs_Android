@@ -30,6 +30,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -90,6 +91,7 @@ fun StorageDetailList(
                 linksPagingList[idx]?.let { cardItem ->
                     FeedCard(
                         cardInfo = cardItem,
+                        feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
                         onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
                         onClickMoreButton = { onClickMoreButton(cardItem.postId) },
                     )
