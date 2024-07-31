@@ -59,9 +59,9 @@ fun StorageFolderList(
             )
             if (idx != storageState.customStorageFolderList.lastIndex) {
                 HorizontalDivider(
-                    modifier =
-                    Modifier
-                        .height(0.5.dp)
+                    modifier = Modifier
+                        .height(0.3.dp)
+                        .padding(horizontal = 12.dp)
                         .background(color = DoraColorTokens.G1),
                 )
             }
@@ -91,8 +91,9 @@ fun StorageDefaultFolder(
             if (idx != defaultFolderList.lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier
-                        .height(0.5.dp)
-                        .background(color = DoraColorTokens.G1),
+                        .height(0.3.dp)
+                        .background(color = DoraColorTokens.G1)
+                        .padding(horizontal = 12.dp),
                 )
             }
         }
