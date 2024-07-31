@@ -18,15 +18,19 @@ class PostsRepositoryImpl @Inject constructor(
         order: String?,
         favorite: Boolean?,
         isRead: Boolean?,
+        totalCount: (Int) -> Unit,
     ): Flow<PagingData<Post>> =
-        doraPager { page ->
-            postsRemoteDataSource.getPosts(
-                page = page,
-                order = order,
-                favorite = favorite,
-                isRead = isRead,
-            )
-        }.flow
+        doraPager(
+            apiExecutor = { page ->
+                postsRemoteDataSource.getPosts(
+                    page = page,
+                    order = order,
+                    favorite = favorite,
+                    isRead = isRead,
+                )
+            },
+            totalCount = { total -> totalCount(total) },
+        ).flow
 
     override suspend fun saveLink(link: Link) =
         postsRemoteDataSource.saveLink(link)
@@ -45,8 +49,13 @@ class PostsRepositoryImpl @Inject constructor(
         DoraSampleResponse(isSuccess = false)
     }
 
-    override suspend fun changePostFolder(postId: String, folderId: String) =
-        postsRemoteDataSource.changePostFolder(postId, folderId)
+    override suspend fun changePostFolder(postId: String, folderId: String): DoraSampleResponse =
+        runCatching {
+            postsRemoteDataSource.changePostFolder(postId, folderId)
+            DoraSampleResponse(isSuccess = true)
+        }.getOrElse { throwable ->
+            DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
+        }
 
     override suspend fun getPostsCount(isRead: Boolean?): Int =
         postsRemoteDataSource.getPostsCount(isRead)

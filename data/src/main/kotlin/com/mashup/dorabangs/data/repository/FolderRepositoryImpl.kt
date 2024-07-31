@@ -62,14 +62,18 @@ class FolderRepositoryImpl @Inject constructor(
         order: String,
         limit: Int,
         isRead: Boolean?,
+        totalCount: (Int) -> Unit,
     ): Flow<PagingData<SavedLinkDetailInfo>> =
-        doraPager { page ->
-            remoteDataSource.getLinksFromFolder(
-                folderId = folderId,
-                page = page,
-                limit = limit,
-                order = order,
-                isRead = isRead,
-            ).toDomain()
-        }.flow
+        doraPager(
+            apiExecutor = { page ->
+                remoteDataSource.getLinksFromFolder(
+                    folderId = folderId,
+                    page = page,
+                    limit = limit,
+                    order = order,
+                    isRead = isRead,
+                ).toDomain()
+            },
+            totalCount = { total -> totalCount(total) },
+        ).flow
 }

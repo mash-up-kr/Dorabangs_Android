@@ -22,13 +22,15 @@ class AIClassificationRepositoryImpl @Inject constructor(
         limit: Int,
         order: String,
     ): Flow<PagingData<AIClassificationFeedPost>> =
-        doraPager { page ->
-            remoteDataSource.getAIClassificationPosts(
-                page = page,
-                limit = limit,
-                order = order,
-            ).toPagingDomain()
-        }.flow
+        doraPager(
+            apiExecutor = { page ->
+                remoteDataSource.getAIClassificationPosts(
+                    page = page,
+                    limit = limit,
+                    order = order,
+                ).toPagingDomain()
+            },
+        ).flow
 
     override suspend fun moveAllPostsToRecommendedFolder(suggestionFolderId: String): AIClassificationPosts =
         remoteDataSource.moveAllPostsToRecommendedFolder(suggestionFolderId)

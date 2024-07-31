@@ -32,6 +32,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailTab
+import com.mashup.dorabangs.util.getFolderIcon
 import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
@@ -53,6 +54,7 @@ fun StorageDetailCollapsingHeader(
         if (isCollapsed) {
             StorageDetailTopBarByFolderType(
                 state = state,
+                isCollapsed = true,
                 onClickBackIcon = onClickBackIcon,
                 onClickActionIcon = onClickActionIcon,
             )
@@ -77,6 +79,7 @@ fun StorageDetailExpandedHeader(
     ) {
         StorageDetailTopBarByFolderType(
             state = state,
+            isCollapsed = false,
             onClickBackIcon = onClickBackIcon,
             onClickActionIcon = onClickActionIcon,
         )
@@ -119,7 +122,7 @@ fun StorageDetailHeaderContent(
                     .padding(6.dp)
                     .size(40.dp)
                     .aspectRatio(1f),
-                painter = painterResource(id = coreR.drawable.ic_3d_all_big),
+                painter = painterResource(id = getFolderIcon(state.folderInfo.folderType)),
                 contentDescription = "상단바 아이콘",
             )
         }
@@ -131,7 +134,7 @@ fun StorageDetailHeaderContent(
         ) {
             Text(
                 text = state.folderInfo.title,
-                style = DoraTypoTokens.base2Bold,
+                style = DoraTypoTokens.Subtitle2Bold,
             )
             Text(
                 text = "${state.folderInfo.postCount} 게시물",
@@ -194,14 +197,16 @@ fun StorageDetailHeaderTabBar(
 @Composable
 fun StorageDetailTopBarByFolderType(
     state: StorageDetailState,
+    isCollapsed: Boolean,
     onClickActionIcon: () -> Unit = {},
     onClickBackIcon: () -> Unit,
 ) {
+    val title = if (isCollapsed) state.folderInfo.title else ""
     when (state.folderInfo.folderType) {
         FolderType.CUSTOM -> {
             DoraTopBar.BackWithActionIconTopBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = state.folderInfo.title,
+                title = title,
                 isTitleCenter = true,
                 actionIcon = coreR.drawable.ic_more_black,
                 onClickBackIcon = onClickBackIcon,
@@ -211,7 +216,7 @@ fun StorageDetailTopBarByFolderType(
         else -> {
             DoraTopBar.BackNavigationTopBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = state.folderInfo.title,
+                title = title,
                 isTitleCenter = true,
                 onClickBackIcon = onClickBackIcon,
             )

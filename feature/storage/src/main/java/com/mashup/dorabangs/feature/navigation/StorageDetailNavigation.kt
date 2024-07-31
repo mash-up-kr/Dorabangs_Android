@@ -10,22 +10,22 @@ import com.mashup.core.navigation.bundleSerializable
 import com.mashup.core.navigation.serializableNavType
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.storage.storagedetail.StorageDetailRoute
+import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 fun NavController.navigateToStorageDetail(folder: Folder) {
     val folderItem = Uri.encode(Json.encodeToString(folder))
-    navigate("${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folderItem=$folderItem")
+    navigate("${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folder=$folderItem?")
 }
 
 fun NavGraphBuilder.storageDetailNavigation(
-    onClickBackIcon: () -> Unit,
-    navigateToHome: () -> Unit,
-    navigateToCreateFolder: () -> Unit,
-    navigateToFolderManager: (String) -> Unit,
+    onClickBackIcon: (Boolean) -> Unit,
+    navigateToStorage: (Boolean) -> Unit,
+    navigateToFolderManager: (String, EditActionType) -> Unit,
 ) {
     composable(
-        route = "${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folderItem={folder}",
+        route = "${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folder={folder}?",
         arguments = listOf(
             navArgument("folder") {
                 type = serializableNavType<Folder>()
@@ -33,18 +33,17 @@ fun NavGraphBuilder.storageDetailNavigation(
         ),
     ) { navBackStackEntry ->
         val folderItem = navBackStackEntry.arguments?.bundleSerializable("folder") as Folder?
-        val editFolderName = navBackStackEntry.savedStateHandle.get<String>("editFolderName").orEmpty()
         val isVisibleBottomSheet = navBackStackEntry.savedStateHandle.get<Boolean>("isVisibleBottomSheet") ?: false
+        val isChangedData = navBackStackEntry.savedStateHandle.get<Boolean>("isChanged") ?: false
 
         folderItem?.let { item ->
             StorageDetailRoute(
-                folderItem = if (editFolderName.isNotEmpty()) folderItem.copy(name = editFolderName) else item,
+                folderItem = item,
                 isVisibleBottomSheet = isVisibleBottomSheet,
-                onClickBackIcon = onClickBackIcon,
-                navigateToHome = navigateToHome,
+                isChangedData = isChangedData,
+                onClickBackIcon = { onClickBackIcon(isChangedData) },
+                navigateToStorage = navigateToStorage,
                 navigateToFolderManager = navigateToFolderManager,
-                navigateToCreateFolder = navigateToCreateFolder,
-
             )
         }
     }

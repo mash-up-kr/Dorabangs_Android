@@ -13,6 +13,7 @@ interface PostsRepository {
         order: String? = null,
         favorite: Boolean? = null,
         isRead: Boolean? = null,
+        totalCount: (Int) -> Unit,
     ): Flow<PagingData<Post>>
 
     suspend fun saveLink(
@@ -29,7 +30,7 @@ interface PostsRepository {
     suspend fun changePostFolder(
         postId: String,
         folderId: String,
-    )
+    ): DoraSampleResponse
 
     suspend fun getPostsCount(isRead: Boolean? = null): Int
 }

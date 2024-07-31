@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.utils.isValidUrl
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +25,7 @@ data class HomeState(
     val isShowMovingFolderSheet: Boolean = false,
     val homeCreateFolder: HomeCreateFolder = HomeCreateFolder(),
     val aiClassificationCount: Int = 0,
+    val toastState: ToastState = ToastState(),
     val unReadPostCount: Int = 0,
 ) {
     companion object {
@@ -52,4 +54,9 @@ data class HomeCreateFolder(
     val helperMessage: String = "",
     val urlLink: String = "",
     val lastCheckedFolderName: String = "",
+)
+
+data class ToastState(
+    val text: String = "",
+    val toastStyle: ToastStyle = ToastStyle.CHECK,
 )
