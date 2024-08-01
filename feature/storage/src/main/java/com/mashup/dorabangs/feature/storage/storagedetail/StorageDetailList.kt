@@ -58,15 +58,24 @@ fun StorageDetailList(
 ) {
     val isLoading = linksPagingList.loadState.refresh is LoadState.Loading
     if (linksPagingList.itemCount == 0) {
-        Column {
-            StorageDetailExpandedHeader(
-                state = state,
-                onClickBackIcon = onClickBackIcon,
-                onClickTabItem = onClickTabItem,
-                onClickActionIcon = onClickActionIcon,
-            )
+        Box {
+            Column {
+                StorageDetailExpandedHeader(
+                    state = state,
+                    onClickBackIcon = onClickBackIcon,
+                    onClickTabItem = onClickTabItem,
+                    onClickActionIcon = onClickActionIcon,
+                )
+                if (!isLoading) {
+                    StorageDetailEmpty(modifier = modifier)
+                }
+            }
             if (isLoading) {
-                Box(modifier = Modifier.fillMaxSize().align(Alignment.CenterHorizontally)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                ) {
                     LottieLoader(
                         lottieRes = coreR.raw.spinner,
                         modifier = Modifier
@@ -74,64 +83,63 @@ fun StorageDetailList(
                             .align(Alignment.Center),
                     )
                 }
-            } else {
-                StorageDetailEmpty(modifier = modifier)
             }
         }
     } else {
-        LazyColumn(
-            state = listState,
-            contentPadding = contentPadding,
-            modifier = modifier,
-        ) {
-            item {
-                StorageDetailExpandedHeader(
-                    state = state,
-                    onClickBackIcon = onClickBackIcon,
-                    onClickTabItem = onClickTabItem,
-                    onClickActionIcon = onClickActionIcon,
-                )
-            }
-            if (isLoading) {
+        Box {
+            LazyColumn(
+                state = listState,
+                contentPadding = contentPadding,
+                modifier = modifier,
+            ) {
                 item {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        LottieLoader(
-                            lottieRes = coreR.raw.spinner,
-                            modifier = Modifier
-                                .size(54.dp)
-                                .align(Alignment.Center),
-                        )
-                    }
-                }
-            } else {
-                item {
-                    SortButtonRow(
-                        isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
-                        onClickSortedIcon = onClickSortedIcon,
+                    StorageDetailExpandedHeader(
+                        state = state,
+                        onClickBackIcon = onClickBackIcon,
+                        onClickTabItem = onClickTabItem,
+                        onClickActionIcon = onClickActionIcon,
                     )
-                    Spacer(modifier = Modifier.height(20.dp))
                 }
-                items(
-                    count = linksPagingList.itemCount,
-                    key = linksPagingList.itemKey { item ->
-                        "${item.postId}_${item.isFavorite}"
-                    },
-                    contentType = linksPagingList.itemContentType { "SavedLinks" },
-                ) { idx ->
-                    linksPagingList[idx]?.let { cardItem ->
-                        FeedCard(
-                            cardInfo = cardItem,
-                            onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
-                            onClickMoreButton = { onClickMoreButton(cardItem.postId) },
-                            feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
+                if (!isLoading) {
+                    item {
+                        SortButtonRow(
+                            isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
+                            onClickSortedIcon = onClickSortedIcon,
                         )
-                        if (idx != state.folderInfo.postCount - 1) {
-                            HorizontalDivider(
-                                modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                                thickness = 0.5.dp,
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                    items(
+                        count = linksPagingList.itemCount,
+                        key = linksPagingList.itemKey { item ->
+                            "${item.postId}_${item.isFavorite}"
+                        },
+                        contentType = linksPagingList.itemContentType { "SavedLinks" },
+                    ) { idx ->
+                        linksPagingList[idx]?.let { cardItem ->
+                            FeedCard(
+                                cardInfo = cardItem,
+                                onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
+                                onClickMoreButton = { onClickMoreButton(cardItem.postId) },
+                                feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
                             )
+                            if (idx != state.folderInfo.postCount - 1) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
+                                    thickness = 0.5.dp,
+                                )
+                            }
                         }
                     }
+                }
+            }
+            if (isLoading) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    LottieLoader(
+                        lottieRes = coreR.raw.spinner,
+                        modifier = Modifier
+                            .size(54.dp)
+                            .align(Alignment.Center),
+                    )
                 }
             }
         }
