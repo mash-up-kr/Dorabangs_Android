@@ -62,8 +62,10 @@ fun StorageDetailRoute(
     val scope = rememberCoroutineScope()
     val linksPagingList = storageDetailViewModel.feedListState.collectAsLazyPagingItems()
 
-    LaunchedEffect(Unit) {
-        storageDetailViewModel.setFolderInfo(folderItem)
+    LaunchedEffect(isChangedData) {
+        if (state.folderInfo.folderId.isNullOrEmpty()) {
+            storageDetailViewModel.setFolderInfo(folderItem)
+        }
 
         if (isChangedData) {
             if (state.editActionType == EditActionType.FolderEdit) {
