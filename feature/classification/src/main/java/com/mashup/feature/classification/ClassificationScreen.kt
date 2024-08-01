@@ -26,7 +26,7 @@ fun ClassificationRoute(
     classificationViewModel: ClassificationViewModel = hiltViewModel(),
 ) {
     val state by classificationViewModel.collectAsState()
-    val pagingList = state.cardInfoList.collectAsLazyPagingItems()
+    val pagingList = classificationViewModel.paging.collectAsLazyPagingItems()
 
     ClassificationScreen(
         state = state,
