@@ -66,7 +66,7 @@ fun StorageDetailList(
                 onClickActionIcon = onClickActionIcon,
             )
             if (isLoading) {
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.fillMaxSize().align(Alignment.CenterHorizontally)) {
                     LottieLoader(
                         lottieRes = coreR.raw.spinner,
                         modifier = Modifier
