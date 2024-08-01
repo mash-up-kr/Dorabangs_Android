@@ -83,7 +83,7 @@ fun ClassificationScreen(
                 }
             },
         )
-        if (state.isClassificationComplete) {
+        if (state.chipState.totalCount == 0) {
             ClassificationCompleteScreen(navigateToHome = navigateToHome)
         } else {
             ClassificationListScreen(
