@@ -45,7 +45,7 @@ fun ClassificationScreen(
     state: ClassificationState,
     pagingList: LazyPagingItems<FeedCardUiModel>,
     onClickChip: (Int) -> Unit,
-    onClickDeleteButton: (Int) -> Unit,
+    onClickDeleteButton: (FeedCardUiModel) -> Unit,
     onClickMoveButton: (Int) -> Unit,
     onClickAllItemMoveButton: () -> Unit,
     onClickBackIcon: () -> Unit,

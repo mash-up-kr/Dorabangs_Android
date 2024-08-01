@@ -48,8 +48,12 @@ class AIClassificationRepositoryImpl @Inject constructor(
             order = order,
         )
 
-    override suspend fun deletePostFromAIClassification(postId: String) =
-        remoteDataSource.deletePostFromAIClassification(postId)
+    override suspend fun deletePostFromAIClassification(postId: String): Boolean {
+        return kotlin.runCatching {
+            remoteDataSource.deletePostFromAIClassification(postId)
+            true
+        }.getOrDefault(false)
+    }
 
     override suspend fun getAIClassificationCount() =
         remoteDataSource.getAIClassificationCount()

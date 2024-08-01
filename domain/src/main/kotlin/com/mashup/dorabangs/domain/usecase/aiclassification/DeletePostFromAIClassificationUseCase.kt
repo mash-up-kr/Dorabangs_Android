@@ -9,8 +9,9 @@ class DeletePostFromAIClassificationUseCase @Inject constructor(
 
     suspend operator fun invoke(
         postId: String,
-    ) =
-        aiClassificationRepository.deletePostFromAIClassification(
+    ): Boolean {
+        return aiClassificationRepository.deletePostFromAIClassification(
             postId = postId,
         )
+    }
 }
