@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -68,13 +70,15 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
-    onClickChip: (Int) -> Unit = {},
+    scrollState: LazyListState = rememberLazyListState(),
+    onClickChip: (Int) -> Unit = { _  -> },
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
     onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
 ) {
+
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -129,6 +133,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .haze(hazeState),
+                state = scrollState,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 item {

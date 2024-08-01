@@ -3,9 +3,11 @@ package com.mashup.dorabangs.feature.home
 import android.view.View
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +45,11 @@ fun HomeRoute(
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
     val pagingList = state.feedCards.collectAsLazyPagingItems()
+    val scrollState = rememberLazyListState()
+
+    LaunchedEffect(pagingList.itemCount) {
+        scrollState.scrollToItem(viewModel.scrollCache[state.selectedIndex] ?: 0)
+    }
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -62,6 +69,7 @@ fun HomeRoute(
             is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
 
             is HomeSideEffect.RefreshPostList -> pagingList.refresh()
+
             else -> {}
         }
     }
@@ -71,7 +79,10 @@ fun HomeRoute(
             state = state,
             modifier = modifier,
             postsPagingList = pagingList,
-            onClickChip = viewModel::changeSelectedTapIdx,
+            scrollState = scrollState,
+            onClickChip = { index ->
+                viewModel.changeSelectedTapIdx(index, scrollState.firstVisibleItemIndex)
+            },
             onClickMoreButton = { postId, folderId ->
                 viewModel.updateSelectedPostItem(postId = postId, folderId)
                 viewModel.setVisibleMoreButtonBottomSheet(true)
