@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -86,7 +87,7 @@ fun FeedCard(
             Spacer(modifier = Modifier.width(13.dp))
             AsyncImage(
                 modifier = Modifier
-                    .size(size = 65.dp)
+                    .size(size = 80.dp).aspectRatio(1f)
                     .background(color = DoraColorTokens.G1),
                 model = cardInfo.thumbnail,
                 contentScale = ContentScale.Crop,
