@@ -102,7 +102,8 @@ class ClassificationViewModel @Inject constructor(
     }
 
     fun deleteSelectedItem(cardItem: FeedCardUiModel) = viewModelScope.doraLaunch {
-        if (deletePostUseCase.invoke(cardItem.postId)) {
+        val delete = deletePostUseCase.invoke(cardItem.postId)
+        if (delete.isSuccess) {
             val chips = getAIClassificationFolderListUseCase.invoke()
             val chipList = doraChipMapper(chips)
 

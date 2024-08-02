@@ -3,6 +3,7 @@ package com.mashup.dorabangs.domain.repository
 import androidx.paging.PagingData
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
 import com.mashup.dorabangs.domain.model.AIClassificationPosts
+import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import kotlinx.coroutines.flow.Flow
 
@@ -28,7 +29,7 @@ interface AIClassificationRepository {
 
     suspend fun deletePostFromAIClassification(
         postId: String,
-    ): Boolean
+    ): DoraSampleResponse
 
     suspend fun getAIClassificationCount(): Int
 }
