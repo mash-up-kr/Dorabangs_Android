@@ -96,6 +96,7 @@ class HomeViewModel @Inject constructor(
     fun changeSelectedTapIdx(index: Int, firstVisibleItemPosition: Int) = intent {
         scrollCache[state.selectedIndex] = firstVisibleItemPosition
         getSavedLinkFromDefaultFolder(
+            order = Sort.DESC.name,
             folderId = state.tapElements[index].id,
             favorite = index == FAVORITE_FOLDER_INDEX,
         )
