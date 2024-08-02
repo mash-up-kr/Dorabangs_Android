@@ -42,7 +42,10 @@ fun HomeCreateFolderRoute(
                 urlLink = sideEffect.urlLink,
             )
             is HomeSideEffect.NavigateHomeAfterSaveLink -> navigateToHomeAfterSaveLink()
-            is HomeSideEffect.NavigateToCompleteMovingFolder -> navigateToHomeAfterMovingFolder()
+            is HomeSideEffect.NavigateToCompleteMovingFolder -> {
+                homeViewModel.setVisibleMovingFolderBottomSheet(false)
+                navigateToHomeAfterMovingFolder()
+            }
             else -> {}
         }
     }
