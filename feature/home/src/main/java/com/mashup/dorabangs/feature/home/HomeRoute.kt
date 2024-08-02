@@ -44,7 +44,7 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
-    val pagingList = state.feedCards.collectAsLazyPagingItems()
+    val pagingList = viewModel.postList.collectAsLazyPagingItems()
     val scrollState = rememberLazyListState()
 
     LaunchedEffect(pagingList.itemCount) {

@@ -32,12 +32,11 @@ import com.mashup.dorabangs.domain.usecase.user.SetIdLinkToReadLaterUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetLastCopiedUrlUseCase
 import com.mashup.dorabangs.feature.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -66,8 +65,11 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
-    private val postCache = HashMap<String, Flow<PagingData<FeedCardUiModel>>>()
+    private val postCache = HashMap<String, PagingData<FeedCardUiModel>>()
     val scrollCache = HashMap<Int, Int>()
+
+    private val _postList = MutableStateFlow<PagingData<FeedCardUiModel>>(PagingData.empty())
+    val postList: StateFlow<PagingData<FeedCardUiModel>> = _postList.asStateFlow()
 
     init {
         viewModelScope.doraLaunch {
@@ -101,8 +103,6 @@ class HomeViewModel @Inject constructor(
         reduce {
             state.copy(selectedIndex = index)
         }
-
-        delay(500)
     }
 
     fun hideSnackBar() = intent {
@@ -297,7 +297,7 @@ class HomeViewModel @Inject constructor(
                                     state.tapElements.firstOrNull { folder -> savedLinkInfo.folderId == folder.id }
                                 savedLinkInfo.toUiModel(category?.title)
                             }
-                        }
+                        }.firstOrNull() ?: PagingData.empty()
                 } else {
                     postCache[folderId] ?: getSavedLinksFromFolderUseCase.invoke(
                         folderId = folderId,
@@ -311,20 +311,10 @@ class HomeViewModel @Inject constructor(
                                     .firstOrNull { folder -> savedLinkInfo.folderId == folder.id }
                                 savedLinkInfo.toUiModel(category?.title)
                             }
-                        }
+                        }.firstOrNull() ?: PagingData.empty()
                 }
-
             postCache[cacheKey] = pagingData
-
-            reduce {
-                state.copy(
-                    feedCards = pagingData.stateIn(
-                        scope = viewModelScope,
-                        started = SharingStarted.Lazily,
-                        initialValue = PagingData.empty(),
-                    )
-                )
-            }
+            _postList.value = pagingData
         }
     }
 
