@@ -372,6 +372,30 @@ class HomeViewModel @Inject constructor(
             // intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
         }
     }
+
+    /**
+     * 링크 수정 - 새 폴더 추가 후 폴더 이동
+     */
+    fun createFolderWithMoveLink(folderName: String, postId: String) = viewModelScope.doraLaunch {
+        val newFolder = createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
+        if (newFolder.isSuccess) {
+            val newFolderId = newFolder.result.firstOrNull()?.id
+            newFolderId?.let { folderId ->
+                val moveFolder = changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
+                if (moveFolder.isSuccess) {
+                    intent {
+                        postSideEffect(HomeSideEffect.NavigateToCompleteMovingFolder)
+                        updateEditType(isEditPostFolder = false)
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateEditType(isEditPostFolder: Boolean) = intent {
+        reduce { state.copy(isEditPostFolder = isEditPostFolder) }
+    }
+
     companion object {
         const val FAVORITE_FOLDER_INDEX = 1
     }

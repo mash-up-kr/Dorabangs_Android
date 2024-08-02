@@ -59,7 +59,10 @@ fun HomeRoute(
                 snackBarHostState.currentSnackbarData?.dismiss()
             }
 
-            is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+            is HomeSideEffect.NavigateToCreateFolder -> {
+                viewModel.updateEditType(isEditPostFolder = true)
+                navigateToCreateFolder()
+            }
 
             is HomeSideEffect.RefreshPostList -> pagingList.refresh()
             else -> {}

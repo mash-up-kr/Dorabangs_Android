@@ -27,6 +27,7 @@ data class HomeState(
     val aiClassificationCount: Int = 0,
     val toastState: ToastState = ToastState(),
     val unReadPostCount: Int = 0,
+    val isEditPostFolder: Boolean = false,
 ) {
     companion object {
         // TODO - 추후 sotrageMapper와 합치기

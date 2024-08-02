@@ -68,6 +68,9 @@ fun MainNavHost(
                     isVisibleMovingBottomSheet = false,
                 )
             },
+            navigateToHomeAfterMovingFolder = {
+                appState.navController.popBackStack()
+            },
         )
         homeTutorialNavigation(
             navigateToHome = { appState.navController.popBackStack() },
