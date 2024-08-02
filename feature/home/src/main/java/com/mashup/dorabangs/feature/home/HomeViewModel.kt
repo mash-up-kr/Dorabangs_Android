@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.feature.home
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -356,6 +358,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateSelectFolderId(folderId: String) = intent {
+        Log.d(TAG, "updateSelectFolderId: $folderId")
         reduce { state.copy(changeFolderId = folderId) }
     }
 
@@ -363,11 +366,12 @@ class HomeViewModel @Inject constructor(
      * 링크 폴더 이동
      */
     fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
-        changePostFolderUseCase(postId = postId, folderId = folderId)
+        val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
-        // TODO - 실패 성공 여부 리스트 업데이트
+        if (isSuccess) {
+            // intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+        }
     }
-
     companion object {
         const val FAVORITE_FOLDER_INDEX = 1
     }

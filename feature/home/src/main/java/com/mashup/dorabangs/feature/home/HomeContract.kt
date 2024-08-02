@@ -19,7 +19,7 @@ data class HomeState(
     val selectedIndex: Int = 0,
     val selectedPostId: String = "",
     val selectedFolderId: String = "",
-    val changeFolderId: String = "",
+    val changeFolderId: String = selectedFolderId,
     val isShowMoreButtonSheet: Boolean = false,
     val isShowDialog: Boolean = false,
     val isShowMovingFolderSheet: Boolean = false,
@@ -33,6 +33,7 @@ data class HomeState(
         fun List<Folder>.toSelectBottomSheetModel(folderId: String): List<SelectableBottomSheetItemUIModel> {
             return this.map { item ->
                 SelectableBottomSheetItemUIModel(
+                    id = item.id.orEmpty(),
                     icon = coreR.drawable.ic_3d_folder_big,
                     itemName = item.name,
                     isSelected = item.id == folderId,

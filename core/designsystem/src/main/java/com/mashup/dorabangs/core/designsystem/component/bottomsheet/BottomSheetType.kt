@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.core.designsystem.component.bottomsheet
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -116,7 +118,10 @@ object DoraBottomSheet : BottomSheetType {
                         DoraBottomSheetFolderItem(
                             modifier = Modifier.fillMaxWidth(),
                             data = folderList[index],
-                            onClickItem = { onClickMoveFolder(folderList[index].id) },
+                            onClickItem = {
+                                Log.d(TAG, "MovingFolderBottomSheet: ${folderList[index].id}")
+                                onClickMoveFolder(folderList[index].id)
+                            },
                             isLastItem = index == folderList.lastIndex,
                         )
                     }
