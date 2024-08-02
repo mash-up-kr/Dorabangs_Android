@@ -61,6 +61,7 @@ fun StorageDetailCollapsingHeader(
             StorageDetailHeaderTabBar(
                 tabList = state.tabInfo.tabTitleList,
                 onClickTabItem = onClickTabItem,
+                selectedTabIdx = state.tabInfo.selectedTabIdx
             )
         }
     }
