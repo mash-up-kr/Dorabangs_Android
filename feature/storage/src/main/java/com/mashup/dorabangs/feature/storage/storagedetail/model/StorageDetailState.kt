@@ -1,13 +1,10 @@
 package com.mashup.dorabangs.feature.storage.storagedetail.model
 
 import androidx.annotation.StringRes
-import androidx.paging.PagingData
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderType
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 
 data class StorageDetailState(
     val folderInfo: FolderInfo = FolderInfo(),
@@ -20,7 +17,7 @@ data class StorageDetailState(
     val currentClickPostId: String = "",
     val changeClickFolderId: String = folderInfo.folderId.orEmpty(),
     val folderList: List<Folder> = listOf(),
-    val pagingList: Flow<PagingData<FeedCardUiModel>> = emptyFlow(),
+    val toastState: ToastState = ToastState(),
 
 ) {
     companion object {
@@ -49,4 +46,9 @@ data class EditDialogState(
     val isShowDialog: Boolean = false,
     @StringRes val dialogTitle: Int = R.string.remove_dialog_folder_title,
     @StringRes val dialogCont: Int = R.string.remove_dialog_folder_cont,
+)
+
+data class ToastState(
+    val text: String = "",
+    val toastStyle: ToastStyle = ToastStyle.CHECK,
 )

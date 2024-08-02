@@ -42,6 +42,7 @@ fun DoraDialog(
                         color = DialogColorTokens.BackgroundColor,
                         shape = DialogRoundTokens.Radius,
                     ),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Column(
                     modifier = Modifier

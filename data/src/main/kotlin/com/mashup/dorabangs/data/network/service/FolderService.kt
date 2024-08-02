@@ -19,8 +19,8 @@ interface FolderService {
     @GET("folders")
     suspend fun getFolders(): FolderListResponseModel
 
-    @GET("folders/{id}")
-    suspend fun getFolderById(@Path("id") folderId: String): FolderResponseModel
+    @GET("folders/{folderId}")
+    suspend fun getFolderById(@Path("folderId") folderId: String): FolderResponseModel
 
     @POST("folders")
     suspend fun createFolder(

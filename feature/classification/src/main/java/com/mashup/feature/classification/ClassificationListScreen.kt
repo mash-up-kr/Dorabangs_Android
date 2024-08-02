@@ -24,6 +24,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
@@ -36,7 +37,7 @@ fun ClassificationListScreen(
     lazyColumnState: LazyListState,
     pagingList: LazyPagingItems<FeedCardUiModel>,
     modifier: Modifier = Modifier,
-    onClickDeleteButton: (Int) -> Unit = {},
+    onClickDeleteButton: (FeedCardUiModel) -> Unit = {},
     onClickMoveButton: (Int) -> Unit = {},
     onClickAllItemMoveButton: () -> Unit = {},
 ) {
@@ -116,7 +117,7 @@ fun ClassificationCardItem(
     idx: Int,
     lastIndex: Int,
     cardItem: FeedCardUiModel,
-    onClickDeleteButton: (Int) -> Unit,
+    onClickDeleteButton: (FeedCardUiModel) -> Unit,
     onClickMoveButton: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -131,7 +132,7 @@ fun ClassificationCardItem(
                 .padding(end = 20.dp)
                 .size(size = 24.dp)
                 .align(Alignment.End),
-            onClick = { onClickDeleteButton(idx) },
+            onClick = { onClickDeleteButton(cardItem) },
         ) {
             Image(
                 imageVector = DoraIconClose.CloseCircle,
@@ -139,7 +140,7 @@ fun ClassificationCardItem(
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
-        FeedCard(cardInfo = cardItem)
+        FeedCard(cardInfo = cardItem, feedCardEntryPoint = FeedCardEntryPoint.AiClassification)
         DoraButtons.DoraColorFullMaxBtn(
             modifier = Modifier
                 .fillMaxWidth()

@@ -29,6 +29,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
+import com.mashup.dorabangs.util.getFolderIcon
 import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
@@ -48,7 +49,7 @@ fun StorageFolderList(
             )
             Spacer(modifier = Modifier.height(20.dp))
         }
-        itemsIndexed(storageState.customStorageFolderList) { idx, item ->
+        itemsIndexed(items = storageState.customStorageFolderList) { idx, item ->
             StorageListItem(
                 item = item,
                 isFirstItem = idx == 0,
@@ -58,9 +59,9 @@ fun StorageFolderList(
             )
             if (idx != storageState.customStorageFolderList.lastIndex) {
                 HorizontalDivider(
-                    modifier =
-                    Modifier
-                        .height(0.5.dp)
+                    modifier = Modifier
+                        .height(0.3.dp)
+                        .padding(horizontal = 12.dp)
                         .background(color = DoraColorTokens.G1),
                 )
             }
@@ -90,8 +91,9 @@ fun StorageDefaultFolder(
             if (idx != defaultFolderList.lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier
-                        .height(0.5.dp)
-                        .background(color = DoraColorTokens.G1),
+                        .height(0.3.dp)
+                        .background(color = DoraColorTokens.G1)
+                        .padding(horizontal = 12.dp),
                 )
             }
         }
@@ -159,16 +161,6 @@ fun StorageListItem(
                 contentDescription = "folderIcon",
             )
         }
-    }
-}
-
-private fun getFolderIcon(type: FolderType): Int {
-    return when (type) {
-        FolderType.ALL -> coreR.drawable.ic_3d_all_big
-        FolderType.FAVORITE -> coreR.drawable.ic_3d_bookmark_big
-        FolderType.DEFAULT -> coreR.drawable.ic_3d_pin_big
-        FolderType.CUSTOM -> coreR.drawable.ic_3d_folder_big
-        else -> coreR.drawable.ic_3d_folder_big
     }
 }
 

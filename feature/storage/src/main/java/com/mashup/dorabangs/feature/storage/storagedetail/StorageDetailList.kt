@@ -4,10 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,11 +27,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
@@ -51,54 +55,94 @@ fun StorageDetailList(
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
+    val isLoading = linksPagingList.loadState.refresh is LoadState.Loading
     if (linksPagingList.itemCount == 0) {
-        Column {
-            StorageDetailExpandedHeader(
-                state = state,
-                onClickBackIcon = onClickBackIcon,
-                onClickTabItem = onClickTabItem,
-                onClickActionIcon = onClickActionIcon,
-            )
-            StorageDetailEmpty(modifier = modifier)
-        }
-    } else {
-        LazyColumn(
-            state = listState,
-            contentPadding = contentPadding,
-            modifier = modifier,
-        ) {
-            item {
+        Box {
+            Column {
                 StorageDetailExpandedHeader(
                     state = state,
                     onClickBackIcon = onClickBackIcon,
                     onClickTabItem = onClickTabItem,
                     onClickActionIcon = onClickActionIcon,
                 )
+                if (!isLoading) {
+                    StorageDetailEmpty(modifier = modifier)
+                }
             }
-            item {
-                SortButtonRow(
-                    isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
-                    onClickSortedIcon = onClickSortedIcon,
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-            items(
-                count = linksPagingList.itemCount,
-                key = linksPagingList.itemKey(FeedCardUiModel::postId),
-                contentType = linksPagingList.itemContentType { "SavedLinks" },
-            ) { idx ->
-                linksPagingList[idx]?.let { cardItem ->
-                    FeedCard(
-                        cardInfo = cardItem,
-                        onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
-                        onClickMoreButton = { onClickMoreButton(cardItem.postId) },
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                ) {
+                    LottieLoader(
+                        lottieRes = coreR.raw.spinner,
+                        modifier = Modifier
+                            .size(54.dp)
+                            .align(Alignment.Center),
                     )
-                    if (idx != state.folderInfo.postCount - 1) {
-                        HorizontalDivider(
-                            modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                            thickness = 0.5.dp,
+                }
+            }
+        }
+    } else {
+        Box {
+            LazyColumn(
+                state = listState,
+                contentPadding = contentPadding,
+                modifier = modifier,
+            ) {
+                item {
+                    StorageDetailExpandedHeader(
+                        state = state,
+                        onClickBackIcon = onClickBackIcon,
+                        onClickTabItem = onClickTabItem,
+                        onClickActionIcon = onClickActionIcon,
+                    )
+                }
+                if (!isLoading) {
+                    item {
+                        SortButtonRow(
+                            isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
+                            onClickSortedIcon = onClickSortedIcon,
                         )
+                        Spacer(modifier = Modifier.height(20.dp))
                     }
+                    items(
+                        count = linksPagingList.itemCount,
+                        key = linksPagingList.itemKey { item ->
+                            "${item.postId}_${item.isFavorite}"
+                        },
+                        contentType = linksPagingList.itemContentType { "SavedLinks" },
+                    ) { idx ->
+                        linksPagingList[idx]?.let { cardItem ->
+                            val item = cardItem.copy(category = state.folderInfo.title)
+                            FeedCard(
+                                cardInfo = item,
+                                onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
+                                onClickMoreButton = { onClickMoreButton(cardItem.postId) },
+                                feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
+                            )
+                            if (idx != state.folderInfo.postCount - 1) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 20.dp)
+                                        .height(0.5.dp)
+                                        .background(DoraColorTokens.G2),
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            if (isLoading) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    LottieLoader(
+                        lottieRes = coreR.raw.spinner,
+                        modifier = Modifier
+                            .size(54.dp)
+                            .align(Alignment.Center),
+                    )
                 }
             }
         }

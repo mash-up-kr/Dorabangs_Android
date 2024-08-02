@@ -6,6 +6,7 @@ import com.mashup.dorabangs.data.model.classification.toPagingDomain
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
 import com.mashup.dorabangs.domain.model.AIClassificationPosts
+import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.repository.AIClassificationRepository
 import kotlinx.coroutines.flow.Flow
@@ -22,13 +23,15 @@ class AIClassificationRepositoryImpl @Inject constructor(
         limit: Int,
         order: String,
     ): Flow<PagingData<AIClassificationFeedPost>> =
-        doraPager { page ->
-            remoteDataSource.getAIClassificationPosts(
-                page = page,
-                limit = limit,
-                order = order,
-            ).toPagingDomain()
-        }.flow
+        doraPager(
+            apiExecutor = { page ->
+                remoteDataSource.getAIClassificationPosts(
+                    page = page,
+                    limit = limit,
+                    order = order,
+                ).toPagingDomain()
+            },
+        ).flow
 
     override suspend fun moveAllPostsToRecommendedFolder(suggestionFolderId: String): AIClassificationPosts =
         remoteDataSource.moveAllPostsToRecommendedFolder(suggestionFolderId)
@@ -46,8 +49,12 @@ class AIClassificationRepositoryImpl @Inject constructor(
             order = order,
         )
 
-    override suspend fun deletePostFromAIClassification(postId: String) =
-        remoteDataSource.deletePostFromAIClassification(postId)
+    override suspend fun deletePostFromAIClassification(postId: String): DoraSampleResponse {
+        return kotlin.runCatching {
+            remoteDataSource.deletePostFromAIClassification(postId)
+            DoraSampleResponse(isSuccess = true)
+        }.getOrElse { DoraSampleResponse(isSuccess = false, errorMsg = it.message.orEmpty()) }
+    }
 
     override suspend fun getAIClassificationCount() =
         remoteDataSource.getAIClassificationCount()
