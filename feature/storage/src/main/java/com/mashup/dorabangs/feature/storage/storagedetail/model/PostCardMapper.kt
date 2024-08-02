@@ -15,7 +15,7 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
         createdAt = this.createdAt,
         keywordList = this.keywords?.map { it.name },
         isFavorite = isFavorite ?: false,
-        thumbnail = "",
+        thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId.orEmpty(),
     )
 }
@@ -28,7 +28,7 @@ fun Post.toUiModel(): FeedCardUiModel {
         createdAt = this.createdAt,
         keywordList = listOf(),
         isFavorite = isFavorite,
-        thumbnail = "",
+        thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId,
     )
 }

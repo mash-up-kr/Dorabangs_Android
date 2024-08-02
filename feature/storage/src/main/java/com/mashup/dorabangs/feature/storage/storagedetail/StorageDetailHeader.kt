@@ -61,6 +61,7 @@ fun StorageDetailCollapsingHeader(
             StorageDetailHeaderTabBar(
                 tabList = state.tabInfo.tabTitleList,
                 onClickTabItem = onClickTabItem,
+                selectedTabIdx = state.tabInfo.selectedTabIdx,
             )
         }
     }
@@ -91,9 +92,11 @@ fun StorageDetailExpandedHeader(
             selectedTabIdx = state.tabInfo.selectedTabIdx,
             onClickTabItem = onClickTabItem,
         )
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 0.5.dp,
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(0.5.dp)
+                .background(DoraColorTokens.G2),
         )
     }
 }

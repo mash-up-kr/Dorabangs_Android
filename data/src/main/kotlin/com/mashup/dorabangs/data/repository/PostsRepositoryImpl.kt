@@ -35,19 +35,21 @@ class PostsRepositoryImpl @Inject constructor(
     override suspend fun saveLink(link: Link) =
         postsRemoteDataSource.saveLink(link)
 
-    override suspend fun patchPostInfo(postId: String, postInfo: PostInfo) = runCatching {
-        postsRemoteDataSource.patchPostInfo(postId, postInfo)
-        DoraSampleResponse(isSuccess = true)
-    }.getOrElse {
-        DoraSampleResponse(isSuccess = false)
-    }
+    override suspend fun patchPostInfo(postId: String, postInfo: PostInfo): DoraSampleResponse =
+        runCatching {
+            postsRemoteDataSource.patchPostInfo(postId, postInfo)
+            DoraSampleResponse(isSuccess = true)
+        }.getOrElse { throwable ->
+            DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
+        }
 
-    override suspend fun deletePost(postId: String) = runCatching {
-        postsRemoteDataSource.deletePost(postId)
-        DoraSampleResponse(isSuccess = true)
-    }.getOrElse {
-        DoraSampleResponse(isSuccess = false)
-    }
+    override suspend fun deletePost(postId: String): DoraSampleResponse =
+        runCatching {
+            postsRemoteDataSource.deletePost(postId)
+            DoraSampleResponse(isSuccess = true)
+        }.getOrElse { throwable ->
+            DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
+        }
 
     override suspend fun changePostFolder(postId: String, folderId: String): DoraSampleResponse =
         runCatching {

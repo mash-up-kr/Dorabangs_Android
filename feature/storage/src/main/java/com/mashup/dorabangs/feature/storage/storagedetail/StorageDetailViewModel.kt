@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
@@ -27,7 +29,11 @@ import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSor
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import com.mashup.dorabangs.feature.storage.storagedetail.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -51,6 +57,9 @@ class StorageDetailViewModel @Inject constructor(
     private val getFolderByIdUseCase: GetFolderById,
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
+
+    private val _feedListState: MutableStateFlow<PagingData<FeedCardUiModel>> = MutableStateFlow(value = PagingData.empty())
+    val feedListState: StateFlow<PagingData<FeedCardUiModel>> = _feedListState.asStateFlow()
 
     fun setFolderInfo(folderItem: Folder) = intent {
         reduce {
@@ -117,7 +126,7 @@ class StorageDetailViewModel @Inject constructor(
         limit: Int = 10,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-        val pagingData = savedLinksFromFolderUseCase.invoke(
+        savedLinksFromFolderUseCase.invoke(
             folderId = folderId,
             order = order,
             isRead = isRead,
@@ -136,11 +145,8 @@ class StorageDetailViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
             initialValue = PagingData.empty(),
-        )
-        intent {
-            reduce {
-                state.copy(pagingList = pagingData)
-            }
+        ).collectLatest { pagingData ->
+            _feedListState.value = pagingData
         }
     }
 
@@ -152,32 +158,28 @@ class StorageDetailViewModel @Inject constructor(
         favorite: Boolean = false,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-        val pagingData =
-            getPostsUseCase.invoke(
-                order = order,
-                favorite = favorite,
-                isRead = isRead,
-                totalCount = { total ->
-                    intent {
-                        reduce {
-                            val folderInfo = state.folderInfo.copy(postCount = total)
-                            state.copy(folderInfo = folderInfo)
-                        }
+        getPostsUseCase.invoke(
+            order = order,
+            favorite = favorite,
+            isRead = isRead,
+            totalCount = { total ->
+                intent {
+                    reduce {
+                        val folderInfo = state.folderInfo.copy(postCount = total)
+                        state.copy(folderInfo = folderInfo)
                     }
-                },
-            )
-                .cachedIn(viewModelScope).map { pagedData ->
-                    pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-                }.stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.Lazily,
-                    initialValue = PagingData.empty(),
-                )
-        intent {
-            reduce {
-                state.copy(pagingList = pagingData)
+                }
+            },
+        )
+            .cachedIn(viewModelScope).map { pagedData ->
+                pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Lazily,
+                initialValue = PagingData.empty(),
+            ).collectLatest { pagingData ->
+                _feedListState.value = pagingData
             }
-        }
     }
 
     /**
@@ -219,28 +221,24 @@ class StorageDetailViewModel @Inject constructor(
     }
 
     /**
-     * 즐겨찾기 추가
-     * 낙관적 Update추가, 스크롤 위치가 왜 변할까?
+     * 즐겨찾기 추가 - 낙관적 업데이트 적용
      */
     fun addFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
-        intent {
-            val postInfo = PostInfo(isFavorite = !isFavorite)
-            patchPostInfoUseCase(
-                postId = postId,
-                postInfo = postInfo,
-            )
-            // intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
-            reduce {
-                val updateList = state.pagingList.map { pagingData ->
-                    pagingData.map { item ->
-                        if (item.postId == postId) {
-                            item.copy(isFavorite = !isFavorite)
-                        } else {
-                            item
-                        }
-                    }
+        _feedListState.value = feedListState.value.map { item ->
+            if (item.postId == postId) {
+                item.copy(isFavorite = !isFavorite)
+            } else {
+                item
+            }
+        }
+        val isSuccessFavorite = patchPostInfoUseCase(postId = postId, postInfo = PostInfo(isFavorite = !isFavorite)).isSuccess
+        if (isSuccessFavorite.not()) {
+            _feedListState.value = feedListState.value.map { item ->
+                if (item.postId == postId) {
+                    item.copy(isFavorite = isFavorite)
+                } else {
+                    item
                 }
-                state.copy(pagingList = updateList)
             }
         }
     }
@@ -264,9 +262,11 @@ class StorageDetailViewModel @Inject constructor(
      * 링크 삭제
      */
     fun deletePost(postId: String) = viewModelScope.doraLaunch {
-        deletePostUseCase(postId)
+        val isSuccessDeleted = deletePostUseCase(postId).isSuccess
         setVisibleDialog(false)
-        intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+        if (isSuccessDeleted) {
+            _feedListState.value = feedListState.value.filter { item -> item.postId != postId }
+        }
     }
 
     /**

@@ -113,7 +113,9 @@ fun StorageRoute(
             text = storageState.toastState.text,
             toastStyle = storageState.toastState.toastStyle,
             snackBarHostState = toastSnackBarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 20.dp),
         )
     }
 }
@@ -154,6 +156,7 @@ fun StorageTopAppBar(
             .padding(horizontal = 20.dp, vertical = 12.dp)
             .background(Color.Transparent),
         horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(id = R.string.storage),

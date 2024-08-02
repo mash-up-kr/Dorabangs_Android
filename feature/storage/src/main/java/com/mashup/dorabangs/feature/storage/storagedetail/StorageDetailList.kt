@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -58,13 +57,84 @@ fun StorageDetailList(
 ) {
     val isLoading = linksPagingList.loadState.refresh is LoadState.Loading
     if (linksPagingList.itemCount == 0) {
-        Column {
-            StorageDetailExpandedHeader(
-                state = state,
-                onClickBackIcon = onClickBackIcon,
-                onClickTabItem = onClickTabItem,
-                onClickActionIcon = onClickActionIcon,
-            )
+        Box {
+            Column {
+                StorageDetailExpandedHeader(
+                    state = state,
+                    onClickBackIcon = onClickBackIcon,
+                    onClickTabItem = onClickTabItem,
+                    onClickActionIcon = onClickActionIcon,
+                )
+                if (!isLoading) {
+                    StorageDetailEmpty(modifier = modifier)
+                }
+            }
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                ) {
+                    LottieLoader(
+                        lottieRes = coreR.raw.spinner,
+                        modifier = Modifier
+                            .size(54.dp)
+                            .align(Alignment.Center),
+                    )
+                }
+            }
+        }
+    } else {
+        Box {
+            LazyColumn(
+                state = listState,
+                contentPadding = contentPadding,
+                modifier = modifier,
+            ) {
+                item {
+                    StorageDetailExpandedHeader(
+                        state = state,
+                        onClickBackIcon = onClickBackIcon,
+                        onClickTabItem = onClickTabItem,
+                        onClickActionIcon = onClickActionIcon,
+                    )
+                }
+                if (!isLoading) {
+                    item {
+                        SortButtonRow(
+                            isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
+                            onClickSortedIcon = onClickSortedIcon,
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                    items(
+                        count = linksPagingList.itemCount,
+                        key = linksPagingList.itemKey { item ->
+                            "${item.postId}_${item.isFavorite}"
+                        },
+                        contentType = linksPagingList.itemContentType { "SavedLinks" },
+                    ) { idx ->
+                        linksPagingList[idx]?.let { cardItem ->
+                            val item = cardItem.copy(category = state.folderInfo.title)
+                            FeedCard(
+                                cardInfo = item,
+                                onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
+                                onClickMoreButton = { onClickMoreButton(cardItem.postId) },
+                                feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
+                            )
+                            if (idx != state.folderInfo.postCount - 1) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 20.dp)
+                                        .height(0.5.dp)
+                                        .background(DoraColorTokens.G2),
+                                )
+                            }
+                        }
+                    }
+                }
+            }
             if (isLoading) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     LottieLoader(
@@ -73,67 +143,6 @@ fun StorageDetailList(
                             .size(54.dp)
                             .align(Alignment.Center),
                     )
-                }
-            } else {
-                StorageDetailEmpty(modifier = modifier)
-            }
-        }
-    } else {
-        LazyColumn(
-            state = listState,
-            contentPadding = contentPadding,
-            modifier = modifier,
-        ) {
-            item {
-                StorageDetailExpandedHeader(
-                    state = state,
-                    onClickBackIcon = onClickBackIcon,
-                    onClickTabItem = onClickTabItem,
-                    onClickActionIcon = onClickActionIcon,
-                )
-            }
-            if (isLoading) {
-                item {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        LottieLoader(
-                            lottieRes = coreR.raw.spinner,
-                            modifier = Modifier
-                                .size(54.dp)
-                                .align(Alignment.Center),
-                        )
-                    }
-                }
-            } else {
-                item {
-                    SortButtonRow(
-                        isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
-                        onClickSortedIcon = onClickSortedIcon,
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
-                items(
-                    count = linksPagingList.itemCount,
-                    key = { idx ->
-                        linksPagingList[idx]?.let { item ->
-                            "${item.postId}_${item.isFavorite}"
-                        } ?: linksPagingList.itemKey(FeedCardUiModel::postId)
-                    },
-                    contentType = linksPagingList.itemContentType { "SavedLinks" },
-                ) { idx ->
-                    linksPagingList[idx]?.let { cardItem ->
-                        FeedCard(
-                            cardInfo = cardItem,
-                            onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
-                            onClickMoreButton = { onClickMoreButton(cardItem.postId) },
-                            feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
-                        )
-                        if (idx != state.folderInfo.postCount - 1) {
-                            HorizontalDivider(
-                                modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                                thickness = 0.5.dp,
-                            )
-                        }
-                    }
                 }
             }
         }

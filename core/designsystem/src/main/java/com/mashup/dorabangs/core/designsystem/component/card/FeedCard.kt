@@ -72,8 +72,8 @@ fun FeedCard(
         modifier = modifier
             .background(DoraColorTokens.P1, shape = RectangleShape)
             .fillMaxWidth()
-            .padding(20.dp)
-            .clickable { onClickCardItem() },
+            .clickable { onClickCardItem() }
+            .padding(20.dp),
     ) {
         Row(
             modifier = Modifier.background(DoraColorTokens.P1),
