@@ -146,7 +146,7 @@ class StorageDetailViewModel @Inject constructor(
             started = SharingStarted.Lazily,
             initialValue = PagingData.empty(),
         ).collectLatest { pagingData ->
-            _feedListState.emit(pagingData)
+            _feedListState.value = pagingData
         }
     }
 
@@ -158,28 +158,28 @@ class StorageDetailViewModel @Inject constructor(
         favorite: Boolean = false,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-            getPostsUseCase.invoke(
-                order = order,
-                favorite = favorite,
-                isRead = isRead,
-                totalCount = { total ->
-                    intent {
-                        reduce {
-                            val folderInfo = state.folderInfo.copy(postCount = total)
-                            state.copy(folderInfo = folderInfo)
-                        }
+        getPostsUseCase.invoke(
+            order = order,
+            favorite = favorite,
+            isRead = isRead,
+            totalCount = { total ->
+                intent {
+                    reduce {
+                        val folderInfo = state.folderInfo.copy(postCount = total)
+                        state.copy(folderInfo = folderInfo)
                     }
-                },
-            )
-                .cachedIn(viewModelScope).map { pagedData ->
-                    pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-                }.stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.Lazily,
-                    initialValue = PagingData.empty(),
-                ).collectLatest { pagingData ->
-                    _feedListState.value = pagingData
                 }
+            },
+        )
+            .cachedIn(viewModelScope).map { pagedData ->
+                pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Lazily,
+                initialValue = PagingData.empty(),
+            ).collectLatest { pagingData ->
+                _feedListState.value = pagingData
+            }
     }
 
     /**
@@ -232,7 +232,7 @@ class StorageDetailViewModel @Inject constructor(
             }
         }
         val isSuccessFavorite = patchPostInfoUseCase(postId = postId, postInfo = PostInfo(isFavorite = !isFavorite)).isSuccess
-        if (!isSuccessFavorite) {
+        if (isSuccessFavorite.not()) {
             _feedListState.value = feedListState.value.map { item ->
                 if (item.postId == postId) {
                     item.copy(isFavorite = isFavorite)

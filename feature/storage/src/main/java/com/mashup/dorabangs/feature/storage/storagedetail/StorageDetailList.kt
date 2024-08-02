@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -124,9 +123,12 @@ fun StorageDetailList(
                                 feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
                             )
                             if (idx != state.folderInfo.postCount - 1) {
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp),
-                                    thickness = 0.5.dp,
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 20.dp)
+                                        .height(0.5.dp)
+                                        .background(DoraColorTokens.G2),
                                 )
                             }
                         }

@@ -113,7 +113,9 @@ fun StorageRoute(
             text = storageState.toastState.text,
             toastStyle = storageState.toastState.toastStyle,
             snackBarHostState = toastSnackBarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 20.dp),
         )
     }
 }
