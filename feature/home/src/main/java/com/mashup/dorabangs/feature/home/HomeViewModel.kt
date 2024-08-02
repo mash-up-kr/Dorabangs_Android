@@ -366,7 +366,7 @@ class HomeViewModel @Inject constructor(
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
-            // intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+            // intent { postSideEffect(HomeSideEffect) }
         }
     }
 

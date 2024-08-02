@@ -87,7 +87,8 @@ fun FeedCard(
             Spacer(modifier = Modifier.width(13.dp))
             AsyncImage(
                 modifier = Modifier
-                    .size(size = 80.dp).aspectRatio(1f)
+                    .size(size = 80.dp)
+                    .aspectRatio(1f)
                     .background(color = DoraColorTokens.G1),
                 model = cardInfo.thumbnail,
                 contentScale = ContentScale.Crop,
