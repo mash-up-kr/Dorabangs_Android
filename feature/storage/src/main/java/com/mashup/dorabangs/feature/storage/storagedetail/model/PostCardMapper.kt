@@ -13,9 +13,10 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
         title = this.title,
         content = this.description,
         createdAt = this.createdAt,
+        category = this.title,
         keywordList = this.keywords?.map { it.name },
         isFavorite = isFavorite ?: false,
-        thumbnail = "",
+        thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId.orEmpty(),
     )
 }
@@ -25,10 +26,11 @@ fun Post.toUiModel(): FeedCardUiModel {
         postId = this.id,
         title = this.title,
         content = this.description,
+        category = this.title,
         createdAt = this.createdAt,
         keywordList = listOf(),
         isFavorite = isFavorite,
-        thumbnail = "",
+        thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId,
     )
 }
