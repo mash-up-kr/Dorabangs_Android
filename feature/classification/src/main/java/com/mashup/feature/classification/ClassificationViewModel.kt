@@ -14,6 +14,7 @@ import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.usecase.aiclassification.DeletePostFromAIClassificationUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationPostsUseCase
+import com.mashup.dorabangs.domain.usecase.aiclassification.MoveSinglePostToRecommendedFolderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,6 +31,7 @@ class ClassificationViewModel @Inject constructor(
     private val getAIClassificationFolderListUseCase: GetAIClassificationFolderListUseCase,
     private val getAIClassificationPostsUseCase: GetAIClassificationPostsUseCase,
     private val deletePostUseCase: DeletePostFromAIClassificationUseCase,
+    private val moveSinglePostUseCase: MoveSinglePostToRecommendedFolderUseCase,
 ) : ViewModel(),
     ContainerHost<ClassificationState, ClassificationSideEffect> {
     override val container =
@@ -76,17 +78,6 @@ class ClassificationViewModel @Inject constructor(
         }
     }
 
-    private fun doraChipMapper(chips: AIClassificationFolders) =
-        chips.list.map {
-            val postCount = if (it.postCount > 99) "99+" else it.postCount
-            DoraChipUiModel(
-                id = it.folderId,
-                title = "${it.folderName} $postCount",
-                icon = it.icon,
-                postCount = it.postCount,
-            )
-        }
-
     fun changeCategory(idx: Int) = intent {
         reduce {
             state.copy(
@@ -98,20 +89,14 @@ class ClassificationViewModel @Inject constructor(
     fun moveAllItems() = intent {
     }
 
-    fun moveSelectedItem(idx: Int) = intent {
-    }
+    fun moveSelectedItem(cardItem: FeedCardUiModel) = viewModelScope.doraLaunch {
+        val move = moveSinglePostUseCase.invoke(
+            postId = cardItem.postId,
+            suggestionFolderId = cardItem.folderId,
+        )
 
-    fun deleteSelectedItem(cardItem: FeedCardUiModel) = viewModelScope.doraLaunch {
-        val delete = deletePostUseCase.invoke(cardItem.postId)
-        if (delete.isSuccess) {
-            val chips = getAIClassificationFolderListUseCase.invoke()
-            val chipList = doraChipMapper(chips)
-
-            paging.map { pagingData ->
-                pagingData.filter { it.postId != cardItem.postId }
-            }.let {
-                _paging.value = it.firstOrNull() ?: PagingData.empty()
-            }
+        if (move.isSuccess) {
+            val (chips, chipList) = updateListScreen(cardItem)
             intent {
                 reduce {
                     state.copy(
@@ -124,6 +109,46 @@ class ClassificationViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteSelectedItem(cardItem: FeedCardUiModel) = viewModelScope.doraLaunch {
+        val delete = deletePostUseCase.invoke(cardItem.postId)
+        if (delete.isSuccess) {
+            val (chips, chipList) = updateListScreen(cardItem)
+            intent {
+                reduce {
+                    state.copy(
+                        chipState = ChipState(
+                            totalCount = chips.totalCounts,
+                            chipList = chipList,
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun updateListScreen(cardItem: FeedCardUiModel): Pair<AIClassificationFolders, List<DoraChipUiModel>> {
+        val chips = getAIClassificationFolderListUseCase.invoke()
+        val chipList = doraChipMapper(chips)
+
+        paging.map { pagingData ->
+            pagingData.filter { it.postId != cardItem.postId }
+        }.let {
+            _paging.value = it.firstOrNull() ?: PagingData.empty()
+        }
+        return Pair(chips, chipList)
+    }
+
+    private fun doraChipMapper(chips: AIClassificationFolders) =
+        chips.list.map {
+            val postCount = if (it.postCount > 99) "99+" else it.postCount
+            DoraChipUiModel(
+                id = it.folderId,
+                title = "${it.folderName} $postCount",
+                icon = it.icon,
+                postCount = it.postCount,
+            )
+        }
 }
 
 fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedCardUiModel(

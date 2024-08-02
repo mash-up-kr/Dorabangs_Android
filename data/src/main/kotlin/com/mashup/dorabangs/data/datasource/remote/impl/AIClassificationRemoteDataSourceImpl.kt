@@ -2,7 +2,6 @@ package com.mashup.dorabangs.data.datasource.remote.impl
 
 import com.mashup.dorabangs.data.datasource.remote.api.AIClassificationRemoteDataSource
 import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostRequestModel
-import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostResponseModel
 import com.mashup.dorabangs.data.model.classification.AIClassificationAIPostListResponseModel
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.network.service.AIClassificationService
@@ -58,7 +57,7 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
     override suspend fun moveSinglePostToRecommendedFolder(
         postId: String,
         suggestionFolderId: String,
-    ): AiClassificationMoveSinglePostResponseModel = service.moveSinglePostToRecommendedFolder(
+    ) = service.moveSinglePostToRecommendedFolder(
         postId = postId,
         requestModel = AiClassificationMoveSinglePostRequestModel(
             suggestionFolderId = suggestionFolderId,
