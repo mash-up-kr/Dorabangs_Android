@@ -37,7 +37,7 @@ fun ClassificationListScreen(
     lazyColumnState: LazyListState,
     pagingList: LazyPagingItems<FeedCardUiModel>,
     modifier: Modifier = Modifier,
-    onClickDeleteButton: (Int) -> Unit = {},
+    onClickDeleteButton: (FeedCardUiModel) -> Unit = {},
     onClickMoveButton: (Int) -> Unit = {},
     onClickAllItemMoveButton: () -> Unit = {},
 ) {
@@ -117,7 +117,7 @@ fun ClassificationCardItem(
     idx: Int,
     lastIndex: Int,
     cardItem: FeedCardUiModel,
-    onClickDeleteButton: (Int) -> Unit,
+    onClickDeleteButton: (FeedCardUiModel) -> Unit,
     onClickMoveButton: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -132,7 +132,7 @@ fun ClassificationCardItem(
                 .padding(end = 20.dp)
                 .size(size = 24.dp)
                 .align(Alignment.End),
-            onClick = { onClickDeleteButton(idx) },
+            onClick = { onClickDeleteButton(cardItem) },
         ) {
             Image(
                 imageVector = DoraIconClose.CloseCircle,
