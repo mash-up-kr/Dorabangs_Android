@@ -232,7 +232,6 @@ fun HomeScreen(
                             isFavorite
                         )
                     },
-                    refreshPageList = { postsPagingList?.refresh() },
                 )
             }
 
@@ -273,7 +272,6 @@ private fun LazyListScope.Feeds(
     feeds: LazyPagingItems<FeedCardUiModel>?,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
-    refreshPageList: () -> Unit = {},
 ) {
     if (feeds != null) {
         items(
@@ -294,7 +292,6 @@ private fun LazyListScope.Feeds(
                             !cardInfo.isFavorite,
                         )
                     },
-                    updateCardState = { refreshPageList() },
                 )
                 Box(
                     modifier = Modifier

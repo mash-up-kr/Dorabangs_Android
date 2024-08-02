@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,11 +31,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedDate
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedSecond
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
-import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import kotlinx.coroutines.delay
 
 @Composable
 fun FeedCard(
@@ -46,28 +42,7 @@ fun FeedCard(
     onClickCardItem: () -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
-    updateCardState: () -> Unit = {},
 ) {
-    val loadingSecond = if (!cardInfo.createdAt.isNullOrBlank()) {
-        cardInfo.createdAt.convertCreatedSecond()
-    } else {
-        8
-    }.between(0, 8)
-
-    LaunchedEffect(cardInfo.isLoading) {
-        var requested = false
-        while (cardInfo.isLoading) {
-            val currentLoadingSecond = if (requested) {
-                4000
-            } else {
-                requested = true
-                loadingSecond * 1000L
-            }
-            delay(currentLoadingSecond)
-            updateCardState()
-        }
-    }
-
     Column(
         modifier = modifier
             .background(DoraColorTokens.P1, shape = RectangleShape)
@@ -94,15 +69,6 @@ fun FeedCard(
             )
         }
         if (cardInfo.isLoading) {
-            CardProgressBar(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .fillMaxWidth()
-                    .height(4.dp),
-                completedColor = DoraColorTokens.Primary,
-                remainColor = DoraGradientToken.Gradient2,
-                timeInProgress = minOf(0.8f, cardInfo.createdAt.convertCreatedSecond() / 8f),
-            )
             FeedCardCategoryAndDayLabel(
                 cardInfo = cardInfo,
             )
