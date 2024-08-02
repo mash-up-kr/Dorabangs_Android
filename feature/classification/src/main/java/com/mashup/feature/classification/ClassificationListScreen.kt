@@ -38,7 +38,7 @@ fun ClassificationListScreen(
     pagingList: LazyPagingItems<FeedCardUiModel>,
     modifier: Modifier = Modifier,
     onClickDeleteButton: (FeedCardUiModel) -> Unit = {},
-    onClickMoveButton: (Int) -> Unit = {},
+    onClickMoveButton: (FeedCardUiModel) -> Unit = {},
     onClickAllItemMoveButton: () -> Unit = {},
 ) {
     LazyColumn(
@@ -118,7 +118,7 @@ fun ClassificationCardItem(
     lastIndex: Int,
     cardItem: FeedCardUiModel,
     onClickDeleteButton: (FeedCardUiModel) -> Unit,
-    onClickMoveButton: (Int) -> Unit,
+    onClickMoveButton: (FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -147,7 +147,7 @@ fun ClassificationCardItem(
                 .padding(horizontal = 20.dp),
             buttonText = "${cardItem.category}(으)로 옮기기",
             enabled = true,
-            onClickButton = { onClickMoveButton(idx) },
+            onClickButton = { onClickMoveButton(cardItem) },
         )
         Spacer(modifier = Modifier.height(32.dp))
         if (idx != lastIndex) {

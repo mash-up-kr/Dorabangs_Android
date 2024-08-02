@@ -98,7 +98,8 @@ class ClassificationViewModel @Inject constructor(
     fun moveAllItems() = intent {
     }
 
-    fun moveSelectedItem(idx: Int) = intent {
+    fun moveSelectedItem(cardItem: FeedCardUiModel) = intent {
+        
     }
 
     fun deleteSelectedItem(cardItem: FeedCardUiModel) = viewModelScope.doraLaunch {
