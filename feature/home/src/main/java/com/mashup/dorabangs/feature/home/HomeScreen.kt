@@ -101,8 +101,7 @@ fun HomeScreen(
                         .align(Alignment.Center),
                 )
             }
-        }
-        else if (postsPagingList?.itemCount == 0) {
+        } else if (postsPagingList?.itemCount == 0) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -229,7 +228,7 @@ fun HomeScreen(
                     onClickBookMarkButton = { postId, isFavorite ->
                         onClickBookMarkButton(
                             postId,
-                            isFavorite
+                            isFavorite,
                         )
                     },
                 )
