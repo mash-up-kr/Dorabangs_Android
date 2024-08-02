@@ -16,13 +16,14 @@ data class FeedCardUiModel(
     val isLoading: Boolean = false,
 ) {
     companion object {
-        fun String?.convertCreatedDate(): Long {
+        fun String?.convertCreatedDate(): String {
             this?.let {
                 val givenDate = Instant.parse(this)
                 val currentDate = Instant.now()
-                return ChronoUnit.DAYS.between(givenDate, currentDate)
+                val dayDiff = ChronoUnit.DAYS.between(givenDate, currentDate)
+                return if (dayDiff == 0L) "오늘" else "${dayDiff}일 전"
             }
-            return 0L
+            return "없음"
         }
 
         fun String?.convertCreatedSecond(): Int {

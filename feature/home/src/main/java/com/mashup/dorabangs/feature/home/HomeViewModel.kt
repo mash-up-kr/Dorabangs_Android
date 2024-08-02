@@ -320,6 +320,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
+        val beforeData = postList.value.map { it }
+
         _postList.value = postList.value.map { item ->
             if (item.postId == postId) {
                 item.copy(isFavorite = isFavorite)
@@ -333,13 +335,7 @@ class HomeViewModel @Inject constructor(
             postInfo = postInfo,
         )
         if (response.isSuccess.not()) {
-            _postList.value = postList.value.map { item ->
-                if (item.postId == postId) {
-                    item.copy(isFavorite = !isFavorite)
-                } else {
-                    item
-                }
-            }
+            _postList.value = beforeData
         }
     }
 

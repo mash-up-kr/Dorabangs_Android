@@ -231,9 +231,8 @@ fun FeedCardCategoryAndDayLabel(
         )
         cardInfo.createdAt?.let { day ->
             if (day.isNotEmpty()) {
-                val days = day.convertCreatedDate()
                 Text(
-                    text = if (days == 0L) "오늘" else "${day.convertCreatedDate()}일 전",
+                    text = day.convertCreatedDate(),
                     style = DoraTypoTokens.XSNormal,
                     color = DoraColorTokens.G5,
                 )
