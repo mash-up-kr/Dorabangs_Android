@@ -319,14 +319,25 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
-        intent {
-            val postInfo = PostInfo(isFavorite = isFavorite)
-            val response = patchPostInfoUseCase(
-                postId = postId,
-                postInfo = postInfo,
-            )
-            if (response.isSuccess) {
-                postSideEffect(HomeSideEffect.RefreshPostList)
+        _postList.value = postList.value.map { item ->
+            if (item.postId == postId) {
+                item.copy(isFavorite = isFavorite)
+            } else {
+                item
+            }
+        }
+        val postInfo = PostInfo(isFavorite = isFavorite)
+        val response = patchPostInfoUseCase(
+            postId = postId,
+            postInfo = postInfo,
+        )
+        if (response.isSuccess.not()) {
+            _postList.value = postList.value.map { item ->
+                if (item.postId == postId) {
+                    item.copy(isFavorite = !isFavorite)
+                } else {
+                    item
+                }
             }
         }
     }

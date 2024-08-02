@@ -88,14 +88,17 @@ fun HomeScreen(
         val hazeState = remember { HazeState() }
 
         if (isLoading) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 104.dp)
+                    .align(Alignment.Center),
             ) {
-                Text(
-                    "로딩중",
-                    style = DoraTypoTokens.TitleBold
+                LottieLoader(
+                    lottieRes = R.raw.spinner,
+                    modifier = Modifier
+                        .size(54.dp)
+                        .align(Alignment.Center),
                 )
             }
         }
