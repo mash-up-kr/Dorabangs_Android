@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.home
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -358,7 +356,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateSelectFolderId(folderId: String) = intent {
-        Log.d(TAG, "updateSelectFolderId: $folderId")
         reduce { state.copy(changeFolderId = folderId) }
     }
 
