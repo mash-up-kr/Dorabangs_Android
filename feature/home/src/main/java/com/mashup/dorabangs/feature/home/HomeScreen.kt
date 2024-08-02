@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
@@ -71,20 +72,33 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
     scrollState: LazyListState = rememberLazyListState(),
-    onClickChip: (Int) -> Unit = { _  -> },
+    onClickChip: (Int) -> Unit = { _ -> },
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
     onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
 ) {
+    val isLoading = postsPagingList?.loadState?.refresh is LoadState.Loading
 
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
         val hazeState = remember { HazeState() }
 
-        if (postsPagingList?.itemCount == 0) {
+        if (isLoading) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    "로딩중",
+                    style = DoraTypoTokens.TitleBold
+                )
+            }
+        }
+        else if (postsPagingList?.itemCount == 0) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -208,7 +222,12 @@ fun HomeScreen(
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
-                    onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
+                    onClickBookMarkButton = { postId, isFavorite ->
+                        onClickBookMarkButton(
+                            postId,
+                            isFavorite
+                        )
+                    },
                     refreshPageList = { postsPagingList?.refresh() },
                 )
             }
