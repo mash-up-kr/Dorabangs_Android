@@ -158,7 +158,6 @@ class StorageDetailViewModel @Inject constructor(
         favorite: Boolean = false,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-        val pagingData =
             getPostsUseCase.invoke(
                 order = order,
                 favorite = favorite,

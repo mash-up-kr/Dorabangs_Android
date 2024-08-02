@@ -116,8 +116,9 @@ fun StorageDetailList(
                         contentType = linksPagingList.itemContentType { "SavedLinks" },
                     ) { idx ->
                         linksPagingList[idx]?.let { cardItem ->
+                            val item = cardItem.copy(category = state.folderInfo.title)
                             FeedCard(
-                                cardInfo = cardItem,
+                                cardInfo = item,
                                 onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
                                 onClickMoreButton = { onClickMoreButton(cardItem.postId) },
                                 feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
