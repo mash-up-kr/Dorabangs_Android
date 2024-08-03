@@ -52,7 +52,7 @@ fun StorageDetailList(
     onClickTabItem: (Int) -> Unit,
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
-    onClickPostItem:(String) -> Unit,
+    onClickPostItem: (String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {

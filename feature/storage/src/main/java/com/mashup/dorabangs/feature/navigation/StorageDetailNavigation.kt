@@ -45,7 +45,7 @@ fun NavGraphBuilder.storageDetailNavigation(
                 onClickBackIcon = { onClickBackIcon(isChangedData) },
                 navigateToStorage = navigateToStorage,
                 navigateToFolderManager = navigateToFolderManager,
-                navigateToWebView = navigateToWebView
+                navigateToWebView = navigateToWebView,
             )
         }
     }

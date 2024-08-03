@@ -58,6 +58,7 @@ fun List<AIClassificationAIPostListResponseModel.AIPostCard?>?.toDomain(): List<
                 aiStatus = item.aiStatus.orEmpty(),
                 keywordList = item.keywords?.map { keyword -> keyword.orEmpty() } ?: listOf(),
                 thumbnail = item.thumbnailImgUrl.orEmpty(),
+                url = item.url.orEmpty(),
                 isFavorite = false,
                 isLoading = false,
             )

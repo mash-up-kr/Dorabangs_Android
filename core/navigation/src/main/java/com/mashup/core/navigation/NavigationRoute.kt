@@ -16,5 +16,5 @@ sealed class NavigationRoute(val route: String) {
         object SelectFolder : NavigationRoute("save/folder")
     }
 
-    object WebViewScreen: NavigationRoute("webView")
+    object WebViewScreen : NavigationRoute("webView")
 }

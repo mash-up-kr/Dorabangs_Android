@@ -62,7 +62,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.lifecycle.compose.ktx)
 
-    //hilt
+    // hilt
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

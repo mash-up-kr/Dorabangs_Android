@@ -56,7 +56,7 @@ fun MainNavHost(
             },
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
             navigateToHomeTutorial = { appState.navController.navigateToHomeTutorial() },
-            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url)}
+            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
         )
         homeCreateFolderNavigation(
             navController = appState.navController,
@@ -115,11 +115,12 @@ fun MainNavHost(
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isRemoveSuccess", isRemoveSuccess)
                 appState.navController.popBackStack()
             },
-            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url)}
+            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
         )
         classificationNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
             navigateToHome = { appState.navController.popBackStack() },
+            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
         )
         saveLinkNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
@@ -143,7 +144,7 @@ fun MainNavHost(
             },
         )
         webViewNavigation(
-            navigateToPopBackStack = { appState.navController.popBackStack() }
+            navigateToPopBackStack = { appState.navController.popBackStack() },
         )
     }
 }

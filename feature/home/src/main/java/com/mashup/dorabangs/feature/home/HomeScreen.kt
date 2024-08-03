@@ -207,7 +207,7 @@ fun HomeScreen(
                     },
                     onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
                     refreshPageList = { postsPagingList?.refresh() },
-                    onClickCardItem = onClickCardItem
+                    onClickCardItem = onClickCardItem,
                 )
             }
 
@@ -271,7 +271,7 @@ private fun LazyListScope.Feeds(
                         )
                     },
                     updateCardState = { refreshPageList() },
-                    onClickCardItem = onClickCardItem
+                    onClickCardItem = onClickCardItem,
                 )
                 Box(
                     modifier = Modifier

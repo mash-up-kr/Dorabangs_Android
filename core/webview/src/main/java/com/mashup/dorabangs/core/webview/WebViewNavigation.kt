@@ -10,9 +10,9 @@ import com.mashup.core.navigation.NavigationRoute
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-fun NavController.navigateToWebView(navOptions: NavOptions? = null, url: String?)  {
+fun NavController.navigateToWebView(navOptions: NavOptions? = null, url: String?) {
     val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
-    navigate("${NavigationRoute.WebViewScreen.route}?url=${encodedUrl}", navOptions)
+    navigate("${NavigationRoute.WebViewScreen.route}?url=$encodedUrl", navOptions)
 }
 
 fun NavGraphBuilder.webViewNavigation(
@@ -31,7 +31,7 @@ fun NavGraphBuilder.webViewNavigation(
         moveUrl?.let { url ->
             DoraWebView(
                 url = url,
-                navigateToPopBackStack = navigateToPopBackStack
+                navigateToPopBackStack = navigateToPopBackStack,
             )
         }
     }

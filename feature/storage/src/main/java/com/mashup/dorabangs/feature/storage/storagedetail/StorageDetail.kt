@@ -116,7 +116,7 @@ fun StorageDetailRoute(
                 storageDetailViewModel.setActionType(EditActionType.LinkEdit, postId)
                 storageDetailViewModel.setVisibleMoreButtonBottomSheet(true)
             },
-            onClickPostItem = navigateToWebView
+            onClickPostItem = navigateToWebView,
         )
 
         DoraBottomSheet.MoreButtonBottomSheet(
@@ -239,7 +239,7 @@ fun StorageDetailScreen(
             onClickBookMarkButton = onClickBookMarkButton,
             onClickActionIcon = onClickActionIcon,
             onClickMoreButton = onClickMoreButton,
-            onClickPostItem = onClickPostItem
+            onClickPostItem = onClickPostItem,
 
         )
     }
@@ -253,6 +253,6 @@ fun PreviewStorageDetailScreen() {
         navigateToStorage = {},
         navigateToFolderManager = { id, type -> },
         onClickBackIcon = {},
-        navigateToWebView = {}
+        navigateToWebView = {},
     )
 }

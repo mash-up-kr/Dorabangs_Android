@@ -35,7 +35,7 @@ fun NavGraphBuilder.homeNavigation(
             navigateToSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToCreateFolder = navigateToCreateFolder,
             navigateToHomeTutorial = navigateToHomeTutorial,
-            navigateToWebView = navigateToWebView
+            navigateToWebView = navigateToWebView,
         )
     }
 }

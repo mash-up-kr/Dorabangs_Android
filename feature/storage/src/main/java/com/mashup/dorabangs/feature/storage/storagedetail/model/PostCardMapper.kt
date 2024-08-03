@@ -17,7 +17,7 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
         isFavorite = isFavorite ?: false,
         thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId.orEmpty(),
-        url = this.url.orEmpty()
+        url = this.url.orEmpty(),
     )
 }
 
@@ -31,7 +31,7 @@ fun Post.toUiModel(): FeedCardUiModel {
         isFavorite = isFavorite,
         thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId,
-        url = this.url
+        url = this.url,
     )
 }
 

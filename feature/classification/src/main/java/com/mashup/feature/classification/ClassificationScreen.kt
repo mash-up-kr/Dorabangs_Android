@@ -23,6 +23,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun ClassificationRoute(
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToWebView: (String) -> Unit,
     classificationViewModel: ClassificationViewModel = hiltViewModel(),
 ) {
     val state by classificationViewModel.collectAsState()
@@ -37,6 +38,7 @@ fun ClassificationRoute(
         onClickAllItemMoveButton = classificationViewModel::moveAllItems,
         onClickBackIcon = onClickBackIcon,
         navigateToHome = navigateToHome,
+        onClickCardItem = navigateToWebView,
     )
 }
 
@@ -50,6 +52,7 @@ fun ClassificationScreen(
     onClickAllItemMoveButton: () -> Unit,
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
+    onClickCardItem: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val totalCount = if (state.chipState.totalCount > 99) "99+" else state.chipState.totalCount.toString()
@@ -93,6 +96,7 @@ fun ClassificationScreen(
                 onClickDeleteButton = onClickDeleteButton,
                 onClickMoveButton = onClickMoveButton,
                 onClickAllItemMoveButton = onClickAllItemMoveButton,
+                onClickCardItem = onClickCardItem,
             )
         }
     }

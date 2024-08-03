@@ -23,19 +23,19 @@ fun DoraWebView(
     val webView = remember { WebView(context) }
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         DoraTopBar.BackNavigationTopBar(
             modifier = Modifier.fillMaxWidth(),
             title = "",
             isTitleCenter = true,
-            onClickBackIcon = { navigateToPopBackStack() }
+            onClickBackIcon = { navigateToPopBackStack() },
         )
         AndroidView(factory = {
             webView.apply {
                 this.layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
+                    ViewGroup.LayoutParams.MATCH_PARENT,
                 )
                 this.webViewClient = WebViewClient()
             }
@@ -43,5 +43,4 @@ fun DoraWebView(
             it.loadUrl(url)
         })
     }
-
 }

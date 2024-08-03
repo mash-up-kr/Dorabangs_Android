@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.core.designsystem.component.card
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,6 +33,7 @@ import coil.compose.AsyncImage
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedDate
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedSecond
+import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -69,12 +68,13 @@ fun FeedCard(
             updateCardState()
         }
     }
-    Log.d(TAG, "FeedCard: ${cardInfo.url}")
     Column(
         modifier = modifier
             .background(DoraColorTokens.P1, shape = RectangleShape)
             .fillMaxWidth()
-            .clickable { onClickCardItem(cardInfo.url) }
+            .thenIf(feedCardEntryPoint !is FeedCardEntryPoint.AiClassification) {
+                this.clickable { onClickCardItem(cardInfo.url) }
+            }
             .padding(20.dp),
     ) {
         Row(

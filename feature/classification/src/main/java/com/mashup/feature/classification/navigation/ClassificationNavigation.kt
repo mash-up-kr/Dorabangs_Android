@@ -11,6 +11,7 @@ fun NavController.navigateToClassification() = navigate(NavigationRoute.Classifi
 fun NavGraphBuilder.classificationNavigation(
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToWebView: (String) -> Unit,
 ) {
     composable(
         route = NavigationRoute.ClassificationScreen.route,
@@ -18,6 +19,7 @@ fun NavGraphBuilder.classificationNavigation(
         ClassificationRoute(
             onClickBackIcon = onClickBackIcon,
             navigateToHome = navigateToHome,
+            navigateToWebView = navigateToWebView,
         )
     }
 }
