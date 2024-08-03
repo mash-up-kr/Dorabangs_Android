@@ -18,6 +18,7 @@ import com.mashup.dorabangs.core.designsystem.component.bottomnavigation.DoraBot
 @Composable
 fun DoraApp(
     isFirstEntry: Boolean,
+    hideKeyboardAction: () -> Unit,
     appState: DoraAppState = rememberDoraAppState(),
 ) {
     Scaffold(
@@ -45,6 +46,7 @@ fun DoraApp(
                     } else {
                         "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}"
                     },
+                    hideKeyboardAction = hideKeyboardAction,
                 )
             }
         },
