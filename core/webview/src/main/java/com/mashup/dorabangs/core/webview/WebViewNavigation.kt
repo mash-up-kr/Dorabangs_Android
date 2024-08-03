@@ -12,22 +12,22 @@ import java.nio.charset.StandardCharsets
 
 fun NavController.navigateToWebView(navOptions: NavOptions? = null, url: String?)  {
     val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
-    navigate("${NavigationRoute.WebViewScreen.route}/url=${encodedUrl}", navOptions)
+    navigate("${NavigationRoute.WebViewScreen.route}?url=${encodedUrl}", navOptions)
 }
 
 fun NavGraphBuilder.webViewNavigation(
     navigateToPopBackStack: () -> Unit,
 ) {
     composable(
-        route = "${NavigationRoute.WebViewScreen.route}/url={encodedUrl}",
+        route = "${NavigationRoute.WebViewScreen.route}?url={url}",
         arguments = listOf(
-            navArgument(name = "encodedUrl") {
+            navArgument(name = "url") {
                 type = NavType.StringType
                 defaultValue = ""
             },
         ),
     ) { navBackStackEntry ->
-        val moveUrl = navBackStackEntry.arguments?.getString("encodeUrl")
+        val moveUrl = navBackStackEntry.arguments?.getString("url")
         moveUrl?.let { url ->
             DoraWebView(
                 url = url,

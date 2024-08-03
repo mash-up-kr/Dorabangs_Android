@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.core.designsystem.component.card
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -43,7 +45,7 @@ fun FeedCard(
     cardInfo: FeedCardUiModel,
     feedCardEntryPoint: FeedCardEntryPoint,
     modifier: Modifier = Modifier,
-    onClickCardItem: () -> Unit = {},
+    onClickCardItem: (String) -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
     updateCardState: () -> Unit = {},
@@ -67,12 +69,12 @@ fun FeedCard(
             updateCardState()
         }
     }
-
+    Log.d(TAG, "FeedCard: ${cardInfo.url}")
     Column(
         modifier = modifier
             .background(DoraColorTokens.P1, shape = RectangleShape)
             .fillMaxWidth()
-            .clickable { onClickCardItem() }
+            .clickable { onClickCardItem(cardInfo.url) }
             .padding(20.dp),
     ) {
         Row(

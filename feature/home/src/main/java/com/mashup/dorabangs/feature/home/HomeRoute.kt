@@ -31,13 +31,14 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun HomeRoute(
     modifier: Modifier = Modifier,
     view: View = LocalView.current,
+    navigateToCreateFolder: () -> Unit,
+    navigateToHomeTutorial: () -> Unit,
+    navigateToWebView: (String) -> Unit,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToClassification: () -> Unit = {},
     navigateToSaveScreenWithLink: (String) -> Unit = {},
     navigateToSaveScreenWithoutLink: () -> Unit = {},
-    navigateToCreateFolder: () -> Unit,
-    navigateToHomeTutorial: () -> Unit,
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -77,6 +78,7 @@ fun HomeRoute(
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
             onClickBookMarkButton = { postId, isFavorite -> viewModel.updateFavoriteItem(postId, isFavorite) },
+            onClickCardItem = navigateToWebView,
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,

@@ -9,6 +9,8 @@ import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.core.webview.navigateToWebView
+import com.mashup.dorabangs.core.webview.webViewNavigation
 import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.navigation.homeCreateFolderNavigation
 import com.mashup.dorabangs.feature.navigation.homeNavigation
@@ -54,6 +56,7 @@ fun MainNavHost(
             },
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
             navigateToHomeTutorial = { appState.navController.navigateToHomeTutorial() },
+            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url)}
         )
         homeCreateFolderNavigation(
             navController = appState.navController,
@@ -112,6 +115,7 @@ fun MainNavHost(
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isRemoveSuccess", isRemoveSuccess)
                 appState.navController.popBackStack()
             },
+            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url)}
         )
         classificationNavigation(
             onClickBackIcon = { appState.navController.popBackStack() },
@@ -137,6 +141,9 @@ fun MainNavHost(
             onClickAddNewFolder = { url ->
                 appState.navController.navigateToHomeCrateFolder(urlLink = url)
             },
+        )
+        webViewNavigation(
+            navigateToPopBackStack = { appState.navController.popBackStack() }
         )
     }
 }
