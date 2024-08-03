@@ -3,6 +3,7 @@ package com.mashup.feature.classification
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,12 +24,14 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
+import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
 @Composable
@@ -52,7 +55,6 @@ fun ClassificationListScreen(
                 onClickAllItemMoveButton = onClickAllItemMoveButton,
                 count = state.chipState.totalCount,
             )
-            HorizontalDivider(thickness = 0.5.dp)
         }
 
         items(
@@ -82,7 +84,7 @@ fun ClassificationFolderMove(
 ) {
     Column(
         modifier = modifier
-            .background(color = DoraColorTokens.White)
+            .background(DoraGradientToken.Gradient2)
             .fillMaxWidth()
             .padding(vertical = 32.dp, horizontal = 23.dp),
 
@@ -141,14 +143,21 @@ fun ClassificationCardItem(
         }
         Spacer(modifier = Modifier.height(20.dp))
         FeedCard(cardInfo = cardItem, feedCardEntryPoint = FeedCardEntryPoint.AiClassification)
-        DoraButtons.DoraColorFullMaxBtn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            buttonText = "${cardItem.category}(으)로 옮기기",
-            enabled = true,
-            onClickButton = { onClickMoveButton(cardItem) },
-        )
+        GradientButton(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+            gradientModifier = Modifier.fillMaxWidth().height(36.dp),
+            containerColor = DoraGradientToken.Gradient1,
+            contentPadding = PaddingValues(horizontal = 20.dp),
+            onClick = { onClickMoveButton(cardItem) },
+        ) {
+            Text(
+                text = "${cardItem.category}(으)로 옮기기",
+                modifier = Modifier.padding(vertical = 7.dp),
+                style = DoraTypoTokens.caption1Medium.copy(
+                    brush = DoraGradientToken.Gradient5,
+                ),
+            )
+        }
         Spacer(modifier = Modifier.height(32.dp))
         if (idx != lastIndex) {
             HorizontalDivider(

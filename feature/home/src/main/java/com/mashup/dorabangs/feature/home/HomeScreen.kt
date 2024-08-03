@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -330,6 +332,10 @@ private fun HomeCarousel(
                     GradientButton(
                         containerColor = DoraGradientToken.Gradient3,
                         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+                        gradientModifier = Modifier.defaultMinSize(
+                            minWidth = ButtonDefaults.MinWidth,
+                            minHeight = ButtonDefaults.MinHeight,
+                        ),
                         onClick = homeCarouselItems[page].onClickButton,
                     ) {
                         Text(
