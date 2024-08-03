@@ -151,7 +151,7 @@ fun StorageDetailList(
 
 @Composable
 fun SortButtonRow(
-    items: List<StorageDetailSort> = listOf(StorageDetailSort.ASC, StorageDetailSort.DESC),
+    items: List<StorageDetailSort> = listOf(StorageDetailSort.DESC, StorageDetailSort.ASC),
     isLatestSort: Boolean = false,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
