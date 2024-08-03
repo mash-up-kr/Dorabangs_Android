@@ -21,6 +21,7 @@ fun NavController.navigateToStorageDetail(folder: Folder) {
 
 fun NavGraphBuilder.storageDetailNavigation(
     onClickBackIcon: (Boolean) -> Unit,
+    navigateToWebView: (String) -> Unit,
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
 ) {
@@ -44,6 +45,7 @@ fun NavGraphBuilder.storageDetailNavigation(
                 onClickBackIcon = { onClickBackIcon(isChangedData) },
                 navigateToStorage = navigateToStorage,
                 navigateToFolderManager = navigateToFolderManager,
+                navigateToWebView = navigateToWebView
             )
         }
     }

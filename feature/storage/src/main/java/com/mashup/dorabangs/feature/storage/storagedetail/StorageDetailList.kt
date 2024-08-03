@@ -52,6 +52,7 @@ fun StorageDetailList(
     onClickTabItem: (Int) -> Unit,
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
+    onClickPostItem:(String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
@@ -118,6 +119,7 @@ fun StorageDetailList(
                             val item = cardItem.copy(category = state.folderInfo.title)
                             FeedCard(
                                 cardInfo = item,
+                                onClickCardItem = onClickPostItem,
                                 onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
                                 onClickMoreButton = { onClickMoreButton(cardItem.postId) },
                                 feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
