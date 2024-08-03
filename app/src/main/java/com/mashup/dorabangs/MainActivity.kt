@@ -1,10 +1,12 @@
 package com.mashup.dorabangs
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -49,9 +51,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             val firstEntryScreen = splashViewModel.firstEntryScreen.collectAsState()
             if (firstEntryScreen.value != FirstEntryScreen.Splash) {
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+
                 DorabangsTheme {
                     DoraApp(
                         isFirstEntry = firstEntryScreen.value == FirstEntryScreen.Onboarding,
+                        hideKeyboardAction = {
+                            currentFocus?.let {
+                                imm?.hideSoftInputFromWindow(it.windowToken, 0)
+                            }
+                        },
                     )
                 }
             }
