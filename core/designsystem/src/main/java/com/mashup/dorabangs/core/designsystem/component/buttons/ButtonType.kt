@@ -82,7 +82,7 @@ object DoraButtons : ButtonType {
     )
 
     @Composable
-    override fun DoraColorFullMaxBtn(
+    override fun DoraGradientFullMaxBtn(
         modifier: Modifier,
         buttonText: String,
         enabled: Boolean,
@@ -93,8 +93,8 @@ object DoraButtons : ButtonType {
         textStyle = DoraTypoTokens.caption1Medium,
         enabled = enabled,
         radius = BtnMaxRoundTokens.FullButtonWidthRadius,
-        containerColor = BtnMaxColorTokens.ContainerColor1,
-        contentColor = BtnMaxColorTokens.ContentColor1,
+        containerColor = BtnMaxColorTokens.Transparent,
+        contentColor = BtnMaxColorTokens.Transparent,
         disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
         disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
         onClickButton = onClickButton,
@@ -133,7 +133,7 @@ sealed interface ButtonType {
     )
 
     @Composable
-    fun DoraColorFullMaxBtn(
+    fun DoraGradientFullMaxBtn(
         modifier: Modifier,
         buttonText: String,
         enabled: Boolean,
