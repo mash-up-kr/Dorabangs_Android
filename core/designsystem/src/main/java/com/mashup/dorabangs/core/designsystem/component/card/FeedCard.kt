@@ -33,6 +33,7 @@ import coil.compose.AsyncImage
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedDate
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedSecond
+import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -43,7 +44,7 @@ fun FeedCard(
     cardInfo: FeedCardUiModel,
     feedCardEntryPoint: FeedCardEntryPoint,
     modifier: Modifier = Modifier,
-    onClickCardItem: () -> Unit = {},
+    onClickCardItem: (String) -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
     updateCardState: () -> Unit = {},
@@ -67,12 +68,13 @@ fun FeedCard(
             updateCardState()
         }
     }
-
     Column(
         modifier = modifier
             .background(DoraColorTokens.P1, shape = RectangleShape)
             .fillMaxWidth()
-            .clickable { onClickCardItem() }
+            .thenIf(feedCardEntryPoint !is FeedCardEntryPoint.AiClassification) {
+                this.clickable { onClickCardItem(cardInfo.url) }
+            }
             .padding(20.dp),
     ) {
         Row(

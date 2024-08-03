@@ -71,6 +71,7 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
+    onClickCardItem: (String) -> Unit,
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
     onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
@@ -208,6 +209,7 @@ fun HomeScreen(
                     },
                     onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
                     refreshPageList = { postsPagingList?.refresh() },
+                    onClickCardItem = onClickCardItem,
                 )
             }
 
@@ -248,6 +250,7 @@ private fun LazyListScope.Feeds(
     feeds: LazyPagingItems<FeedCardUiModel>?,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
+    onClickCardItem: (String) -> Unit,
     refreshPageList: () -> Unit = {},
 ) {
     if (feeds != null) {
@@ -270,6 +273,7 @@ private fun LazyListScope.Feeds(
                         )
                     },
                     updateCardState = { refreshPageList() },
+                    onClickCardItem = onClickCardItem,
                 )
                 Box(
                     modifier = Modifier
@@ -457,6 +461,7 @@ fun HomeCarouselPreview() {
 fun HomeScreenPreview() {
     HomeScreen(
         onClickMoreButton = { postId, folderId -> },
+        onClickCardItem = {},
         state = HomeState(
             tapElements = listOf(
                 DoraChipUiModel(

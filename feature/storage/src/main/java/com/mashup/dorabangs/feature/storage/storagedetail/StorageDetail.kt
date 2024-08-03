@@ -49,6 +49,7 @@ fun StorageDetailRoute(
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: () -> Unit,
+    navigateToWebView: (String) -> Unit,
     modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
     isChangedData: Boolean = false,
@@ -115,6 +116,7 @@ fun StorageDetailRoute(
                 storageDetailViewModel.setActionType(EditActionType.LinkEdit, postId)
                 storageDetailViewModel.setVisibleMoreButtonBottomSheet(true)
             },
+            onClickPostItem = navigateToWebView,
         )
 
         DoraBottomSheet.MoreButtonBottomSheet(
@@ -210,6 +212,7 @@ fun StorageDetailScreen(
     onClickSortedIcon: (StorageDetailSort) -> Unit,
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
+    onClickPostItem: (String) -> Unit,
     modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),
@@ -236,6 +239,7 @@ fun StorageDetailScreen(
             onClickBookMarkButton = onClickBookMarkButton,
             onClickActionIcon = onClickActionIcon,
             onClickMoreButton = onClickMoreButton,
+            onClickPostItem = onClickPostItem,
 
         )
     }
@@ -249,5 +253,6 @@ fun PreviewStorageDetailScreen() {
         navigateToStorage = {},
         navigateToFolderManager = { id, type -> },
         onClickBackIcon = {},
+        navigateToWebView = {},
     )
 }

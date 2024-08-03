@@ -14,6 +14,7 @@ data class FeedCardUiModel(
     val thumbnail: String?,
     val isFavorite: Boolean = false,
     val isLoading: Boolean = false,
+    val url: String = "",
 ) {
     companion object {
         fun String?.convertCreatedDate(): Long {

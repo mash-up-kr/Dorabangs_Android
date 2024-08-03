@@ -161,5 +161,6 @@ fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedCardUiMode
     keywordList = keywordList.take(3),
     thumbnail = thumbnail,
     isFavorite = false,
+    url = url,
     isLoading = false,
 )

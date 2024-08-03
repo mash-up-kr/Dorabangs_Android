@@ -2,6 +2,7 @@ package com.mashup.feature.classification
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +41,7 @@ fun ClassificationListScreen(
     lazyColumnState: LazyListState,
     pagingList: LazyPagingItems<FeedCardUiModel>,
     modifier: Modifier = Modifier,
+    onClickCardItem: (String) -> Unit,
     onClickDeleteButton: (FeedCardUiModel) -> Unit = {},
     onClickMoveButton: (FeedCardUiModel) -> Unit = {},
     onClickAllItemMoveButton: () -> Unit = {},
@@ -69,6 +71,7 @@ fun ClassificationListScreen(
                     cardItem = item,
                     onClickDeleteButton = onClickDeleteButton,
                     onClickMoveButton = onClickMoveButton,
+                    onClickCardItem = onClickCardItem,
                 )
             }
         }
@@ -121,12 +124,14 @@ fun ClassificationCardItem(
     cardItem: FeedCardUiModel,
     onClickDeleteButton: (FeedCardUiModel) -> Unit,
     onClickMoveButton: (FeedCardUiModel) -> Unit,
+    onClickCardItem: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = DoraColorTokens.White),
+            .background(color = DoraColorTokens.White)
+            .clickable { onClickCardItem(cardItem.url) },
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         IconButton(
