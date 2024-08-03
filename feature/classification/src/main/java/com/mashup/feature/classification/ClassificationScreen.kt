@@ -26,7 +26,7 @@ fun ClassificationRoute(
     classificationViewModel: ClassificationViewModel = hiltViewModel(),
 ) {
     val state by classificationViewModel.collectAsState()
-    val pagingList = state.cardInfoList.collectAsLazyPagingItems()
+    val pagingList = classificationViewModel.paging.collectAsLazyPagingItems()
 
     ClassificationScreen(
         state = state,
@@ -45,8 +45,8 @@ fun ClassificationScreen(
     state: ClassificationState,
     pagingList: LazyPagingItems<FeedCardUiModel>,
     onClickChip: (Int) -> Unit,
-    onClickDeleteButton: (Int) -> Unit,
-    onClickMoveButton: (Int) -> Unit,
+    onClickDeleteButton: (FeedCardUiModel) -> Unit,
+    onClickMoveButton: (FeedCardUiModel) -> Unit,
     onClickAllItemMoveButton: () -> Unit,
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
@@ -83,7 +83,7 @@ fun ClassificationScreen(
                 }
             },
         )
-        if (state.isClassificationComplete) {
+        if (state.chipState.totalCount == 0) {
             ClassificationCompleteScreen(navigateToHome = navigateToHome)
         } else {
             ClassificationListScreen(
