@@ -33,18 +33,18 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
 import com.mashup.dorabangs.core.designsystem.R as coreR
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 
 @Composable
 fun StorageDetailList(
     listState: LazyListState,
-    linksPagingList: LazyPagingItems<FeedCardUiModel>,
+    linksPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>,
     state: StorageDetailState,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),

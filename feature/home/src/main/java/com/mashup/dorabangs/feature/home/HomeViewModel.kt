@@ -8,7 +8,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
@@ -163,7 +163,7 @@ class HomeViewModel @Inject constructor(
             reduce {
                 state.copy(
                     tapElements = folderList.mapIndexed { index, folder ->
-                        DoraChipUiModel(
+                        FeedUiModel.DoraChipUiModel(
                             id = folder.id.orEmpty(),
                             title = folder.name,
                             icon = setDefaultFolderIcon(index),
@@ -273,9 +273,10 @@ class HomeViewModel @Inject constructor(
         val pagingData =
             if (folderId.isNullOrBlank()) {
                 getPostsUseCase.invoke(order = order, favorite = favorite, isRead = isRead)
-                    .cachedIn(viewModelScope).map { pagedData ->
+                    .map { pagedData ->
                         pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-                    }.stateIn(
+                    }.cachedIn(viewModelScope)
+                    .stateIn(
                         scope = viewModelScope,
                         started = SharingStarted.Lazily,
                         initialValue = PagingData.empty(),
@@ -286,10 +287,9 @@ class HomeViewModel @Inject constructor(
                     order = order,
                     limit = 10,
                     isRead = isRead,
-                )
-                    .cachedIn(viewModelScope).map { pagedData ->
-                        pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-                    }
+                ).map { pagedData ->
+                    pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+                }.cachedIn(viewModelScope)
                     .stateIn(
                         scope = viewModelScope,
                         started = SharingStarted.Lazily,

@@ -28,7 +28,7 @@ import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
@@ -39,11 +39,11 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 fun ClassificationListScreen(
     state: ClassificationState,
     lazyColumnState: LazyListState,
-    pagingList: LazyPagingItems<FeedCardUiModel>,
+    pagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>,
     modifier: Modifier = Modifier,
     onClickCardItem: (String) -> Unit,
-    onClickDeleteButton: (FeedCardUiModel) -> Unit = {},
-    onClickMoveButton: (FeedCardUiModel) -> Unit = {},
+    onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit = {},
+    onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickAllItemMoveButton: () -> Unit = {},
 ) {
     LazyColumn(
@@ -61,7 +61,7 @@ fun ClassificationListScreen(
 
         items(
             count = pagingList.itemCount,
-            key = pagingList.itemKey(FeedCardUiModel::postId),
+            key = pagingList.itemKey(FeedUiModel.FeedCardUiModel::postId),
             contentType = pagingList.itemContentType { "Feed Paging" },
         ) { idx ->
             pagingList[idx]?.let { item ->
@@ -121,9 +121,9 @@ fun ClassificationFolderMove(
 fun ClassificationCardItem(
     idx: Int,
     lastIndex: Int,
-    cardItem: FeedCardUiModel,
-    onClickDeleteButton: (FeedCardUiModel) -> Unit,
-    onClickMoveButton: (FeedCardUiModel) -> Unit,
+    cardItem: FeedUiModel.FeedCardUiModel,
+    onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickCardItem: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {

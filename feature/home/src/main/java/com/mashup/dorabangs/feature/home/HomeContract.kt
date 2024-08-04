@@ -2,19 +2,18 @@ package com.mashup.dorabangs.feature.home
 
 import androidx.paging.PagingData
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
-import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.utils.isValidUrl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import com.mashup.dorabangs.core.designsystem.R as coreR
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 
 data class HomeState(
     val clipBoardState: ClipBoardState = ClipBoardState(),
-    val tapElements: List<DoraChipUiModel> = emptyList(),
-    val feedCards: Flow<PagingData<FeedCardUiModel>> = emptyFlow(),
+    val tapElements: List<FeedUiModel.DoraChipUiModel> = emptyList(),
+    val feedCards: Flow<PagingData<FeedUiModel.FeedCardUiModel>> = emptyFlow(),
     val folderList: List<Folder> = listOf(),
     val selectedIndex: Int = 0,
     val selectedPostId: String = "",

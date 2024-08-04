@@ -51,9 +51,8 @@ import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
-import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
@@ -70,7 +69,7 @@ import dev.chrisbanes.haze.hazeChild
 fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
-    postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
+    postsPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>? = null,
     onClickCardItem: (String) -> Unit,
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
@@ -247,7 +246,7 @@ fun HomeScreen(
 }
 
 private fun LazyListScope.Feeds(
-    feeds: LazyPagingItems<FeedCardUiModel>?,
+    feeds: LazyPagingItems<FeedUiModel.FeedCardUiModel>?,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickCardItem: (String) -> Unit,
@@ -256,7 +255,7 @@ private fun LazyListScope.Feeds(
     if (feeds != null) {
         items(
             count = feeds.itemCount,
-            key = feeds.itemKey(FeedCardUiModel::postId),
+            key = feeds.itemKey(FeedUiModel.FeedCardUiModel::postId),
             contentType = feeds.itemContentType { "SavedLinks" },
         ) { index ->
             feeds[index]?.let { cardInfo ->
@@ -464,25 +463,25 @@ fun HomeScreenPreview() {
         onClickCardItem = {},
         state = HomeState(
             tapElements = listOf(
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "전체",
                     icon = R.drawable.ic_plus,
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "즐겨찾기",
                     icon = R.drawable.ic_plus,
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "나중에 읽을 링크",
                     icon = R.drawable.ic_plus,
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "테스트",
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "테스트",
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "테스트",
                 ),
             ),
