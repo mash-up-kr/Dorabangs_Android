@@ -53,7 +53,7 @@ fun ClassificationListScreen(
         items(
             count = pagingList.itemCount,
             key = pagingList.itemKey(FeedUiModel::uuid),
-            contentType = pagingList.itemContentType { "Feed Paging" },
+            contentType = { if (pagingList[it] is FeedUiModel.FeedCardUiModel) "feed_card" else "header" },
         ) { idx ->
             pagingList[idx]?.let { item ->
                 when (item) {
