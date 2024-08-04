@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
@@ -49,18 +50,9 @@ fun ClassificationListScreen(
         modifier = modifier.background(color = DoraColorTokens.White),
         state = lazyColumnState,
     ) {
-//        item {
-//            ClassificationFolderMove(
-//                selectedFolder = state.chipState.chipList.getOrNull(state.chipState.currentIndex - 1)?.title
-//                    ?: "전체",
-//                onClickAllItemMoveButton = onClickAllItemMoveButton,
-//                count = state.chipState.totalCount,
-//            )
-//        }
-
         items(
             count = pagingList.itemCount,
-//            key = pagingList.itemKey(FeedUiModel.FeedCardUiModel::postId),
+            key = pagingList.itemKey(FeedUiModel::uuid),
             contentType = pagingList.itemContentType { "Feed Paging" },
         ) { idx ->
             pagingList[idx]?.let { item ->
@@ -72,6 +64,7 @@ fun ClassificationListScreen(
                             count = item.postCount,
                         )
                     }
+
                     is FeedUiModel.FeedCardUiModel -> {
                         ClassificationCardItem(
                             idx = idx,
@@ -159,8 +152,12 @@ fun ClassificationCardItem(
         Spacer(modifier = Modifier.height(20.dp))
         FeedCard(cardInfo = cardItem, feedCardEntryPoint = FeedCardEntryPoint.AiClassification)
         GradientButton(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-            gradientModifier = Modifier.fillMaxWidth().height(36.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            gradientModifier = Modifier
+                .fillMaxWidth()
+                .height(36.dp),
             containerColor = DoraGradientToken.Gradient1,
             contentPadding = PaddingValues(horizontal = 20.dp),
             onClick = { onClickMoveButton(cardItem) },

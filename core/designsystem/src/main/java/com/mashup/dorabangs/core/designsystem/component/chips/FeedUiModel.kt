@@ -3,8 +3,10 @@ package com.mashup.dorabangs.core.designsystem.component.chips
 import androidx.annotation.DrawableRes
 import java.time.Instant
 import java.time.temporal.ChronoUnit
+import java.util.UUID
 
 sealed interface FeedUiModel {
+    val uuid: String
 
     data class FeedCardUiModel(
         val postId: String,
@@ -19,6 +21,7 @@ sealed interface FeedUiModel {
         val isLoading: Boolean = false,
         val url: String = "",
     ) : FeedUiModel {
+        override val uuid: String = UUID.randomUUID().toString()
         companion object {
             fun String?.convertCreatedDate(): Long {
                 this?.let {
@@ -46,5 +49,7 @@ sealed interface FeedUiModel {
         val title: String = "",
         val postCount: Int = 0,
         @DrawableRes val icon: Int? = null,
-    ) : FeedUiModel
+    ) : FeedUiModel {
+        override val uuid: String = UUID.randomUUID().toString()
+    }
 }
