@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 
 data class DoraChipUiModel(
     val id: String = "",
+    val mergedTitle: String = "",
     val title: String = "",
     val postCount: Int = 0,
     @DrawableRes val icon: Int? = null,

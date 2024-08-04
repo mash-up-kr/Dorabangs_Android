@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
@@ -53,14 +54,15 @@ class ClassificationViewModel @Inject constructor(
         getAIClassificationPostsUseCase.invoke(
             limit = LIMIT,
             order = DESC,
-        ).cachedIn(viewModelScope)
-            .map { pagedData ->
-                pagedData.map {
-                    val category =
-                        chips.list.firstOrNull { chip -> chip.folderId == it.folderId }?.folderName.orEmpty()
-                    it.toUiModel(category)
-                }
-            }.let {
+        ).map { pagedData ->
+            pagedData.map {
+                val category =
+                    chips.list.firstOrNull { chip -> chip.folderId == it.folderId }?.folderName.orEmpty()
+                it.toUiModel(category)
+            }
+        }
+            .cachedIn(viewModelScope)
+            .let {
                 _paging.value = it.firstOrNull() ?: PagingData.empty()
             }
 
@@ -144,7 +146,8 @@ class ClassificationViewModel @Inject constructor(
             val postCount = if (it.postCount > 99) "99+" else it.postCount
             DoraChipUiModel(
                 id = it.folderId,
-                title = "${it.folderName} $postCount",
+                mergedTitle = "${it.folderName} $postCount",
+                title = it.folderName,
                 icon = it.icon,
                 postCount = it.postCount,
             )
