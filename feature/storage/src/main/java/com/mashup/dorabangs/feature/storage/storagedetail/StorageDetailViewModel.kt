@@ -24,6 +24,7 @@ import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
+import com.mashup.dorabangs.feature.storage.storagedetail.model.FeedCacheKeyType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
@@ -74,6 +75,8 @@ class StorageDetailViewModel @Inject constructor(
         fetchSavedLinkFromType(
             type = folderItem.folderType,
             folderId = folderItem.id,
+            needFetchUpdate = true,
+            cacheKey = FeedCacheKeyType.ALL.name,
         )
     }
 
@@ -105,15 +108,35 @@ class StorageDetailViewModel @Inject constructor(
      * 폴더 타입별 API 호출 분기 처리
      */
     private fun fetchSavedLinkFromType(
+        needFetchUpdate: Boolean = false,
+        cacheKey: String = "",
         type: FolderType = FolderType.ALL,
         folderId: String? = "",
         order: String = StorageDetailSort.ASC.name,
         isRead: Boolean? = null,
     ) {
         when (type) {
-            FolderType.ALL -> getSavedLinkFromDefaultFolder(order = order, favorite = false, isRead = isRead)
-            FolderType.FAVORITE -> getSavedLinkFromDefaultFolder(order = order, favorite = true, isRead = isRead)
-            else -> getSavedLinkFromCustomFolder(folderId = folderId, order = order, isRead = isRead)
+            FolderType.ALL -> getSavedLinkFromDefaultFolder(
+                order = order,
+                favorite = false,
+                isRead = isRead,
+                needFetchUpdate = needFetchUpdate,
+                cacheKey = cacheKey
+            )
+            FolderType.FAVORITE -> getSavedLinkFromDefaultFolder(
+                order = order,
+                favorite = true,
+                isRead = isRead,
+                needFetchUpdate = needFetchUpdate,
+                cacheKey = cacheKey
+            )
+            else -> getSavedLinkFromCustomFolder(
+                folderId = folderId,
+                order = order,
+                isRead = isRead,
+                needFetchUpdate = needFetchUpdate,
+                cacheKey = cacheKey
+            )
         }
     }
 
@@ -121,6 +144,8 @@ class StorageDetailViewModel @Inject constructor(
      * 사용자 지정 folder links
      */
     private fun getSavedLinkFromCustomFolder(
+        needFetchUpdate: Boolean = false,
+        cacheKey: String = "",
         folderId: String?,
         order: String = StorageDetailSort.ASC.name,
         limit: Int = 10,
@@ -154,11 +179,15 @@ class StorageDetailViewModel @Inject constructor(
      * default folder links
      */
     private fun getSavedLinkFromDefaultFolder(
+        needFetchUpdate: Boolean = false,
+        cacheKey: String = "",
         order: String = StorageDetailSort.ASC.name,
         favorite: Boolean = false,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
         getPostsUseCase.invoke(
+            needFetchUpdate = needFetchUpdate,
+            cacheKey = cacheKey,
             order = order,
             favorite = favorite,
             isRead = isRead,
@@ -170,10 +199,9 @@ class StorageDetailViewModel @Inject constructor(
                     }
                 }
             },
-        )
-            .cachedIn(viewModelScope).map { pagedData ->
+        ).map { pagedData ->
                 pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-            }.stateIn(
+            }.cachedIn(viewModelScope).stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.Lazily,
                 initialValue = PagingData.empty(),
@@ -187,12 +215,17 @@ class StorageDetailViewModel @Inject constructor(
      */
     fun changeSelectedTabIdx(selectedIdx: Int) = viewModelScope.launch {
         intent {
-            val isRead = if (selectedIdx == 0) null else false
+            val (isRead, cachedKey) =
+                if (selectedIdx == 0)
+                    null to FeedCacheKeyType.ALL.name
+                else false to FeedCacheKeyType.UNREAD.name
             fetchSavedLinkFromType(
                 type = state.folderInfo.folderType,
                 folderId = state.folderInfo.folderId,
                 order = state.isLatestSort.name,
                 isRead = isRead,
+                needFetchUpdate = false,
+                cacheKey = cachedKey
             )
             reduce {
                 state.copy(tabInfo = state.tabInfo.copy(selectedTabIdx = selectedIdx))
@@ -211,6 +244,8 @@ class StorageDetailViewModel @Inject constructor(
                 folderId = state.folderInfo.folderId,
                 order = item.name,
                 isRead = isRead,
+                needFetchUpdate = false,
+                cacheKey = if(item == StorageDetailSort.ASC) FeedCacheKeyType.ASC.name else FeedCacheKeyType.DESC.name
             )
             reduce {
                 state.copy(

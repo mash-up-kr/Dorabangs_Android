@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 interface PostsRepository {
 
     suspend fun getPosts(
+        needFetchUpdate: Boolean,
+        cacheKey: String,
         order: String? = null,
         favorite: Boolean? = null,
         isRead: Boolean? = null,
