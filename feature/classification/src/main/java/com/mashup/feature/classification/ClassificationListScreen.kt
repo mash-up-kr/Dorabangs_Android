@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
@@ -65,7 +64,7 @@ fun ClassificationListScreen(
             contentType = pagingList.itemContentType { "Feed Paging" },
         ) { idx ->
             pagingList[idx]?.let { item ->
-                when(item) {
+                when (item) {
                     is FeedUiModel.DoraChipUiModel -> {
                         ClassificationFolderMove(
                             selectedFolder = item.title,

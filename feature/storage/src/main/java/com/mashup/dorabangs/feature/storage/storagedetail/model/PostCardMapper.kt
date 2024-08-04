@@ -1,11 +1,11 @@
 package com.mashup.dorabangs.feature.storage.storagedetail.model
 
-import com.mashup.dorabangs.core.designsystem.R as coreR
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
+import com.mashup.dorabangs.core.designsystem.R as coreR
 
 fun SavedLinkDetailInfo.toUiModel(): FeedUiModel.FeedCardUiModel {
     return FeedUiModel.FeedCardUiModel(

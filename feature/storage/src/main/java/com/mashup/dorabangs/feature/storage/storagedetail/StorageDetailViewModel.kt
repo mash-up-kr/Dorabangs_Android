@@ -171,14 +171,14 @@ class StorageDetailViewModel @Inject constructor(
                 }
             },
         ).cachedIn(viewModelScope).map { pagedData ->
-                pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Lazily,
-                initialValue = PagingData.empty(),
-            ).collectLatest { pagingData ->
-                _feedListState.value = pagingData
-            }
+            pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = PagingData.empty(),
+        ).collectLatest { pagingData ->
+            _feedListState.value = pagingData
+        }
     }
 
     /**

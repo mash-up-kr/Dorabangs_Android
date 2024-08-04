@@ -73,15 +73,17 @@ class ClassificationViewModel @Inject constructor(
             }.map {
                 it.insertSeparators { before, after ->
                     after?.let {
-                        if (before?.category != after.category) FeedUiModel.DoraChipUiModel(
-                            id = after.postId,
-                            mergedTitle = "",
-                            title = after.category.orEmpty(),
-                            postCount = chips.list
-                                .firstOrNull { chip -> chip.folderName == after.category.orEmpty() }
-                                ?.postCount ?: 0,
-                            icon = null,
-                        ) else {
+                        if (before?.category != after.category) {
+                            FeedUiModel.DoraChipUiModel(
+                                id = after.postId,
+                                mergedTitle = "",
+                                title = after.category.orEmpty(),
+                                postCount = chips.list
+                                    .firstOrNull { chip -> chip.folderName == after.category.orEmpty() }
+                                    ?.postCount ?: 0,
+                                icon = null,
+                            )
+                        } else {
                             null
                         }
                     }
