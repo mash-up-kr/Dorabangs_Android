@@ -39,7 +39,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 fun ClassificationListScreen(
     state: ClassificationState,
     lazyColumnState: LazyListState,
-    pagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>,
+    pagingList: LazyPagingItems<FeedUiModel>,
     modifier: Modifier = Modifier,
     onClickCardItem: (String) -> Unit,
     onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit = {},
@@ -50,29 +50,40 @@ fun ClassificationListScreen(
         modifier = modifier.background(color = DoraColorTokens.White),
         state = lazyColumnState,
     ) {
-        item {
-            ClassificationFolderMove(
-                selectedFolder = state.chipState.chipList.getOrNull(state.chipState.currentIndex - 1)?.title
-                    ?: "전체",
-                onClickAllItemMoveButton = onClickAllItemMoveButton,
-                count = state.chipState.totalCount,
-            )
-        }
+//        item {
+//            ClassificationFolderMove(
+//                selectedFolder = state.chipState.chipList.getOrNull(state.chipState.currentIndex - 1)?.title
+//                    ?: "전체",
+//                onClickAllItemMoveButton = onClickAllItemMoveButton,
+//                count = state.chipState.totalCount,
+//            )
+//        }
 
         items(
             count = pagingList.itemCount,
-            key = pagingList.itemKey(FeedUiModel.FeedCardUiModel::postId),
+//            key = pagingList.itemKey(FeedUiModel.FeedCardUiModel::postId),
             contentType = pagingList.itemContentType { "Feed Paging" },
         ) { idx ->
             pagingList[idx]?.let { item ->
-                ClassificationCardItem(
-                    idx = idx,
-                    lastIndex = pagingList.itemCount - 1,
-                    cardItem = item,
-                    onClickDeleteButton = onClickDeleteButton,
-                    onClickMoveButton = onClickMoveButton,
-                    onClickCardItem = onClickCardItem,
-                )
+                when(item) {
+                    is FeedUiModel.DoraChipUiModel -> {
+                        ClassificationFolderMove(
+                            selectedFolder = item.title,
+                            onClickAllItemMoveButton = onClickAllItemMoveButton,
+                            count = item.postCount,
+                        )
+                    }
+                    is FeedUiModel.FeedCardUiModel -> {
+                        ClassificationCardItem(
+                            idx = idx,
+                            lastIndex = pagingList.itemCount - 1,
+                            cardItem = item,
+                            onClickDeleteButton = onClickDeleteButton,
+                            onClickMoveButton = onClickMoveButton,
+                            onClickCardItem = onClickCardItem,
+                        )
+                    }
+                }
             }
         }
     }

@@ -44,7 +44,7 @@ fun ClassificationRoute(
 @Composable
 fun ClassificationScreen(
     state: ClassificationState,
-    pagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>,
+    pagingList: LazyPagingItems<FeedUiModel>,
     onClickChip: (Int) -> Unit,
     onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit,
