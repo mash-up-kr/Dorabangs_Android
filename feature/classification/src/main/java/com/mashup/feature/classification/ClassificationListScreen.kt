@@ -58,22 +58,26 @@ fun ClassificationListScreen(
             pagingList[idx]?.let { item ->
                 when (item) {
                     is FeedUiModel.DoraChipUiModel -> {
-                        ClassificationFolderMove(
-                            selectedFolder = item.title,
-                            onClickAllItemMoveButton = onClickAllItemMoveButton,
-                            count = item.postCount,
-                        )
+                        if (state.selectedFolder == item.title || state.selectedFolder == "전체") {
+                            ClassificationFolderMove(
+                                selectedFolder = item.title,
+                                onClickAllItemMoveButton = onClickAllItemMoveButton,
+                                count = item.postCount,
+                            )
+                        }
                     }
 
                     is FeedUiModel.FeedCardUiModel -> {
-                        ClassificationCardItem(
-                            idx = idx,
-                            lastIndex = pagingList.itemCount - 1,
-                            cardItem = item,
-                            onClickDeleteButton = onClickDeleteButton,
-                            onClickMoveButton = onClickMoveButton,
-                            onClickCardItem = onClickCardItem,
-                        )
+                        if (state.selectedFolder == item.category || state.selectedFolder == "전체") {
+                            ClassificationCardItem(
+                                idx = idx,
+                                lastIndex = pagingList.itemCount - 1,
+                                cardItem = item,
+                                onClickDeleteButton = onClickDeleteButton,
+                                onClickMoveButton = onClickMoveButton,
+                                onClickCardItem = onClickCardItem,
+                            )
+                        }
                     }
                 }
             }
