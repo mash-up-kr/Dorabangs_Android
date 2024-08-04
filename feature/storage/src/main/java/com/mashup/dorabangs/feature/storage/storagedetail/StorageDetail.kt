@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -75,7 +73,8 @@ fun StorageDetailRoute(
                     folderId = state.folderInfo.folderId.orEmpty(),
                     toastMsg = context.getString(storageR.string.toast_rename_folder),
                 )
-            }
+            } else
+                linksPagingList.refresh()
         }
         storageDetailViewModel.setVisibleMovingFolderBottomSheet(isVisibleBottomSheet)
     }
@@ -92,10 +91,7 @@ fun StorageDetailRoute(
             sideEffect = sideEffect,
             navigateToStorage = navigateToStorage,
             navigateToFolderManager = { id -> navigateToFolderManager(id, state.editActionType) },
-            refreshPagingList = {
-                Log.d(TAG, "StorageDetailRoute: refresh")
-                linksPagingList.refresh()
-                                },
+            refreshPagingList = { linksPagingList.refresh() },
             showToastSnackBar = {
                 scope.launch { toastSnackBarHostState.showSnackbar(state.toastState.text) }
             },
@@ -185,9 +181,7 @@ fun StorageDetailRoute(
             text = state.toastState.text,
             toastStyle = state.toastState.toastStyle,
             snackBarHostState = toastSnackBarHostState,
-            modifier = modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp),
+            modifier = modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
         )
     }
 }

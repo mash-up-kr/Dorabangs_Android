@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,7 +24,6 @@ import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
-import com.mashup.dorabangs.feature.storage.storagedetail.model.FeedCacheKeyType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
@@ -37,7 +34,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -62,9 +58,6 @@ class StorageDetailViewModel @Inject constructor(
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
-    private val feeListCache = HashMap<String, PagingData<FeedCardUiModel>>()
-    val scrollCache = HashMap<Int, Int>()
-    
     private val _feedListState: MutableStateFlow<PagingData<FeedCardUiModel>> = MutableStateFlow(value = PagingData.empty())
     val feedListState: StateFlow<PagingData<FeedCardUiModel>> = _feedListState.asStateFlow()
 
@@ -81,7 +74,6 @@ class StorageDetailViewModel @Inject constructor(
         fetchSavedLinkFromType(
             type = folderItem.folderType,
             folderId = folderItem.id,
-            cacheType = FeedCacheKeyType.ALL
         )
     }
 
@@ -117,12 +109,11 @@ class StorageDetailViewModel @Inject constructor(
         folderId: String? = "",
         order: String = StorageDetailSort.ASC.name,
         isRead: Boolean? = null,
-        cacheType: FeedCacheKeyType = FeedCacheKeyType.ALL
     ) {
         when (type) {
-            FolderType.ALL -> getSavedLinkFromDefaultFolder(order = order, favorite = false, isRead = isRead, cacheType = cacheType)
-            FolderType.FAVORITE -> getSavedLinkFromDefaultFolder(order = order, favorite = true, cacheType = cacheType)
-            else -> getSavedLinkFromCustomFolder(folderId = folderId, order = order, cacheType = cacheType)
+            FolderType.ALL -> getSavedLinkFromDefaultFolder(order = order, favorite = false, isRead = isRead)
+            FolderType.FAVORITE -> getSavedLinkFromDefaultFolder(order = order, favorite = true, isRead = isRead)
+            else -> getSavedLinkFromCustomFolder(folderId = folderId, order = order, isRead = isRead)
         }
     }
 
@@ -134,10 +125,8 @@ class StorageDetailViewModel @Inject constructor(
         order: String = StorageDetailSort.ASC.name,
         limit: Int = 10,
         isRead: Boolean? = null,
-        cacheType: FeedCacheKeyType
     ) = viewModelScope.doraLaunch {
-        Log.d(TAG, "getSavedLinkFromCustomFolder: ${cacheType.name}")
-        val pagingData = feeListCache[cacheType.name] ?: savedLinksFromFolderUseCase.invoke(
+        savedLinksFromFolderUseCase.invoke(
             folderId = folderId,
             order = order,
             isRead = isRead,
@@ -156,9 +145,9 @@ class StorageDetailViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
             initialValue = PagingData.empty(),
-        ).firstOrNull() ?: PagingData.empty()
-        feeListCache[cacheType.name] = pagingData
-        _feedListState.value = pagingData
+        ).collectLatest { pagingData ->
+            _feedListState.value = pagingData
+        }
     }
 
     /**
@@ -168,10 +157,8 @@ class StorageDetailViewModel @Inject constructor(
         order: String = StorageDetailSort.ASC.name,
         favorite: Boolean = false,
         isRead: Boolean? = null,
-        cacheType: FeedCacheKeyType
     ) = viewModelScope.doraLaunch {
-        Log.d(TAG, "getSavedLinkFromCustomFolder: ${cacheType.name}")
-        val pagingData = feeListCache[cacheType.name] ?: getPostsUseCase.invoke(
+        getPostsUseCase.invoke(
             order = order,
             favorite = favorite,
             isRead = isRead,
@@ -190,9 +177,9 @@ class StorageDetailViewModel @Inject constructor(
                 scope = viewModelScope,
                 started = SharingStarted.Lazily,
                 initialValue = PagingData.empty(),
-            ).firstOrNull() ?: PagingData.empty()
-        feeListCache[cacheType.name] = pagingData
-        _feedListState.value = pagingData
+            ).collectLatest { pagingData ->
+                _feedListState.value = pagingData
+            }
     }
 
     /**
@@ -206,7 +193,6 @@ class StorageDetailViewModel @Inject constructor(
                 folderId = state.folderInfo.folderId,
                 order = state.isLatestSort.name,
                 isRead = isRead,
-                cacheType = if(isRead == null) FeedCacheKeyType.ALL else FeedCacheKeyType.UNREAD
             )
             reduce {
                 state.copy(tabInfo = state.tabInfo.copy(selectedTabIdx = selectedIdx))
@@ -225,7 +211,6 @@ class StorageDetailViewModel @Inject constructor(
                 folderId = state.folderInfo.folderId,
                 order = item.name,
                 isRead = isRead,
-                cacheType = if(item == StorageDetailSort.ASC) FeedCacheKeyType.ASC else FeedCacheKeyType.DESC
             )
             reduce {
                 state.copy(
