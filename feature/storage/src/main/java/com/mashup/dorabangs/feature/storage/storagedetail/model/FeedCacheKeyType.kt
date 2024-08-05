@@ -4,5 +4,5 @@ enum class FeedCacheKeyType {
     ASC,
     DESC,
     ALL,
-    UNREAD
+    UNREAD,
 }

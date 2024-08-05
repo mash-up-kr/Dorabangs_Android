@@ -2,7 +2,9 @@ package com.mashup.dorabangs.feature.storage.storagedetail.model
 
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.Folder
+import com.mashup.dorabangs.domain.model.LinkKeywordInfo
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import com.mashup.dorabangs.core.designsystem.R as coreR
@@ -30,6 +32,35 @@ fun Post.toUiModel(): FeedCardUiModel {
         isFavorite = isFavorite,
         thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId,
+    )
+}
+
+fun FeedCardUiModel.toPost(): Post {
+    return Post(
+        id = postId,
+        folderId = folderId,
+        url = "",
+        title = title.orEmpty(),
+        description = content.orEmpty(),
+        isFavorite = isFavorite,
+        createdAt = this.createdAt.orEmpty(),
+        thumbnailImgUrl = this.thumbnail.orEmpty(),
+    )
+}
+
+fun FeedCardUiModel.toSavedLinkDetailInfo(): SavedLinkDetailInfo {
+    return SavedLinkDetailInfo(
+        id = postId,
+        folderId = folderId,
+        url = "",
+        title = title.orEmpty(),
+        description = content.orEmpty(),
+        isFavorite = isFavorite,
+        createdAt = this.createdAt.orEmpty(),
+        thumbnailImgUrl = this.thumbnail.orEmpty(),
+        keywords = this.keywordList?.map { LinkKeywordInfo(id = "", name = it) },
+        userId = "",
+        aiStatus = AIStatus.NOTHING,
     )
 }
 

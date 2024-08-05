@@ -28,7 +28,10 @@ import com.mashup.dorabangs.feature.storage.storagedetail.model.FeedCacheKeyType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
+import com.mashup.dorabangs.feature.storage.storagedetail.model.toPost
+import com.mashup.dorabangs.feature.storage.storagedetail.model.toSavedLinkDetailInfo
 import com.mashup.dorabangs.feature.storage.storagedetail.model.toUiModel
+import com.mashup.dorabangs.util.getCacheKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -76,7 +79,7 @@ class StorageDetailViewModel @Inject constructor(
             type = folderItem.folderType,
             folderId = folderItem.id,
             needFetchUpdate = true,
-            cacheKey = FeedCacheKeyType.ALL.name,
+            cacheKey = getCacheKey(FeedCacheKeyType.ALL.name, FeedCacheKeyType.DESC.name),
         )
     }
 
@@ -112,7 +115,7 @@ class StorageDetailViewModel @Inject constructor(
         cacheKey: String = "",
         type: FolderType = FolderType.ALL,
         folderId: String? = "",
-        order: String = StorageDetailSort.ASC.name,
+        order: String = StorageDetailSort.DESC.name,
         isRead: Boolean? = null,
     ) {
         when (type) {
@@ -121,21 +124,21 @@ class StorageDetailViewModel @Inject constructor(
                 favorite = false,
                 isRead = isRead,
                 needFetchUpdate = needFetchUpdate,
-                cacheKey = cacheKey
+                cacheKey = cacheKey,
             )
             FolderType.FAVORITE -> getSavedLinkFromDefaultFolder(
                 order = order,
                 favorite = true,
                 isRead = isRead,
                 needFetchUpdate = needFetchUpdate,
-                cacheKey = cacheKey
+                cacheKey = cacheKey,
             )
             else -> getSavedLinkFromCustomFolder(
                 folderId = folderId,
                 order = order,
                 isRead = isRead,
                 needFetchUpdate = needFetchUpdate,
-                cacheKey = cacheKey
+                cacheKey = cacheKey,
             )
         }
     }
@@ -147,11 +150,13 @@ class StorageDetailViewModel @Inject constructor(
         needFetchUpdate: Boolean = false,
         cacheKey: String = "",
         folderId: String?,
-        order: String = StorageDetailSort.ASC.name,
+        order: String = StorageDetailSort.DESC.name,
         limit: Int = 10,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
         savedLinksFromFolderUseCase.invoke(
+            needFetchUpdate = needFetchUpdate,
+            cacheKey = cacheKey,
             folderId = folderId,
             order = order,
             isRead = isRead,
@@ -181,7 +186,7 @@ class StorageDetailViewModel @Inject constructor(
     private fun getSavedLinkFromDefaultFolder(
         needFetchUpdate: Boolean = false,
         cacheKey: String = "",
-        order: String = StorageDetailSort.ASC.name,
+        order: String = StorageDetailSort.DESC.name,
         favorite: Boolean = false,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
@@ -200,14 +205,14 @@ class StorageDetailViewModel @Inject constructor(
                 }
             },
         ).map { pagedData ->
-                pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-            }.cachedIn(viewModelScope).stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Lazily,
-                initialValue = PagingData.empty(),
-            ).collectLatest { pagingData ->
-                _feedListState.value = pagingData
-            }
+            pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
+        }.cachedIn(viewModelScope).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = PagingData.empty(),
+        ).collectLatest { pagingData ->
+            _feedListState.value = pagingData
+        }
     }
 
     /**
@@ -216,16 +221,16 @@ class StorageDetailViewModel @Inject constructor(
     fun changeSelectedTabIdx(selectedIdx: Int) = viewModelScope.launch {
         intent {
             val (isRead, cachedKey) =
-                if (selectedIdx == 0)
-                    null to FeedCacheKeyType.ALL.name
-                else false to FeedCacheKeyType.UNREAD.name
+                if (selectedIdx == 0) {
+                    null to getCacheKey(FeedCacheKeyType.ALL.name, state.isLatestSort.name)
+                } else false to getCacheKey(FeedCacheKeyType.UNREAD.name, state.isLatestSort.name)
             fetchSavedLinkFromType(
                 type = state.folderInfo.folderType,
                 folderId = state.folderInfo.folderId,
                 order = state.isLatestSort.name,
                 isRead = isRead,
                 needFetchUpdate = false,
-                cacheKey = cachedKey
+                cacheKey = cachedKey,
             )
             reduce {
                 state.copy(tabInfo = state.tabInfo.copy(selectedTabIdx = selectedIdx))
@@ -238,14 +243,22 @@ class StorageDetailViewModel @Inject constructor(
      */
     fun clickFeedSort(item: StorageDetailSort) = viewModelScope.launch {
         intent {
-            val isRead = if (state.tabInfo.selectedTabIdx == 0) null else false
+            val (isRead, currentTap) =
+                if (state.tabInfo.selectedTabIdx == 0) {
+                    null to FeedCacheKeyType.ALL.name
+                } else false to FeedCacheKeyType.UNREAD.name
+            val cacheKey = if (item == StorageDetailSort.ASC) {
+                getCacheKey(currentTap, StorageDetailSort.ASC.name)
+            } else {
+                getCacheKey(currentTap, StorageDetailSort.DESC.name)
+            }
             fetchSavedLinkFromType(
                 type = state.folderInfo.folderType,
                 folderId = state.folderInfo.folderId,
                 order = item.name,
                 isRead = isRead,
                 needFetchUpdate = false,
-                cacheKey = if(item == StorageDetailSort.ASC) FeedCacheKeyType.ASC.name else FeedCacheKeyType.DESC.name
+                cacheKey = cacheKey,
             )
             reduce {
                 state.copy(
@@ -258,22 +271,45 @@ class StorageDetailViewModel @Inject constructor(
     /**
      * 즐겨찾기 추가 - 낙관적 업데이트 적용
      */
-    fun addFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
-        _feedListState.value = feedListState.value.map { item ->
-            if (item.postId == postId) {
-                item.copy(isFavorite = !isFavorite)
-            } else {
-                item
-            }
-        }
-        val isSuccessFavorite = patchPostInfoUseCase(postId = postId, postInfo = PostInfo(isFavorite = !isFavorite)).isSuccess
-        if (isSuccessFavorite.not()) {
+    fun addFavoriteItem(postId: String, isFavorite: Boolean, page: Int) = viewModelScope.doraLaunch {
+        intent {
+            val cachedList = feedListState.value
+            var updateItemInfo = FeedCardUiModel()
             _feedListState.value = feedListState.value.map { item ->
                 if (item.postId == postId) {
-                    item.copy(isFavorite = isFavorite)
+                    updateItemInfo = item.copy(isFavorite = !isFavorite)
+                    item.copy(isFavorite = !isFavorite)
                 } else {
                     item
                 }
+            }
+            val isSuccessFavorite = patchPostInfoUseCase(postId = postId, postInfo = PostInfo(isFavorite = !isFavorite)).isSuccess
+            if (isSuccessFavorite) {
+                val cacheKey = if (state.tabInfo.selectedTabIdx == 0) {
+                    getCacheKey(FeedCacheKeyType.ALL.name, state.isLatestSort.name)
+                } else {
+                    getCacheKey(FeedCacheKeyType.UNREAD.name, state.isLatestSort.name)
+                }
+                when (state.folderInfo.folderType) {
+                    FolderType.ALL, FolderType.FAVORITE -> {
+                        getPostsUseCase.updatePostItem(
+                            page = page + 1,
+                            cacheKey = cacheKey,
+                            cachedKeyList = getUpdateKeyCase(),
+                            item = updateItemInfo.toPost(),
+                        )
+                    }
+                    else -> {
+                        savedLinksFromFolderUseCase.updatePostItem(
+                            page = page + 1,
+                            cacheKey = cacheKey,
+                            cachedKeyList = getUpdateKeyCase(),
+                            item = updateItemInfo.toSavedLinkDetailInfo(),
+                        )
+                    }
+                }
+            } else {
+                _feedListState.value = cachedList
             }
         }
     }
@@ -395,5 +431,14 @@ class StorageDetailViewModel @Inject constructor(
             state.copy(isShowMovingFolderSheet = visible)
         }
         if (isNavigate) postSideEffect(StorageDetailSideEffect.NavigateToFolderManage(itemId = state.currentClickPostId))
+    }
+
+    private fun getUpdateKeyCase(): List<String> {
+        return listOf(
+            getCacheKey(FeedCacheKeyType.ALL.name, FeedCacheKeyType.DESC.name),
+            getCacheKey(FeedCacheKeyType.UNREAD.name, FeedCacheKeyType.DESC.name),
+            getCacheKey(FeedCacheKeyType.ALL.name, FeedCacheKeyType.ASC.name),
+            getCacheKey(FeedCacheKeyType.UNREAD.name, FeedCacheKeyType.DESC.name),
+        )
     }
 }

@@ -24,4 +24,18 @@ class GetPosts @Inject constructor(
         isRead = isRead,
         totalCount = totalCount,
     )
+
+    fun updatePostItem(
+        page: Int,
+        cacheKey: String,
+        cachedKeyList: List<String>,
+        item: Post,
+    ) {
+        postsRepository.updatePostItem(
+            page = page,
+            cacheKey = cacheKey,
+            cachedKeyList = cachedKeyList,
+            item = item,
+        )
+    }
 }

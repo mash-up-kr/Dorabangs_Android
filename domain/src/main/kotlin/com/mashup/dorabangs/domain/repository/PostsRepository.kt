@@ -18,6 +18,13 @@ interface PostsRepository {
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<Post>>
 
+    fun updatePostItem(
+        page: Int,
+        cacheKey: String,
+        cachedKeyList: List<String>,
+        item: Post,
+    )
+
     suspend fun saveLink(
         link: Link,
     )

@@ -52,7 +52,7 @@ fun StorageDetailList(
     onClickTabItem: (Int) -> Unit,
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
-    onClickBookMarkButton: (String, Boolean) -> Unit,
+    onClickBookMarkButton: (String, Boolean, Int) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     val isLoading = linksPagingList.loadState.refresh is LoadState.Loading
@@ -118,7 +118,7 @@ fun StorageDetailList(
                             val item = cardItem.copy(category = state.folderInfo.title)
                             FeedCard(
                                 cardInfo = item,
-                                onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
+                                onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite, (idx / 10)) },
                                 onClickMoreButton = { onClickMoreButton(cardItem.postId) },
                                 feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
                             )
@@ -151,7 +151,7 @@ fun StorageDetailList(
 
 @Composable
 fun SortButtonRow(
-    items: List<StorageDetailSort> = listOf(StorageDetailSort.ASC, StorageDetailSort.DESC),
+    items: List<StorageDetailSort> = listOf(StorageDetailSort.DESC, StorageDetailSort.ASC),
     isLatestSort: Boolean = false,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {

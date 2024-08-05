@@ -4,14 +4,14 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 data class FeedCardUiModel(
-    val postId: String,
-    val folderId: String,
-    val title: String?,
-    val content: String?,
+    val postId: String = "",
+    val folderId: String = "",
+    val title: String? = "",
+    val content: String? = "",
     val category: String? = "",
-    val createdAt: String?,
-    val keywordList: List<String>?,
-    val thumbnail: String?,
+    val createdAt: String? = "",
+    val keywordList: List<String>? = listOf(),
+    val thumbnail: String? = "",
     val isFavorite: Boolean = false,
     val isLoading: Boolean = false,
 ) {
