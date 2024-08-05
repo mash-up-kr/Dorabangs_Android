@@ -55,11 +55,11 @@ fun StorageDetailRoute(
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val listState = rememberLazyListState()
     val overlapHeightPx = with(LocalDensity.current) { MaxToolbarHeight.toPx() - MinToolbarHeight.toPx() }
     val state by storageDetailViewModel.collectAsState()
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val scope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
     val linksPagingList = storageDetailViewModel.feedListState.collectAsLazyPagingItems()
 
     LaunchedEffect(isChangedData) {
@@ -74,7 +74,7 @@ fun StorageDetailRoute(
                     toastMsg = context.getString(storageR.string.toast_rename_folder),
                 )
             } else
-                linksPagingList.refresh()
+                storageDetailViewModel.refresh()
         }
         storageDetailViewModel.setVisibleMovingFolderBottomSheet(isVisibleBottomSheet)
     }
@@ -181,7 +181,9 @@ fun StorageDetailRoute(
             text = state.toastState.text,
             toastStyle = state.toastState.toastStyle,
             snackBarHostState = toastSnackBarHostState,
-            modifier = modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
+            modifier = modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 20.dp),
         )
     }
 }

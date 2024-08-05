@@ -50,7 +50,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StorageDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     private val savedLinksFromFolderUseCase: GetSavedLinksFromFolderUseCase,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
     private val getPostsUseCase: GetPosts,
@@ -367,6 +367,18 @@ class StorageDetailViewModel @Inject constructor(
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
             intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+        }
+    }
+
+    fun refresh() = viewModelScope.doraLaunch {
+        intent {
+            val tabPosition = if (state.tabInfo.selectedTabIdx == 0) FeedCacheKeyType.ALL.name else FeedCacheKeyType.UNREAD.name
+            fetchSavedLinkFromType(
+                type = state.folderInfo.folderType,
+                folderId = state.folderInfo.folderId,
+                needFetchUpdate = true,
+                cacheKey = getCacheKey(tabPosition, state.isLatestSort.name),
+            )
         }
     }
 

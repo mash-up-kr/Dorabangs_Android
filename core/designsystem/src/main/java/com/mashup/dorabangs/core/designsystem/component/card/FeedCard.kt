@@ -108,7 +108,7 @@ fun FeedCard(
             )
         } else {
             Spacer(modifier = Modifier.height(12.dp))
-            FeedCardKeyword(keywordList = cardInfo.keywordList)
+            FeedCardKeyword(keywordList = cardInfo.keywordList?.take(3))
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
