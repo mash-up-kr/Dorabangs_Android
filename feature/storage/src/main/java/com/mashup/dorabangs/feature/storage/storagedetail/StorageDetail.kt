@@ -26,7 +26,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.component.toast.DoraToast
 import com.mashup.dorabangs.domain.model.Folder
@@ -205,7 +205,7 @@ private fun handleSideEffect(
 
 @Composable
 fun StorageDetailScreen(
-    linksPagingList: LazyPagingItems<FeedCardUiModel>,
+    linksPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickBackIcon: () -> Unit,
     onClickTabItem: (Int) -> Unit,

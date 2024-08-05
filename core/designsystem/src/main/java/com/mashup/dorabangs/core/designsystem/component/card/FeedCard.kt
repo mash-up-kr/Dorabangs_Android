@@ -31,8 +31,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedDate
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel.Companion.convertCreatedSecond
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCardUiModel.Companion.convertCreatedDate
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCardUiModel.Companion.convertCreatedSecond
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
@@ -41,7 +42,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun FeedCard(
-    cardInfo: FeedCardUiModel,
+    cardInfo: FeedUiModel.FeedCardUiModel,
     feedCardEntryPoint: FeedCardEntryPoint,
     modifier: Modifier = Modifier,
     onClickCardItem: (String) -> Unit = {},
@@ -133,7 +134,7 @@ fun FeedCard(
 
 @Composable
 fun FeedCardContent(
-    cardInfo: FeedCardUiModel,
+    cardInfo: FeedUiModel.FeedCardUiModel,
     modifier: Modifier,
     isLoading: Boolean,
 ) {
@@ -247,7 +248,7 @@ fun FeedCardKeyword(keywordList: List<String?>?) {
 @Composable
 fun FeedCardCategoryAndDayLabel(
     modifier: Modifier = Modifier,
-    cardInfo: FeedCardUiModel,
+    cardInfo: FeedUiModel.FeedCardUiModel,
 ) {
     Row(
         modifier = modifier.then(Modifier.wrapContentWidth()),
@@ -279,7 +280,7 @@ fun FeedCardCategoryAndDayLabel(
 
 @Composable
 fun FeedCardMenuItems(
-    cardInfo: FeedCardUiModel,
+    cardInfo: FeedUiModel.FeedCardUiModel,
     feedCardEntryPoint: FeedCardEntryPoint,
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
@@ -323,7 +324,7 @@ sealed class FeedCardEntryPoint {
 @Composable
 private fun PreviewFeedCard() {
     val cardInfo =
-        FeedCardUiModel(
+        FeedUiModel.FeedCardUiModel(
             postId = "",
             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
@@ -340,7 +341,7 @@ private fun PreviewFeedCard() {
 @Composable
 private fun PreviewLoadingFeedCard() {
     val cardInfo =
-        FeedCardUiModel(
+        FeedUiModel.FeedCardUiModel(
             postId = "",
             title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
             content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",

@@ -1,14 +1,14 @@
 package com.mashup.dorabangs.feature.storage.storagedetail.model
 
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import com.mashup.dorabangs.core.designsystem.R as coreR
 
-fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
-    return FeedCardUiModel(
+fun SavedLinkDetailInfo.toUiModel(): FeedUiModel.FeedCardUiModel {
+    return FeedUiModel.FeedCardUiModel(
         postId = this.id.orEmpty(),
         title = this.title,
         content = this.description,
@@ -21,8 +21,8 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
     )
 }
 
-fun Post.toUiModel(): FeedCardUiModel {
-    return FeedCardUiModel(
+fun Post.toUiModel(): FeedUiModel.FeedCardUiModel {
+    return FeedUiModel.FeedCardUiModel(
         postId = this.id,
         title = this.title,
         content = this.description,
