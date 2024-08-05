@@ -9,7 +9,7 @@ import androidx.paging.filter
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
@@ -62,8 +62,8 @@ class StorageDetailViewModel @Inject constructor(
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
-    private val _feedListState: MutableStateFlow<PagingData<FeedCardUiModel>> = MutableStateFlow(value = PagingData.empty())
-    val feedListState: StateFlow<PagingData<FeedCardUiModel>> = _feedListState.asStateFlow()
+    private val _feedListState: MutableStateFlow<PagingData<FeedUiModel.FeedCardUiModel>> = MutableStateFlow(value = PagingData.empty())
+    val feedListState: StateFlow<PagingData<FeedUiModel.FeedCardUiModel>> = _feedListState.asStateFlow()
 
     fun setFolderInfo(folderItem: Folder) = intent {
         reduce {
@@ -204,9 +204,11 @@ class StorageDetailViewModel @Inject constructor(
                     }
                 }
             },
+
         ).map { pagedData ->
             pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
-        }.cachedIn(viewModelScope).stateIn(
+        }.cachedIn(viewModelScope)
+            .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
             initialValue = PagingData.empty(),
@@ -274,7 +276,7 @@ class StorageDetailViewModel @Inject constructor(
     fun addFavoriteItem(postId: String, isFavorite: Boolean, page: Int) = viewModelScope.doraLaunch {
         intent {
             val cachedList = feedListState.value
-            var updateItemInfo = FeedCardUiModel()
+            var updateItemInfo = FeedUiModel.FeedCardUiModel()
             _feedListState.value = feedListState.value.map { item ->
                 if (item.postId == postId) {
                     updateItemInfo = item.copy(isFavorite = !isFavorite)

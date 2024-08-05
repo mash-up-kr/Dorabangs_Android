@@ -19,3 +19,18 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Do not strip any method/class that is annotated with @DoNotStrip
+-keep class com.facebook.jni.**  {  *;  }
+-keep class com.facebook.flipper.** {  *;  }
+
+-dontwarn com.facebook.litho.**
+-dontwarn com.facebook.flipper.**
+-dontwarn com.facebook.yoga.**
+-dontwarn org.mozilla.**
+-dontwarn  com.facebook.fbui.**
+
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+
+ # R8 full mode strips generic signatures from return types if not kept.
+ -if interface * { @retrofit2.http.* public *** *(...); }
+ -keep,allowoptimization,allowshrinking,allowobfuscation class <3>

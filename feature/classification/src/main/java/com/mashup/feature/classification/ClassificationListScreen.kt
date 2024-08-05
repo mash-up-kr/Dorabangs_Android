@@ -2,7 +2,9 @@ package com.mashup.feature.classification
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,51 +25,57 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
+import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
 @Composable
 fun ClassificationListScreen(
     state: ClassificationState,
     lazyColumnState: LazyListState,
-    pagingList: LazyPagingItems<FeedCardUiModel>,
+    pagingList: LazyPagingItems<FeedUiModel>,
     modifier: Modifier = Modifier,
-    onClickDeleteButton: (FeedCardUiModel) -> Unit = {},
-    onClickMoveButton: (FeedCardUiModel) -> Unit = {},
+    onClickCardItem: (String) -> Unit,
+    onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit = {},
+    onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickAllItemMoveButton: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.background(color = DoraColorTokens.White),
         state = lazyColumnState,
     ) {
-        item {
-            ClassificationFolderMove(
-                selectedFolder = state.chipState.chipList.getOrNull(state.chipState.currentIndex - 1)?.title
-                    ?: "전체",
-                onClickAllItemMoveButton = onClickAllItemMoveButton,
-                count = state.chipState.totalCount,
-            )
-            HorizontalDivider(thickness = 0.5.dp)
-        }
-
         items(
             count = pagingList.itemCount,
-            key = pagingList.itemKey(FeedCardUiModel::postId),
+            key = pagingList.itemKey(FeedUiModel::uuid),
             contentType = pagingList.itemContentType { "Feed Paging" },
         ) { idx ->
             pagingList[idx]?.let { item ->
-                ClassificationCardItem(
-                    idx = idx,
-                    lastIndex = pagingList.itemCount - 1,
-                    cardItem = item,
-                    onClickDeleteButton = onClickDeleteButton,
-                    onClickMoveButton = onClickMoveButton,
-                )
+                when (item) {
+                    is FeedUiModel.DoraChipUiModel -> {
+                        ClassificationFolderMove(
+                            selectedFolder = item.title,
+                            onClickAllItemMoveButton = onClickAllItemMoveButton,
+                            count = item.postCount,
+                        )
+                    }
+
+                    is FeedUiModel.FeedCardUiModel -> {
+                        ClassificationCardItem(
+                            idx = idx,
+                            lastIndex = pagingList.itemCount - 1,
+                            cardItem = item,
+                            onClickDeleteButton = onClickDeleteButton,
+                            onClickMoveButton = onClickMoveButton,
+                            onClickCardItem = onClickCardItem,
+                        )
+                    }
+                }
             }
         }
     }
@@ -82,7 +90,7 @@ fun ClassificationFolderMove(
 ) {
     Column(
         modifier = modifier
-            .background(color = DoraColorTokens.White)
+            .background(DoraGradientToken.Gradient2)
             .fillMaxWidth()
             .padding(vertical = 32.dp, horizontal = 23.dp),
 
@@ -116,15 +124,17 @@ fun ClassificationFolderMove(
 fun ClassificationCardItem(
     idx: Int,
     lastIndex: Int,
-    cardItem: FeedCardUiModel,
-    onClickDeleteButton: (FeedCardUiModel) -> Unit,
-    onClickMoveButton: (FeedCardUiModel) -> Unit,
+    cardItem: FeedUiModel.FeedCardUiModel,
+    onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onClickCardItem: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = DoraColorTokens.White),
+            .background(color = DoraColorTokens.White)
+            .clickable { onClickCardItem(cardItem.url) },
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         IconButton(
@@ -141,14 +151,25 @@ fun ClassificationCardItem(
         }
         Spacer(modifier = Modifier.height(20.dp))
         FeedCard(cardInfo = cardItem, feedCardEntryPoint = FeedCardEntryPoint.AiClassification)
-        DoraButtons.DoraColorFullMaxBtn(
+        GradientButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            buttonText = "${cardItem.category}(으)로 옮기기",
-            enabled = true,
-            onClickButton = { onClickMoveButton(cardItem) },
-        )
+            gradientModifier = Modifier
+                .fillMaxWidth()
+                .height(36.dp),
+            containerColor = DoraGradientToken.Gradient1,
+            contentPadding = PaddingValues(horizontal = 20.dp),
+            onClick = { onClickMoveButton(cardItem) },
+        ) {
+            Text(
+                text = "${cardItem.category}(으)로 옮기기",
+                modifier = Modifier.padding(vertical = 7.dp),
+                style = DoraTypoTokens.caption1Medium.copy(
+                    brush = DoraGradientToken.Gradient5,
+                ),
+            )
+        }
         Spacer(modifier = Modifier.height(32.dp))
         if (idx != lastIndex) {
             HorizontalDivider(

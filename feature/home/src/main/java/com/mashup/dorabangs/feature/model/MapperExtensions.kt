@@ -1,12 +1,12 @@
 package com.mashup.dorabangs.feature.model
 
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 
-fun Post.toUiModel(): FeedCardUiModel {
-    return FeedCardUiModel(
+fun Post.toUiModel(): FeedUiModel.FeedCardUiModel {
+    return FeedUiModel.FeedCardUiModel(
         postId = this.id,
         folderId = this.folderId,
         title = this.title,
@@ -15,12 +15,13 @@ fun Post.toUiModel(): FeedCardUiModel {
         keywordList = listOf(),
         isFavorite = isFavorite,
         thumbnail = thumbnailImgUrl,
+        url = this.url,
         isLoading = this.aiStatus == AIStatus.IN_PROGRESS,
     )
 }
 
-fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
-    return FeedCardUiModel(
+fun SavedLinkDetailInfo.toUiModel(): FeedUiModel.FeedCardUiModel {
+    return FeedUiModel.FeedCardUiModel(
         postId = this.id ?: "",
         folderId = this.folderId.orEmpty(),
         title = this.title,
@@ -29,6 +30,7 @@ fun SavedLinkDetailInfo.toUiModel(): FeedCardUiModel {
         keywordList = emptyList(),
         isFavorite = this.isFavorite ?: false,
         thumbnail = thumbnailImgUrl,
+        url = this.url.orEmpty(),
         isLoading = this.aiStatus == AIStatus.IN_PROGRESS,
     )
 }

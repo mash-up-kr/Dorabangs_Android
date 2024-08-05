@@ -12,4 +12,5 @@ data class AIClassificationFeedPost(
     val isLoading: Boolean = false,
     val aiStatus: String = "",
     val readAt: String = "",
+    val url: String = "",
 )

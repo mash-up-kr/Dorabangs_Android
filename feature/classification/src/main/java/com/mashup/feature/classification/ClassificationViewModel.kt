@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
-import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.usecase.aiclassification.DeletePostFromAIClassificationUseCase
@@ -36,7 +36,7 @@ class ClassificationViewModel @Inject constructor(
     ContainerHost<ClassificationState, ClassificationSideEffect> {
     override val container =
         container<ClassificationState, ClassificationSideEffect>(ClassificationState())
-    private val _paging = MutableStateFlow<PagingData<FeedCardUiModel>>(PagingData.empty())
+    private val _paging = MutableStateFlow<PagingData<FeedUiModel>>(PagingData.empty())
     val paging = _paging.asStateFlow()
 
     companion object {
@@ -50,20 +50,6 @@ class ClassificationViewModel @Inject constructor(
 
     private fun getInitialData() = viewModelScope.doraLaunch {
         val chips = getAIClassificationFolderListUseCase.invoke()
-        getAIClassificationPostsUseCase.invoke(
-            limit = LIMIT,
-            order = DESC,
-        ).cachedIn(viewModelScope)
-            .map { pagedData ->
-                pagedData.map {
-                    val category =
-                        chips.list.firstOrNull { chip -> chip.folderId == it.folderId }?.folderName.orEmpty()
-                    it.toUiModel(category)
-                }
-            }.let {
-                _paging.value = it.firstOrNull() ?: PagingData.empty()
-            }
-
         intent {
             reduce {
                 doraChipMapper(chips).let { chipList ->
@@ -75,6 +61,38 @@ class ClassificationViewModel @Inject constructor(
                     )
                 }
             }
+            getAIClassificationPostsUseCase.invoke(
+                limit = LIMIT,
+                order = DESC,
+            ).map { pagedData ->
+                pagedData.map {
+                    val category =
+                        chips.list.firstOrNull { chip -> chip.folderId == it.folderId }?.folderName.orEmpty()
+                    it.toUiModel(category)
+                }
+            }.map {
+                it.insertSeparators { before, after ->
+                    after?.let {
+                        if (before?.category != after.category) {
+                            FeedUiModel.DoraChipUiModel(
+                                id = after.postId,
+                                mergedTitle = "",
+                                title = after.category.orEmpty(),
+                                postCount = chips.list
+                                    .firstOrNull { chip -> chip.folderName == after.category.orEmpty() }
+                                    ?.postCount ?: 0,
+                                icon = null,
+                            )
+                        } else {
+                            null
+                        }
+                    }
+                }
+            }
+                .cachedIn(viewModelScope)
+                .let {
+                    _paging.value = it.firstOrNull() ?: PagingData.empty()
+                }
         }
     }
 
@@ -89,7 +107,7 @@ class ClassificationViewModel @Inject constructor(
     fun moveAllItems() = intent {
     }
 
-    fun moveSelectedItem(cardItem: FeedCardUiModel) = viewModelScope.doraLaunch {
+    fun moveSelectedItem(cardItem: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
         val move = moveSinglePostUseCase.invoke(
             postId = cardItem.postId,
             suggestionFolderId = cardItem.folderId,
@@ -110,7 +128,7 @@ class ClassificationViewModel @Inject constructor(
         }
     }
 
-    fun deleteSelectedItem(cardItem: FeedCardUiModel) = viewModelScope.doraLaunch {
+    fun deleteSelectedItem(cardItem: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
         val delete = deletePostUseCase.invoke(cardItem.postId)
         if (delete.isSuccess) {
             val (chips, chipList) = updateListScreen(cardItem)
@@ -127,12 +145,21 @@ class ClassificationViewModel @Inject constructor(
         }
     }
 
-    private suspend fun updateListScreen(cardItem: FeedCardUiModel): Pair<AIClassificationFolders, List<DoraChipUiModel>> {
+    private suspend fun updateListScreen(cardItem: FeedUiModel.FeedCardUiModel): Pair<AIClassificationFolders, List<FeedUiModel.DoraChipUiModel>> {
+        // chip update
         val chips = getAIClassificationFolderListUseCase.invoke()
         val chipList = doraChipMapper(chips)
 
+        // list update
         paging.map { pagingData ->
-            pagingData.filter { it.postId != cardItem.postId }
+            pagingData.filter {
+                when (it) {
+                    is FeedUiModel.DoraChipUiModel -> true
+                    is FeedUiModel.FeedCardUiModel -> {
+                        it.postId != cardItem.postId
+                    }
+                }
+            }
         }.let {
             _paging.value = it.firstOrNull() ?: PagingData.empty()
         }
@@ -142,16 +169,17 @@ class ClassificationViewModel @Inject constructor(
     private fun doraChipMapper(chips: AIClassificationFolders) =
         chips.list.map {
             val postCount = if (it.postCount > 99) "99+" else it.postCount
-            DoraChipUiModel(
+            FeedUiModel.DoraChipUiModel(
                 id = it.folderId,
-                title = "${it.folderName} $postCount",
+                mergedTitle = "${it.folderName} $postCount",
+                title = it.folderName,
                 icon = it.icon,
                 postCount = it.postCount,
             )
         }
 }
 
-fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedCardUiModel(
+fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedUiModel.FeedCardUiModel(
     postId = postId,
     folderId = folderId,
     title = title,
@@ -161,5 +189,6 @@ fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedCardUiMode
     keywordList = keywordList.take(3),
     thumbnail = thumbnail,
     isFavorite = false,
+    url = url,
     isLoading = false,
 )

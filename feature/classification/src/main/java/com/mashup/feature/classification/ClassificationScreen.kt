@@ -12,9 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
-import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
@@ -23,6 +22,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun ClassificationRoute(
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToWebView: (String) -> Unit,
     classificationViewModel: ClassificationViewModel = hiltViewModel(),
 ) {
     val state by classificationViewModel.collectAsState()
@@ -37,19 +37,21 @@ fun ClassificationRoute(
         onClickAllItemMoveButton = classificationViewModel::moveAllItems,
         onClickBackIcon = onClickBackIcon,
         navigateToHome = navigateToHome,
+        onClickCardItem = navigateToWebView,
     )
 }
 
 @Composable
 fun ClassificationScreen(
     state: ClassificationState,
-    pagingList: LazyPagingItems<FeedCardUiModel>,
+    pagingList: LazyPagingItems<FeedUiModel>,
     onClickChip: (Int) -> Unit,
-    onClickDeleteButton: (FeedCardUiModel) -> Unit,
-    onClickMoveButton: (FeedCardUiModel) -> Unit,
+    onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickAllItemMoveButton: () -> Unit,
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
+    onClickCardItem: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val totalCount = if (state.chipState.totalCount > 99) "99+" else state.chipState.totalCount.toString()
@@ -67,7 +69,7 @@ fun ClassificationScreen(
         DoraChips(
             modifier = modifier.fillMaxWidth(),
             chipList = listOf(
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     id = "",
                     title = stringResource(R.string.ai_classification_chips_count, totalCount),
                     postCount = state.chipState.totalCount,
@@ -93,6 +95,7 @@ fun ClassificationScreen(
                 onClickDeleteButton = onClickDeleteButton,
                 onClickMoveButton = onClickMoveButton,
                 onClickAllItemMoveButton = onClickAllItemMoveButton,
+                onClickCardItem = onClickCardItem,
             )
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,9 +51,8 @@ import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
-import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
@@ -68,7 +69,8 @@ import dev.chrisbanes.haze.hazeChild
 fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
-    postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
+    postsPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>? = null,
+    onClickCardItem: (String) -> Unit,
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
     onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
@@ -206,6 +208,7 @@ fun HomeScreen(
                     },
                     onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
                     refreshPageList = { postsPagingList?.refresh() },
+                    onClickCardItem = onClickCardItem,
                 )
             }
 
@@ -243,15 +246,16 @@ fun HomeScreen(
 }
 
 private fun LazyListScope.Feeds(
-    feeds: LazyPagingItems<FeedCardUiModel>?,
+    feeds: LazyPagingItems<FeedUiModel.FeedCardUiModel>?,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
+    onClickCardItem: (String) -> Unit,
     refreshPageList: () -> Unit = {},
 ) {
     if (feeds != null) {
         items(
             count = feeds.itemCount,
-            key = feeds.itemKey(FeedCardUiModel::postId),
+            key = feeds.itemKey(FeedUiModel.FeedCardUiModel::postId),
             contentType = feeds.itemContentType { "SavedLinks" },
         ) { index ->
             feeds[index]?.let { cardInfo ->
@@ -268,6 +272,7 @@ private fun LazyListScope.Feeds(
                         )
                     },
                     updateCardState = { refreshPageList() },
+                    onClickCardItem = onClickCardItem,
                 )
                 Box(
                     modifier = Modifier
@@ -330,6 +335,10 @@ private fun HomeCarousel(
                     GradientButton(
                         containerColor = DoraGradientToken.Gradient3,
                         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+                        gradientModifier = Modifier.defaultMinSize(
+                            minWidth = ButtonDefaults.MinWidth,
+                            minHeight = ButtonDefaults.MinHeight,
+                        ),
                         onClick = homeCarouselItems[page].onClickButton,
                     ) {
                         Text(
@@ -451,27 +460,28 @@ fun HomeCarouselPreview() {
 fun HomeScreenPreview() {
     HomeScreen(
         onClickMoreButton = { postId, folderId -> },
+        onClickCardItem = {},
         state = HomeState(
             tapElements = listOf(
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "전체",
                     icon = R.drawable.ic_plus,
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "즐겨찾기",
                     icon = R.drawable.ic_plus,
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "나중에 읽을 링크",
                     icon = R.drawable.ic_plus,
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "테스트",
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "테스트",
                 ),
-                DoraChipUiModel(
+                FeedUiModel.DoraChipUiModel(
                     title = "테스트",
                 ),
             ),
