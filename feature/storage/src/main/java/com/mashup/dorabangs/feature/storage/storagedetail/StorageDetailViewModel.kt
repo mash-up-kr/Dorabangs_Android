@@ -274,19 +274,23 @@ class StorageDetailViewModel @Inject constructor(
     /**
      * 즐겨찾기 추가 - 낙관적 업데이트 적용
      */
-    fun addFavoriteItem(postId: String, isFavorite: Boolean, page: Int) = viewModelScope.doraLaunch {
+    fun addFavoriteItem(cardInfo: FeedUiModel.FeedCardUiModel, isFavorite: Boolean, page: Int) = viewModelScope.doraLaunch {
         intent {
             val cachedList = feedListState.value
             var updateItemInfo = FeedUiModel.FeedCardUiModel()
             _feedListState.value = feedListState.value.map { item ->
-                if (item.postId == postId) {
+                if (item.postId == cardInfo.postId) {
                     updateItemInfo = item.copy(isFavorite = !isFavorite)
                     item.copy(isFavorite = !isFavorite)
                 } else {
                     item
                 }
             }
-            val isSuccessFavorite = patchPostInfoUseCase(postId = postId, postInfo = PostInfo(isFavorite = !isFavorite)).isSuccess
+            val isSuccessFavorite = patchPostInfoUseCase(
+                postId = cardInfo.postId,
+                postInfo = PostInfo(isFavorite = !isFavorite, readAt = cardInfo.readAt),
+            ).isSuccess
+
             if (isSuccessFavorite) {
                 val cacheKey = if (state.tabInfo.selectedTabIdx == 0) {
                     getCacheKey(FeedCacheKeyType.ALL.name, state.isLatestSort.name)

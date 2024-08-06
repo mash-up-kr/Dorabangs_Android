@@ -211,7 +211,7 @@ private fun handleSideEffect(
 @Composable
 fun StorageDetailScreen(
     linksPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>,
-    onClickBookMarkButton: (String, Boolean, Int) -> Unit,
+    onClickBookMarkButton: (FeedUiModel.FeedCardUiModel, Boolean, Int) -> Unit,
     onClickBackIcon: () -> Unit,
     onClickTabItem: (Int) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit,
