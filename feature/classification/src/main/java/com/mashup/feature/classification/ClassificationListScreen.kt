@@ -3,11 +3,9 @@ package com.mashup.feature.classification
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,7 +30,6 @@ import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
-import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
