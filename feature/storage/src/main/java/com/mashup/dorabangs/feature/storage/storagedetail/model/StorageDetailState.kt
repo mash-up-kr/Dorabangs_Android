@@ -19,7 +19,7 @@ data class StorageDetailState(
     val folderList: List<Folder> = listOf(),
     val toastState: ToastState = ToastState(),
     val isChangeData: Boolean = false,
-    val scrollPosition: Int = 0
+    val scrollPosition: Int = 0,
 ) {
     companion object {
         fun getDefaultTabTitleList() = listOf(StorageDetailTab.ALL, StorageDetailTab.UNREAD)

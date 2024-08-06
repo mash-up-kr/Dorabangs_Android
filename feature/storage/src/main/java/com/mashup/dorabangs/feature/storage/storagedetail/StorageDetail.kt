@@ -1,8 +1,5 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
-import android.content.ContentValues.TAG
-import android.util.Log
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -84,19 +80,18 @@ fun StorageDetailRoute(
         }
     }
 
-    
     LaunchedEffect(Unit) {
         if (state.folderInfo.folderId.isNullOrEmpty()) {
+            storageDetailViewModel.updateChangeData(false)
             storageDetailViewModel.setFolderInfo(folderItem)
         }
-        storageDetailViewModel.updateChangeData(isChangedData)
         if (isChangedData) {
+            storageDetailViewModel.updateChangeData(true)
             if (state.editActionType == EditActionType.FolderEdit) {
                 storageDetailViewModel.getFolderInfoById(
                     folderId = state.folderInfo.folderId.orEmpty(),
                     toastMsg = context.getString(storageR.string.toast_rename_folder),
                 )
-                storageDetailViewModel.updateChangeData(true)
             } else
                 storageDetailViewModel.refresh()
         }

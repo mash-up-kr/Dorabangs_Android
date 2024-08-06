@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.filter
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
@@ -69,7 +68,7 @@ class StorageDetailViewModel @Inject constructor(
         reduce { state.copy(scrollPosition = position) }
     }
 
-    fun updateChangeData(isChange:Boolean) = intent {
+    fun updateChangeData(isChange: Boolean) = intent {
         reduce { state.copy(isChangeData = isChange) }
     }
 
@@ -346,7 +345,9 @@ class StorageDetailViewModel @Inject constructor(
         val isSuccessDeleted = deletePostUseCase(postId).isSuccess
         setVisibleDialog(false)
         if (isSuccessDeleted) {
-            _feedListState.value = feedListState.value.filter { item -> item.postId != postId }
+            updateChangeData(true)
+            intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+            // _feedListState.value = feedListState.value.filter { item -> item.postId != postId }
         }
     }
 
@@ -376,6 +377,7 @@ class StorageDetailViewModel @Inject constructor(
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
+            updateChangeData(true)
             intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
         }
     }
