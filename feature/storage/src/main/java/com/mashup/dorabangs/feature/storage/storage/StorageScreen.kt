@@ -78,8 +78,17 @@ fun StorageRoute(
     }
 
     LaunchedEffect(Unit) {
-        if (isChangedData) storageViewModel.getFolderList()
-        if (isRemoveSuccess) storageViewModel.setToastState(context.getString(R.string.toast_remove_folder))
+        if (isChangedData) {
+            val toastMsg = when (storageState.folderEditType) {
+                FolderManageType.CREATE -> "폴더를 추가했어요."
+                FolderManageType.CHANGE -> "폴더 이름을 변경했어요." // todo- context로 가져오기 근데 가져왔을때 이상하게 안됨..
+            }
+            storageViewModel.setToastState(toastMsg)
+            storageViewModel.getFolderList()
+        }
+        if (isRemoveSuccess) {
+            storageViewModel.setToastState("삭제 완료했어요.")
+        }
     }
 
     Box {
@@ -90,7 +99,10 @@ fun StorageRoute(
                 storageViewModel.setSelectFolderId(folderId = folderItem.id.orEmpty())
                 storageViewModel.setVisibleMoreButtonBottomSheet(visible = true)
             },
-            onClickAddFolderIcon = { navigateToFolderManage(FolderManageType.CREATE, storageState.selectedFolderId) },
+            onClickAddFolderIcon = {
+                storageViewModel.updateFolderEditType(FolderManageType.CREATE)
+                navigateToFolderManage(FolderManageType.CREATE, storageState.selectedFolderId)
+            },
         )
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
@@ -102,6 +114,7 @@ fun StorageRoute(
                 storageViewModel.setVisibleDialog(true)
             },
             onClickMoveFolderButton = {
+                storageViewModel.updateFolderEditType(FolderManageType.CHANGE)
                 storageViewModel.setVisibleMoreButtonBottomSheet(visible = false, isNavigate = true)
             },
             onDismissRequest = { storageViewModel.setVisibleMoreButtonBottomSheet(false) },
@@ -115,8 +128,10 @@ fun StorageRoute(
             disMissBtnText = stringResource(R.string.dialog_folder_remove_button_cancel),
             onDisMissRequest = { storageViewModel.setVisibleDialog(false) },
             onClickConfirmBtn = {
-                storageViewModel.deleteFolder(folderId = storageState.selectedFolderId)
-                storageViewModel.setVisibleDialog(false)
+                storageViewModel.deleteFolder(
+                    folderId = storageState.selectedFolderId,
+                    toastMsg = "삭제 완료했어요.",
+                )
             },
         )
         DoraToast(
