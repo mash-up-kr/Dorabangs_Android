@@ -54,7 +54,6 @@ fun ClassificationScreen(
     onClickCardItem: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val totalCount = if (state.chipState.totalCount > 99) "99+" else state.chipState.totalCount.toString()
     val lazyColumnState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     Column(
@@ -68,19 +67,16 @@ fun ClassificationScreen(
         )
         DoraChips(
             modifier = modifier.fillMaxWidth(),
-            chipList = listOf(
-                FeedUiModel.DoraChipUiModel(
-                    id = "",
-                    title = stringResource(R.string.ai_classification_chips_count, totalCount),
-                    postCount = state.chipState.totalCount,
-                    icon = com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_small,
-                ),
-            ) + state.chipState.chipList,
+            chipList = state.chipState.chipList.map {
+                // 여기만 타이틀에서 연예 3 과 같이 숫자 들고 있어서 이렇게 변경함;
+                it.copy(
+                    title = it.mergedTitle,
+                )
+            },
             selectedIndex = state.chipState.currentIndex,
             onClickChip = {
                 onClickChip(it) // UI Update
                 coroutineScope.launch {
-                    // 여기서 선택한 칩의 scroll state 구분해줄 방법 만들기
                     lazyColumnState.animateScrollToItem(0)
                 }
             },

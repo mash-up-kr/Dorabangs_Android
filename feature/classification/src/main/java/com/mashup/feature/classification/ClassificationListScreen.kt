@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
@@ -53,27 +52,31 @@ fun ClassificationListScreen(
         items(
             count = pagingList.itemCount,
             key = pagingList.itemKey(FeedUiModel::uuid),
-            contentType = pagingList.itemContentType { "Feed Paging" },
+            contentType = { if (pagingList[it] is FeedUiModel.FeedCardUiModel) "feed_card" else "header" },
         ) { idx ->
             pagingList[idx]?.let { item ->
                 when (item) {
                     is FeedUiModel.DoraChipUiModel -> {
-                        ClassificationFolderMove(
-                            selectedFolder = item.title,
-                            onClickAllItemMoveButton = onClickAllItemMoveButton,
-                            count = item.postCount,
-                        )
+                        if (state.selectedFolder == item.title || state.selectedFolder == "전체") {
+                            ClassificationFolderMove(
+                                selectedFolder = item.title,
+                                onClickAllItemMoveButton = onClickAllItemMoveButton,
+                                count = item.postCount,
+                            )
+                        }
                     }
 
                     is FeedUiModel.FeedCardUiModel -> {
-                        ClassificationCardItem(
-                            idx = idx,
-                            lastIndex = pagingList.itemCount - 1,
-                            cardItem = item,
-                            onClickDeleteButton = onClickDeleteButton,
-                            onClickMoveButton = onClickMoveButton,
-                            onClickCardItem = onClickCardItem,
-                        )
+                        if (state.selectedFolder == item.category || state.selectedFolder == "전체") {
+                            ClassificationCardItem(
+                                idx = idx,
+                                lastIndex = pagingList.itemCount - 1,
+                                cardItem = item,
+                                onClickDeleteButton = onClickDeleteButton,
+                                onClickMoveButton = onClickMoveButton,
+                                onClickCardItem = onClickCardItem,
+                            )
+                        }
                     }
                 }
             }

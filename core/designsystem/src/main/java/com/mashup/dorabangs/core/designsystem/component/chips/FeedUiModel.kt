@@ -48,7 +48,7 @@ sealed interface FeedUiModel {
         val mergedTitle: String = "",
         val title: String = "",
         val postCount: Int = 0,
-        @DrawableRes val icon: Int? = null,
+        @DrawableRes val icon: Int? = com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_small,
     ) : FeedUiModel {
         override val uuid: String = UUID.randomUUID().toString()
     }

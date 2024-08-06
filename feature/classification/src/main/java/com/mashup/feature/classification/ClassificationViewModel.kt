@@ -100,6 +100,7 @@ class ClassificationViewModel @Inject constructor(
         reduce {
             state.copy(
                 chipState = state.chipState.copy(currentIndex = idx),
+                selectedFolder = state.chipState.chipList.getOrNull(idx)?.title ?: "전체",
             )
         }
     }
@@ -166,8 +167,16 @@ class ClassificationViewModel @Inject constructor(
         return Pair(chips, chipList)
     }
 
-    private fun doraChipMapper(chips: AIClassificationFolders) =
-        chips.list.map {
+    private fun doraChipMapper(chips: AIClassificationFolders): List<FeedUiModel.DoraChipUiModel> {
+        val firstChip = listOf(
+            FeedUiModel.DoraChipUiModel(
+                id = "",
+                mergedTitle = "전체 ${chips.totalCounts}",
+                title = "전체",
+                postCount = chips.totalCounts,
+            ),
+        )
+        return firstChip + chips.list.map {
             val postCount = if (it.postCount > 99) "99+" else it.postCount
             FeedUiModel.DoraChipUiModel(
                 id = it.folderId,
@@ -177,6 +186,7 @@ class ClassificationViewModel @Inject constructor(
                 postCount = it.postCount,
             )
         }
+    }
 }
 
 fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedUiModel.FeedCardUiModel(
