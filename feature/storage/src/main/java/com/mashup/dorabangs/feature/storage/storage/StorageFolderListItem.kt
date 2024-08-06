@@ -149,7 +149,7 @@ fun StorageListItem(
                 modifier = Modifier
                     .padding(end = 12.dp)
                     .align(Alignment.CenterVertically),
-                text = "${item.postCount}",
+                text = if (item.postCount > 99) "99+" else "${item.postCount}",
                 color = DoraColorTokens.G4,
                 style = DoraTypoTokens.caption3Medium,
             )
