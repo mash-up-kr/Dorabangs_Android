@@ -29,7 +29,7 @@ class DoraPagingSource<T : Any> (
 
         val cachedData = cachedList[doraConvertKey(page, cacheKey)]
         return try {
-            if (cachedData != null && !needFetchUpdate) {
+            if (cachedData != null && needFetchUpdate.not()) {
                 val isLastPage = (!cachedData.pagingInfo.hasNext) || (cachedData.pagingInfo.total == 0)
                 if (cachedData.data.isEmpty()) return LoadResult.Error(DoraException(message = "empty"))
                 totalCount(cachedData.pagingInfo.total)
