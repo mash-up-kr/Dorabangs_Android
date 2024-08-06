@@ -1,5 +1,8 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
+import android.content.ContentValues.TAG
+import android.util.Log
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -10,9 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
@@ -48,7 +55,7 @@ fun StorageDetailRoute(
     folderItem: Folder,
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
-    onClickBackIcon: () -> Unit,
+    onClickBackIcon: (Boolean) -> Unit,
     navigateToWebView: (String) -> Unit,
     modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
@@ -63,17 +70,33 @@ fun StorageDetailRoute(
     val listState = rememberLazyListState()
     val linksPagingList = storageDetailViewModel.feedListState.collectAsLazyPagingItems()
 
-    LaunchedEffect(isChangedData) {
+    LaunchedEffect(linksPagingList.itemSnapshotList) {
+        snapshotFlow { listState.firstVisibleItemIndex }.collect {
+            if (linksPagingList.loadState.refresh is LoadState.NotLoading) {
+                storageDetailViewModel.updateScrollPosition(it)
+            }
+        }
+    }
+
+    LaunchedEffect(linksPagingList.loadState.refresh) {
+        if (linksPagingList.loadState.refresh is LoadState.NotLoading) {
+            listState.animateScrollToItem(state.scrollPosition)
+        }
+    }
+
+    
+    LaunchedEffect(Unit) {
         if (state.folderInfo.folderId.isNullOrEmpty()) {
             storageDetailViewModel.setFolderInfo(folderItem)
         }
-
+        storageDetailViewModel.updateChangeData(isChangedData)
         if (isChangedData) {
             if (state.editActionType == EditActionType.FolderEdit) {
                 storageDetailViewModel.getFolderInfoById(
                     folderId = state.folderInfo.folderId.orEmpty(),
                     toastMsg = context.getString(storageR.string.toast_rename_folder),
                 )
+                storageDetailViewModel.updateChangeData(true)
             } else
                 storageDetailViewModel.refresh()
         }
@@ -104,7 +127,7 @@ fun StorageDetailRoute(
             linksPagingList = linksPagingList,
             listState = listState,
             isCollapsed = isCollapsed,
-            onClickBackIcon = onClickBackIcon,
+            onClickBackIcon = { onClickBackIcon(state.isChangeData) },
             onClickTabItem = storageDetailViewModel::changeSelectedTabIdx,
             onClickSortedIcon = storageDetailViewModel::clickFeedSort,
             onClickBookMarkButton = storageDetailViewModel::addFavoriteItem,

@@ -65,6 +65,14 @@ class StorageDetailViewModel @Inject constructor(
     private val _feedListState: MutableStateFlow<PagingData<FeedUiModel.FeedCardUiModel>> = MutableStateFlow(value = PagingData.empty())
     val feedListState: StateFlow<PagingData<FeedUiModel.FeedCardUiModel>> = _feedListState.asStateFlow()
 
+    fun updateScrollPosition(position: Int) = intent {
+        reduce { state.copy(scrollPosition = position) }
+    }
+
+    fun updateChangeData(isChange:Boolean) = intent {
+        reduce { state.copy(isChangeData = isChange) }
+    }
+
     fun setFolderInfo(folderItem: Folder) = intent {
         reduce {
             state.copy(
