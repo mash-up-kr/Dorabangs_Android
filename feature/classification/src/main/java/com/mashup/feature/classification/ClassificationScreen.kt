@@ -48,7 +48,7 @@ fun ClassificationScreen(
     onClickChip: (Int) -> Unit,
     onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit,
-    onClickAllItemMoveButton: () -> Unit,
+    onClickAllItemMoveButton: (String) -> Unit,
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
     onClickCardItem: (String) -> Unit,

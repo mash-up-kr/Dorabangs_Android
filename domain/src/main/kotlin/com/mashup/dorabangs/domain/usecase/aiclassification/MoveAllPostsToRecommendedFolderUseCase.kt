@@ -9,8 +9,7 @@ class MoveAllPostsToRecommendedFolderUseCase @Inject constructor(
 
     suspend operator fun invoke(
         suggestionFolderId: String,
-    ) =
-        aiClassificationRepository.moveAllPostsToRecommendedFolder(
+    ) = aiClassificationRepository.moveAllPostsToRecommendedFolder(
             suggestionFolderId = suggestionFolderId,
         )
 }

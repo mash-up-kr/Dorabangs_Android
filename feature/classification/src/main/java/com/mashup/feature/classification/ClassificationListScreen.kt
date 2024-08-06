@@ -43,7 +43,7 @@ fun ClassificationListScreen(
     onClickCardItem: (String) -> Unit,
     onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit = {},
-    onClickAllItemMoveButton: () -> Unit = {},
+    onClickAllItemMoveButton: (String) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.background(color = DoraColorTokens.White),
@@ -60,7 +60,7 @@ fun ClassificationListScreen(
                         if (state.selectedFolder == item.title || state.selectedFolder == "전체") {
                             ClassificationFolderMove(
                                 selectedFolder = item.title,
-                                onClickAllItemMoveButton = onClickAllItemMoveButton,
+                                onClickAllItemMoveButton = { onClickAllItemMoveButton(item.folderId) },
                                 count = item.postCount,
                             )
                         }
@@ -118,7 +118,7 @@ fun ClassificationFolderMove(
                 .padding(horizontal = 30.dp, vertical = 8.dp)
                 .wrapContentWidth(),
             buttonText = stringResource(id = R.string.ai_classification_all_move),
-            onClickButton = { onClickAllItemMoveButton() },
+            onClickButton = onClickAllItemMoveButton,
         )
     }
 }
