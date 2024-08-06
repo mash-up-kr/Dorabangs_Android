@@ -51,7 +51,7 @@ fun PostResponseModel.toDomain(): Post {
         createdAt = createdAt,
         thumbnailImgUrl = thumbnailImgUrl,
         aiStatus = aiStatus.toDomain(),
-        readAt = readAt
+        readAt = readAt,
     )
 }
 

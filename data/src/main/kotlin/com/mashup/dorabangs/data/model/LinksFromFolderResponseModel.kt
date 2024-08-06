@@ -24,7 +24,7 @@ data class SavedLinkInfoResponseModel(
     val userId: String? = "",
     val thumbnailImgUrl: String = "",
     val aiStatusResponseModel: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
-    val readAt: String?
+    val readAt: String?,
 )
 
 @Serializable
@@ -56,7 +56,7 @@ fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
         userId = userId,
         thumbnailImgUrl = thumbnailImgUrl,
         aiStatus = aiStatusResponseModel.toDomain(),
-        readAt = readAt
+        readAt = readAt,
     )
 }
 

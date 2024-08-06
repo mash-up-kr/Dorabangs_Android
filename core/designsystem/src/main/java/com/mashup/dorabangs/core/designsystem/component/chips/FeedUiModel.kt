@@ -2,6 +2,7 @@ package com.mashup.dorabangs.core.designsystem.component.chips
 
 import androidx.annotation.DrawableRes
 import java.time.Instant
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -45,9 +46,10 @@ sealed interface FeedUiModel {
             }
 
             fun createCurrentTime(): String? {
-                val now = ZonedDateTime.now(java.time.ZoneOffset.UTC)
-                val formatter = DateTimeFormatter.ISO_DATE_TIME
-                return now.format(formatter)
+                val zonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
+                val utcDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("UTC"))
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
+                return utcDateTime.format(formatter)
             }
         }
     }

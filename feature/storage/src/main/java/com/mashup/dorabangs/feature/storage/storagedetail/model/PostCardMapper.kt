@@ -20,6 +20,7 @@ fun SavedLinkDetailInfo.toUiModel(): FeedUiModel.FeedCardUiModel {
         thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId.orEmpty(),
         url = this.url.orEmpty(),
+        readAt = readAt,
     )
 }
 
@@ -34,6 +35,7 @@ fun Post.toUiModel(): FeedUiModel.FeedCardUiModel {
         thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId,
         url = this.url,
+        readAt = readAt,
     )
 }
 
@@ -47,7 +49,7 @@ fun FeedUiModel.FeedCardUiModel.toPost(): Post {
         isFavorite = isFavorite,
         createdAt = createdAt.orEmpty(),
         thumbnailImgUrl = thumbnail.orEmpty(),
-        readAt = readAt
+        readAt = readAt,
     )
 }
 
@@ -64,7 +66,7 @@ fun FeedUiModel.FeedCardUiModel.toSavedLinkDetailInfo(): SavedLinkDetailInfo {
         keywords = this.keywordList?.map { LinkKeywordInfo(id = "", name = it) },
         userId = "",
         aiStatus = AIStatus.NOTHING,
-        readAt = readAt
+        readAt = readAt,
     )
 }
 

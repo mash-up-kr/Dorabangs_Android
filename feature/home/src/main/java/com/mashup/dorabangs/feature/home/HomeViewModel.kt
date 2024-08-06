@@ -373,7 +373,7 @@ class HomeViewModel @Inject constructor(
      */
     fun updateReadAt(cardInfo: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
         intent {
-            if(cardInfo.readAt.isNullOrEmpty()) {
+            if (cardInfo.readAt.isNullOrEmpty()) {
                 patchPostInfoUseCase.invoke(
                     postId = cardInfo.postId,
                     PostInfo(isFavorite = cardInfo.isFavorite, readAt = FeedUiModel.FeedCardUiModel.createCurrentTime()),
