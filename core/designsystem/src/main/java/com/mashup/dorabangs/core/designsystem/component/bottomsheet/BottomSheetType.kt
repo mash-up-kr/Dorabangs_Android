@@ -116,7 +116,9 @@ object DoraBottomSheet : BottomSheetType {
                         DoraBottomSheetFolderItem(
                             modifier = Modifier.fillMaxWidth(),
                             data = folderList[index],
-                            onClickItem = { onClickMoveFolder(folderList[index].id) },
+                            onClickItem = {
+                                onClickMoveFolder(folderList[index].id)
+                            },
                             isLastItem = index == folderList.lastIndex,
                         )
                     }

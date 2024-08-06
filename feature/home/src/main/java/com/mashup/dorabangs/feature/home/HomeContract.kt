@@ -18,7 +18,7 @@ data class HomeState(
     val selectedIndex: Int = 0,
     val selectedPostId: String = "",
     val selectedFolderId: String = "",
-    val changeFolderId: String = "",
+    val changeFolderId: String = selectedFolderId,
     val isShowMoreButtonSheet: Boolean = false,
     val isShowDialog: Boolean = false,
     val isShowMovingFolderSheet: Boolean = false,
@@ -26,12 +26,14 @@ data class HomeState(
     val aiClassificationCount: Int = 0,
     val toastState: ToastState = ToastState(),
     val unReadPostCount: Int = 0,
+    val isEditPostFolder: Boolean = false,
 ) {
     companion object {
         // TODO - 추후 sotrageMapper와 합치기
         fun List<Folder>.toSelectBottomSheetModel(folderId: String): List<SelectableBottomSheetItemUIModel> {
             return this.map { item ->
                 SelectableBottomSheetItemUIModel(
+                    id = item.id.orEmpty(),
                     icon = coreR.drawable.ic_3d_folder_big,
                     itemName = item.name,
                     isSelected = item.id == folderId,

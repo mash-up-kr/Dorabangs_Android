@@ -69,6 +69,11 @@ fun MainNavHost(
             onClickBackIcon = {
                 appState.navController.navigateToHome(
                     isVisibleMovingBottomSheet = true,
+                    navOptions = navOptions {
+                        popUpTo(appState.navController.graph.id) {
+                            inclusive = true
+                        }
+                    },
                 )
             },
             navigateToHome = { appState.navController.popBackStackWithClearFocus() },
@@ -76,6 +81,9 @@ fun MainNavHost(
                 appState.navController.navigateToHome(
                     isVisibleMovingBottomSheet = false,
                 )
+            },
+            navigateToHomeAfterMovingFolder = {
+                appState.navController.popBackStack()
             },
         )
         homeTutorialNavigation(

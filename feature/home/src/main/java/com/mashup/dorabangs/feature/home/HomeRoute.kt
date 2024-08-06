@@ -60,7 +60,10 @@ fun HomeRoute(
                 snackBarHostState.currentSnackbarData?.dismiss()
             }
 
-            is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+            is HomeSideEffect.NavigateToCreateFolder -> {
+                viewModel.updateEditType(isEditPostFolder = true)
+                navigateToCreateFolder()
+            }
 
             is HomeSideEffect.RefreshPostList -> pagingList.refresh()
             else -> {}
@@ -125,15 +128,26 @@ fun HomeRoute(
         DoraBottomSheet.MovingFolderBottomSheet(
             modifier = modifier,
             isShowSheet = state.isShowMovingFolderSheet,
-            folderList = state.folderList.toSelectBottomSheetModel(state.changeFolderId.ifEmpty { state.selectedFolderId }),
-            onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
+            folderList = state.folderList.toSelectBottomSheetModel(
+                state.changeFolderId.ifEmpty {
+                    val originFolder = state.selectedFolderId
+                    viewModel.updateSelectFolderId(originFolder)
+                    originFolder
+                },
+            ),
+            onDismissRequest = {
+                viewModel.updateSelectFolderId(state.selectedFolderId)
+                viewModel.setVisibleMovingFolderBottomSheet(false)
+            },
             onClickCreateFolder = {
                 viewModel.setVisibleMovingFolderBottomSheet(
                     visible = false,
                     isNavigate = true,
                 )
             },
-            onClickMoveFolder = { selectFolder -> viewModel.updateSelectFolderId(selectFolder) },
+            onClickMoveFolder = { selectFolder ->
+                viewModel.updateSelectFolderId(selectFolder)
+            },
             btnEnable = state.selectedFolderId != state.changeFolderId,
             onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId) },
         )

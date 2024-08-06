@@ -163,7 +163,10 @@ fun StorageDetailRoute(
                     originFolder
                 },
             ),
-            onDismissRequest = { storageDetailViewModel.setVisibleMovingFolderBottomSheet(false) },
+            onDismissRequest = {
+                storageDetailViewModel.updateSelectFolderId(state.folderInfo.folderId.orEmpty())
+                storageDetailViewModel.setVisibleMovingFolderBottomSheet(false)
+            },
             onClickCreateFolder = {
                 storageDetailViewModel.setVisibleMovingFolderBottomSheet(
                     visible = false,

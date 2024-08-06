@@ -30,6 +30,7 @@ fun HomeCreateFolderRoute(
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
     navigateToHomeAfterSaveLink: () -> Unit,
+    navigateToHomeAfterMovingFolder: () -> Unit,
 ) {
     val state by homeViewModel.collectAsState()
 
@@ -41,14 +42,26 @@ fun HomeCreateFolderRoute(
                 urlLink = sideEffect.urlLink,
             )
             is HomeSideEffect.NavigateHomeAfterSaveLink -> navigateToHomeAfterSaveLink()
+            is HomeSideEffect.NavigateToCompleteMovingFolder -> {
+                homeViewModel.setVisibleMovingFolderBottomSheet(false)
+                navigateToHomeAfterMovingFolder()
+            }
             else -> {}
         }
     }
 
     HomeCreateFolderScreen(
         state = state.homeCreateFolder,
-        onClickBackIcon = onClickBackIcon,
-        onClickSaveButton = { homeViewModel.createFolder(state.homeCreateFolder.folderName, state.homeCreateFolder.urlLink) },
+        onClickBackIcon = {
+            homeViewModel.updateEditType(isEditPostFolder = false)
+            onClickBackIcon()
+        },
+        onClickSaveButton = {
+            if (state.isEditPostFolder) {
+                homeViewModel.createFolderWithMoveLink(state.homeCreateFolder.folderName, state.selectedPostId)
+            } else {
+                homeViewModel.createFolder(state.homeCreateFolder.folderName, state.homeCreateFolder.urlLink) }
+        },
         onValueChanged = homeViewModel::setFolderName,
     )
 }
