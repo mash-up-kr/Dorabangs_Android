@@ -10,6 +10,7 @@ import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCardUiModel.Companion.createCurrentTime
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
@@ -381,6 +382,20 @@ class StorageDetailViewModel @Inject constructor(
                 needFetchUpdate = true,
                 cacheKey = getCacheKey(tabPosition, state.isLatestSort.name),
             )
+        }
+    }
+
+    /**
+     * 웹뷰 이동 시 읽음 처리
+     */
+    fun updateReadAt(cardInfo: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
+        intent {
+            if(cardInfo.readAt.isNullOrEmpty()) {
+                patchPostInfoUseCase.invoke(
+                    postId = cardInfo.postId,
+                    PostInfo(isFavorite = cardInfo.isFavorite, readAt = createCurrentTime()),
+                )
+            }
         }
     }
 

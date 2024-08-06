@@ -116,7 +116,10 @@ fun StorageDetailRoute(
                 storageDetailViewModel.setActionType(EditActionType.LinkEdit, postId)
                 storageDetailViewModel.setVisibleMoreButtonBottomSheet(true)
             },
-            onClickPostItem = navigateToWebView,
+            onClickPostItem = { cardInfo ->
+                storageDetailViewModel.updateReadAt(cardInfo)
+                navigateToWebView(cardInfo.url)
+            },
         )
 
         DoraBottomSheet.MoreButtonBottomSheet(
@@ -214,7 +217,7 @@ fun StorageDetailScreen(
     onClickSortedIcon: (StorageDetailSort) -> Unit,
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
-    onClickPostItem: (String) -> Unit,
+    onClickPostItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),

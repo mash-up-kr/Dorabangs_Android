@@ -53,7 +53,7 @@ fun StorageDetailList(
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
     onClickBookMarkButton: (String, Boolean, Int) -> Unit,
-    onClickPostItem: (String) -> Unit,
+    onClickPostItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     val isLoading = linksPagingList.loadState.refresh is LoadState.Loading

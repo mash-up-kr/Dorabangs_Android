@@ -45,7 +45,7 @@ fun FeedCard(
     cardInfo: FeedUiModel.FeedCardUiModel,
     feedCardEntryPoint: FeedCardEntryPoint,
     modifier: Modifier = Modifier,
-    onClickCardItem: (String) -> Unit = {},
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
     updateCardState: () -> Unit = {},
@@ -74,7 +74,7 @@ fun FeedCard(
             .background(DoraColorTokens.P1, shape = RectangleShape)
             .fillMaxWidth()
             .thenIf(feedCardEntryPoint !is FeedCardEntryPoint.AiClassification) {
-                this.clickable { onClickCardItem(cardInfo.url) }
+                this.clickable { onClickCardItem(cardInfo) }
             }
             .padding(20.dp),
     ) {

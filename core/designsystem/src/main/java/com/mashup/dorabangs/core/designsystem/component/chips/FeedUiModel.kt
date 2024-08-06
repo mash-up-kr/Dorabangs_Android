@@ -2,6 +2,8 @@ package com.mashup.dorabangs.core.designsystem.component.chips
 
 import androidx.annotation.DrawableRes
 import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
@@ -20,6 +22,7 @@ sealed interface FeedUiModel {
         val isFavorite: Boolean = false,
         val isLoading: Boolean = false,
         val url: String = "",
+        val readAt: String? = null,
     ) : FeedUiModel {
         override val uuid: String = UUID.randomUUID().toString()
         companion object {
@@ -39,6 +42,12 @@ sealed interface FeedUiModel {
                     return ChronoUnit.SECONDS.between(givenDate, currentDate).toInt()
                 }
                 return 0
+            }
+
+            fun createCurrentTime(): String? {
+                val now = ZonedDateTime.now(java.time.ZoneOffset.UTC)
+                val formatter = DateTimeFormatter.ISO_DATE_TIME
+                return now.format(formatter)
             }
         }
     }

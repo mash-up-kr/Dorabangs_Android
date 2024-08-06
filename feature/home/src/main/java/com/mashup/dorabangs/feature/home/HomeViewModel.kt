@@ -368,6 +368,20 @@ class HomeViewModel @Inject constructor(
         // TODO - 실패 성공 여부 리스트 업데이트
     }
 
+    /**
+     * 웹뷰 이동 시 읽음 처리
+     */
+    fun updateReadAt(cardInfo: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
+        intent {
+            if(cardInfo.readAt.isNullOrEmpty()) {
+                patchPostInfoUseCase.invoke(
+                    postId = cardInfo.postId,
+                    PostInfo(isFavorite = cardInfo.isFavorite, readAt = FeedUiModel.FeedCardUiModel.createCurrentTime()),
+                )
+            }
+        }
+    }
+
     companion object {
         const val FAVORITE_FOLDER_INDEX = 1
     }

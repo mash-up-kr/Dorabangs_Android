@@ -37,7 +37,10 @@ fun ClassificationRoute(
         onClickAllItemMoveButton = classificationViewModel::moveAllItems,
         onClickBackIcon = onClickBackIcon,
         navigateToHome = navigateToHome,
-        onClickCardItem = navigateToWebView,
+        onClickCardItem = { cardInfo ->
+            classificationViewModel.updateReadAt(cardInfo)
+            navigateToWebView(cardInfo.url)
+        },
     )
 }
 
@@ -51,7 +54,7 @@ fun ClassificationScreen(
     onClickAllItemMoveButton: () -> Unit,
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
-    onClickCardItem: (String) -> Unit,
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val totalCount = if (state.chipState.totalCount > 99) "99+" else state.chipState.totalCount.toString()
