@@ -100,6 +100,8 @@ fun ClassificationScreen(
                         modifier = Modifier
                             .size(54.dp)
                             .align(Alignment.Center),
+                        iterations = 200,
+                        reverseOnRepeat = true,
                     )
                 }
             } else {
