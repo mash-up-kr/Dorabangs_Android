@@ -11,6 +11,8 @@ class GetSavedLinksFromFolderUseCase @Inject constructor(
     private val folderRepository: FolderRepository,
 ) {
     suspend operator fun invoke(
+        needFetchUpdate: Boolean = false,
+        cacheKey: String = "",
         folderId: String?,
         order: String,
         limit: Int,
@@ -18,11 +20,27 @@ class GetSavedLinksFromFolderUseCase @Inject constructor(
         totalCount: (Int) -> Unit = {},
     ): Flow<PagingData<SavedLinkDetailInfo>> {
         return folderRepository.getLinksFromFolder(
+            needFetchUpdate = needFetchUpdate,
+            cacheKey = cacheKey,
             folderId = folderId,
             order = order.lowercase(Locale.ROOT),
             limit = limit,
             isRead = isRead,
             totalCount = totalCount,
+        )
+    }
+
+    fun updatePostItem(
+        page: Int,
+        cacheKey: String,
+        cachedKeyList: List<String>,
+        item: SavedLinkDetailInfo,
+    ) {
+        folderRepository.updatePostItem(
+            page = page,
+            cacheKey = cacheKey,
+            cachedKeyList = cachedKeyList,
+            item = item,
         )
     }
 }

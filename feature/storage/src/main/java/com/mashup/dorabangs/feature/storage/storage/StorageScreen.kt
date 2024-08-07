@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.component.toast.DoraToast
@@ -65,6 +66,15 @@ fun StorageRoute(
                 }
             }
         }
+    }
+
+    LifecycleResumeEffect(storageState.needToUpdate) {
+        storageViewModel.getNeedToUpdateData()
+        if (storageState.needToUpdate && storageState.isFirstEntry.not()) {
+            storageViewModel.getFolderList()
+            storageViewModel.setNeedToUpdateData(needToUpdate = false)
+        }
+        onPauseOrDispose { storageViewModel.setIsFirstEntry(false) }
     }
 
     LaunchedEffect(Unit) {

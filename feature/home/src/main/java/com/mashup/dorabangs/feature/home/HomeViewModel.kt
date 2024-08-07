@@ -393,6 +393,20 @@ class HomeViewModel @Inject constructor(
         reduce { state.copy(isEditPostFolder = isEditPostFolder) }
     }
 
+    /**
+     * 웹뷰 이동 시 읽음 처리
+     */
+    fun updateReadAt(cardInfo: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
+        intent {
+            if (cardInfo.readAt.isNullOrEmpty()) {
+                patchPostInfoUseCase.invoke(
+                    postId = cardInfo.postId,
+                    PostInfo(isFavorite = cardInfo.isFavorite, readAt = FeedUiModel.FeedCardUiModel.createCurrentTime()),
+                )
+            }
+        }
+    }
+
     companion object {
         const val FAVORITE_FOLDER_INDEX = 1
     }

@@ -10,6 +10,8 @@ data class StorageListState(
     val selectedFolderId: String = "",
     val isShowMoreButtonSheet: Boolean = false,
     val isShowDialog: Boolean = false,
+    val needToUpdate: Boolean = false,
+    val isFirstEntry: Boolean = true,
     val toastState: ToastState = ToastState(),
 )
 

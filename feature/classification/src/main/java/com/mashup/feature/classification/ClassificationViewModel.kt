@@ -10,12 +10,14 @@ import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
+import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.usecase.aiclassification.DeletePostFromAIClassificationUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationPostsUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.MoveAllPostsToRecommendedFolderUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.MoveSinglePostToRecommendedFolderUseCase
+import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,6 +36,7 @@ class ClassificationViewModel @Inject constructor(
     private val deletePostUseCase: DeletePostFromAIClassificationUseCase,
     private val moveSinglePostUseCase: MoveSinglePostToRecommendedFolderUseCase,
     private val moveAllPostUseCase: MoveAllPostsToRecommendedFolderUseCase,
+    private val patchPostInfoUseCase: PatchPostInfoUseCase,
 ) : ViewModel(),
     ContainerHost<ClassificationState, ClassificationSideEffect> {
     override val container =
@@ -216,6 +219,20 @@ class ClassificationViewModel @Inject constructor(
             )
         }
     }
+
+    /**
+     * 웹뷰 이동 시 읽음 처리
+     */
+    fun updateReadAt(cardInfo: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
+        intent {
+            if (cardInfo.readAt.isNullOrEmpty()) {
+                patchPostInfoUseCase.invoke(
+                    postId = cardInfo.postId,
+                    PostInfo(isFavorite = cardInfo.isFavorite, readAt = FeedUiModel.FeedCardUiModel.createCurrentTime()),
+                )
+            }
+        }
+    }
 }
 
 fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedUiModel.FeedCardUiModel(
@@ -230,4 +247,5 @@ fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedUiModel.Fe
     isFavorite = false,
     url = url,
     isLoading = false,
+    readAt = readAt,
 )
