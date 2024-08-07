@@ -33,8 +33,14 @@ class AIClassificationRepositoryImpl @Inject constructor(
             },
         ).flow
 
-    override suspend fun moveAllPostsToRecommendedFolder(suggestionFolderId: String): AIClassificationPosts =
-        remoteDataSource.moveAllPostsToRecommendedFolder(suggestionFolderId)
+    override suspend fun moveAllPostsToRecommendedFolder(suggestionFolderId: String): DoraSampleResponse {
+        return kotlin.runCatching {
+            remoteDataSource.moveAllPostsToRecommendedFolder(suggestionFolderId)
+            DoraSampleResponse(isSuccess = true)
+        }.getOrElse {
+            DoraSampleResponse(isSuccess = false, errorMsg = it.message.orEmpty())
+        }
+    }
 
     override suspend fun getAIClassificationPostsByFolder(
         folderId: String,

@@ -14,6 +14,7 @@ import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.usecase.aiclassification.DeletePostFromAIClassificationUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationPostsUseCase
+import com.mashup.dorabangs.domain.usecase.aiclassification.MoveAllPostsToRecommendedFolderUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.MoveSinglePostToRecommendedFolderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,7 @@ class ClassificationViewModel @Inject constructor(
     private val getAIClassificationPostsUseCase: GetAIClassificationPostsUseCase,
     private val deletePostUseCase: DeletePostFromAIClassificationUseCase,
     private val moveSinglePostUseCase: MoveSinglePostToRecommendedFolderUseCase,
+    private val moveAllPostUseCase: MoveAllPostsToRecommendedFolderUseCase,
 ) : ViewModel(),
     ContainerHost<ClassificationState, ClassificationSideEffect> {
     override val container =
@@ -54,6 +56,7 @@ class ClassificationViewModel @Inject constructor(
             reduce {
                 doraChipMapper(chips).let { chipList ->
                     state.copy(
+                        isLoading = true,
                         chipState = ChipState(
                             totalCount = chips.totalCounts,
                             chipList = chipList,
@@ -81,6 +84,7 @@ class ClassificationViewModel @Inject constructor(
                                 postCount = chips.list
                                     .firstOrNull { chip -> chip.folderName == after.category.orEmpty() }
                                     ?.postCount ?: 0,
+                                folderId = after.folderId,
                                 icon = null,
                             )
                         } else {
@@ -94,6 +98,12 @@ class ClassificationViewModel @Inject constructor(
                     _paging.value = it.firstOrNull() ?: PagingData.empty()
                 }
         }
+    }.invokeOnCompletion {
+        intent {
+            reduce {
+                state.copy(isLoading = false)
+            }
+        }
     }
 
     fun changeCategory(idx: Int) = intent {
@@ -105,7 +115,21 @@ class ClassificationViewModel @Inject constructor(
         }
     }
 
-    fun moveAllItems() = intent {
+    fun moveAllItems(folderId: String) = viewModelScope.doraLaunch {
+        intent {
+            reduce {
+                state.copy(isLoading = true)
+            }
+        }
+        val allMove = moveAllPostUseCase.invoke(suggestionFolderId = folderId)
+
+        if (allMove.isSuccess) {
+            getInitialData()
+        }
+    }.invokeOnCompletion {
+        intent {
+            reduce { state.copy(isLoading = false) }
+        }
     }
 
     fun moveSelectedItem(cardItem: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
@@ -115,7 +139,9 @@ class ClassificationViewModel @Inject constructor(
         )
 
         if (move.isSuccess) {
-            val (chips, chipList) = updateListScreen(cardItem)
+            val (chips, chipList) = updateChipList()
+            updateListScreenWithSingleItem(cardItem)
+
             intent {
                 reduce {
                     state.copy(
@@ -132,7 +158,9 @@ class ClassificationViewModel @Inject constructor(
     fun deleteSelectedItem(cardItem: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
         val delete = deletePostUseCase.invoke(cardItem.postId)
         if (delete.isSuccess) {
-            val (chips, chipList) = updateListScreen(cardItem)
+            val (chips, chipList) = updateChipList()
+            updateListScreenWithSingleItem(cardItem)
+
             intent {
                 reduce {
                     state.copy(
@@ -146,11 +174,7 @@ class ClassificationViewModel @Inject constructor(
         }
     }
 
-    private suspend fun updateListScreen(cardItem: FeedUiModel.FeedCardUiModel): Pair<AIClassificationFolders, List<FeedUiModel.DoraChipUiModel>> {
-        // chip update
-        val chips = getAIClassificationFolderListUseCase.invoke()
-        val chipList = doraChipMapper(chips)
-
+    private suspend fun updateListScreenWithSingleItem(cardItem: FeedUiModel.FeedCardUiModel) {
         // list update
         paging.map { pagingData ->
             pagingData.filter {
@@ -164,6 +188,11 @@ class ClassificationViewModel @Inject constructor(
         }.let {
             _paging.value = it.firstOrNull() ?: PagingData.empty()
         }
+    }
+
+    private suspend fun updateChipList(): Pair<AIClassificationFolders, List<FeedUiModel.DoraChipUiModel>> {
+        val chips = getAIClassificationFolderListUseCase.invoke()
+        val chipList = doraChipMapper(chips)
         return Pair(chips, chipList)
     }
 
