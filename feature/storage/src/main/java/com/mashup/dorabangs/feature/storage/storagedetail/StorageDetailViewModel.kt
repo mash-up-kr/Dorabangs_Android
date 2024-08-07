@@ -280,8 +280,8 @@ class StorageDetailViewModel @Inject constructor(
             var updateItemInfo = FeedUiModel.FeedCardUiModel()
             _feedListState.value = feedListState.value.map { item ->
                 if (item.postId == cardInfo.postId) {
-                    updateItemInfo = item.copy(isFavorite = !isFavorite)
-                    item.copy(isFavorite = !isFavorite)
+                    updateItemInfo = item.copy(isFavorite = isFavorite.not())
+                    item.copy(isFavorite = isFavorite.not())
                 } else {
                     item
                 }
