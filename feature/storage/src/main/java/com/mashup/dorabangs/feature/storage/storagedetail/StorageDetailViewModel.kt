@@ -288,7 +288,7 @@ class StorageDetailViewModel @Inject constructor(
             }
             val isSuccessFavorite = patchPostInfoUseCase(
                 postId = cardInfo.postId,
-                postInfo = PostInfo(isFavorite = !isFavorite, readAt = cardInfo.readAt),
+                postInfo = PostInfo(isFavorite = !isFavorite),
             ).isSuccess
 
             if (isSuccessFavorite) {
@@ -397,7 +397,7 @@ class StorageDetailViewModel @Inject constructor(
             if (cardInfo.readAt.isNullOrEmpty()) {
                 patchPostInfoUseCase.invoke(
                     postId = cardInfo.postId,
-                    PostInfo(isFavorite = cardInfo.isFavorite, readAt = createCurrentTime()),
+                    PostInfo(readAt = createCurrentTime()),
                 )
             }
         }
