@@ -45,7 +45,10 @@ fun ClassificationRoute(
         onClickAllItemMoveButton = classificationViewModel::moveAllItems,
         onClickBackIcon = onClickBackIcon,
         navigateToHome = navigateToHome,
-        onClickCardItem = navigateToWebView,
+        onClickCardItem = { cardInfo ->
+            classificationViewModel.updateReadAt(cardInfo)
+            navigateToWebView(cardInfo.url)
+        },
     )
 }
 
@@ -59,7 +62,7 @@ fun ClassificationScreen(
     onClickAllItemMoveButton: (String) -> Unit,
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
-    onClickCardItem: (String) -> Unit,
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val lazyColumnState = rememberLazyListState()

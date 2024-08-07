@@ -81,7 +81,10 @@ fun HomeRoute(
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
             onClickBookMarkButton = { postId, isFavorite -> viewModel.updateFavoriteItem(postId, isFavorite) },
-            onClickCardItem = navigateToWebView,
+            onClickCardItem = { cardInfo ->
+                viewModel.updateReadAt(cardInfo)
+                navigateToWebView(cardInfo.url)
+            },
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
