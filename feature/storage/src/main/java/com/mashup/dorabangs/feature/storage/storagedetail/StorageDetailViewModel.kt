@@ -378,7 +378,10 @@ class StorageDetailViewModel @Inject constructor(
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
             updateChangeData(true)
-            intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
+            intent {
+                updateSelectFolderId(state.folderInfo.folderId.orEmpty())
+                postSideEffect(StorageDetailSideEffect.RefreshPagingList)
+            }
         }
     }
 

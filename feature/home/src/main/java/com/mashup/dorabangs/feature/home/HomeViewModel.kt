@@ -363,9 +363,13 @@ class HomeViewModel @Inject constructor(
      * 링크 폴더 이동
      */
     fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
-        changePostFolderUseCase(postId = postId, folderId = folderId)
-        setVisibleMovingFolderBottomSheet(false)
-        // TODO - 실패 성공 여부 리스트 업데이트
+        val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
+        if (isSuccess) {
+            intent {
+                setVisibleMovingFolderBottomSheet(false)
+                updateSelectFolderId(state.selectedFolderId)
+            }
+        }
     }
 
     companion object {
