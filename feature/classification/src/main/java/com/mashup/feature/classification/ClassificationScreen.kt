@@ -109,7 +109,7 @@ fun ClassificationScreen(
 
                 if (state.isLoading) {
                     Box(
-                        modifier = modifier
+                        modifier = Modifier
                             .fillMaxSize()
                             .clickable(
                                 indication = null,
