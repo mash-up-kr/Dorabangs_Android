@@ -31,7 +31,6 @@ class DoraPagingSource<T : Any> (
         return try {
             if (cachedData != null && needFetchUpdate.not()) {
                 val isLastPage = (!cachedData.pagingInfo.hasNext) || (cachedData.pagingInfo.total == 0)
-                if (cachedData.data.isEmpty()) return LoadResult.Error(DoraException(message = "empty"))
                 totalCount(cachedData.pagingInfo.total)
                 LoadResult.Page(
                     data = cachedData.data,
@@ -41,7 +40,6 @@ class DoraPagingSource<T : Any> (
             } else {
                 val result = apiExecutor(page)
                 val isLastPage = (!result.pagingInfo.hasNext) || (result.pagingInfo.total == 0)
-                if (result.data.isEmpty()) return LoadResult.Error(DoraException(message = "empty"))
                 totalCount(result.pagingInfo.total)
                 cachingData(result, page)
 
