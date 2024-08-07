@@ -70,7 +70,7 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     postsPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>? = null,
-    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onClickCardItem: (String) -> Unit,
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
     onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
@@ -249,7 +249,7 @@ private fun LazyListScope.Feeds(
     feeds: LazyPagingItems<FeedUiModel.FeedCardUiModel>?,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
-    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onClickCardItem: (String) -> Unit,
     refreshPageList: () -> Unit = {},
 ) {
     if (feeds != null) {

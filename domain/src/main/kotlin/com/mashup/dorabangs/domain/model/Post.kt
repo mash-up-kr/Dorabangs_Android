@@ -20,7 +20,6 @@ data class Post(
     val createdAt: String = "",
     val thumbnailImgUrl: String = "",
     val aiStatus: AIStatus = AIStatus.NOTHING,
-    val readAt: String?,
 )
 
 enum class AIStatus {

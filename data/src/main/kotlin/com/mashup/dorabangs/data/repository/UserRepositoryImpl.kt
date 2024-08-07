@@ -47,12 +47,4 @@ class UserRepositoryImpl @Inject constructor(
     override fun getIdFromLinkToReadLater(): Flow<String> {
         return userLocalDataSource.getIdFromLinkToReadLater()
     }
-
-    override suspend fun setNeedToUpdateData(needToUpdate: Boolean) {
-        userLocalDataSource.setNeedToUpdateData(needToUpdate = needToUpdate)
-    }
-
-    override fun getNeedToUpdateData(): Flow<Boolean> {
-        return userLocalDataSource.getNeedToUpdateData()
-    }
 }

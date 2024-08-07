@@ -12,5 +12,3 @@ fun getFolderIcon(type: FolderType): Int {
         else -> R.drawable.ic_3d_folder_big
     }
 }
-
-fun getCacheKey(firstKey: String, secondKey: String) = "$firstKey|$secondKey"

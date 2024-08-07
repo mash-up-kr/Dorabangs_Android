@@ -12,7 +12,6 @@ data class SavedLinkDetailInfo(
     val keywords: List<LinkKeywordInfo>?,
     val thumbnailImgUrl: String,
     val aiStatus: AIStatus,
-    val readAt: String?,
 )
 
 data class LinkKeywordInfo(

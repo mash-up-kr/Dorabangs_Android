@@ -13,6 +13,4 @@ interface UserRepository {
     fun getLastCopiedUrl(): Flow<String>
     suspend fun setIdLinkToReadLater(id: String)
     fun getIdFromLinkToReadLater(): Flow<String>
-    suspend fun setNeedToUpdateData(needToUpdate: Boolean)
-    fun getNeedToUpdateData(): Flow<Boolean>
 }

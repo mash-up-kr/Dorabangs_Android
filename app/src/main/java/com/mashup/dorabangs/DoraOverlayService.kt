@@ -71,11 +71,10 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
                 delay(3000L)
                 if (localFolderId.isNotBlank()) {
                     saveLinkUseCase.invoke(
-                        link = Link(
+                        Link(
                             folderId = localFolderId,
                             url = url,
                         ),
-                        fetchUpdate = true,
                     )
                 }
                 stopSelf()

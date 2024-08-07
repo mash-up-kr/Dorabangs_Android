@@ -40,6 +40,7 @@ abstract class RepositoryModule {
     ): DoraUrlCheckRepository
 
     @Binds
+    @Reusable
     abstract fun bindsPostsRepository(
         repository: PostsRepositoryImpl,
     ): PostsRepository

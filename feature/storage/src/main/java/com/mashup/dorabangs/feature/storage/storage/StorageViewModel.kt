@@ -6,8 +6,6 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
-import com.mashup.dorabangs.domain.usecase.user.GetNeedToUpdateDataUseCase
-import com.mashup.dorabangs.domain.usecase.user.SetNeedToUpdateDataUseCase
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +20,6 @@ import javax.inject.Inject
 class StorageViewModel @Inject constructor(
     private val getFolderListUseCase: GetFolderListUseCase,
     private val deleteFolderUseCase: DeleteFolderUseCase,
-    private val getNeedToUpdateDataUseCase: GetNeedToUpdateDataUseCase,
-    private val setNeedToUpdateDataUseCase: SetNeedToUpdateDataUseCase,
 ) : ViewModel(), ContainerHost<StorageListState, StorageListSideEffect> {
     override val container = container<StorageListState, StorageListSideEffect>(StorageListState())
 
@@ -62,24 +58,6 @@ class StorageViewModel @Inject constructor(
     fun setToastState(toastMsg: String) = intent {
         reduce { state.copy(toastState = state.toastState.copy(text = toastMsg, toastStyle = ToastStyle.CHECK)) }
         postSideEffect(StorageListSideEffect.ShowFolderRemoveToastSnackBar)
-    }
-
-    fun getNeedToUpdateData() = viewModelScope.doraLaunch {
-        intent {
-            val needToUpdateData = getNeedToUpdateDataUseCase()
-            reduce { state.copy(needToUpdate = needToUpdateData) }
-        }
-    }
-
-    fun setNeedToUpdateData(needToUpdate: Boolean) = viewModelScope.doraLaunch {
-        intent {
-            reduce { state.copy(needToUpdate = needToUpdate) }
-        }
-        setNeedToUpdateDataUseCase(needToUpdate)
-    }
-
-    fun setIsFirstEntry(isFirst: Boolean) = intent {
-        reduce { state.copy(isFirstEntry = isFirst) }
     }
 
     fun setVisibleMoreButtonBottomSheet(visible: Boolean, isNavigate: Boolean = false) = intent {

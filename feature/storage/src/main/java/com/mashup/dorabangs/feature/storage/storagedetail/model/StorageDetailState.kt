@@ -12,12 +12,13 @@ data class StorageDetailState(
     val moreBottomSheetState: MoreBottomSheetState = MoreBottomSheetState(),
     val isShowMovingFolderSheet: Boolean = false,
     val editDialogState: EditDialogState = EditDialogState(),
-    val isLatestSort: StorageDetailSort = StorageDetailSort.DESC,
+    val isLatestSort: StorageDetailSort = StorageDetailSort.ASC,
     val editActionType: EditActionType = EditActionType.FolderEdit,
     val currentClickPostId: String = "",
     val changeClickFolderId: String = folderInfo.folderId.orEmpty(),
     val folderList: List<Folder> = listOf(),
     val toastState: ToastState = ToastState(),
+
 ) {
     companion object {
         fun getDefaultTabTitleList() = listOf(StorageDetailTab.ALL, StorageDetailTab.UNREAD)

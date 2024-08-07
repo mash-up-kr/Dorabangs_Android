@@ -49,14 +49,6 @@ class UserLocalDataSourceImpl @Inject constructor(
         return getDataStore(stringPreferencesKey(READ_LATER_LINK_ID), "")
     }
 
-    override suspend fun setNeedToUpdateData(needToUpdate: Boolean) {
-        setDataStore(booleanPreferencesKey(NEED_TO_UPDATE_DATA), needToUpdate)
-    }
-
-    override fun getNeedToUpdateData(): Flow<Boolean> {
-        return getDataStore(booleanPreferencesKey(NEED_TO_UPDATE_DATA), false)
-    }
-
     private suspend fun <T> setDataStore(key: Preferences.Key<T>, value: T) {
         dataStore.edit { preferences ->
             preferences[key] = value
@@ -82,6 +74,5 @@ class UserLocalDataSourceImpl @Inject constructor(
         private const val FIRST_ENTRY = "FIRST_ENTRY"
         private const val LAST_COPIED_URL = "LAST_COPIED_URL"
         private const val READ_LATER_LINK_ID = "READ_LATER_LINK_ID"
-        private const val NEED_TO_UPDATE_DATA = "NEED_TO_UPDATE_DATA"
     }
 }

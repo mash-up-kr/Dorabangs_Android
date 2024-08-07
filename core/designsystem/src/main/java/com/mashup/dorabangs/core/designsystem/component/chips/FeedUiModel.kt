@@ -2,9 +2,6 @@ package com.mashup.dorabangs.core.designsystem.component.chips
 
 import androidx.annotation.DrawableRes
 import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
@@ -12,18 +9,17 @@ sealed interface FeedUiModel {
     val uuid: String
 
     data class FeedCardUiModel(
-        val postId: String = "",
-        val folderId: String = "",
-        val title: String? = "",
-        val content: String? = "",
+        val postId: String,
+        val folderId: String,
+        val title: String?,
+        val content: String?,
         val category: String? = "",
-        val createdAt: String? = "",
-        val keywordList: List<String>? = listOf(),
-        val thumbnail: String? = "",
+        val createdAt: String?,
+        val keywordList: List<String>?,
+        val thumbnail: String?,
         val isFavorite: Boolean = false,
         val isLoading: Boolean = false,
         val url: String = "",
-        val readAt: String? = null,
     ) : FeedUiModel {
         override val uuid: String = UUID.randomUUID().toString()
         companion object {
@@ -43,13 +39,6 @@ sealed interface FeedUiModel {
                     return ChronoUnit.SECONDS.between(givenDate, currentDate).toInt()
                 }
                 return 0
-            }
-
-            fun createCurrentTime(): String? {
-                val zonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
-                val utcDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("UTC"))
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
-                return utcDateTime.format(formatter)
             }
         }
     }
