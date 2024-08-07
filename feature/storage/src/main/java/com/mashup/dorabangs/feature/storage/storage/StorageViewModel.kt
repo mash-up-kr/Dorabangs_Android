@@ -84,7 +84,7 @@ class StorageViewModel @Inject constructor(
         reduce { state.copy(isFirstEntry = isFirst) }
     }
 
-    fun updateFolderEditType(type: FolderManageType) = intent {
+    fun updateFolderEditType(type: FolderManageType?) = intent {
         reduce { state.copy(folderEditType = type) }
     }
 
