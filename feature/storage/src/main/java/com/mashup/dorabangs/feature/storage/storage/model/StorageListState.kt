@@ -14,7 +14,7 @@ data class StorageListState(
     val needToUpdate: Boolean = false,
     val isFirstEntry: Boolean = true,
     val toastState: ToastState = ToastState(),
-    val folderEditType: FolderManageType? = null
+    val folderEditType: FolderManageType? = null,
 )
 
 data class ToastState(

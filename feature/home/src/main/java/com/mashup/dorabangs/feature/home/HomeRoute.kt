@@ -128,7 +128,8 @@ fun HomeRoute(
             folderList = state.folderList.toSelectBottomSheetModel(state.changeFolderId.ifEmpty { state.selectedFolderId }),
             onDismissRequest = {
                 viewModel.updateSelectFolderId(state.selectedFolderId)
-                viewModel.setVisibleMovingFolderBottomSheet(false) },
+                viewModel.setVisibleMovingFolderBottomSheet(false)
+            },
             onClickCreateFolder = {
                 viewModel.setVisibleMovingFolderBottomSheet(
                     visible = false,

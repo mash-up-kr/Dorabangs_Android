@@ -3,6 +3,7 @@ package com.mashup.dorabangs.feature.storage.storage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -124,42 +125,48 @@ fun StorageListItem(
     ) {
         Row(
             modifier = Modifier
-                .align(Alignment.CenterStart)
-                .clickable { navigateToStorageDetail() },
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Image(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = getFolderIcon(item.folderType)),
-                contentDescription = "folderIcon",
-            )
-            Text(
+            Row(
                 modifier = Modifier
-                    .padding(start = 12.dp)
-                    .align(Alignment.CenterVertically),
-                textAlign = TextAlign.Center,
-                text = item.name,
-                color = DoraColorTokens.G9,
-                style = DoraTypoTokens.caption3Medium,
-            )
-        }
-        Row(
-            modifier = Modifier.align(Alignment.CenterEnd),
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(end = 12.dp)
-                    .align(Alignment.CenterVertically),
-                text = if (item.postCount > 99) "99+" else "${item.postCount}",
-                color = DoraColorTokens.G4,
-                style = DoraTypoTokens.caption3Medium,
-            )
-            val isDefault = item.folderType != FolderType.CUSTOM
-            val icon = if (isDefault) coreR.drawable.ic_chevron_right_m_gray else coreR.drawable.ic_more_gray
-            Image(
-                modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickSettingButton() },
-                painter = painterResource(id = icon),
-                contentDescription = "folderIcon",
-            )
+                    .fillMaxWidth()
+                    .weight(2f)
+                    .clickable { navigateToStorageDetail() },
+            ) {
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(id = getFolderIcon(item.folderType)),
+                    contentDescription = "folderIcon",
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .align(Alignment.CenterVertically),
+                    textAlign = TextAlign.Center,
+                    text = item.name,
+                    color = DoraColorTokens.G9,
+                    style = DoraTypoTokens.caption3Medium,
+                )
+            }
+            Row {
+                Text(
+                    modifier = Modifier
+                        .padding(end = 12.dp)
+                        .align(Alignment.CenterVertically),
+                    text = if (item.postCount > 99) "99+" else "${item.postCount}",
+                    color = DoraColorTokens.G4,
+                    style = DoraTypoTokens.caption3Medium,
+                )
+                val isDefault = item.folderType != FolderType.CUSTOM
+                val icon = if (isDefault) coreR.drawable.ic_chevron_right_m_gray else coreR.drawable.ic_more_gray
+                Image(
+                    modifier = Modifier.clickable { if (isDefault) navigateToStorageDetail() else onClickSettingButton() },
+                    painter = painterResource(id = icon),
+                    contentDescription = "folderIcon",
+                )
+            }
         }
     }
 }
@@ -167,8 +174,7 @@ fun StorageListItem(
 @Preview
 @Composable
 fun PreviewStorageFolderList() {
-    StorageFolderList(
-        storageState = StorageListState(),
-        navigateToStorageDetail = {},
+    StorageListItem(
+        item = Folder(name = "나중에 읽을 링크"),
     )
 }
