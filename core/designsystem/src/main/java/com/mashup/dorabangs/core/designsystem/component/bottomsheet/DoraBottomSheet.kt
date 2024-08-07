@@ -33,7 +33,6 @@ fun DoraBaseBottomSheet(
         containerColor = containerColor,
         shape = DoraRoundTokens.TopRound16,
         dragHandle = { DoraDragHandle(Modifier.padding(top = 6.dp)) },
-        windowInsets = WindowInsets(bottom = 48.dp),
         onDismissRequest = onDismissRequest,
     ) {
         content()
