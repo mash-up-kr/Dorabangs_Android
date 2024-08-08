@@ -18,7 +18,7 @@ sealed interface FeedUiModel {
         val content: String? = "",
         val category: String? = "",
         val createdAt: String? = "",
-        val keywordList: List<String>? = listOf(),
+        val keywordList: List<String?>? = listOf(),
         val thumbnail: String? = "",
         val isFavorite: Boolean = false,
         val isLoading: Boolean = false,

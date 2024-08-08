@@ -228,7 +228,7 @@ class ClassificationViewModel @Inject constructor(
             if (cardInfo.readAt.isNullOrEmpty()) {
                 patchPostInfoUseCase.invoke(
                     postId = cardInfo.postId,
-                    PostInfo(isFavorite = cardInfo.isFavorite, readAt = FeedUiModel.FeedCardUiModel.createCurrentTime()),
+                    PostInfo(readAt = FeedUiModel.FeedCardUiModel.createCurrentTime()),
                 )
             }
         }
