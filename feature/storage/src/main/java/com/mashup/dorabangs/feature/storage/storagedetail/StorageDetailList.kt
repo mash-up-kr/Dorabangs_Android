@@ -52,8 +52,8 @@ fun StorageDetailList(
     onClickTabItem: (Int) -> Unit,
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
-    onClickBookMarkButton: (String, Boolean, Int) -> Unit,
-    onClickPostItem: (String) -> Unit,
+    onClickBookMarkButton: (FeedUiModel.FeedCardUiModel, Boolean, Int) -> Unit,
+    onClickPostItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     val isLoading = linksPagingList.loadState.refresh is LoadState.Loading
@@ -120,7 +120,7 @@ fun StorageDetailList(
                             FeedCard(
                                 cardInfo = item,
 
-                                onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite, (idx / 10)) },
+                                onClickBookMarkButton = { onClickBookMarkButton(cardItem, cardItem.isFavorite, (idx / 10)) },
                                 onClickCardItem = onClickPostItem,
                                 onClickMoreButton = { onClickMoreButton(cardItem.postId) },
                                 feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,

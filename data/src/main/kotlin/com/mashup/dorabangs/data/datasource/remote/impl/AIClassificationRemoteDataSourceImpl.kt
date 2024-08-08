@@ -31,7 +31,7 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
     override suspend fun moveAllPostsToRecommendedFolder(suggestionFolderId: String) =
         service.moveAllPostsToRecommendedFolder(
             suggestionFolderId = suggestionFolderId,
-        ).toDomain()
+        )
 
     override suspend fun getAIClassificationPostsByFolder(
         folderId: String,

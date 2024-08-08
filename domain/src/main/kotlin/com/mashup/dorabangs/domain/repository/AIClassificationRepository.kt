@@ -18,7 +18,7 @@ interface AIClassificationRepository {
 
     suspend fun moveAllPostsToRecommendedFolder(
         suggestionFolderId: String,
-    ): AIClassificationPosts
+    ): DoraSampleResponse
 
     suspend fun getAIClassificationPostsByFolder(
         folderId: String,

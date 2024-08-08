@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -45,7 +46,7 @@ fun FeedCard(
     cardInfo: FeedUiModel.FeedCardUiModel,
     feedCardEntryPoint: FeedCardEntryPoint,
     modifier: Modifier = Modifier,
-    onClickCardItem: (String) -> Unit = {},
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
     updateCardState: () -> Unit = {},
@@ -74,7 +75,7 @@ fun FeedCard(
             .background(DoraColorTokens.P1, shape = RectangleShape)
             .fillMaxWidth()
             .thenIf(feedCardEntryPoint !is FeedCardEntryPoint.AiClassification) {
-                this.clickable { onClickCardItem(cardInfo.url) }
+                this.clickable { onClickCardItem(cardInfo) }
             }
             .padding(20.dp),
     ) {
@@ -89,7 +90,8 @@ fun FeedCard(
             Spacer(modifier = Modifier.width(13.dp))
             AsyncImage(
                 modifier = Modifier
-                    .size(size = 65.dp)
+                    .size(size = 80.dp)
+                    .aspectRatio(1f)
                     .background(color = DoraColorTokens.G1),
                 model = cardInfo.thumbnail,
                 contentScale = ContentScale.Crop,
@@ -111,7 +113,7 @@ fun FeedCard(
             )
         } else {
             Spacer(modifier = Modifier.height(12.dp))
-            FeedCardKeyword(keywordList = cardInfo.keywordList?.take(3))
+            FeedCardKeyword(keywordList = cardInfo.keywordList?.filterNotNull()?.take(3))
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),

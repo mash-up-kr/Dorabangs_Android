@@ -10,11 +10,14 @@ import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
+import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.usecase.aiclassification.DeletePostFromAIClassificationUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationPostsUseCase
+import com.mashup.dorabangs.domain.usecase.aiclassification.MoveAllPostsToRecommendedFolderUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.MoveSinglePostToRecommendedFolderUseCase
+import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,6 +35,8 @@ class ClassificationViewModel @Inject constructor(
     private val getAIClassificationPostsUseCase: GetAIClassificationPostsUseCase,
     private val deletePostUseCase: DeletePostFromAIClassificationUseCase,
     private val moveSinglePostUseCase: MoveSinglePostToRecommendedFolderUseCase,
+    private val moveAllPostUseCase: MoveAllPostsToRecommendedFolderUseCase,
+    private val patchPostInfoUseCase: PatchPostInfoUseCase,
 ) : ViewModel(),
     ContainerHost<ClassificationState, ClassificationSideEffect> {
     override val container =
@@ -54,6 +59,7 @@ class ClassificationViewModel @Inject constructor(
             reduce {
                 doraChipMapper(chips).let { chipList ->
                     state.copy(
+                        isLoading = true,
                         chipState = ChipState(
                             totalCount = chips.totalCounts,
                             chipList = chipList,
@@ -81,6 +87,7 @@ class ClassificationViewModel @Inject constructor(
                                 postCount = chips.list
                                     .firstOrNull { chip -> chip.folderName == after.category.orEmpty() }
                                     ?.postCount ?: 0,
+                                folderId = after.folderId,
                                 icon = null,
                             )
                         } else {
@@ -94,17 +101,38 @@ class ClassificationViewModel @Inject constructor(
                     _paging.value = it.firstOrNull() ?: PagingData.empty()
                 }
         }
+    }.invokeOnCompletion {
+        intent {
+            reduce {
+                state.copy(isLoading = false)
+            }
+        }
     }
 
     fun changeCategory(idx: Int) = intent {
         reduce {
             state.copy(
                 chipState = state.chipState.copy(currentIndex = idx),
+                selectedFolder = state.chipState.chipList.getOrNull(idx)?.title ?: "전체",
             )
         }
     }
 
-    fun moveAllItems() = intent {
+    fun moveAllItems(folderId: String) = viewModelScope.doraLaunch {
+        intent {
+            reduce {
+                state.copy(isLoading = true)
+            }
+        }
+        val allMove = moveAllPostUseCase.invoke(suggestionFolderId = folderId)
+
+        if (allMove.isSuccess) {
+            getInitialData()
+        }
+    }.invokeOnCompletion {
+        intent {
+            reduce { state.copy(isLoading = false) }
+        }
     }
 
     fun moveSelectedItem(cardItem: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
@@ -114,7 +142,9 @@ class ClassificationViewModel @Inject constructor(
         )
 
         if (move.isSuccess) {
-            val (chips, chipList) = updateListScreen(cardItem)
+            val (chips, chipList) = updateChipList()
+            updateListScreenWithSingleItem(cardItem)
+
             intent {
                 reduce {
                     state.copy(
@@ -131,7 +161,9 @@ class ClassificationViewModel @Inject constructor(
     fun deleteSelectedItem(cardItem: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
         val delete = deletePostUseCase.invoke(cardItem.postId)
         if (delete.isSuccess) {
-            val (chips, chipList) = updateListScreen(cardItem)
+            val (chips, chipList) = updateChipList()
+            updateListScreenWithSingleItem(cardItem)
+
             intent {
                 reduce {
                     state.copy(
@@ -145,11 +177,7 @@ class ClassificationViewModel @Inject constructor(
         }
     }
 
-    private suspend fun updateListScreen(cardItem: FeedUiModel.FeedCardUiModel): Pair<AIClassificationFolders, List<FeedUiModel.DoraChipUiModel>> {
-        // chip update
-        val chips = getAIClassificationFolderListUseCase.invoke()
-        val chipList = doraChipMapper(chips)
-
+    private suspend fun updateListScreenWithSingleItem(cardItem: FeedUiModel.FeedCardUiModel) {
         // list update
         paging.map { pagingData ->
             pagingData.filter {
@@ -163,11 +191,24 @@ class ClassificationViewModel @Inject constructor(
         }.let {
             _paging.value = it.firstOrNull() ?: PagingData.empty()
         }
+    }
+
+    private suspend fun updateChipList(): Pair<AIClassificationFolders, List<FeedUiModel.DoraChipUiModel>> {
+        val chips = getAIClassificationFolderListUseCase.invoke()
+        val chipList = doraChipMapper(chips)
         return Pair(chips, chipList)
     }
 
-    private fun doraChipMapper(chips: AIClassificationFolders) =
-        chips.list.map {
+    private fun doraChipMapper(chips: AIClassificationFolders): List<FeedUiModel.DoraChipUiModel> {
+        val firstChip = listOf(
+            FeedUiModel.DoraChipUiModel(
+                id = "",
+                mergedTitle = "전체 ${chips.totalCounts}",
+                title = "전체",
+                postCount = chips.totalCounts,
+            ),
+        )
+        return firstChip + chips.list.map {
             val postCount = if (it.postCount > 99) "99+" else it.postCount
             FeedUiModel.DoraChipUiModel(
                 id = it.folderId,
@@ -177,6 +218,21 @@ class ClassificationViewModel @Inject constructor(
                 postCount = it.postCount,
             )
         }
+    }
+
+    /**
+     * 웹뷰 이동 시 읽음 처리
+     */
+    fun updateReadAt(cardInfo: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
+        intent {
+            if (cardInfo.readAt.isNullOrEmpty()) {
+                patchPostInfoUseCase.invoke(
+                    postId = cardInfo.postId,
+                    PostInfo(readAt = FeedUiModel.FeedCardUiModel.createCurrentTime()),
+                )
+            }
+        }
+    }
 }
 
 fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedUiModel.FeedCardUiModel(
@@ -191,4 +247,5 @@ fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedUiModel.Fe
     isFavorite = false,
     url = url,
     isLoading = false,
+    readAt = readAt,
 )

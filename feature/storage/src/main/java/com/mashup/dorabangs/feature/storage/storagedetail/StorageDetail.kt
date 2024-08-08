@@ -134,7 +134,10 @@ fun StorageDetailRoute(
                 storageDetailViewModel.setActionType(EditActionType.LinkEdit, postId)
                 storageDetailViewModel.setVisibleMoreButtonBottomSheet(true)
             },
-            onClickPostItem = navigateToWebView,
+            onClickPostItem = { cardInfo ->
+                storageDetailViewModel.updateReadAt(cardInfo)
+                navigateToWebView(cardInfo.url)
+            },
         )
 
         DoraBottomSheet.MoreButtonBottomSheet(
@@ -229,13 +232,13 @@ private fun handleSideEffect(
 @Composable
 fun StorageDetailScreen(
     linksPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>,
-    onClickBookMarkButton: (String, Boolean, Int) -> Unit,
+    onClickBookMarkButton: (FeedUiModel.FeedCardUiModel, Boolean, Int) -> Unit,
     onClickBackIcon: () -> Unit,
     onClickTabItem: (Int) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit,
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
-    onClickPostItem: (String) -> Unit,
+    onClickPostItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),

@@ -60,7 +60,10 @@ fun HomeRoute(
                 snackBarHostState.currentSnackbarData?.dismiss()
             }
 
-            is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+            is HomeSideEffect.NavigateToCreateFolder -> {
+                viewModel.updateEditType(isEditPostFolder = true)
+                navigateToCreateFolder()
+            }
 
             is HomeSideEffect.RefreshPostList -> pagingList.refresh()
             else -> {}
@@ -78,7 +81,10 @@ fun HomeRoute(
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
             onClickBookMarkButton = { postId, isFavorite -> viewModel.updateFavoriteItem(postId, isFavorite) },
-            onClickCardItem = navigateToWebView,
+            onClickCardItem = { cardInfo ->
+                viewModel.updateReadAt(cardInfo)
+                navigateToWebView(cardInfo.url)
+            },
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
@@ -125,7 +131,13 @@ fun HomeRoute(
         DoraBottomSheet.MovingFolderBottomSheet(
             modifier = modifier,
             isShowSheet = state.isShowMovingFolderSheet,
-            folderList = state.folderList.toSelectBottomSheetModel(state.changeFolderId.ifEmpty { state.selectedFolderId }),
+            folderList = state.folderList.toSelectBottomSheetModel(
+                state.changeFolderId.ifEmpty {
+                    val originFolder = state.selectedFolderId
+                    viewModel.updateSelectFolderId(originFolder)
+                    originFolder
+                },
+            ),
             onDismissRequest = {
                 viewModel.updateSelectFolderId(state.selectedFolderId)
                 viewModel.setVisibleMovingFolderBottomSheet(false)
@@ -136,7 +148,9 @@ fun HomeRoute(
                     isNavigate = true,
                 )
             },
-            onClickMoveFolder = { selectFolder -> viewModel.updateSelectFolderId(selectFolder) },
+            onClickMoveFolder = { selectFolder ->
+                viewModel.updateSelectFolderId(selectFolder)
+            },
             btnEnable = state.selectedFolderId != state.changeFolderId,
             onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId) },
         )

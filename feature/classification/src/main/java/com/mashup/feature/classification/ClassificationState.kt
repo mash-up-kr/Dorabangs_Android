@@ -4,7 +4,8 @@ import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 
 data class ClassificationState(
     val chipState: ChipState = ChipState(),
-    val selectedFolder: String = "디자인",
+    val selectedFolder: String = "전체",
+    val isLoading: Boolean = false,
 )
 
 data class ChipState(

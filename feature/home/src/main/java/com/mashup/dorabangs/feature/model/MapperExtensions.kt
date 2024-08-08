@@ -17,6 +17,7 @@ fun Post.toUiModel(): FeedUiModel.FeedCardUiModel {
         thumbnail = thumbnailImgUrl,
         url = this.url,
         isLoading = this.aiStatus == AIStatus.IN_PROGRESS,
+        readAt = readAt,
     )
 }
 
@@ -32,5 +33,6 @@ fun SavedLinkDetailInfo.toUiModel(): FeedUiModel.FeedCardUiModel {
         thumbnail = thumbnailImgUrl,
         url = this.url.orEmpty(),
         isLoading = this.aiStatus == AIStatus.IN_PROGRESS,
+        readAt = readAt,
     )
 }

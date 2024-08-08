@@ -16,7 +16,7 @@ interface AIClassificationRemoteDataSource {
 
     suspend fun moveAllPostsToRecommendedFolder(
         suggestionFolderId: String,
-    ): AIClassificationPosts
+    ): AIClassificationAIPostListResponseModel
 
     suspend fun getAIClassificationPostsByFolder(
         folderId: String,

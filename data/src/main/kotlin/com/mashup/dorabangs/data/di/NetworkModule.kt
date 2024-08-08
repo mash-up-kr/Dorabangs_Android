@@ -12,6 +12,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -70,6 +71,7 @@ object NetworkModule {
     @Singleton
     fun providesConverterFactory(json: Json): Converter.Factory = json.asConverterFactory("application/json".toMediaType())
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Provides
     @Singleton
     fun providesJsonBuilder(): Json =
@@ -77,6 +79,7 @@ object NetworkModule {
             isLenient = true
             ignoreUnknownKeys = true
             coerceInputValues = true
+            explicitNulls = false
         }
 
     @Provides

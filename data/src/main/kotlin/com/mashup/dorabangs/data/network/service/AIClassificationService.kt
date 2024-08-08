@@ -26,7 +26,7 @@ interface AIClassificationService {
     @PATCH("classification/posts")
     suspend fun moveAllPostsToRecommendedFolder(
         @Query("suggestionFolderId") suggestionFolderId: String,
-    ): AIClassificationPostsResponseModel
+    ): AIClassificationAIPostListResponseModel
 
     @PATCH("classification/posts/{postId}")
     suspend fun moveSinglePostToRecommendedFolder(

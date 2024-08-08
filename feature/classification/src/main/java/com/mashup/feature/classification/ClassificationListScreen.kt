@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
@@ -41,10 +40,10 @@ fun ClassificationListScreen(
     lazyColumnState: LazyListState,
     pagingList: LazyPagingItems<FeedUiModel>,
     modifier: Modifier = Modifier,
-    onClickCardItem: (String) -> Unit,
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit = {},
-    onClickAllItemMoveButton: () -> Unit = {},
+    onClickAllItemMoveButton: (String) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.background(color = DoraColorTokens.White),
@@ -53,27 +52,31 @@ fun ClassificationListScreen(
         items(
             count = pagingList.itemCount,
             key = pagingList.itemKey(FeedUiModel::uuid),
-            contentType = pagingList.itemContentType { "Feed Paging" },
+            contentType = { if (pagingList[it] is FeedUiModel.FeedCardUiModel) "feed_card" else "header" },
         ) { idx ->
             pagingList[idx]?.let { item ->
                 when (item) {
                     is FeedUiModel.DoraChipUiModel -> {
-                        ClassificationFolderMove(
-                            selectedFolder = item.title,
-                            onClickAllItemMoveButton = onClickAllItemMoveButton,
-                            count = item.postCount,
-                        )
+                        if (state.selectedFolder == item.title || state.selectedFolder == "전체") {
+                            ClassificationFolderMove(
+                                selectedFolder = item.title,
+                                onClickAllItemMoveButton = { onClickAllItemMoveButton(item.folderId) },
+                                count = item.postCount,
+                            )
+                        }
                     }
 
                     is FeedUiModel.FeedCardUiModel -> {
-                        ClassificationCardItem(
-                            idx = idx,
-                            lastIndex = pagingList.itemCount - 1,
-                            cardItem = item,
-                            onClickDeleteButton = onClickDeleteButton,
-                            onClickMoveButton = onClickMoveButton,
-                            onClickCardItem = onClickCardItem,
-                        )
+                        if (state.selectedFolder == item.category || state.selectedFolder == "전체") {
+                            ClassificationCardItem(
+                                idx = idx,
+                                lastIndex = pagingList.itemCount - 1,
+                                cardItem = item,
+                                onClickDeleteButton = onClickDeleteButton,
+                                onClickMoveButton = onClickMoveButton,
+                                onClickCardItem = onClickCardItem,
+                            )
+                        }
                     }
                 }
             }
@@ -115,7 +118,7 @@ fun ClassificationFolderMove(
                 .padding(horizontal = 30.dp, vertical = 8.dp)
                 .wrapContentWidth(),
             buttonText = stringResource(id = R.string.ai_classification_all_move),
-            onClickButton = { onClickAllItemMoveButton() },
+            onClickButton = onClickAllItemMoveButton,
         )
     }
 }
@@ -127,14 +130,14 @@ fun ClassificationCardItem(
     cardItem: FeedUiModel.FeedCardUiModel,
     onClickDeleteButton: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickMoveButton: (FeedUiModel.FeedCardUiModel) -> Unit,
-    onClickCardItem: (String) -> Unit,
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .background(color = DoraColorTokens.White)
-            .clickable { onClickCardItem(cardItem.url) },
+            .clickable { onClickCardItem(cardItem) },
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         IconButton(

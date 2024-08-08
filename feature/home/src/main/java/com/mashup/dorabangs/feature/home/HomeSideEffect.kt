@@ -9,4 +9,5 @@ sealed class HomeSideEffect {
     object NavigateHomeAfterSaveLink : HomeSideEffect()
     data class NavigateSelectLinkFromService(val urlLink: String) : HomeSideEffect()
     object RefreshPostList : HomeSideEffect()
+    object NavigateToCompleteMovingFolder : HomeSideEffect()
 }
