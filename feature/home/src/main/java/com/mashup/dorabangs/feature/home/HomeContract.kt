@@ -8,6 +8,7 @@ import com.mashup.dorabangs.domain.utils.isValidUrl
 import com.mashup.dorabangs.core.designsystem.R as coreR
 
 data class HomeState(
+    val isLoading: Boolean = false,
     val clipBoardState: ClipBoardState = ClipBoardState(),
     val tapElements: List<DoraChipUiModel> = emptyList(),
     val folderList: List<Folder> = listOf(),

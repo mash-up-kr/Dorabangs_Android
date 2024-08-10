@@ -78,14 +78,13 @@ fun HomeScreen(
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
 ) {
-//    val isLoading = postsList?.loadState?.refresh is LoadState.Loading
 
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
         val hazeState = remember { HazeState() }
 
-        if (false) { // Todo :: 로딩 추가해야 함
+        if (state.isLoading) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()

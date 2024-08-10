@@ -75,7 +75,7 @@ fun HomeRoute(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.initPostList(state)
+        viewModel.initPostList()
     }
 
     LaunchedEffect(Unit) {

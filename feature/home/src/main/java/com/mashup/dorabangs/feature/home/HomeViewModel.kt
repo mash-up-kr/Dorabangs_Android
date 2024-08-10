@@ -102,7 +102,7 @@ class HomeViewModel @Inject constructor(
             state.copy(selectedIndex = index)
         }
 
-        initPostList(state, getCacheKey(state, index))
+        initPostList(getCacheKey(state, index))
     }
 
     fun hideSnackBar() = intent {
@@ -274,9 +274,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun initPostList(
-        state: HomeState,
         cacheKey: String? = null,
     ) = viewModelScope.doraLaunch {
+        intent {
+            reduce { state.copy(isLoading = true) }
+
+
         _postList.value = emptyList()
         val cacheKey = cacheKey ?: getCacheKey(state)
 
@@ -295,6 +298,9 @@ class HomeViewModel @Inject constructor(
                     ?.mapNotNull { postId -> postCache[postId] }
                     .orEmpty()
             _postList.update { cachedList }
+        }
+
+            reduce { state.copy(isLoading = false) }
         }
     }
 
