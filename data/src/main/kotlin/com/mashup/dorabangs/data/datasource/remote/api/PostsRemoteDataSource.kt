@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.data.datasource.remote.api
 
+import com.mashup.dorabangs.data.model.PostsResponseModel
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.Post
@@ -31,4 +32,11 @@ interface PostsRemoteDataSource {
     )
 
     suspend fun getPostsCount(isRead: Boolean? = null): Int
+
+    suspend fun getPostPage(
+        page: Int? = null,
+        order: String? = null,
+        favorite: Boolean? = null,
+        isRead: Boolean? = null,
+    ): PostsResponseModel
 }

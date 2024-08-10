@@ -8,10 +8,14 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -20,11 +24,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
+import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
+import com.mashup.dorabangs.feature.utils.getCacheKey
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -44,11 +50,43 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
-    val pagingList = viewModel.postList.collectAsLazyPagingItems()
     val scrollState = rememberLazyListState()
 
-    LaunchedEffect(pagingList.itemCount) {
-        scrollState.scrollToItem(viewModel.scrollCache[state.selectedIndex] ?: 0)
+    val postList = remember { mutableStateListOf<FeedCardUiModel>() }
+    var prevFolderIndex by remember { mutableIntStateOf(0) }
+
+    val reachedBottom: Boolean by remember {
+        derivedStateOf {
+            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
+            lastVisibleItem?.index != 0 && lastVisibleItem?.index == scrollState.layoutInfo.totalItemsCount - 5
+        }
+    }
+
+    LaunchedEffect(reachedBottom) {
+        if (reachedBottom && viewModel.scrollLoading.not()) {
+            viewModel.loadMore(state)
+        }
+    }
+
+    LaunchedEffect(postList.size) {
+        if (state.selectedIndex != prevFolderIndex) {
+            scrollState.scrollToItem(viewModel.scrollCache[state.selectedIndex] ?: 0)
+            prevFolderIndex = state.selectedIndex
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.initPostList(state)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.postList.collectLatest { feedList ->
+            if (feedList.isEmpty()) return@collectLatest
+
+            val postIdSet = postList.map { it.postId }.toSet()
+            val newList = feedList.filter { post -> post.postId !in postIdSet }
+            postList.addAll(newList)
+        }
     }
 
     viewModel.collectSideEffect { sideEffect ->
@@ -68,7 +106,13 @@ fun HomeRoute(
 
             is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
 
-            is HomeSideEffect.RefreshPostList -> pagingList.refresh()
+            is HomeSideEffect.ResetPostList -> postList.clear()
+
+            is HomeSideEffect.UpdatePost -> {
+                val post = sideEffect.post
+                val index = postList.indexOf(post)
+                postList[index] = post
+            }
 
             else -> {}
         }
@@ -78,9 +122,10 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
-            postsPagingList = pagingList,
+            postsList = postList,
             scrollState = scrollState,
             onClickChip = { index ->
+                postList.clear()
                 viewModel.changeSelectedTapIdx(index, scrollState.firstVisibleItemIndex)
             },
             onClickMoreButton = { postId, folderId ->

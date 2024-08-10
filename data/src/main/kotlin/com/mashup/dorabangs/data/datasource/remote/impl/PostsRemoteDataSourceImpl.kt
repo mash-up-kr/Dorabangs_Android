@@ -2,6 +2,7 @@ package com.mashup.dorabangs.data.datasource.remote.impl
 
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.data.model.ChangePostFolderIdRequestModel
+import com.mashup.dorabangs.data.model.PostsResponseModel
 import com.mashup.dorabangs.data.model.toData
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.model.toPagingDomain
@@ -43,4 +44,17 @@ class PostsRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getPostsCount(isRead: Boolean?): Int =
         postsService.getPostsCount(isRead)
+
+    override suspend fun getPostPage(
+        page: Int?,
+        order: String?,
+        favorite: Boolean?,
+        isRead: Boolean?
+    ): PostsResponseModel =
+        postsService.getPosts(
+            page = page,
+            order = order,
+            favorite = favorite,
+            isRead = isRead
+        )
 }

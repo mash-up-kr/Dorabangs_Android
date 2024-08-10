@@ -26,7 +26,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,10 +46,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
@@ -70,8 +68,8 @@ import dev.chrisbanes.haze.hazeChild
 @Composable
 fun HomeScreen(
     state: HomeState,
+    postsList: SnapshotStateList<FeedCardUiModel>,
     modifier: Modifier = Modifier,
-    postsPagingList: LazyPagingItems<FeedCardUiModel>? = null,
     scrollState: LazyListState = rememberLazyListState(),
     onClickChip: (Int) -> Unit = { _ -> },
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
@@ -80,14 +78,14 @@ fun HomeScreen(
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
 ) {
-    val isLoading = postsPagingList?.loadState?.refresh is LoadState.Loading
+//    val isLoading = postsList?.loadState?.refresh is LoadState.Loading
 
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
         val hazeState = remember { HazeState() }
 
-        if (isLoading) {
+        if (false) { // Todo :: 로딩 추가해야 함
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -101,7 +99,7 @@ fun HomeScreen(
                         .align(Alignment.Center),
                 )
             }
-        } else if (postsPagingList?.itemCount == 0) {
+        } else if (postsList.size == 0) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -221,13 +219,19 @@ fun HomeScreen(
                 }
 
                 Feeds(
-                    feeds = postsPagingList,
+                    feeds = postsList,
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
-                    onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
-                    refreshPageList = { postsPagingList?.refresh() },
-                )
+                    onClickBookMarkButton = { postId, isFavorite ->
+                        onClickBookMarkButton(
+                            postId,
+                            isFavorite
+                        )
+                    },
+                ) {
+                    // Todo :: 포스트 삭제 후 포스트 업데이트 로직 작성
+                }
             }
 
             Box(
@@ -264,41 +268,38 @@ fun HomeScreen(
 }
 
 private fun LazyListScope.Feeds(
-    feeds: LazyPagingItems<FeedCardUiModel>?,
+    feeds: SnapshotStateList<FeedCardUiModel>,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     refreshPageList: () -> Unit = {},
 ) {
-    if (feeds != null) {
-        items(
-            count = feeds.itemCount,
-            key = feeds.itemKey(FeedCardUiModel::postId),
-            contentType = feeds.itemContentType { "SavedLinks" },
-        ) { index ->
-            feeds[index]?.let { cardInfo ->
-                FeedCard(
-                    cardInfo = cardInfo,
-                    feedCardEntryPoint = FeedCardEntryPoint.Home,
-                    onClickMoreButton = {
-                        onClickMoreButton(cardInfo.postId, cardInfo.folderId)
-                    },
-                    onClickBookMarkButton = {
-                        onClickBookMarkButton(
-                            cardInfo.postId,
-                            !cardInfo.isFavorite,
-                        )
-                    },
-                    updateCardState = { refreshPageList() },
+    items(
+        count = feeds.size,
+        contentType = { index -> feeds[index].isLoading },
+    ) { index ->
+        val cardInfo = feeds[index]
+        FeedCard(
+            cardInfo = cardInfo,
+            feedCardEntryPoint = FeedCardEntryPoint.Home,
+            onClickMoreButton = {
+                onClickMoreButton(cardInfo.postId, cardInfo.folderId)
+            },
+            onClickBookMarkButton = {
+                onClickBookMarkButton(
+                    cardInfo.postId,
+                    !cardInfo.isFavorite,
                 )
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth()
-                        .height(0.5.dp)
-                        .background(DoraColorTokens.G2),
-                )
-            }
-        }
+            },
+            updateCardState = { refreshPageList() },
+        )
+
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .fillMaxWidth()
+                .height(0.5.dp)
+                .background(DoraColorTokens.G2),
+        )
     }
 }
 
@@ -470,6 +471,7 @@ fun HomeCarouselPreview() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
+    val postList = remember { mutableStateListOf<FeedCardUiModel>() }
     HomeScreen(
         onClickMoreButton = { postId, folderId -> },
         state = HomeState(
@@ -497,5 +499,6 @@ fun HomeScreenPreview() {
                 ),
             ),
         ),
+        postsList = postList,
     )
 }

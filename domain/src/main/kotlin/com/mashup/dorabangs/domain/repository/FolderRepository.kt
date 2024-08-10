@@ -7,6 +7,7 @@ import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.NewFolderName
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import kotlinx.coroutines.flow.Flow
 
@@ -24,4 +25,12 @@ interface FolderRepository {
         isRead: Boolean?,
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<SavedLinkDetailInfo>>
+
+    suspend fun getPostPageFromFolder(
+        folderId: String?,
+        page: Int,
+        order: String,
+        limit: Int,
+        isRead: Boolean?,
+    ): Posts
 }

@@ -2,6 +2,8 @@ package com.mashup.dorabangs.data.model
 import com.mashup.dorabangs.domain.model.LinkKeywordInfo
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo
+import com.mashup.dorabangs.domain.model.Post
+import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import kotlinx.serialization.Serializable
 
@@ -41,6 +43,24 @@ fun LinksFromFolderResponseModel.toDomain(): PageData<List<SavedLinkDetailInfo>>
         ),
     )
 }
+
+fun LinksFromFolderResponseModel.toDomainModel() =
+    Posts(
+        metaData = metadata.toDomain(),
+        items = list.map {
+            Post(
+                id = it.id.orEmpty(),
+                folderId = it.folderId.orEmpty(),
+                url = it.url.orEmpty(),
+                title = it.title.orEmpty(),
+                description = it.description.orEmpty(),
+                isFavorite = it.isFavorite,
+                createdAt = it.createdAt.orEmpty(),
+                thumbnailImgUrl = it.thumbnailImgUrl,
+                aiStatus = it.aiStatusResponseModel.toDomain()
+            )
+        }
+    )
 
 fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
     return SavedLinkDetailInfo(
