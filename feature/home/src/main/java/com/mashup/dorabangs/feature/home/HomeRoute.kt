@@ -115,6 +115,10 @@ fun HomeRoute(
                 }
             }
 
+            is HomeSideEffect.DeletePost -> {
+                postList.removeIf { it.postId == sideEffect.postId }
+            }
+
             else -> {}
         }
     }

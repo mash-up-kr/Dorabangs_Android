@@ -12,4 +12,6 @@ sealed class HomeSideEffect {
     data class NavigateSelectLinkFromService(val urlLink: String) : HomeSideEffect()
     object ResetPostList : HomeSideEffect()
     data class UpdatePost(val post: FeedCardUiModel) : HomeSideEffect()
+
+    data class DeletePost(val postId: String): HomeSideEffect()
 }

@@ -413,7 +413,10 @@ class HomeViewModel @Inject constructor(
         setVisibleDialog(false)
         if (response.isSuccess) {
             intent {
-                // Todo :: View 업데이트
+                postSideEffect(HomeSideEffect.DeletePost(postId))
+                idListCache[getCacheKey(state)] = idListCache[getCacheKey(state)]?.filterNot { it == postId } ?: emptyList()
+                idListCache["all"] = idListCache["all"]?.filterNot { it == postId } ?: emptyList()
+                idListCache["favorite"] = idListCache["favorite"]?.filterNot { it == postId } ?: emptyList()
             }
         }
     }
