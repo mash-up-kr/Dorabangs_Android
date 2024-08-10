@@ -72,7 +72,7 @@ class HomeViewModel @Inject constructor(
     val scrollCache = HashMap<Int, Int>()
     val idListCache = HashMap<String, List<String>>()
 
-    var scrollLoading: Boolean = false
+    var isScrollLoading: Boolean = false
 
     init {
         viewModelScope.doraLaunch {
@@ -299,10 +299,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadMore(state: HomeState) = viewModelScope.doraLaunch {
-        if (scrollLoading) {
+        if (isScrollLoading) {
             return@doraLaunch
         }
-        scrollLoading = true
+        isScrollLoading = true
 
         val cacheKey = getCacheKey(state)
         val pagingInfo = pagingInfoCache[cacheKey] ?: return@doraLaunch
@@ -358,26 +358,31 @@ class HomeViewModel @Inject constructor(
             (idListCache[cacheKey] ?: emptyList()) + newPostList.map { it.postId }
 
         _postList.update { _postList.value + newPostList }
-        scrollLoading = false
+        isScrollLoading = false
     }
 
     fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
-        val beforeData = postList.value
-
-        _postList.value = postList.value.map { item ->
-            if (item.postId == postId) {
-                item.copy(isFavorite = isFavorite)
-            } else {
-                item
-            }
+        val post = postCache[postId] ?: return@doraLaunch
+        intent {
+            postSideEffect(HomeSideEffect.UpdatePost(post.copy(isFavorite = isFavorite)))
         }
+
+        val postIndex = postList.value.indexOfFirst { it.postId == postId }
+        if (postIndex == -1) return@doraLaunch
+
         val postInfo = PostInfo(isFavorite = isFavorite)
+
         val response = patchPostInfoUseCase(
             postId = postId,
             postInfo = postInfo,
         )
+
         if (response.isSuccess.not()) {
-            _postList.value = beforeData
+            intent {
+                postSideEffect(HomeSideEffect.UpdatePost(post.copy(isFavorite = isFavorite.not())))
+            }
+        } else {
+            postCache[post.postId] = post.copy(isFavorite = isFavorite)
         }
     }
 

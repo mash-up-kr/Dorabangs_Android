@@ -29,7 +29,6 @@ import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSh
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
-import com.mashup.dorabangs.feature.utils.getCacheKey
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
@@ -63,7 +62,7 @@ fun HomeRoute(
     }
 
     LaunchedEffect(reachedBottom) {
-        if (reachedBottom && viewModel.scrollLoading.not()) {
+        if (reachedBottom && viewModel.isScrollLoading.not()) {
             viewModel.loadMore(state)
         }
     }
@@ -110,8 +109,10 @@ fun HomeRoute(
 
             is HomeSideEffect.UpdatePost -> {
                 val post = sideEffect.post
-                val index = postList.indexOf(post)
-                postList[index] = post
+                val index = postList.indexOfFirst { it.postId == post.postId }
+                if (index != -1) {
+                    postList[index] = post
+                }
             }
 
             else -> {}
