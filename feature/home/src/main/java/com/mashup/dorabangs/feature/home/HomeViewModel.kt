@@ -449,7 +449,17 @@ class HomeViewModel @Inject constructor(
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
-            // intent { postSideEffect(HomeSideEffect) }
+            intent {
+                val beforeFolderId = postList.value.find { it.postId == postId }?.folderId.orEmpty()
+                val category = state.folderList.find { it.id == folderId }?.name.orEmpty()
+                val changedPost = getPostUseCase(postId).toUiModel(category)
+                postCache[postId] = changedPost
+                idListCache[beforeFolderId] = idListCache[beforeFolderId]?.toMutableList()?.filterNot { it == postId } ?: emptyList()
+                if (idListCache[folderId].isNullOrEmpty().not()) {
+                    idListCache[folderId] = idListCache[folderId]?.plus(postId) ?: emptyList()
+                }
+                postSideEffect(HomeSideEffect.UpdatePost(changedPost))
+            }
         }
     }
 

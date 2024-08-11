@@ -109,13 +109,14 @@ fun HomeRoute(
                 navigateToCreateFolder()
             }
 
-            is HomeSideEffect.ResetPostList -> postList.clear()
-
             is HomeSideEffect.UpdatePost -> {
                 val post = sideEffect.post
                 val index = postList.indexOfFirst { it.postId == post.postId }
                 if (index != -1) {
                     postList[index] = post
+                    if (state.selectedIndex > 1) {
+                        postList.removeIf { it.folderId != state.selectedFolderId }
+                    }
                 }
             }
 

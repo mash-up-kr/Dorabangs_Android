@@ -1,4 +1,5 @@
 package com.mashup.dorabangs.data.model
+
 import com.mashup.dorabangs.domain.model.LinkKeywordInfo
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo
