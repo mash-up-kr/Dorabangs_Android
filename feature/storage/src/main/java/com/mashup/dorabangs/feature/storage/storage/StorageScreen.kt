@@ -79,7 +79,7 @@ fun StorageRoute(
 
     LaunchedEffect(Unit) {
         if (isChangedData) {
-            if (!storageState.folderEditType?.name.isNullOrEmpty()) {
+            if (storageState.folderEditType != FolderManageType.NOTHING) {
                 val toastMsg = when (storageState.folderEditType) {
                     FolderManageType.CREATE -> "폴더를 추가했어요."
                     FolderManageType.CHANGE -> "폴더 이름을 변경했어요." // todo- context로 가져오기 근데 가져왔을때 이상하게 안됨..
@@ -98,7 +98,7 @@ fun StorageRoute(
         StorageScreen(
             storageState = storageState,
             navigateToStorageDetail = { folder ->
-                storageViewModel.updateFolderEditType(null)
+                storageViewModel.updateFolderEditType(FolderManageType.NOTHING)
                 navigateToStorageDetail(folder)
             },
             onClickSettingButton = { folderItem ->

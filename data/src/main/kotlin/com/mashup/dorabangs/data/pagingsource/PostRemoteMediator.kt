@@ -53,12 +53,12 @@ class PostRemoteMediator<T : Any> (
                     return MediatorResult.Success(endOfPaginationReached = false)
                 }
             }
+            database.remoteKeysDao().clearRemoteKeys()
             val apiResponse = apiExecutor(page)
             val posts = apiResponse.data
             val endOfPaginationReached = posts.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    database.remoteKeysDao().clearRemoteKeys()
                     database.postDao().clearAllPostItem()
                 }
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
