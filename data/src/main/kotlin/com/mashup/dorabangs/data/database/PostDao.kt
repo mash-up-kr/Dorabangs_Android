@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.mashup.dorabangs.data.database.LocalPostItemEntity
 
 @Dao
 interface PostDao {
@@ -16,38 +15,38 @@ interface PostDao {
     @Query("SELECT * FROM localPostItemEntity")
     fun getPosts(): PagingSource<Int, LocalPostItemEntity>
 
-
     @Query("SELECT * FROM localPostItemEntity")
     suspend fun getPostByPage(): List<LocalPostItemEntity>
 
-
-    @Query("""
+    @Query(
+        """
     SELECT * FROM localPostItemEntity
     WHERE (:isRead = 1) OR (:isRead = 0 AND readAt = '')
     ORDER BY createdAt ASC
-""")
+""",
+    )
     fun getAllPostsOrderedByAsc(isRead: Boolean?): PagingSource<Int, LocalPostItemEntity>
 
-    @Query("""
+    @Query(
+        """
     SELECT * FROM localPostItemEntity
     WHERE (:isRead = 1) OR (:isRead = 0 AND readAt = '')
     ORDER BY createdAt DESC
-""")
+""",
+    )
     fun getAllPostsOrderedByDesc(isRead: Boolean?): PagingSource<Int, LocalPostItemEntity>
-
 
     /**
      * 전체 목록 삽입
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(posts : List<LocalPostItemEntity>)
+    fun insertAll(posts: List<LocalPostItemEntity>)
 
     /**
      * Post 아이템 삭제
      */
     @Query("DELETE FROM localPostItemEntity where id = :postId")
     suspend fun deletePostItem(postId: String)
-
 
     /**
      * refresh일시 전체 삭제
@@ -60,5 +59,4 @@ interface PostDao {
      */
     @Query("UPDATE localPostItemEntity SET isFavorite = :isFavorite WHERE id = :postId")
     suspend fun updateFavoriteStatus(postId: String, isFavorite: Boolean)
-
 }

@@ -71,9 +71,6 @@ class FolderRepositoryImpl @Inject constructor(
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<SavedLinkDetailInfo>> =
         doraPager(
-            needFetchUpdate = needFetchUpdate,
-            cachedList = pagingListCache,
-            cacheKey = cacheKey,
             apiExecutor = { page ->
                 remoteDataSource.getLinksFromFolder(
                     folderId = folderId,
@@ -84,7 +81,6 @@ class FolderRepositoryImpl @Inject constructor(
                 ).toDomain()
             },
             totalCount = { total -> totalCount(total) },
-            cachingData = { item, page -> pagingListCache[doraConvertKey(page, cacheKey)] = item },
         ).flow
 
     override fun updatePostItem(

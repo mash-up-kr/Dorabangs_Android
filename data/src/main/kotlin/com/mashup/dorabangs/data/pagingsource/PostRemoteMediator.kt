@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.data.pagingsource
 
-import android.content.ContentValues
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -11,15 +9,12 @@ import com.mashup.dorabangs.data.database.LocalPostItemEntity
 import com.mashup.dorabangs.data.database.PostDatabase
 import com.mashup.dorabangs.data.database.RemoteKeys
 import com.mashup.dorabangs.data.database.toLocalEntity
-import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.domain.model.PageData
-import com.mashup.dorabangs.domain.model.Post
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class PostRemoteMediator<T: Any> (
+class PostRemoteMediator<T : Any> (
     private val database: PostDatabase,
     private val needFetchUpdate: Boolean,
     private val apiExecutor: suspend (Int) -> PageData<List<T>>,
@@ -31,7 +26,7 @@ class PostRemoteMediator<T: Any> (
     private val STARTING_PAGE_INDEX = 1
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, LocalPostItemEntity>
+        state: PagingState<Int, LocalPostItemEntity>,
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
@@ -52,7 +47,7 @@ class PostRemoteMediator<T: Any> (
             }
         }
         return try {
-            if(needFetchUpdate.not()) {
+            if (needFetchUpdate.not()) {
                 val cachedPosts = database.postDao().getPostByPage()
                 if (cachedPosts.isNotEmpty()) {
                     return MediatorResult.Success(endOfPaginationReached = false)
@@ -108,7 +103,7 @@ class PostRemoteMediator<T: Any> (
      * Refresh : 데이터 처음 호출 및 새로고침
      */
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, LocalPostItemEntity>
+        state: PagingState<Int, LocalPostItemEntity>,
     ): RemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { postId ->
@@ -116,5 +111,4 @@ class PostRemoteMediator<T: Any> (
             }
         }
     }
-
 }

@@ -8,5 +8,5 @@ class ChangeLocalPostUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(postId: String, isFavorite: Boolean) =
-        postsRepository.updateBookMarkState(postId,isFavorite)
+        postsRepository.updateBookMarkState(postId, isFavorite)
 }

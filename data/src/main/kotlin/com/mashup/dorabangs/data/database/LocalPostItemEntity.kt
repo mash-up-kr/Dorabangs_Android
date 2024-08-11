@@ -9,7 +9,6 @@ import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.LinkKeywordInfo
 import com.mashup.dorabangs.domain.model.Post
 
-
 @Entity
 data class LocalPostItemEntity(
     @PrimaryKey val id: String = "",
@@ -26,7 +25,6 @@ data class LocalPostItemEntity(
     val readAt: String?,
 )
 
-
 fun Post.toLocalEntity(): LocalPostItemEntity {
     return LocalPostItemEntity(
         id = id,
@@ -34,7 +32,7 @@ fun Post.toLocalEntity(): LocalPostItemEntity {
         description = description,
         folderId = folderId,
         isFavorite = isFavorite,
-        keywords =  keywords?.map { it.toData() },
+        keywords = keywords?.map { it.toData() },
         title = title,
         url = url,
         thumbnailImgUrl = thumbnailImgUrl,
@@ -62,7 +60,7 @@ fun LocalPostItemEntity.toPost(): Post {
         description = description.orEmpty(),
         folderId = folderId.orEmpty(),
         isFavorite = isFavorite,
-        keywords =  keywords?.map { it.toDomain() },
+        keywords = keywords?.map { it.toDomain() },
         title = title.orEmpty(),
         url = url.orEmpty(),
         thumbnailImgUrl = thumbnailImgUrl.orEmpty(),
@@ -70,5 +68,3 @@ fun LocalPostItemEntity.toPost(): Post {
         readAt = readAt,
     )
 }
-
-

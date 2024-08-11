@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.mashup.dorabangs.data.utils.ListTypeConverters
 
-
 @Database(entities = [LocalPostItemEntity::class, RemoteKeys::class], version = 1)
 @TypeConverters(ListTypeConverters::class)
 abstract class PostDatabase : RoomDatabase() {
@@ -23,7 +22,8 @@ abstract class PostDatabase : RoomDatabase() {
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context,
-                    PostDatabase::class.java, "post.db"
+                    PostDatabase::class.java,
+                    "post.db",
                 ).build()
             }
     }

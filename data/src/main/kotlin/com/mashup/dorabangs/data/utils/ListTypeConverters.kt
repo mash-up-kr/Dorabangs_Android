@@ -12,6 +12,6 @@ class ListTypeConverters {
 
     @TypeConverter
     fun jsonToList(value: String): List<LinkKeywordResponseModel>? {
-        return Gson().fromJson(value,Array<LinkKeywordResponseModel>::class.java)?.toList()
+        return Gson().fromJson(value, Array<LinkKeywordResponseModel>::class.java)?.toList()
     }
 }

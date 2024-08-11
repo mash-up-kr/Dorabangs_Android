@@ -24,7 +24,6 @@ import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
 import com.mashup.dorabangs.domain.usecase.posts.DeletePostLocalUseCase
 import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPostRemoteUseCase
-import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.FeedCacheKeyType
@@ -54,7 +53,6 @@ class StorageDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val savedLinksFromFolderUseCase: GetSavedLinksFromFolderUseCase,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
-    private val getPostsUseCase: GetPosts,
     private val deleteFolderUseCase: DeleteFolderUseCase,
     private val deletePostUseCase: DeletePostUseCase,
     private val getFolderListUseCase: GetFolderListUseCase,
@@ -213,7 +211,7 @@ class StorageDetailViewModel @Inject constructor(
                 }
             },
 
-            ).map { pagedData ->
+        ).map { pagedData ->
             pagedData.map { savedLinkInfo -> savedLinkInfo.toUiModel() }
         }.cachedIn(viewModelScope)
             .stateIn(
@@ -452,14 +450,5 @@ class StorageDetailViewModel @Inject constructor(
             state.copy(isShowMovingFolderSheet = visible)
         }
         if (isNavigate) postSideEffect(StorageDetailSideEffect.NavigateToFolderManage(itemId = state.currentClickPostId))
-    }
-
-    private fun getUpdateKeyCase(): List<String> {
-        return listOf(
-            getCacheKey(FeedCacheKeyType.ALL.name, FeedCacheKeyType.DESC.name),
-            getCacheKey(FeedCacheKeyType.UNREAD.name, FeedCacheKeyType.DESC.name),
-            getCacheKey(FeedCacheKeyType.ALL.name, FeedCacheKeyType.ASC.name),
-            getCacheKey(FeedCacheKeyType.UNREAD.name, FeedCacheKeyType.DESC.name),
-        )
     }
 }

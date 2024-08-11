@@ -8,5 +8,5 @@ data class RemoteKeys(
     @PrimaryKey
     val postId: String,
     val prevKey: Int? = null,
-    val nextKey: Int? = null
+    val nextKey: Int? = null,
 )

@@ -10,12 +10,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object LocalDatabaseModule {
+object LocalDataBaseModule {
 
     @Singleton
     @Provides
     fun providePostDatabase(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): PostDatabase {
         return PostDatabase.getInstance(context)
     }

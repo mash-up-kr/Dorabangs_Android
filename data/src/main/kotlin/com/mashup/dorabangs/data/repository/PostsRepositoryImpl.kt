@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.data.repository
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -14,11 +12,9 @@ import com.mashup.dorabangs.data.database.toPost
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.data.pagingsource.PostRemoteMediator
 import com.mashup.dorabangs.data.utils.PAGING_SIZE
-import com.mashup.dorabangs.data.utils.doraConvertKey
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.Link
-import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.repository.PostsRepository
@@ -28,23 +24,17 @@ import javax.inject.Inject
 
 class PostsRepositoryImpl @Inject constructor(
     private val postsRemoteDataSource: PostsRemoteDataSource,
-    private val database: PostDatabase
+    private val database: PostDatabase,
 ) : PostsRepository {
-
-    private val pagingListCache = HashMap<String, PageData<List<Post>>>()
 
     override suspend fun getPosts(
         needFetchUpdate: Boolean,
-        cacheKey: String,
         order: String?,
         favorite: Boolean?,
         isRead: Boolean?,
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<Post>> =
         doraPager(
-            needFetchUpdate = needFetchUpdate,
-            cachedList = pagingListCache,
-            cacheKey = cacheKey,
             apiExecutor = { page ->
                 postsRemoteDataSource.getPosts(
                     page = page,
@@ -54,35 +44,7 @@ class PostsRepositoryImpl @Inject constructor(
                 )
             },
             totalCount = { total -> totalCount(total) },
-            cachingData = { item, page ->
-                pagingListCache[doraConvertKey(page, cacheKey)] = item
-            },
         ).flow
-
-    override fun updatePostItem(
-        page: Int,
-        cacheKey: String,
-        cachedKeyList: List<String>,
-        item: Post,
-    ) {
-        val key = doraConvertKey(page, cacheKey)
-        val updatedData = pagingListCache[key]?.data?.map { post ->
-            if (post.id == item.id) {
-                item
-            } else {
-                post
-            }
-        }
-        cachedKeyList.forEach { currentKey ->
-            val listKey = doraConvertKey(page, currentKey)
-            val updatedPageData = updatedData?.let {
-                pagingListCache[listKey]?.copy(data = it)
-            }
-            updatedPageData?.let { data ->
-                pagingListCache[listKey] = data
-            }
-        }
-    }
 
     override suspend fun saveLink(link: Link) =
         postsRemoteDataSource.saveLink(link)
@@ -99,7 +61,6 @@ class PostsRepositoryImpl @Inject constructor(
         runCatching {
             postsRemoteDataSource.deletePost(postId)
             DoraSampleResponse(isSuccess = true)
-
         }.getOrElse { throwable ->
             DoraSampleResponse(isSuccess = false, errorMsg = throwable.message.orEmpty())
         }
@@ -121,7 +82,7 @@ class PostsRepositoryImpl @Inject constructor(
         order: String?,
         favorite: Boolean?,
         isRead: Boolean?,
-        totalCount: (Int) -> Unit
+        totalCount: (Int) -> Unit,
     ): Flow<PagingData<Post>> {
         return Pager(
             config = PagingConfig(
@@ -133,8 +94,8 @@ class PostsRepositoryImpl @Inject constructor(
                 database = database,
                 needFetchUpdate = needFetchUpdate,
                 totalCount = { total -> totalCount(total) },
-                toLocalEntity = { post -> post.toLocalEntity()},
-                getRemoteKey = {  post -> RemoteKeys(postId = post.id)},
+                toLocalEntity = { post -> post.toLocalEntity() },
+                getRemoteKey = { post -> RemoteKeys(postId = post.id) },
                 apiExecutor = { page ->
                     postsRemoteDataSource.getPosts(
                         page = page,
@@ -145,9 +106,10 @@ class PostsRepositoryImpl @Inject constructor(
                 },
             ),
             pagingSourceFactory = {
-                if(order == "asc") database.postDao().getAllPostsOrderedByAsc(isRead = isRead == null)
-                else database.postDao().getAllPostsOrderedByDesc(isRead = isRead == null)
-            }
+                if (order == "asc") {
+                    database.postDao().getAllPostsOrderedByAsc(isRead = isRead == null)
+                } else database.postDao().getAllPostsOrderedByDesc(isRead = isRead == null)
+            },
         ).flow.map { data ->
             data.map { it.toPost() }
         }
