@@ -19,6 +19,8 @@ interface FolderRepository {
     suspend fun editFolderName(newFolderName: NewFolderName, folderId: String): DoraSampleResponse
     suspend fun deleteFolder(folderId: String): DoraSampleResponse
     suspend fun getLinksFromFolder(
+        needFetchUpdate: Boolean = false,
+        cacheKey: String = "",
         folderId: String?,
         order: String,
         limit: Int,
@@ -33,4 +35,11 @@ interface FolderRepository {
         limit: Int,
         isRead: Boolean?,
     ): Posts
+
+    fun updatePostItem(
+        page: Int,
+        cacheKey: String,
+        cachedKeyList: List<String>,
+        item: SavedLinkDetailInfo,
+    )
 }

@@ -1,21 +1,25 @@
 package com.mashup.dorabangs.feature.home
 
+import androidx.paging.PagingData
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.utils.isValidUrl
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import com.mashup.dorabangs.core.designsystem.R as coreR
 
 data class HomeState(
     val isLoading: Boolean = false,
     val clipBoardState: ClipBoardState = ClipBoardState(),
-    val tapElements: List<DoraChipUiModel> = emptyList(),
+    val tapElements: List<FeedUiModel.DoraChipUiModel> = emptyList(),
     val folderList: List<Folder> = listOf(),
     val selectedIndex: Int = 0,
     val selectedPostId: String = "",
     val selectedFolderId: String = "",
-    val changeFolderId: String = "",
+    val changeFolderId: String = selectedFolderId,
     val isShowMoreButtonSheet: Boolean = false,
     val isShowDialog: Boolean = false,
     val isShowMovingFolderSheet: Boolean = false,
@@ -23,12 +27,14 @@ data class HomeState(
     val aiClassificationCount: Int = 0,
     val toastState: ToastState = ToastState(),
     val unReadPostCount: Int = 0,
+    val isEditPostFolder: Boolean = false,
 ) {
     companion object {
         // TODO - 추후 sotrageMapper와 합치기
         fun List<Folder>.toSelectBottomSheetModel(folderId: String): List<SelectableBottomSheetItemUIModel> {
             return this.map { item ->
                 SelectableBottomSheetItemUIModel(
+                    id = item.id.orEmpty(),
                     icon = coreR.drawable.ic_3d_folder_big,
                     itemName = item.name,
                     isSelected = item.id == folderId,

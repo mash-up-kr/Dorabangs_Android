@@ -26,7 +26,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.component.toast.DoraToast
 import com.mashup.dorabangs.domain.model.Folder
@@ -49,17 +49,18 @@ fun StorageDetailRoute(
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: () -> Unit,
+    navigateToWebView: (String) -> Unit,
     modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
     isChangedData: Boolean = false,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val listState = rememberLazyListState()
     val overlapHeightPx = with(LocalDensity.current) { MaxToolbarHeight.toPx() - MinToolbarHeight.toPx() }
     val state by storageDetailViewModel.collectAsState()
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val scope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
     val linksPagingList = storageDetailViewModel.feedListState.collectAsLazyPagingItems()
 
     LaunchedEffect(isChangedData) {
@@ -74,7 +75,7 @@ fun StorageDetailRoute(
                     toastMsg = context.getString(storageR.string.toast_rename_folder),
                 )
             } else
-                linksPagingList.refresh()
+                storageDetailViewModel.refresh()
         }
         storageDetailViewModel.setVisibleMovingFolderBottomSheet(isVisibleBottomSheet)
     }
@@ -114,6 +115,10 @@ fun StorageDetailRoute(
             onClickMoreButton = { postId ->
                 storageDetailViewModel.setActionType(EditActionType.LinkEdit, postId)
                 storageDetailViewModel.setVisibleMoreButtonBottomSheet(true)
+            },
+            onClickPostItem = { cardInfo ->
+                storageDetailViewModel.updateReadAt(cardInfo)
+                navigateToWebView(cardInfo.url)
             },
         )
 
@@ -161,7 +166,10 @@ fun StorageDetailRoute(
                     originFolder
                 },
             ),
-            onDismissRequest = { storageDetailViewModel.setVisibleMovingFolderBottomSheet(false) },
+            onDismissRequest = {
+                storageDetailViewModel.updateSelectFolderId(state.folderInfo.folderId.orEmpty())
+                storageDetailViewModel.setVisibleMovingFolderBottomSheet(false)
+            },
             onClickCreateFolder = {
                 storageDetailViewModel.setVisibleMovingFolderBottomSheet(
                     visible = false,
@@ -181,7 +189,9 @@ fun StorageDetailRoute(
             text = state.toastState.text,
             toastStyle = state.toastState.toastStyle,
             snackBarHostState = toastSnackBarHostState,
-            modifier = modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp),
+            modifier = modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 20.dp),
         )
     }
 }
@@ -203,13 +213,14 @@ private fun handleSideEffect(
 
 @Composable
 fun StorageDetailScreen(
-    linksPagingList: LazyPagingItems<FeedCardUiModel>,
-    onClickBookMarkButton: (String, Boolean) -> Unit,
+    linksPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>,
+    onClickBookMarkButton: (FeedUiModel.FeedCardUiModel, Boolean, Int) -> Unit,
     onClickBackIcon: () -> Unit,
     onClickTabItem: (Int) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit,
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
+    onClickPostItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),
@@ -236,6 +247,7 @@ fun StorageDetailScreen(
             onClickBookMarkButton = onClickBookMarkButton,
             onClickActionIcon = onClickActionIcon,
             onClickMoreButton = onClickMoreButton,
+            onClickPostItem = onClickPostItem,
 
         )
     }
@@ -249,5 +261,6 @@ fun PreviewStorageDetailScreen() {
         navigateToStorage = {},
         navigateToFolderManager = { id, type -> },
         onClickBackIcon = {},
+        navigateToWebView = {},
     )
 }

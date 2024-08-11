@@ -33,7 +33,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -44,7 +44,7 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 @Composable
 fun StorageDetailList(
     listState: LazyListState,
-    linksPagingList: LazyPagingItems<FeedCardUiModel>,
+    linksPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>,
     state: StorageDetailState,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -52,7 +52,8 @@ fun StorageDetailList(
     onClickTabItem: (Int) -> Unit,
     onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
-    onClickBookMarkButton: (String, Boolean) -> Unit,
+    onClickBookMarkButton: (FeedUiModel.FeedCardUiModel, Boolean, Int) -> Unit,
+    onClickPostItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     val isLoading = linksPagingList.loadState.refresh is LoadState.Loading
@@ -118,7 +119,9 @@ fun StorageDetailList(
                             val item = cardItem.copy(category = state.folderInfo.title)
                             FeedCard(
                                 cardInfo = item,
-                                onClickBookMarkButton = { onClickBookMarkButton(cardItem.postId, cardItem.isFavorite) },
+
+                                onClickBookMarkButton = { onClickBookMarkButton(cardItem, cardItem.isFavorite, (idx / 10)) },
+                                onClickCardItem = onClickPostItem,
                                 onClickMoreButton = { onClickMoreButton(cardItem.postId) },
                                 feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
                             )
@@ -151,7 +154,7 @@ fun StorageDetailList(
 
 @Composable
 fun SortButtonRow(
-    items: List<StorageDetailSort> = listOf(StorageDetailSort.ASC, StorageDetailSort.DESC),
+    items: List<StorageDetailSort> = listOf(StorageDetailSort.DESC, StorageDetailSort.ASC),
     isLatestSort: Boolean = false,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {

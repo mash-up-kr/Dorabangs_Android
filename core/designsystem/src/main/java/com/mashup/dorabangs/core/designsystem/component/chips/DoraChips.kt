@@ -28,7 +28,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
 @Composable
 fun DoraChips(
-    chipList: List<DoraChipUiModel>,
+    chipList: List<FeedUiModel.DoraChipUiModel>,
     modifier: Modifier = Modifier,
     selectedIndex: Int = 0,
     onClickChip: (Int) -> Unit = {},
@@ -56,7 +56,7 @@ fun DoraChips(
 
 @Composable
 fun DoraChip(
-    doraChipUiModel: DoraChipUiModel,
+    doraChipUiModel: FeedUiModel.DoraChipUiModel,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     onClickChip: () -> Unit = {},
@@ -102,7 +102,7 @@ fun DoraChip(
 @Composable
 fun SelectedDoraChipPreview() {
     DoraChip(
-        doraChipUiModel = DoraChipUiModel(
+        doraChipUiModel = FeedUiModel.DoraChipUiModel(
             title = "하이?",
         ),
     )
@@ -112,7 +112,7 @@ fun SelectedDoraChipPreview() {
 @Composable
 fun UnSelectedDoraChipPreview() {
     DoraChip(
-        doraChipUiModel = DoraChipUiModel(
+        doraChipUiModel = FeedUiModel.DoraChipUiModel(
             title = "바이?",
         ),
     )
@@ -122,7 +122,7 @@ fun UnSelectedDoraChipPreview() {
 @Composable
 fun SelectedIconDoraChipPreview() {
     DoraChip(
-        doraChipUiModel = DoraChipUiModel(
+        doraChipUiModel = FeedUiModel.DoraChipUiModel(
             title = "하이?",
             icon = R.drawable.ic_android_white_24dp,
         ),
@@ -133,7 +133,7 @@ fun SelectedIconDoraChipPreview() {
 @Composable
 fun UnSelectedIconDoraChipPreview() {
     DoraChip(
-        doraChipUiModel = DoraChipUiModel(
+        doraChipUiModel = FeedUiModel.DoraChipUiModel(
             title = "바이?",
             icon = R.drawable.ic_plus,
         ),
@@ -145,20 +145,20 @@ fun UnSelectedIconDoraChipPreview() {
 fun DoraChipsPreview() {
     DoraChips(
         chipList = listOf(
-            DoraChipUiModel(
+            FeedUiModel.DoraChipUiModel(
                 title = "전체 99+",
                 icon = R.drawable.ic_plus,
             ),
-            DoraChipUiModel(
+            FeedUiModel.DoraChipUiModel(
                 title = "하이?",
             ),
-            DoraChipUiModel(
+            FeedUiModel.DoraChipUiModel(
                 title = "바이?",
             ),
-            DoraChipUiModel(
+            FeedUiModel.DoraChipUiModel(
                 title = "바이?",
             ),
-            DoraChipUiModel(
+            FeedUiModel.DoraChipUiModel(
                 title = "바이?",
                 icon = R.drawable.ic_plus,
             ),

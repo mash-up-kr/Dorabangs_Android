@@ -3,6 +3,7 @@ package com.mashup.dorabangs.data.repository
 import androidx.paging.PagingData
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.model.toDomain
+import com.mashup.dorabangs.data.utils.doraConvertKey
 import com.mashup.dorabangs.data.model.toDomainModel
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.DoraCreateFolderModel
@@ -12,6 +13,7 @@ import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.NewFolderName
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.model.Posts
+import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import com.mashup.dorabangs.domain.repository.FolderRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +22,8 @@ import javax.inject.Inject
 class FolderRepositoryImpl @Inject constructor(
     private val remoteDataSource: FolderRemoteDataSource,
 ) : FolderRepository {
+
+    private val pagingListCache = HashMap<String, PageData<List<SavedLinkDetailInfo>>>()
 
     override suspend fun getFolders(): FolderList =
         remoteDataSource.getFolders()
@@ -60,6 +64,8 @@ class FolderRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getLinksFromFolder(
+        needFetchUpdate: Boolean,
+        cacheKey: String,
         folderId: String?,
         order: String,
         limit: Int,
@@ -67,6 +73,9 @@ class FolderRepositoryImpl @Inject constructor(
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<SavedLinkDetailInfo>> =
         doraPager(
+            needFetchUpdate = needFetchUpdate,
+            cachedList = pagingListCache,
+            cacheKey = cacheKey,
             apiExecutor = { page ->
                 remoteDataSource.getLinksFromFolder(
                     folderId = folderId,
@@ -77,6 +86,7 @@ class FolderRepositoryImpl @Inject constructor(
                 ).toDomain()
             },
             totalCount = { total -> totalCount(total) },
+            cachingData = { item, page -> pagingListCache[doraConvertKey(page, cacheKey)] = item },
         ).flow
 
     override suspend fun getPostPageFromFolder(
@@ -93,4 +103,29 @@ class FolderRepositoryImpl @Inject constructor(
             limit = limit,
             isRead = isRead,
         ).toDomainModel()
+
+    override fun updatePostItem(
+        page: Int,
+        cacheKey: String,
+        cachedKeyList: List<String>,
+        item: SavedLinkDetailInfo,
+    ) {
+        val key = doraConvertKey(page, cacheKey)
+        val updatedData = pagingListCache[key]?.data?.map { post ->
+            if (post.id == item.id) {
+                item
+            } else {
+                post
+            }
+        }
+        cachedKeyList.forEach { currentKey ->
+            val listKey = doraConvertKey(page, currentKey)
+            val updatedPageData = updatedData?.let {
+                pagingListCache[listKey]?.copy(data = it)
+            }
+            updatedPageData?.let { data ->
+                pagingListCache[listKey] = data
+            }
+        }
+    }
 }

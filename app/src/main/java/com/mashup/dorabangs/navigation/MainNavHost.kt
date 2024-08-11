@@ -2,6 +2,7 @@ package com.mashup.dorabangs.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.dorabangs.feature.navigation.navigateToSaveLink
@@ -9,6 +10,8 @@ import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.core.webview.navigateToWebView
+import com.mashup.dorabangs.core.webview.webViewNavigation
 import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.navigation.homeCreateFolderNavigation
 import com.mashup.dorabangs.feature.navigation.homeNavigation
@@ -30,8 +33,13 @@ import com.mashup.feature.classification.navigation.navigateToClassification
 fun MainNavHost(
     modifier: Modifier = Modifier,
     appState: DoraAppState,
+    hideKeyboardAction: () -> Unit,
     startDestination: String = NavigationRoute.OnBoardingScreen.route,
 ) {
+    fun NavController.popBackStackWithClearFocus() {
+        hideKeyboardAction()
+        popBackStack()
+    }
     NavHost(
         modifier = modifier,
         navController = appState.navController,
@@ -54,23 +62,32 @@ fun MainNavHost(
             },
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
             navigateToHomeTutorial = { appState.navController.navigateToHomeTutorial() },
+            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
         )
         homeCreateFolderNavigation(
             navController = appState.navController,
             onClickBackIcon = {
                 appState.navController.navigateToHome(
                     isVisibleMovingBottomSheet = true,
+                    navOptions = navOptions {
+                        popUpTo(appState.navController.graph.id) {
+                            inclusive = true
+                        }
+                    },
                 )
             },
-            navigateToHome = { appState.navController.popBackStack() },
+            navigateToHome = { appState.navController.popBackStackWithClearFocus() },
             navigateToHomeAfterSaveLink = {
                 appState.navController.navigateToHome(
                     isVisibleMovingBottomSheet = false,
                 )
             },
+            navigateToHomeAfterMovingFolder = {
+                appState.navController.popBackStack()
+            },
         )
         homeTutorialNavigation(
-            navigateToHome = { appState.navController.popBackStack() },
+            navigateToHome = { appState.navController.popBackStackWithClearFocus() },
         )
         storageNavigation(
             navigateToStorageDetail = { folder ->
@@ -90,18 +107,18 @@ fun MainNavHost(
                 val isVisibleBottomSheet = folderType == FolderManageType.CREATE
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", isVisibleBottomSheet)
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", false)
-                appState.navController.popBackStack()
+                appState.navController.popBackStackWithClearFocus()
             },
             navigateToComplete = {
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", true)
-                appState.navController.popBackStack()
+                appState.navController.popBackStackWithClearFocus()
             },
         )
         storageDetailNavigation(
             onClickBackIcon = { isChanged ->
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isRemoveSuccess", false)
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", isChanged)
-                appState.navController.popBackStack()
+                appState.navController.popBackStackWithClearFocus()
             },
             navigateToFolderManager = { itemId, type ->
                 val folderManageType = if (type == EditActionType.FolderEdit) FolderManageType.CHANGE else FolderManageType.CREATE
@@ -110,20 +127,22 @@ fun MainNavHost(
             navigateToStorage = { isRemoveSuccess ->
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", isRemoveSuccess)
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isRemoveSuccess", isRemoveSuccess)
-                appState.navController.popBackStack()
+                appState.navController.popBackStackWithClearFocus()
             },
+            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
         )
         classificationNavigation(
-            onClickBackIcon = { appState.navController.popBackStack() },
-            navigateToHome = { appState.navController.popBackStack() },
+            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
+            onClickBackIcon = { appState.navController.popBackStackWithClearFocus() },
+            navigateToHome = { appState.navController.popBackStackWithClearFocus() },
         )
         saveLinkNavigation(
-            onClickBackIcon = { appState.navController.popBackStack() },
+            onClickBackIcon = { appState.navController.popBackStackWithClearFocus() },
             onClickSaveButton = { appState.navController.navigateToSaveLinkSelectFolder(copiedUrl = it) },
         )
         saveLinkSelectFolder(
             onClickBackButton = {
-                appState.navController.popBackStack()
+                appState.navController.popBackStackWithClearFocus()
             },
             finishSaveLink = {
                 appState.navController.navigateToHome(
@@ -137,6 +156,9 @@ fun MainNavHost(
             onClickAddNewFolder = { url ->
                 appState.navController.navigateToHomeCrateFolder(urlLink = url)
             },
+        )
+        webViewNavigation(
+            navigateToPopBackStack = { appState.navController.popBackStackWithClearFocus() },
         )
     }
 }

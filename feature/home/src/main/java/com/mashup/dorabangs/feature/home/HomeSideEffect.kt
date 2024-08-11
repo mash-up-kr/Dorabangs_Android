@@ -10,8 +10,8 @@ sealed class HomeSideEffect {
     data class SaveLink(val folderId: String, val urlLink: String) : HomeSideEffect()
     object NavigateHomeAfterSaveLink : HomeSideEffect()
     data class NavigateSelectLinkFromService(val urlLink: String) : HomeSideEffect()
+    object NavigateToCompleteMovingFolder : HomeSideEffect()
     object ResetPostList : HomeSideEffect()
     data class UpdatePost(val post: FeedCardUiModel) : HomeSideEffect()
-
     data class DeletePost(val postId: String) : HomeSideEffect()
 }

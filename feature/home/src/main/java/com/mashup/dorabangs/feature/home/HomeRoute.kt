@@ -38,13 +38,14 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun HomeRoute(
     modifier: Modifier = Modifier,
     view: View = LocalView.current,
+    navigateToCreateFolder: () -> Unit,
+    navigateToHomeTutorial: () -> Unit,
+    navigateToWebView: (String) -> Unit,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToClassification: () -> Unit = {},
     navigateToSaveScreenWithLink: (String) -> Unit = {},
     navigateToSaveScreenWithoutLink: () -> Unit = {},
-    navigateToCreateFolder: () -> Unit,
-    navigateToHomeTutorial: () -> Unit,
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -103,7 +104,10 @@ fun HomeRoute(
                 snackBarHostState.currentSnackbarData?.dismiss()
             }
 
-            is HomeSideEffect.NavigateToCreateFolder -> navigateToCreateFolder()
+            is HomeSideEffect.NavigateToCreateFolder -> {
+                viewModel.updateEditType(isEditPostFolder = true)
+                navigateToCreateFolder()
+            }
 
             is HomeSideEffect.ResetPostList -> postList.clear()
 
@@ -140,6 +144,10 @@ fun HomeRoute(
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
             onClickBookMarkButton = { postId, isFavorite -> viewModel.updateFavoriteItem(postId, isFavorite) },
+            onClickCardItem = { cardInfo ->
+                viewModel.updateReadAt(cardInfo)
+                navigateToWebView(cardInfo.url)
+            },
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
@@ -187,15 +195,26 @@ fun HomeRoute(
         DoraBottomSheet.MovingFolderBottomSheet(
             modifier = modifier,
             isShowSheet = state.isShowMovingFolderSheet,
-            folderList = state.folderList.toSelectBottomSheetModel(state.changeFolderId.ifEmpty { state.selectedFolderId }),
-            onDismissRequest = { viewModel.setVisibleMovingFolderBottomSheet(false) },
+            folderList = state.folderList.toSelectBottomSheetModel(
+                state.changeFolderId.ifEmpty {
+                    val originFolder = state.selectedFolderId
+                    viewModel.updateSelectFolderId(originFolder)
+                    originFolder
+                },
+            ),
+            onDismissRequest = {
+                viewModel.updateSelectFolderId(state.selectedFolderId)
+                viewModel.setVisibleMovingFolderBottomSheet(false)
+            },
             onClickCreateFolder = {
                 viewModel.setVisibleMovingFolderBottomSheet(
                     visible = false,
                     isNavigate = true,
                 )
             },
-            onClickMoveFolder = { selectFolder -> viewModel.updateSelectFolderId(selectFolder) },
+            onClickMoveFolder = { selectFolder ->
+                viewModel.updateSelectFolderId(selectFolder)
+            },
             btnEnable = state.selectedFolderId != state.changeFolderId,
             onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId) },
         )

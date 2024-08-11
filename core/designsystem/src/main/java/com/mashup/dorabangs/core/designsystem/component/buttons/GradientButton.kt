@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -26,6 +25,7 @@ import androidx.compose.ui.unit.dp
 fun GradientButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    gradientModifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.shape,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
@@ -48,11 +48,7 @@ fun GradientButton(
         interactionSource = interactionSource,
     ) {
         Box(
-            modifier = Modifier
-                .defaultMinSize(
-                    minWidth = ButtonDefaults.MinWidth,
-                    minHeight = ButtonDefaults.MinHeight,
-                )
+            modifier = gradientModifier
                 .background(brush = containerColor, shape = shape)
                 .padding(contentPadding),
             contentAlignment = Alignment.Center,

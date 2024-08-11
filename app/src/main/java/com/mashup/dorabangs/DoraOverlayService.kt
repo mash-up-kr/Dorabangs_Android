@@ -66,26 +66,28 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val url = intent?.getStringExtra(URL).orEmpty()
         if (url.isNotBlank()) {
+            val view = showOverlay(url)
             serviceScope.launch {
                 val localFolderId = getFolderId.invoke()
                 delay(3000L)
                 if (localFolderId.isNotBlank()) {
+                    windowManager.removeView(view)
                     saveLinkUseCase.invoke(
-                        Link(
+                        link = Link(
                             folderId = localFolderId,
                             url = url,
                         ),
+                        fetchUpdate = true,
                     )
                 }
                 stopSelf()
             }
         }
-        showOverlay(url)
 
         return START_NOT_STICKY
     }
 
-    private fun showOverlay(copiedUrl: String) {
+    private fun showOverlay(copiedUrl: String): ComposeView {
         _lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
         _lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
@@ -95,6 +97,7 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
             setContent {
                 DoraSnackBarWithShareScreen(
                     onClick = {
+                        windowManager.removeView(this)
                         job.cancel()
                         val encodedUrl = URLEncoder.encode(copiedUrl, "UTF-8")
                         val deepLinkUri = Uri.parse("linkit://linksave/$encodedUrl")
@@ -118,12 +121,7 @@ class DoraOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         params.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
 
         windowManager.addView(overlayView, params)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        windowManager.removeView(overlayView)
-        job.cancel()
+        return overlayView
     }
 
     companion object {

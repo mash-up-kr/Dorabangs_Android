@@ -18,7 +18,7 @@ interface AIClassificationRepository {
 
     suspend fun moveAllPostsToRecommendedFolder(
         suggestionFolderId: String,
-    ): AIClassificationPosts
+    ): DoraSampleResponse
 
     suspend fun getAIClassificationPostsByFolder(
         folderId: String,
@@ -32,4 +32,9 @@ interface AIClassificationRepository {
     ): DoraSampleResponse
 
     suspend fun getAIClassificationCount(): Int
+
+    suspend fun moveSinglePostToRecommendedFolder(
+        postId: String,
+        suggestionFolderId: String,
+    ): DoraSampleResponse
 }

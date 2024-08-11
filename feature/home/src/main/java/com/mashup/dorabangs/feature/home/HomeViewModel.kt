@@ -7,6 +7,7 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
@@ -174,7 +175,7 @@ class HomeViewModel @Inject constructor(
             reduce {
                 state.copy(
                     tapElements = folderList.mapIndexed { index, folder ->
-                        DoraChipUiModel(
+                        FeedUiModel.DoraChipUiModel(
                             id = folder.id.orEmpty(),
                             title = folder.name,
                             icon = setDefaultFolderIcon(index),
@@ -369,6 +370,7 @@ class HomeViewModel @Inject constructor(
         isScrollLoading = false
     }
 
+
     fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
         val post = postCache[postId] ?: return@doraLaunch
         intent {
@@ -422,9 +424,12 @@ class HomeViewModel @Inject constructor(
         if (response.isSuccess) {
             intent {
                 postSideEffect(HomeSideEffect.DeletePost(postId))
-                idListCache[getCacheKey(state)] = idListCache[getCacheKey(state)]?.filterNot { it == postId } ?: emptyList()
-                idListCache["all"] = idListCache["all"]?.filterNot { it == postId } ?: emptyList()
-                idListCache["favorite"] = idListCache["favorite"]?.filterNot { it == postId } ?: emptyList()
+                idListCache[getCacheKey(state)] =
+                    idListCache[getCacheKey(state)]?.filterNot { it == postId } ?: emptyList()
+                idListCache["all"] =
+                    idListCache["all"]?.filterNot { it == postId } ?: emptyList()
+                idListCache["favorite"] =
+                    idListCache["favorite"]?.filterNot { it == postId } ?: emptyList()
             }
         }
     }
@@ -444,9 +449,54 @@ class HomeViewModel @Inject constructor(
      * 링크 폴더 이동
      */
     fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
-        changePostFolderUseCase(postId = postId, folderId = folderId)
+        val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
-        // TODO - 실패 성공 여부 리스트 업데이트
+        if (isSuccess) {
+            // intent { postSideEffect(HomeSideEffect) }
+        }
+    }
+
+    /**
+     * 링크 수정 - 새 폴더 추가 후 폴더 이동
+     */
+    fun createFolderWithMoveLink(folderName: String, postId: String) =
+        viewModelScope.doraLaunch {
+            val newFolder = createFolderUseCase.invoke(
+                folderList = NewFolderNameList(
+                    names = listOf(folderName)
+                )
+            )
+            if (newFolder.isSuccess) {
+                val newFolderId = newFolder.result.firstOrNull()?.id
+                newFolderId?.let { folderId ->
+                    val moveFolder =
+                        changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
+                    if (moveFolder.isSuccess) {
+                        intent {
+                            postSideEffect(HomeSideEffect.NavigateToCompleteMovingFolder)
+                            updateEditType(isEditPostFolder = false)
+                        }
+                    }
+                }
+            }
+        }
+
+    fun updateEditType(isEditPostFolder: Boolean) = intent {
+        reduce { state.copy(isEditPostFolder = isEditPostFolder) }
+    }
+
+    /**
+     * 웹뷰 이동 시 읽음 처리
+     */
+    fun updateReadAt(cardInfo: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
+        intent {
+            if (cardInfo.readAt.isNullOrEmpty()) {
+                patchPostInfoUseCase.invoke(
+                    postId = cardInfo.postId,
+                    PostInfo(readAt = FeedUiModel.FeedCardUiModel.createCurrentTime()),
+                )
+            }
+        }
     }
 
     fun updatePost(postId: String) = viewModelScope.doraLaunch {
