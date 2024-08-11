@@ -19,14 +19,16 @@ interface PostDao {
         """
     SELECT * FROM localPostItemEntity
     WHERE (:isRead = 1) OR (:isRead = 0 AND readAt = '' OR readAt IS NULL)
-    ORDER BY createdAt ASC """)
+    ORDER BY createdAt ASC """,
+    )
     fun getAllPostsOrderedByAsc(isRead: Boolean?): PagingSource<Int, LocalPostItemEntity>
 
     @Query(
         """
     SELECT * FROM localPostItemEntity
     WHERE (:isRead = 1) OR (:isRead = 0 AND readAt = '' OR readAt IS NULL)
-    ORDER BY createdAt DESC """)
+    ORDER BY createdAt DESC """,
+    )
     fun getAllPostsOrderedByDesc(isRead: Boolean?): PagingSource<Int, LocalPostItemEntity>
 
     /**
