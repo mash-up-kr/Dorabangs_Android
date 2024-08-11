@@ -25,7 +25,7 @@ data class SavedLinkInfoResponseModel(
     val url: String? = "",
     val userId: String? = "",
     val thumbnailImgUrl: String = "",
-    val aiStatusResponseModel: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
+    val aiStatus: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
 )
 
 @Serializable
@@ -57,7 +57,7 @@ fun LinksFromFolderResponseModel.toDomainModel() =
                 isFavorite = it.isFavorite,
                 createdAt = it.createdAt.orEmpty(),
                 thumbnailImgUrl = it.thumbnailImgUrl,
-                aiStatus = it.aiStatusResponseModel.toDomain()
+                aiStatus = it.aiStatus.toDomain()
             )
         }
     )
@@ -74,7 +74,7 @@ fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
         url = url,
         userId = userId,
         thumbnailImgUrl = thumbnailImgUrl,
-        aiStatus = aiStatusResponseModel.toDomain(),
+        aiStatus = aiStatus.toDomain(),
     )
 }
 

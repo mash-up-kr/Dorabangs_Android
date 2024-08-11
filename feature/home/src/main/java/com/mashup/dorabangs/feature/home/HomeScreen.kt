@@ -77,6 +77,7 @@ fun HomeScreen(
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
+    requestUpdate: (String) -> Unit = {},
 ) {
 
     Box(
@@ -228,9 +229,8 @@ fun HomeScreen(
                             isFavorite
                         )
                     },
-                ) {
-                    // Todo :: 포스트 삭제 후 포스트 업데이트 로직 작성
-                }
+                    requestUpdate = { requestUpdate.invoke(it) }
+                )
             }
 
             Box(
@@ -270,7 +270,7 @@ private fun LazyListScope.Feeds(
     feeds: SnapshotStateList<FeedCardUiModel>,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
-    refreshPageList: () -> Unit = {},
+    requestUpdate: (String) -> Unit,
 ) {
     items(
         count = feeds.size,
@@ -289,7 +289,7 @@ private fun LazyListScope.Feeds(
                     !cardInfo.isFavorite,
                 )
             },
-            updateCardState = { refreshPageList() },
+            requestUpdate = { requestUpdate.invoke(it) }
         )
 
         Box(

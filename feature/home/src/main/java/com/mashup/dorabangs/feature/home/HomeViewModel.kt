@@ -19,6 +19,7 @@ import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetPostsFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
 import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
+import com.mashup.dorabangs.domain.usecase.posts.GetPostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPostsPageUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetUnReadPostsCountUseCase
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
@@ -61,6 +62,7 @@ class HomeViewModel @Inject constructor(
     private val deletePostUseCase: DeletePostUseCase,
     private val changePostFolderUseCase: ChangePostFolder,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
+    private val getPostUseCase: GetPostUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -346,7 +348,7 @@ class HomeViewModel @Inject constructor(
         )
 
         var folderList = state.folderList
-        if (folderList.isNullOrEmpty()) {
+        if (folderList.isEmpty()) {
             folderList = getFolderList().toList()
         }
 
@@ -360,6 +362,7 @@ class HomeViewModel @Inject constructor(
         newPostList.forEach { post ->
             postCache[post.postId] = post
         }
+
         idListCache[cacheKey] =
             (idListCache[cacheKey] ?: emptyList()) + newPostList.map { it.postId }
 
@@ -445,6 +448,27 @@ class HomeViewModel @Inject constructor(
         changePostFolderUseCase(postId = postId, folderId = folderId)
         setVisibleMovingFolderBottomSheet(false)
         // TODO - 실패 성공 여부 리스트 업데이트
+    }
+
+    fun updatePost(postId: String) = viewModelScope.doraLaunch {
+        intent {
+            val newPostList = postList.value.toMutableList()
+            val postIndex = newPostList.indexOfFirst { it.postId == postId }
+            if (postIndex == -1) return@intent
+
+            val post = getPostUseCase(postId)
+            var folderList = state.folderList
+            if (folderList.isEmpty()) {
+                folderList = getFolderList().toList()
+            }
+
+            val category = folderList.firstOrNull { it.id == post.folderId }?.name.orEmpty()
+            val newPost = post.toUiModel(category)
+
+            postCache[postId] = newPost
+            newPostList[postIndex] = newPost
+            postSideEffect(HomeSideEffect.UpdatePost(newPost))
+        }
     }
 
     companion object {

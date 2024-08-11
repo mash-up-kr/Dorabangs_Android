@@ -37,6 +37,9 @@ class PostsRepositoryImpl @Inject constructor(
     override suspend fun saveLink(link: Link) =
         postsRemoteDataSource.saveLink(link)
 
+    override suspend fun getPost(postId: String) =
+        postsRemoteDataSource.getPost(postId).toDomain()
+
     override suspend fun patchPostInfo(postId: String, postInfo: PostInfo): DoraSampleResponse =
         runCatching {
             postsRemoteDataSource.patchPostInfo(postId, postInfo)

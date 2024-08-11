@@ -2,6 +2,7 @@ package com.mashup.dorabangs.data.datasource.remote.impl
 
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.data.model.ChangePostFolderIdRequestModel
+import com.mashup.dorabangs.data.model.PostResponseModel
 import com.mashup.dorabangs.data.model.PostsResponseModel
 import com.mashup.dorabangs.data.model.toData
 import com.mashup.dorabangs.data.model.toDomain
@@ -32,6 +33,9 @@ class PostsRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun saveLink(link: Link) =
         postsService.saveLink(link.toData())
+
+    override suspend fun getPost(postId: String): PostResponseModel =
+        postsService.getPost(postId)
 
     override suspend fun patchPostInfo(postId: String, postInfo: PostInfo) =
         postsService.patchPostInfo(postId, postInfo.toDomain())

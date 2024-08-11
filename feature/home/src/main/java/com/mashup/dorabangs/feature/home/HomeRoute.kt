@@ -130,8 +130,10 @@ fun HomeRoute(
             postsList = postList,
             scrollState = scrollState,
             onClickChip = { index ->
-                postList.clear()
-                viewModel.changeSelectedTapIdx(index, scrollState.firstVisibleItemIndex)
+                if (index != state.selectedIndex) {
+                    postList.clear()
+                    viewModel.changeSelectedTapIdx(index, scrollState.firstVisibleItemIndex)
+                }
             },
             onClickMoreButton = { postId, folderId ->
                 viewModel.updateSelectedPostItem(postId = postId, folderId)
@@ -141,6 +143,7 @@ fun HomeRoute(
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
+            requestUpdate = { viewModel.updatePost(it) }
         )
 
         HomeDoraSnackBar(

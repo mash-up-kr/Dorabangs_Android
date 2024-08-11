@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.data.datasource.remote.api
 
+import com.mashup.dorabangs.data.model.PostResponseModel
 import com.mashup.dorabangs.data.model.PostsResponseModel
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.PageData
@@ -18,6 +19,8 @@ interface PostsRemoteDataSource {
     suspend fun saveLink(
         link: Link,
     )
+
+    suspend fun getPost(postId: String): PostResponseModel
 
     suspend fun patchPostInfo(
         postId: String,

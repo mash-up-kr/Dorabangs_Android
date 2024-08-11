@@ -21,6 +21,8 @@ interface PostsRepository {
         link: Link,
     )
 
+    suspend fun getPost(postId: String): Post
+
     suspend fun patchPostInfo(
         postId: String,
         postInfo: PostInfo,

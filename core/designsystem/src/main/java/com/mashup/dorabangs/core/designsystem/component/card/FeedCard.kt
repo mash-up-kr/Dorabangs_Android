@@ -45,7 +45,7 @@ fun FeedCard(
     onClickCardItem: () -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
-    updateCardState: () -> Unit = {},
+    requestUpdate: (String) -> Unit = {},
 ) {
     val loadingSecond = if (!cardInfo.createdAt.isNullOrBlank()) {
         cardInfo.createdAt.convertCreatedSecond()
@@ -63,7 +63,7 @@ fun FeedCard(
                 loadingSecond * 1000L
             }
             delay(currentLoadingSecond)
-            updateCardState()
+            requestUpdate.invoke(cardInfo.postId)
         }
     }
 
