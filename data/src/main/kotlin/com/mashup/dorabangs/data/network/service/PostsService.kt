@@ -30,7 +30,6 @@ interface PostsService {
     @GET("posts/{postId}")
     suspend fun getPost(@Path("postId") postId: String): PostResponseModel
 
-
     @PATCH("posts/{postId}")
     suspend fun patchPostInfo(
         @Path("postId") postId: String,

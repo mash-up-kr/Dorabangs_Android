@@ -57,9 +57,9 @@ fun LinksFromFolderResponseModel.toDomainModel() =
                 isFavorite = it.isFavorite,
                 createdAt = it.createdAt.orEmpty(),
                 thumbnailImgUrl = it.thumbnailImgUrl,
-                aiStatus = it.aiStatus.toDomain()
+                aiStatus = it.aiStatus.toDomain(),
             )
-        }
+        },
     )
 
 fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {

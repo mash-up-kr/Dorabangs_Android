@@ -41,6 +41,6 @@ interface PostsRepository {
         page: Int?,
         order: String?,
         favorite: Boolean?,
-        isRead: Boolean?
+        isRead: Boolean?,
     ): Posts
 }

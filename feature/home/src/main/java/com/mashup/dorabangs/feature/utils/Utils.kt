@@ -9,7 +9,7 @@ fun getCacheKey(state: HomeState) =
         else -> state.tapElements[state.selectedIndex].id
     }
 
-fun getCacheKey(state: HomeState, index:Int) =
+fun getCacheKey(state: HomeState, index: Int) =
     when (state.selectedIndex) {
         0 -> "all"
         1 -> "favorite"

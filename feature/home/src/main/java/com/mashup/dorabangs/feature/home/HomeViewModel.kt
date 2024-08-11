@@ -281,26 +281,25 @@ class HomeViewModel @Inject constructor(
         intent {
             reduce { state.copy(isLoading = true) }
 
+            _postList.value = emptyList()
+            val cacheKey = cacheKey ?: getCacheKey(state)
 
-        _postList.value = emptyList()
-        val cacheKey = cacheKey ?: getCacheKey(state)
+            if (pagingInfoCache.containsKey(cacheKey).not()) {
+                pagingInfoCache[cacheKey] = PagingInfo.getDefault(cacheKey)
+            }
 
-        if (pagingInfoCache.containsKey(cacheKey).not()) {
-            pagingInfoCache[cacheKey] = PagingInfo.getDefault(cacheKey)
-        }
-
-        if (idListCache[cacheKey].isNullOrEmpty()) {
-            loadPostList(
-                state = state,
-                cacheKey = cacheKey,
-                pagingInfo = pagingInfoCache[cacheKey] ?: PagingInfo.getDefault(cacheKey),
-            )
-        } else {
-            val cachedList = idListCache[cacheKey]
+            if (idListCache[cacheKey].isNullOrEmpty()) {
+                loadPostList(
+                    state = state,
+                    cacheKey = cacheKey,
+                    pagingInfo = pagingInfoCache[cacheKey] ?: PagingInfo.getDefault(cacheKey),
+                )
+            } else {
+                val cachedList = idListCache[cacheKey]
                     ?.mapNotNull { postId -> postCache[postId] }
                     .orEmpty()
-            _postList.update { cachedList }
-        }
+                _postList.update { cachedList }
+            }
 
             reduce { state.copy(isLoading = false) }
         }

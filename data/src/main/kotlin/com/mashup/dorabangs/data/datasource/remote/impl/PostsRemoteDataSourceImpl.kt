@@ -53,12 +53,12 @@ class PostsRemoteDataSourceImpl @Inject constructor(
         page: Int?,
         order: String?,
         favorite: Boolean?,
-        isRead: Boolean?
+        isRead: Boolean?,
     ): PostsResponseModel =
         postsService.getPosts(
             page = page,
             order = order,
             favorite = favorite,
-            isRead = isRead
+            isRead = isRead,
         )
 }

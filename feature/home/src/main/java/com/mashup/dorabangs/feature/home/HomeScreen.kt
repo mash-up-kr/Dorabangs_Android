@@ -79,7 +79,6 @@ fun HomeScreen(
     navigateToHomeTutorial: () -> Unit = {},
     requestUpdate: (String) -> Unit = {},
 ) {
-
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -226,10 +225,10 @@ fun HomeScreen(
                     onClickBookMarkButton = { postId, isFavorite ->
                         onClickBookMarkButton(
                             postId,
-                            isFavorite
+                            isFavorite,
                         )
                     },
-                    requestUpdate = { requestUpdate.invoke(it) }
+                    requestUpdate = { requestUpdate.invoke(it) },
                 )
             }
 
@@ -289,7 +288,7 @@ private fun LazyListScope.Feeds(
                     !cardInfo.isFavorite,
                 )
             },
-            requestUpdate = { requestUpdate.invoke(it) }
+            requestUpdate = { requestUpdate.invoke(it) },
         )
 
         Box(

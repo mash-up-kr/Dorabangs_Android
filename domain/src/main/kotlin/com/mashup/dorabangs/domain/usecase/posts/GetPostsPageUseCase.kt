@@ -16,6 +16,6 @@ class GetPostsPageUseCase @Inject constructor(
         page = page,
         order = order,
         favorite = favorite,
-        isRead = isRead
+        isRead = isRead,
     )
 }

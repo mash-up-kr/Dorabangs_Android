@@ -84,13 +84,13 @@ class FolderRepositoryImpl @Inject constructor(
         page: Int,
         order: String,
         limit: Int,
-        isRead: Boolean?
+        isRead: Boolean?,
     ): Posts =
         remoteDataSource.getLinksFromFolder(
             folderId = folderId,
             page = page,
             order = order,
             limit = limit,
-            isRead = isRead
+            isRead = isRead,
         ).toDomainModel()
 }

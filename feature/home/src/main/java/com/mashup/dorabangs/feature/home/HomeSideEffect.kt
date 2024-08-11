@@ -13,5 +13,5 @@ sealed class HomeSideEffect {
     object ResetPostList : HomeSideEffect()
     data class UpdatePost(val post: FeedCardUiModel) : HomeSideEffect()
 
-    data class DeletePost(val postId: String): HomeSideEffect()
+    data class DeletePost(val postId: String) : HomeSideEffect()
 }
