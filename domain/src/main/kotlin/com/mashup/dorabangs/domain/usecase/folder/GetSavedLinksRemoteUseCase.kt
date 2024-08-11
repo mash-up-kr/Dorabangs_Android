@@ -7,21 +7,19 @@ import kotlinx.coroutines.flow.Flow
 import java.util.Locale
 import javax.inject.Inject
 
-class GetSavedLinksFromFolderUseCase @Inject constructor(
+class GetSavedLinksRemoteUseCase @Inject constructor(
     private val folderRepository: FolderRepository,
 ) {
     suspend operator fun invoke(
         needFetchUpdate: Boolean = false,
-        cacheKey: String = "",
         folderId: String?,
         order: String,
         limit: Int,
         isRead: Boolean?,
         totalCount: (Int) -> Unit = {},
     ): Flow<PagingData<SavedLinkDetailInfo>> {
-        return folderRepository.getLinksFromFolder(
+        return folderRepository.getLinksFromFolderRemote(
             needFetchUpdate = needFetchUpdate,
-            cacheKey = cacheKey,
             folderId = folderId,
             order = order.lowercase(Locale.ROOT),
             limit = limit,

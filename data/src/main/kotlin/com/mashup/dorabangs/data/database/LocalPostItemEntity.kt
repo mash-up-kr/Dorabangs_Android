@@ -8,6 +8,7 @@ import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.LinkKeywordInfo
 import com.mashup.dorabangs.domain.model.Post
+import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 
 @Entity
 data class LocalPostItemEntity(
@@ -32,6 +33,22 @@ fun Post.toLocalEntity(): LocalPostItemEntity {
         description = description,
         folderId = folderId,
         isFavorite = isFavorite,
+        keywords = keywords?.map { it.toData() },
+        title = title,
+        url = url,
+        thumbnailImgUrl = thumbnailImgUrl,
+        aiStatusResponseModel = aiStatus.toData(),
+        readAt = readAt,
+    )
+}
+
+fun SavedLinkDetailInfo.toLocalEntity(): LocalPostItemEntity {
+    return LocalPostItemEntity(
+        id = id.orEmpty(),
+        createdAt = createdAt,
+        description = description,
+        folderId = folderId,
+        isFavorite = isFavorite ?: false,
         keywords = keywords?.map { it.toData() },
         title = title,
         url = url,
@@ -66,5 +83,22 @@ fun LocalPostItemEntity.toPost(): Post {
         thumbnailImgUrl = thumbnailImgUrl.orEmpty(),
         aiStatus = aiStatusResponseModel.toDomain(),
         readAt = readAt,
+    )
+}
+
+fun LocalPostItemEntity.toSavedLinkDetailInfo(): SavedLinkDetailInfo {
+    return SavedLinkDetailInfo(
+        id = id,
+        createdAt = createdAt.orEmpty(),
+        description = description.orEmpty(),
+        folderId = folderId.orEmpty(),
+        isFavorite = isFavorite,
+        keywords = keywords?.map { it.toDomain() },
+        title = title.orEmpty(),
+        url = url.orEmpty(),
+        thumbnailImgUrl = thumbnailImgUrl.orEmpty(),
+        aiStatus = aiStatusResponseModel.toDomain(),
+        readAt = readAt,
+        userId = userId,
     )
 }

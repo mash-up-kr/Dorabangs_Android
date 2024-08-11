@@ -18,7 +18,7 @@ import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderById
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
-import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
+import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksRemoteUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangeLocalPostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
 import com.mashup.dorabangs.domain.usecase.posts.DeletePostLocalUseCase
@@ -51,7 +51,6 @@ import javax.inject.Inject
 @HiltViewModel
 class StorageDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val savedLinksFromFolderUseCase: GetSavedLinksFromFolderUseCase,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
     private val deleteFolderUseCase: DeleteFolderUseCase,
     private val deletePostUseCase: DeletePostUseCase,
@@ -61,6 +60,7 @@ class StorageDetailViewModel @Inject constructor(
     private val getPostTestUseCase: GetPostRemoteUseCase,
     private val deletePostLocalUseCase: DeletePostLocalUseCase,
     private val changeLocalPostUseCase: ChangeLocalPostUseCase,
+    private val getSavedLinksRemoteUseCase: GetSavedLinksRemoteUseCase,
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
@@ -146,7 +146,6 @@ class StorageDetailViewModel @Inject constructor(
                 order = order,
                 isRead = isRead,
                 needFetchUpdate = needFetchUpdate,
-                cacheKey = cacheKey,
             )
         }
     }
@@ -156,15 +155,13 @@ class StorageDetailViewModel @Inject constructor(
      */
     private fun getSavedLinkFromCustomFolder(
         needFetchUpdate: Boolean = false,
-        cacheKey: String = "",
         folderId: String?,
         order: String = StorageDetailSort.DESC.name,
         limit: Int = 10,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-        savedLinksFromFolderUseCase.invoke(
+        getSavedLinksRemoteUseCase.invoke(
             needFetchUpdate = needFetchUpdate,
-            cacheKey = cacheKey,
             folderId = folderId,
             order = order,
             isRead = isRead,

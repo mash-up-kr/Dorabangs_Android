@@ -13,27 +13,20 @@ interface PostDao {
      * 전체 post 목록 PagingSource로 가져오기
      */
     @Query("SELECT * FROM localPostItemEntity")
-    fun getPosts(): PagingSource<Int, LocalPostItemEntity>
-
-    @Query("SELECT * FROM localPostItemEntity")
     suspend fun getPostByPage(): List<LocalPostItemEntity>
 
     @Query(
         """
     SELECT * FROM localPostItemEntity
-    WHERE (:isRead = 1) OR (:isRead = 0 AND readAt = '')
-    ORDER BY createdAt ASC
-""",
-    )
+    WHERE (:isRead = 1) OR (:isRead = 0 AND readAt = '' OR readAt IS NULL)
+    ORDER BY createdAt ASC """)
     fun getAllPostsOrderedByAsc(isRead: Boolean?): PagingSource<Int, LocalPostItemEntity>
 
     @Query(
         """
     SELECT * FROM localPostItemEntity
-    WHERE (:isRead = 1) OR (:isRead = 0 AND readAt = '')
-    ORDER BY createdAt DESC
-""",
-    )
+    WHERE (:isRead = 1) OR (:isRead = 0 AND readAt = '' OR readAt IS NULL)
+    ORDER BY createdAt DESC """)
     fun getAllPostsOrderedByDesc(isRead: Boolean?): PagingSource<Int, LocalPostItemEntity>
 
     /**
