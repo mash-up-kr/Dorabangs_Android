@@ -1,5 +1,7 @@
 package com.mashup.dorabangs.data.model
 
+
+import com.mashup.dorabangs.data.database.LocalPostItemEntity
 import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo
@@ -27,6 +29,7 @@ data class PostResponseModel(
     val aiStatus: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
     val thumbnailImgUrl: String = "",
     val readAt: String = "",
+    val keywords: List<LinkKeywordResponseModel> = listOf()
 )
 
 @Serializable

@@ -42,4 +42,16 @@ interface PostsRepository {
     ): DoraSampleResponse
 
     suspend fun getPostsCount(isRead: Boolean? = null): Int
+
+    suspend fun getPostsFromRemote(
+        needFetchUpdate: Boolean,
+        order: String? = null,
+        favorite: Boolean? = null,
+        isRead: Boolean? = null,
+        totalCount: (Int) -> Unit,
+    ): Flow<PagingData<Post>>
+
+    suspend fun deleteLocalPostItem(postId: String)
+
+    suspend fun updateBookMarkState(postId: String, isFavorite:Boolean)
 }
