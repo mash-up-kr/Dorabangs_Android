@@ -13,8 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
@@ -65,20 +62,6 @@ fun StorageDetailRoute(
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     val linksPagingList = storageDetailViewModel.feedListState.collectAsLazyPagingItems()
-
-    LaunchedEffect(linksPagingList.itemSnapshotList) {
-        snapshotFlow { listState.firstVisibleItemIndex }.collect {
-            if (linksPagingList.loadState.refresh is LoadState.NotLoading) {
-                storageDetailViewModel.updateScrollPosition(it)
-            }
-        }
-    }
-
-    LaunchedEffect(linksPagingList.loadState.refresh) {
-        if (linksPagingList.loadState.refresh is LoadState.NotLoading) {
-            listState.animateScrollToItem(state.scrollPosition)
-        }
-    }
 
     LaunchedEffect(Unit) {
         if (state.folderInfo.folderId.isNullOrEmpty()) {
