@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -26,7 +28,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,9 +48,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
@@ -68,8 +69,9 @@ import dev.chrisbanes.haze.hazeChild
 @Composable
 fun HomeScreen(
     state: HomeState,
+    postsList: SnapshotStateList<FeedUiModel.FeedCardUiModel>,
     modifier: Modifier = Modifier,
-    postsPagingList: LazyPagingItems<FeedUiModel.FeedCardUiModel>? = null,
+    scrollState: LazyListState = rememberLazyListState(),
     onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
@@ -77,13 +79,28 @@ fun HomeScreen(
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
+    requestUpdate: (String) -> Unit = {},
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
         val hazeState = remember { HazeState() }
 
-        if (postsPagingList?.itemCount == 0) {
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 104.dp)
+                    .align(Alignment.Center),
+            ) {
+                LottieLoader(
+                    lottieRes = R.raw.spinner,
+                    modifier = Modifier
+                        .size(54.dp)
+                        .align(Alignment.Center),
+                )
+            }
+        } else if (postsList.size == 0) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -132,6 +149,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .haze(hazeState),
+                state = scrollState,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 item {
@@ -202,12 +220,17 @@ fun HomeScreen(
                 }
 
                 Feeds(
-                    feeds = postsPagingList,
+                    feeds = postsList,
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
-                    onClickBookMarkButton = { postId, isFavorite -> onClickBookMarkButton(postId, isFavorite) },
-                    refreshPageList = { postsPagingList?.refresh() },
+                    onClickBookMarkButton = { postId, isFavorite ->
+                        onClickBookMarkButton(
+                            postId,
+                            isFavorite,
+                        )
+                    },
+                    requestUpdate = { requestUpdate.invoke(it) },
                     onClickCardItem = onClickCardItem,
                 )
             }
@@ -246,43 +269,40 @@ fun HomeScreen(
 }
 
 private fun LazyListScope.Feeds(
-    feeds: LazyPagingItems<FeedUiModel.FeedCardUiModel>?,
+    feeds: SnapshotStateList<FeedUiModel.FeedCardUiModel>,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
-    refreshPageList: () -> Unit = {},
+    requestUpdate: (String) -> Unit,
 ) {
-    if (feeds != null) {
-        items(
-            count = feeds.itemCount,
-            key = feeds.itemKey(FeedUiModel.FeedCardUiModel::postId),
-            contentType = feeds.itemContentType { "SavedLinks" },
-        ) { index ->
-            feeds[index]?.let { cardInfo ->
-                FeedCard(
-                    cardInfo = cardInfo,
-                    feedCardEntryPoint = FeedCardEntryPoint.Home,
-                    onClickMoreButton = {
-                        onClickMoreButton(cardInfo.postId, cardInfo.folderId)
-                    },
-                    onClickBookMarkButton = {
-                        onClickBookMarkButton(
-                            cardInfo.postId,
-                            !cardInfo.isFavorite,
-                        )
-                    },
-                    updateCardState = { refreshPageList() },
-                    onClickCardItem = onClickCardItem,
+    items(
+        count = feeds.size,
+        contentType = { index -> feeds[index].isLoading },
+    ) { index ->
+        val cardInfo = feeds[index]
+        FeedCard(
+            cardInfo = cardInfo,
+            feedCardEntryPoint = FeedCardEntryPoint.Home,
+            onClickMoreButton = {
+                onClickMoreButton(cardInfo.postId, cardInfo.folderId)
+            },
+            onClickBookMarkButton = {
+                onClickBookMarkButton(
+                    cardInfo.postId,
+                    !cardInfo.isFavorite,
                 )
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth()
-                        .height(0.5.dp)
-                        .background(DoraColorTokens.G2),
-                )
-            }
-        }
+            },
+            requestUpdate = { requestUpdate.invoke(it) },
+            onClickCardItem = onClickCardItem,
+        )
+
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .fillMaxWidth()
+                .height(0.5.dp)
+                .background(DoraColorTokens.G2),
+        )
     }
 }
 
@@ -458,6 +478,7 @@ fun HomeCarouselPreview() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
+    val postList = remember { mutableStateListOf<FeedUiModel.FeedCardUiModel>() }
     HomeScreen(
         onClickMoreButton = { postId, folderId -> },
         onClickCardItem = {},
@@ -486,5 +507,6 @@ fun HomeScreenPreview() {
                 ),
             ),
         ),
+        postsList = postList,
     )
 }
