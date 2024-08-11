@@ -296,13 +296,15 @@ private fun LazyListScope.Feeds(
             onClickCardItem = onClickCardItem,
         )
 
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .fillMaxWidth()
-                .height(0.5.dp)
-                .background(DoraColorTokens.G2),
-        )
+        if (index != feeds.lastIndex) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .height(0.5.dp)
+                    .background(DoraColorTokens.G2),
+            )
+        }
     }
 }
 
