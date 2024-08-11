@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
 import kotlinx.coroutines.flow.collectLatest
@@ -52,7 +52,7 @@ fun HomeRoute(
     val scope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
 
-    val postList = remember { mutableStateListOf<FeedCardUiModel>() }
+    val postList = remember { mutableStateListOf<FeedUiModel.FeedCardUiModel>() }
     var prevFolderIndex by remember { mutableIntStateOf(0) }
 
     val reachedBottom: Boolean by remember {

@@ -59,6 +59,7 @@ fun LinksFromFolderResponseModel.toDomainModel() =
                 createdAt = it.createdAt.orEmpty(),
                 thumbnailImgUrl = it.thumbnailImgUrl,
                 aiStatus = it.aiStatus.toDomain(),
+                readAt = it.readAt,
             )
         },
     )

@@ -48,14 +48,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
-import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
@@ -73,7 +69,7 @@ import dev.chrisbanes.haze.hazeChild
 @Composable
 fun HomeScreen(
     state: HomeState,
-    postsList: SnapshotStateList<FeedCardUiModel>,
+    postsList: SnapshotStateList<FeedUiModel.FeedCardUiModel>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
     onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
@@ -153,6 +149,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .haze(hazeState),
+                state = scrollState,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 item {
@@ -280,8 +277,7 @@ private fun LazyListScope.Feeds(
 ) {
     items(
         count = feeds.size,
-        key = feeds.itemKey(FeedUiModel.FeedCardUiModel::postId),
-        contentType = feeds.itemContentType { "SavedLinks" },
+        contentType = { index -> feeds[index].isLoading },
     ) { index ->
         val cardInfo = feeds[index]
         FeedCard(
@@ -482,7 +478,7 @@ fun HomeCarouselPreview() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    val postList = remember { mutableStateListOf<FeedCardUiModel>() }
+    val postList = remember { mutableStateListOf<FeedUiModel.FeedCardUiModel>() }
     HomeScreen(
         onClickMoreButton = { postId, folderId -> },
         onClickCardItem = {},

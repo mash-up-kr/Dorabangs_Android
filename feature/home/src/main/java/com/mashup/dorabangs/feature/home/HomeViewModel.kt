@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
-import com.mashup.dorabangs.core.designsystem.component.chips.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
@@ -67,11 +65,11 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
-    private val _postList = MutableStateFlow<List<FeedCardUiModel>>(emptyList())
-    val postList: StateFlow<List<FeedCardUiModel>> = _postList.asStateFlow()
+    private val _postList = MutableStateFlow<List<FeedUiModel.FeedCardUiModel>>(emptyList())
+    val postList: StateFlow<List<FeedUiModel.FeedCardUiModel>> = _postList.asStateFlow()
 
     private val pagingInfoCache = HashMap<String, PagingInfo>()
-    private val postCache = HashMap<String, FeedCardUiModel>()
+    private val postCache = HashMap<String, FeedUiModel.FeedCardUiModel>()
     val scrollCache = HashMap<Int, Int>()
     val idListCache = HashMap<String, List<String>>()
 
@@ -370,7 +368,6 @@ class HomeViewModel @Inject constructor(
         isScrollLoading = false
     }
 
-
     fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
         val post = postCache[postId] ?: return@doraLaunch
         intent {
@@ -463,8 +460,8 @@ class HomeViewModel @Inject constructor(
         viewModelScope.doraLaunch {
             val newFolder = createFolderUseCase.invoke(
                 folderList = NewFolderNameList(
-                    names = listOf(folderName)
-                )
+                    names = listOf(folderName),
+                ),
             )
             if (newFolder.isSuccess) {
                 val newFolderId = newFolder.result.firstOrNull()?.id

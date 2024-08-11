@@ -1,6 +1,6 @@
 package com.mashup.dorabangs.feature.home
 
-import com.mashup.dorabangs.core.designsystem.component.card.FeedCardUiModel
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 
 sealed class HomeSideEffect {
     data class ShowSnackBar(val copiedText: String) : HomeSideEffect()
@@ -12,6 +12,6 @@ sealed class HomeSideEffect {
     data class NavigateSelectLinkFromService(val urlLink: String) : HomeSideEffect()
     object NavigateToCompleteMovingFolder : HomeSideEffect()
     object ResetPostList : HomeSideEffect()
-    data class UpdatePost(val post: FeedCardUiModel) : HomeSideEffect()
+    data class UpdatePost(val post: FeedUiModel.FeedCardUiModel) : HomeSideEffect()
     data class DeletePost(val postId: String) : HomeSideEffect()
 }
