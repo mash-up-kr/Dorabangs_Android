@@ -118,7 +118,7 @@ private fun KeywordChip(
             }
             .clip(DoraRoundTokens.Round99)
             .clickable(onClick = onClickKeyword)
-            .padding(horizontal = 20.dp, vertical = 6.dp),
+            .padding(horizontal = 20.dp, vertical = 9.dp),
     ) {
         if (!isSelected) {
             Text(
