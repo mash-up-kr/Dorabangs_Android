@@ -27,6 +27,7 @@ data class PostResponseModel(
     val aiStatus: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
     val thumbnailImgUrl: String = "",
     val readAt: String = "",
+    val keywords: List<LinkKeywordResponseModel> = listOf(),
 )
 
 @Serializable

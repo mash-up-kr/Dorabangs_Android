@@ -6,7 +6,7 @@ import com.mashup.dorabangs.domain.repository.PostsRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetPosts @Inject constructor(
+class GetPostRemoteUseCase @Inject constructor(
     private val postsRepository: PostsRepository,
 ) {
     suspend operator fun invoke(
@@ -15,7 +15,7 @@ class GetPosts @Inject constructor(
         favorite: Boolean? = null,
         isRead: Boolean? = null,
         totalCount: (Int) -> Unit = {},
-    ): Flow<PagingData<Post>> = postsRepository.getPosts(
+    ): Flow<PagingData<Post>> = postsRepository.getPostsFromRemote(
         needFetchUpdate = needFetchUpdate,
         order = order?.lowercase(),
         favorite = favorite,

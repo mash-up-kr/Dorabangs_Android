@@ -447,7 +447,7 @@ class HomeViewModel @Inject constructor(
      */
     fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
-        setVisibleMovingFolderBottomSheet(false)
+
         if (isSuccess) {
             intent {
                 val beforeFolderId = postList.value.find { it.postId == postId }?.folderId.orEmpty()
@@ -459,6 +459,8 @@ class HomeViewModel @Inject constructor(
                     idListCache[folderId] = idListCache[folderId]?.plus(postId) ?: emptyList()
                 }
                 postSideEffect(HomeSideEffect.UpdatePost(changedPost))
+                setVisibleMovingFolderBottomSheet(false)
+                updateSelectFolderId(state.selectedFolderId)
             }
         }
     }

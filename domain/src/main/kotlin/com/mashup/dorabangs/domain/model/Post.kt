@@ -17,6 +17,7 @@ data class Post(
     val title: String = "",
     val description: String = "",
     val isFavorite: Boolean = false,
+    val keywords: List<LinkKeywordInfo>? = listOf(),
     val createdAt: String = "",
     val thumbnailImgUrl: String = "",
     val aiStatus: AIStatus = AIStatus.NOTHING,

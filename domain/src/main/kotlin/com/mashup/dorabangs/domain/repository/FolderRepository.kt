@@ -36,10 +36,13 @@ interface FolderRepository {
         isRead: Boolean?,
     ): Posts
 
-    fun updatePostItem(
-        page: Int,
-        cacheKey: String,
-        cachedKeyList: List<String>,
-        item: SavedLinkDetailInfo,
-    )
+    suspend fun getLinksFromFolderRemote(
+        needFetchUpdate: Boolean,
+        folderId: String?,
+        order: String,
+        limit: Int,
+        favorite: Boolean? = null,
+        isRead: Boolean? = null,
+        totalCount: (Int) -> Unit,
+    ): Flow<PagingData<SavedLinkDetailInfo>>
 }
