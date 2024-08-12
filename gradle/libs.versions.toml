@@ -3,7 +3,7 @@
 #project
 compile-sdk = "34"
 min-sdk = "28"
-target-sdk = "33"
+target-sdk = "34"
 version-code = "2"
 versionName = "1.0.0"
 
