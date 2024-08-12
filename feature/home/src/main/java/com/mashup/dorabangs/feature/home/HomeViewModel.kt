@@ -478,8 +478,7 @@ class HomeViewModel @Inject constructor(
             if (newFolder.isSuccess) {
                 val newFolderId = newFolder.result.firstOrNull()?.id
                 newFolderId?.let { folderId ->
-                    val moveFolder =
-                        changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
+                    val moveFolder = changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
                     if (moveFolder.isSuccess) {
                         intent {
                             postSideEffect(HomeSideEffect.NavigateToCompleteMovingFolder)
@@ -487,6 +486,12 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 }
+            } else {
+                setTextHelperEnable(
+                    isEnable = true,
+                    helperMsg = newFolder.errorMsg,
+                    lastCheckedFolderName = folderName,
+                )
             }
         }
 
