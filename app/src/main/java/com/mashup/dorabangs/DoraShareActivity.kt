@@ -8,14 +8,19 @@ class DoraShareActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (handleShare().isNotBlank()) {
+        val shareText = handleShare()
+        if (shareText.isNotBlank() && shareText != "Linkit") {
             Intent(this, DoraOverlayService::class.java)
                 .apply {
-                    putExtra(URL, handleShare())
+                    putExtra(URL, shareText)
                 }.also {
                     startService(it)
                     finish()
                 }
+        } else {
+            // 뭐 result set을 하던 해서 돌아가면 저화면 나가는게 필요할 것 같은데
+            // 저쪽 뭔지 몰라서 호현이에게 넘깁니다?
+            finish()
         }
     }
 
