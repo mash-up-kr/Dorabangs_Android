@@ -32,7 +32,7 @@ data class SavedLinkInfoResponseModel(
 
 @Serializable
 data class LinkKeywordResponseModel(
-    val id: String = "",
+    val id: String? = "",
     val name: String = "",
 )
 
@@ -84,7 +84,7 @@ fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
 
 fun LinkKeywordResponseModel.toDomain(): LinkKeywordInfo {
     return LinkKeywordInfo(
-        id = id,
+        id = id.orEmpty(),
         name = name,
     )
 }
