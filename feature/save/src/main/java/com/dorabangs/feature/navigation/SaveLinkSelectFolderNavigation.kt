@@ -17,8 +17,6 @@ import java.nio.charset.StandardCharsets
 fun NavController.navigateToSaveLinkSelectFolder(
     copiedUrl: String,
     navOptions: NavOptions? = null,
-
-    
 ) {
     val encodedUrl = URLEncoder.encode(copiedUrl, StandardCharsets.UTF_8.toString())
     navigate("${NavigationRoute.SaveLink.SelectFolder.route}/$encodedUrl", navOptions)
