@@ -26,10 +26,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dorabangs.feature.save.DoraSaveState
-import com.mashup.dorabangs.core.designsystem.R as DR
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
+import com.mashup.dorabangs.core.designsystem.R as DR
 
 @Composable
 fun DoraLinkSaveTitleAndLinkScreen(
@@ -47,7 +47,7 @@ fun DoraLinkSaveTitleAndLinkScreen(
             Image(
                 modifier = Modifier.size(size = 88.dp),
                 painter = painterResource(id = DR.drawable.default_thumbnail),
-                contentDescription = "default url 썸네일"
+                contentDescription = "default url 썸네일",
             )
         } else {
             AsyncImage(

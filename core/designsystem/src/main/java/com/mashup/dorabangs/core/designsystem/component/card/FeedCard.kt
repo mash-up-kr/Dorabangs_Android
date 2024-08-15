@@ -96,7 +96,7 @@ fun FeedCard(
                         .aspectRatio(1f)
                         .background(color = DoraColorTokens.G1),
                     painter = painterResource(id = R.drawable.default_thumbnail),
-                    contentDescription = "default url 썸네일"
+                    contentDescription = "default url 썸네일",
                 )
             } else {
                 AsyncImage(
