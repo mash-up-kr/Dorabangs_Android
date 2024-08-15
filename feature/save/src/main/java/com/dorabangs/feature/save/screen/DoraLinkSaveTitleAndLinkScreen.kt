@@ -1,7 +1,6 @@
 package com.dorabangs.feature.save.screen
 
 import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,22 +42,15 @@ fun DoraLinkSaveTitleAndLinkScreen(
             .height(88.dp)
             .clip(DoraRoundTokens.Round12),
     ) {
-        if (state.thumbnailUrl.isBlank()) {
-            Image(
-                modifier = Modifier.size(size = 88.dp),
-                painter = painterResource(id = DR.drawable.default_thumbnail),
-                contentDescription = "default url 썸네일",
-            )
-        } else {
-            AsyncImage(
-                modifier = Modifier.size(size = 88.dp),
-                model = ImageRequest.Builder(context)
-                    .data(state.thumbnailUrl)
-                    .crossfade(false)
-                    .build(),
-                contentDescription = "url 썸네일",
-            )
-        }
+        AsyncImage(
+            modifier = Modifier.size(size = 88.dp),
+            model = ImageRequest.Builder(context)
+                .data(state.thumbnailUrl)
+                .crossfade(false)
+                .build(),
+            error = painterResource(id = DR.drawable.default_thumbnail),
+            contentDescription = "url 썸네일",
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()

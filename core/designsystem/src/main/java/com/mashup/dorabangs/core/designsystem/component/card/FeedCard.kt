@@ -1,6 +1,5 @@
 package com.mashup.dorabangs.core.designsystem.component.card
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -89,26 +88,16 @@ fun FeedCard(
                 isLoading = cardInfo.isLoading,
             )
             Spacer(modifier = Modifier.width(13.dp))
-            if (cardInfo.thumbnail.isNullOrBlank()) {
-                Image(
-                    modifier = Modifier
-                        .size(size = 80.dp)
-                        .aspectRatio(1f)
-                        .background(color = DoraColorTokens.G1),
-                    painter = painterResource(id = R.drawable.default_thumbnail),
-                    contentDescription = "default url 썸네일",
-                )
-            } else {
-                AsyncImage(
-                    modifier = Modifier
-                        .size(size = 80.dp)
-                        .aspectRatio(1f)
-                        .background(color = DoraColorTokens.G1),
-                    model = cardInfo.thumbnail,
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "url 썸네일",
-                )
-            }
+            AsyncImage(
+                modifier = Modifier
+                    .size(size = 80.dp)
+                    .aspectRatio(1f)
+                    .background(color = DoraColorTokens.G1),
+                model = cardInfo.thumbnail,
+                error = painterResource(id = R.drawable.default_thumbnail),
+                contentScale = ContentScale.Crop,
+                contentDescription = "url 썸네일",
+            )
         }
         if (cardInfo.isLoading) {
             CardProgressBar(
