@@ -152,7 +152,7 @@ fun HomeRoute(
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
-            requestUpdate = { viewModel.updatePost(it) },
+            requestUpdate = viewModel::updatePost,
         )
 
         HomeDoraSnackBar(

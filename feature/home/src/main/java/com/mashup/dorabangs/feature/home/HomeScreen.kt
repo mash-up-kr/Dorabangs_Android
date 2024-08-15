@@ -289,7 +289,7 @@ private fun LazyListScope.Feeds(
             onClickBookMarkButton = {
                 onClickBookMarkButton(
                     cardInfo.postId,
-                    !cardInfo.isFavorite,
+                    cardInfo.isFavorite.not(),
                 )
             },
             requestUpdate = { requestUpdate.invoke(it) },

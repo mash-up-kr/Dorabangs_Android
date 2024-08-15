@@ -69,10 +69,11 @@ class HomeViewModel @Inject constructor(
     val postList: StateFlow<List<FeedUiModel.FeedCardUiModel>> = _postList.asStateFlow()
 
     private val pagingInfoCache = HashMap<String, PagingInfo>()
-    private val postCache = HashMap<String, FeedUiModel.FeedCardUiModel>()
-    val scrollCache = HashMap<Int, Int>()
-    val idListCache = HashMap<String, List<String>>()
 
+    private val postIdCache = HashMap<String, List<String>>()
+    private val postDataCache = HashMap<String, FeedUiModel.FeedCardUiModel>()
+
+    val scrollCache = HashMap<Int, Int>()
     var isScrollLoading: Boolean = false
 
     init {
@@ -287,19 +288,21 @@ class HomeViewModel @Inject constructor(
                 pagingInfoCache[cacheKey] = PagingInfo.getDefault(cacheKey)
             }
 
-            if (idListCache[cacheKey].isNullOrEmpty()) {
+            if (postIdCache[cacheKey].isNullOrEmpty()) {
                 loadPostList(
                     state = state,
                     cacheKey = cacheKey,
                     pagingInfo = pagingInfoCache[cacheKey] ?: PagingInfo.getDefault(cacheKey),
                 )
             } else {
-                val cachedList = idListCache[cacheKey]
-                    ?.mapNotNull { postId -> postCache[postId] }
+                val cachedList = postIdCache[cacheKey]
+                    ?.mapNotNull { postId -> postDataCache[postId] }
                     .orEmpty()
                 _postList.update { cachedList }
             }
-
+        }
+    }.invokeOnCompletion {
+        intent {
             reduce { state.copy(isLoading = false) }
         }
     }
@@ -358,18 +361,20 @@ class HomeViewModel @Inject constructor(
             }
 
         newPostList.forEach { post ->
-            postCache[post.postId] = post
+            postDataCache[post.postId] = post
         }
 
-        idListCache[cacheKey] =
-            (idListCache[cacheKey] ?: emptyList()) + newPostList.map { it.postId }
+        postIdCache[cacheKey] =
+            (postIdCache[cacheKey] ?: emptyList()) + newPostList.map { it.postId }
 
         _postList.update { _postList.value + newPostList }
         isScrollLoading = false
     }
 
     fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
-        val post = postCache[postId] ?: return@doraLaunch
+        val post = postDataCache[postId] ?: return@doraLaunch
+        if (post.isFavorite == isFavorite) return@doraLaunch
+
         intent {
             postSideEffect(HomeSideEffect.UpdatePost(post.copy(isFavorite = isFavorite)))
         }
@@ -384,12 +389,12 @@ class HomeViewModel @Inject constructor(
             postInfo = postInfo,
         )
 
-        if (response.isSuccess.not()) {
+        if (response.isSuccess) {
+            postDataCache[post.postId] = post.copy(isFavorite = isFavorite)
+        } else {
             intent {
                 postSideEffect(HomeSideEffect.UpdatePost(post.copy(isFavorite = isFavorite.not())))
             }
-        } else {
-            postCache[post.postId] = post.copy(isFavorite = isFavorite)
         }
     }
 
@@ -421,12 +426,9 @@ class HomeViewModel @Inject constructor(
         if (response.isSuccess) {
             intent {
                 postSideEffect(HomeSideEffect.DeletePost(postId))
-                idListCache[getCacheKey(state)] =
-                    idListCache[getCacheKey(state)]?.filterNot { it == postId } ?: emptyList()
-                idListCache["all"] =
-                    idListCache["all"]?.filterNot { it == postId } ?: emptyList()
-                idListCache["favorite"] =
-                    idListCache["favorite"]?.filterNot { it == postId } ?: emptyList()
+                listOf(getCacheKey(state), "all", "favorite").forEach { key ->
+                    postIdCache[key] = postIdCache[key]?.filterNot { it == postId } ?: emptyList()
+                }
             }
         }
     }
@@ -453,10 +455,10 @@ class HomeViewModel @Inject constructor(
                 val beforeFolderId = postList.value.find { it.postId == postId }?.folderId.orEmpty()
                 val category = state.folderList.find { it.id == folderId }?.name.orEmpty()
                 val changedPost = getPostUseCase(postId).toUiModel(category)
-                postCache[postId] = changedPost
-                idListCache[beforeFolderId] = idListCache[beforeFolderId]?.toMutableList()?.filterNot { it == postId } ?: emptyList()
-                if (idListCache[folderId].isNullOrEmpty().not()) {
-                    idListCache[folderId] = idListCache[folderId]?.plus(postId) ?: emptyList()
+                postDataCache[postId] = changedPost
+                postIdCache[beforeFolderId] = postIdCache[beforeFolderId]?.toMutableList()?.filterNot { it == postId } ?: emptyList()
+                if (postIdCache[folderId].isNullOrEmpty().not()) {
+                    postIdCache[folderId] = postIdCache[folderId]?.plus(postId) ?: emptyList()
                 }
                 postSideEffect(HomeSideEffect.UpdatePost(changedPost))
             }
@@ -509,7 +511,7 @@ class HomeViewModel @Inject constructor(
     fun updatePost(postId: String) = viewModelScope.doraLaunch {
         intent {
             val newPostList = postList.value.toMutableList()
-            val postIndex = newPostList.indexOfFirst { it.postId == postId }
+            val postIndex = postList.value.indexOfFirst { it.postId == postId }
             if (postIndex == -1) return@intent
 
             val post = getPostUseCase(postId)
@@ -521,8 +523,9 @@ class HomeViewModel @Inject constructor(
             val category = folderList.firstOrNull { it.id == post.folderId }?.name.orEmpty()
             val newPost = post.toUiModel(category)
 
-            postCache[postId] = newPost
+            postDataCache[postId] = newPost
             newPostList[postIndex] = newPost
+            _postList.value = newPostList
             postSideEffect(HomeSideEffect.UpdatePost(newPost))
         }
     }
