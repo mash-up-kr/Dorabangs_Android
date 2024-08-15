@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.core.designsystem.component.card
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -88,15 +89,26 @@ fun FeedCard(
                 isLoading = cardInfo.isLoading,
             )
             Spacer(modifier = Modifier.width(13.dp))
-            AsyncImage(
-                modifier = Modifier
-                    .size(size = 80.dp)
-                    .aspectRatio(1f)
-                    .background(color = DoraColorTokens.G1),
-                model = cardInfo.thumbnail,
-                contentScale = ContentScale.Crop,
-                contentDescription = "url 썸네일",
-            )
+            if (cardInfo.thumbnail.isNullOrBlank()) {
+                Image(
+                    modifier = Modifier
+                        .size(size = 80.dp)
+                        .aspectRatio(1f)
+                        .background(color = DoraColorTokens.G1),
+                    painter = painterResource(id = R.drawable.default_thumbnail),
+                    contentDescription = "default url 썸네일"
+                )
+            } else {
+                AsyncImage(
+                    modifier = Modifier
+                        .size(size = 80.dp)
+                        .aspectRatio(1f)
+                        .background(color = DoraColorTokens.G1),
+                    model = cardInfo.thumbnail,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = "url 썸네일",
+                )
+            }
         }
         if (cardInfo.isLoading) {
             CardProgressBar(
@@ -320,6 +332,23 @@ sealed class FeedCardEntryPoint {
     object StorageDetail : FeedCardEntryPoint()
     object AiClassification : FeedCardEntryPoint()
     object Home : FeedCardEntryPoint()
+}
+
+@Preview
+@Composable
+private fun PreviewFeedCardWithEmptyUrl() {
+    val cardInfo =
+        FeedUiModel.FeedCardUiModel(
+            postId = "",
+            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
+            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
+            keywordList = listOf("다연", "호현", "석주"),
+            category = "디자인",
+            createdAt = "2024-07-18T15:50:36.181Z",
+            thumbnail = "https://www.naver.com",
+            folderId = "",
+        )
+    FeedCard(cardInfo = cardInfo, feedCardEntryPoint = FeedCardEntryPoint.StorageDetail)
 }
 
 @Preview
