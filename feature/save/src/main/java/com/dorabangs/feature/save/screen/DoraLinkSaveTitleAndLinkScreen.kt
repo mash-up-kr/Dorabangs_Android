@@ -1,6 +1,7 @@
 package com.dorabangs.feature.save.screen
 
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dorabangs.feature.save.DoraSaveState
+import com.mashup.dorabangs.core.designsystem.R as DR
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
@@ -40,14 +43,22 @@ fun DoraLinkSaveTitleAndLinkScreen(
             .height(88.dp)
             .clip(DoraRoundTokens.Round12),
     ) {
-        AsyncImage(
-            modifier = Modifier.size(size = 88.dp),
-            model = ImageRequest.Builder(context)
-                .data(state.thumbnailUrl)
-                .crossfade(false)
-                .build(),
-            contentDescription = "url 썸네일",
-        )
+        if (state.thumbnailUrl.isBlank()) {
+            Image(
+                modifier = Modifier.size(size = 88.dp),
+                painter = painterResource(id = DR.drawable.default_thumbnail),
+                contentDescription = "default url 썸네일"
+            )
+        } else {
+            AsyncImage(
+                modifier = Modifier.size(size = 88.dp),
+                model = ImageRequest.Builder(context)
+                    .data(state.thumbnailUrl)
+                    .crossfade(false)
+                    .build(),
+                contentDescription = "url 썸네일",
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
