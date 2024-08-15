@@ -42,7 +42,7 @@ fun NavGraphBuilder.storageDetailNavigation(
                 folderItem = item,
                 isVisibleBottomSheet = isVisibleBottomSheet,
                 isChangedData = isChangedData,
-                onClickBackIcon = { onClickBackIcon(isChangedData) },
+                onClickBackIcon = onClickBackIcon,
                 navigateToStorage = navigateToStorage,
                 navigateToFolderManager = navigateToFolderManager,
                 navigateToWebView = navigateToWebView,

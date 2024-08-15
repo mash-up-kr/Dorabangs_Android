@@ -1,5 +1,10 @@
 package com.mashup.dorabangs.domain.model
 
+data class LinkKeywordInfo(
+    val id: String,
+    val name: String?,
+)
+
 data class SavedLinkDetailInfo(
     val id: String?,
     val folderId: String?,
@@ -13,9 +18,4 @@ data class SavedLinkDetailInfo(
     val thumbnailImgUrl: String,
     val aiStatus: AIStatus,
     val readAt: String?,
-)
-
-data class LinkKeywordInfo(
-    val id: String,
-    val name: String?,
 )

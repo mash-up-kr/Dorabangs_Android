@@ -7,6 +7,7 @@ import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.NewFolderName
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import kotlinx.coroutines.flow.Flow
 
@@ -27,10 +28,21 @@ interface FolderRepository {
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<SavedLinkDetailInfo>>
 
-    fun updatePostItem(
+    suspend fun getPostPageFromFolder(
+        folderId: String?,
         page: Int,
-        cacheKey: String,
-        cachedKeyList: List<String>,
-        item: SavedLinkDetailInfo,
-    )
+        order: String,
+        limit: Int,
+        isRead: Boolean?,
+    ): Posts
+
+    suspend fun getLinksFromFolderRemote(
+        needFetchUpdate: Boolean,
+        folderId: String?,
+        order: String,
+        limit: Int,
+        favorite: Boolean? = null,
+        isRead: Boolean? = null,
+        totalCount: (Int) -> Unit,
+    ): Flow<PagingData<SavedLinkDetailInfo>>
 }
