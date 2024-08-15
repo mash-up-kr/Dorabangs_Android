@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
@@ -18,18 +19,18 @@ import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderById
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
-import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksRemoteUseCase
-import com.mashup.dorabangs.domain.usecase.posts.ChangeLocalPostUseCase
+import com.mashup.dorabangs.domain.usecase.folder.GetSavedLinksFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
-import com.mashup.dorabangs.domain.usecase.posts.DeletePostLocalUseCase
 import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
-import com.mashup.dorabangs.domain.usecase.posts.GetPostRemoteUseCase
+import com.mashup.dorabangs.domain.usecase.posts.GetPosts
 import com.mashup.dorabangs.domain.usecase.posts.PatchPostInfoUseCase
 import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.FeedCacheKeyType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSideEffect
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailSort
 import com.mashup.dorabangs.feature.storage.storagedetail.model.StorageDetailState
+import com.mashup.dorabangs.feature.storage.storagedetail.model.toPost
+import com.mashup.dorabangs.feature.storage.storagedetail.model.toSavedLinkDetailInfo
 import com.mashup.dorabangs.feature.storage.storagedetail.model.toUiModel
 import com.mashup.dorabangs.util.getCacheKey
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,29 +52,19 @@ import javax.inject.Inject
 @HiltViewModel
 class StorageDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val savedLinksFromFolderUseCase: GetSavedLinksFromFolderUseCase,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
+    private val getPostsUseCase: GetPosts,
     private val deleteFolderUseCase: DeleteFolderUseCase,
     private val deletePostUseCase: DeletePostUseCase,
     private val getFolderListUseCase: GetFolderListUseCase,
     private val changePostFolderUseCase: ChangePostFolder,
     private val getFolderByIdUseCase: GetFolderById,
-    private val getPostTestUseCase: GetPostRemoteUseCase,
-    private val deletePostLocalUseCase: DeletePostLocalUseCase,
-    private val changeLocalPostUseCase: ChangeLocalPostUseCase,
-    private val getSavedLinksRemoteUseCase: GetSavedLinksRemoteUseCase,
 ) : ViewModel(), ContainerHost<StorageDetailState, StorageDetailSideEffect> {
     override val container = container<StorageDetailState, StorageDetailSideEffect>(StorageDetailState())
 
     private val _feedListState: MutableStateFlow<PagingData<FeedUiModel.FeedCardUiModel>> = MutableStateFlow(value = PagingData.empty())
     val feedListState: StateFlow<PagingData<FeedUiModel.FeedCardUiModel>> = _feedListState.asStateFlow()
-
-    fun updateScrollPosition(position: Int) = intent {
-        reduce { state.copy(scrollPosition = position) }
-    }
-
-    fun updateChangeData(isChange: Boolean) = intent {
-        reduce { state.copy(isChangeData = isChange) }
-    }
 
     fun setFolderInfo(folderItem: Folder) = intent {
         reduce {
@@ -134,18 +125,21 @@ class StorageDetailViewModel @Inject constructor(
                 favorite = false,
                 isRead = isRead,
                 needFetchUpdate = needFetchUpdate,
+                cacheKey = cacheKey,
             )
             FolderType.FAVORITE -> getSavedLinkFromDefaultFolder(
                 order = order,
                 favorite = true,
                 isRead = isRead,
                 needFetchUpdate = needFetchUpdate,
+                cacheKey = cacheKey,
             )
             else -> getSavedLinkFromCustomFolder(
                 folderId = folderId,
                 order = order,
                 isRead = isRead,
                 needFetchUpdate = needFetchUpdate,
+                cacheKey = cacheKey,
             )
         }
     }
@@ -155,13 +149,15 @@ class StorageDetailViewModel @Inject constructor(
      */
     private fun getSavedLinkFromCustomFolder(
         needFetchUpdate: Boolean = false,
+        cacheKey: String = "",
         folderId: String?,
         order: String = StorageDetailSort.DESC.name,
         limit: Int = 10,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-        getSavedLinksRemoteUseCase.invoke(
+        savedLinksFromFolderUseCase.invoke(
             needFetchUpdate = needFetchUpdate,
+            cacheKey = cacheKey,
             folderId = folderId,
             order = order,
             isRead = isRead,
@@ -190,12 +186,14 @@ class StorageDetailViewModel @Inject constructor(
      */
     private fun getSavedLinkFromDefaultFolder(
         needFetchUpdate: Boolean = false,
+        cacheKey: String = "",
         order: String = StorageDetailSort.DESC.name,
         favorite: Boolean = false,
         isRead: Boolean? = null,
     ) = viewModelScope.doraLaunch {
-        getPostTestUseCase.invoke(
+        getPostsUseCase.invoke(
             needFetchUpdate = needFetchUpdate,
+            cacheKey = cacheKey,
             order = order,
             favorite = favorite,
             isRead = isRead,
@@ -279,8 +277,10 @@ class StorageDetailViewModel @Inject constructor(
     fun addFavoriteItem(cardInfo: FeedUiModel.FeedCardUiModel, isFavorite: Boolean, page: Int) = viewModelScope.doraLaunch {
         intent {
             val cachedList = feedListState.value
+            var updateItemInfo = FeedUiModel.FeedCardUiModel()
             _feedListState.value = feedListState.value.map { item ->
                 if (item.postId == cardInfo.postId) {
+                    updateItemInfo = item.copy(isFavorite = isFavorite.not())
                     item.copy(isFavorite = isFavorite.not())
                 } else {
                     item
@@ -292,7 +292,29 @@ class StorageDetailViewModel @Inject constructor(
             ).isSuccess
 
             if (isSuccessFavorite) {
-                changeLocalPostUseCase(postId = cardInfo.postId, isFavorite.not())
+                val cacheKey = if (state.tabInfo.selectedTabIdx == 0) {
+                    getCacheKey(FeedCacheKeyType.ALL.name, state.isLatestSort.name)
+                } else {
+                    getCacheKey(FeedCacheKeyType.UNREAD.name, state.isLatestSort.name)
+                }
+                when (state.folderInfo.folderType) {
+                    FolderType.ALL, FolderType.FAVORITE -> {
+                        getPostsUseCase.updatePostItem(
+                            page = page + 1,
+                            cacheKey = cacheKey,
+                            cachedKeyList = getUpdateKeyCase(),
+                            item = updateItemInfo.toPost(),
+                        )
+                    }
+                    else -> {
+                        savedLinksFromFolderUseCase.updatePostItem(
+                            page = page + 1,
+                            cacheKey = cacheKey,
+                            cachedKeyList = getUpdateKeyCase(),
+                            item = updateItemInfo.toSavedLinkDetailInfo(),
+                        )
+                    }
+                }
             } else {
                 _feedListState.value = cachedList
             }
@@ -321,8 +343,7 @@ class StorageDetailViewModel @Inject constructor(
         val isSuccessDeleted = deletePostUseCase(postId).isSuccess
         setVisibleDialog(false)
         if (isSuccessDeleted) {
-            updateChangeData(true)
-            deletePostLocalUseCase(postId)
+            _feedListState.value = feedListState.value.filter { item -> item.postId != postId }
         }
     }
 
@@ -352,11 +373,7 @@ class StorageDetailViewModel @Inject constructor(
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
-            updateChangeData(true)
-            intent {
-                deletePostLocalUseCase(postId)
-                updateSelectFolderId(state.folderInfo.folderId.orEmpty())
-            }
+            intent { postSideEffect(StorageDetailSideEffect.RefreshPagingList) }
         }
     }
 
@@ -447,5 +464,14 @@ class StorageDetailViewModel @Inject constructor(
             state.copy(isShowMovingFolderSheet = visible)
         }
         if (isNavigate) postSideEffect(StorageDetailSideEffect.NavigateToFolderManage(itemId = state.currentClickPostId))
+    }
+
+    private fun getUpdateKeyCase(): List<String> {
+        return listOf(
+            getCacheKey(FeedCacheKeyType.ALL.name, FeedCacheKeyType.DESC.name),
+            getCacheKey(FeedCacheKeyType.UNREAD.name, FeedCacheKeyType.DESC.name),
+            getCacheKey(FeedCacheKeyType.ALL.name, FeedCacheKeyType.ASC.name),
+            getCacheKey(FeedCacheKeyType.UNREAD.name, FeedCacheKeyType.DESC.name),
+        )
     }
 }

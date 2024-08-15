@@ -1,9 +1,8 @@
 package com.mashup.dorabangs.core.webview
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.view.View
-import android.view.WindowManager
+import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,21 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.web.AccompanistWebChromeClient
-import com.google.accompanist.web.WebView
-import com.google.accompanist.web.rememberWebViewState
+import androidx.compose.ui.viewinterop.AndroidView
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 
-@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun DoraWebView(
     url: String,
     navigateToPopBackStack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val state = rememberWebViewState(url)
     val context = LocalContext.current
-    val webViewChromeClient = remember { CustomWebChromeClient(context) }
+    val webView = remember { WebView(context) }
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -36,38 +31,16 @@ fun DoraWebView(
             isTitleCenter = true,
             onClickBackIcon = { navigateToPopBackStack() },
         )
-        WebView(
-            state = state,
-            modifier = Modifier.fillMaxSize(),
-            onCreated = { webView ->
-                webView.settings.javaScriptEnabled = true
-            },
-            chromeClient = webViewChromeClient,
-        )
-    }
-}
-
-class CustomWebChromeClient(
-    private val context: Context,
-) : AccompanistWebChromeClient() {
-    private val windowManager: WindowManager by lazy {
-        context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    }
-
-    private var customView: View? = null
-    override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
-        if (customView != null) {
-            callback?.onCustomViewHidden()
-            return
-        }
-
-        customView = view
-        windowManager.addView(customView, WindowManager.LayoutParams())
-    }
-
-    override fun onHideCustomView() {
-        super.onHideCustomView()
-        windowManager.removeView(customView)
-        customView = null
+        AndroidView(factory = {
+            webView.apply {
+                this.layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                )
+                this.webViewClient = WebViewClient()
+            }
+        }, update = {
+            it.loadUrl(url)
+        })
     }
 }

@@ -5,5 +5,4 @@ data class FolderManageState(
     val folderName: String = "",
     val helperEnable: Boolean = false,
     val helperMessage: String = "",
-    val lastCheckedFolderName: String = "",
 )
