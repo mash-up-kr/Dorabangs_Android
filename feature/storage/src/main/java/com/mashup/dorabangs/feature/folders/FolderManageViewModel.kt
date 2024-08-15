@@ -3,7 +3,6 @@ package com.mashup.dorabangs.feature.folders
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
-import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.NewFolderName
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.model.toSampleResponse
@@ -49,7 +48,6 @@ class FolderManageViewModel @Inject constructor(
             FolderManageType.CHANGE -> {
                 editFolderNameUseCase.invoke(folderName = NewFolderName(name = folderName), folderId = folderId)
             }
-            else -> DoraSampleResponse()
         }
 
         if (isSuccessNewFolder.isSuccess) {
@@ -57,20 +55,13 @@ class FolderManageViewModel @Inject constructor(
                 postSideEffect(FolderManageSideEffect.NavigateToComplete)
             }
         } else {
-            setTextHelperEnable(
-                isEnable = true,
-                helperMsg = isSuccessNewFolder.errorMsg,
-                lastCheckedFolderName = folderName,
-            )
+            setTextHelperEnable(isEnable = true, helperMessage = isSuccessNewFolder.errorMsg)
         }
     }
 
     fun setFolderName(folderName: String) = intent {
         reduce {
-            state.copy(
-                folderName = folderName,
-                helperEnable = folderName == state.lastCheckedFolderName,
-            )
+            state.copy(folderName = folderName)
         }
     }
 
@@ -87,22 +78,10 @@ class FolderManageViewModel @Inject constructor(
                     intent { postSideEffect(FolderManageSideEffect.NavigateToComplete) }
                 }
             }
-        } else {
-            setTextHelperEnable(
-                isEnable = true,
-                helperMsg = newFolder.errorMsg,
-                lastCheckedFolderName = folderName,
-            )
         }
     }
 
-    private fun setTextHelperEnable(
-        isEnable: Boolean,
-        helperMsg: String,
-        lastCheckedFolderName: String,
-    ) = intent {
-        reduce {
-            state.copy(helperEnable = isEnable, helperMessage = helperMsg, lastCheckedFolderName = lastCheckedFolderName)
-        }
+    private fun setTextHelperEnable(isEnable: Boolean, helperMessage: String) = intent {
+        reduce { state.copy(helperEnable = isEnable, helperMessage = helperMessage) }
     }
 }

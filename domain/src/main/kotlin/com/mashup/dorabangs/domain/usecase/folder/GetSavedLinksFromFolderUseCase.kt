@@ -29,4 +29,18 @@ class GetSavedLinksFromFolderUseCase @Inject constructor(
             totalCount = totalCount,
         )
     }
+
+    fun updatePostItem(
+        page: Int,
+        cacheKey: String,
+        cachedKeyList: List<String>,
+        item: SavedLinkDetailInfo,
+    ) {
+        folderRepository.updatePostItem(
+            page = page,
+            cacheKey = cacheKey,
+            cachedKeyList = cachedKeyList,
+            item = item,
+        )
+    }
 }
