@@ -35,7 +35,6 @@ class DoraSaveViewModel @Inject constructor(
 
     fun getFolderList() = viewModelScope.doraLaunch {
         intent { reduce { state.copy(isLoading = true) } }
-        delay(4000L)
         val list = getFolderListUseCase.invoke()
         val firstItem = listOf(
             SelectableFolder(
