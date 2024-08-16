@@ -3,6 +3,7 @@ package com.mashup.dorabangs.core.designsystem.component.bottomsheet
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -32,6 +33,7 @@ fun DoraBaseBottomSheet(
         containerColor = containerColor,
         shape = DoraRoundTokens.TopRound16,
         dragHandle = { DoraDragHandle(Modifier.padding(top = 6.dp)) },
+        windowInsets = WindowInsets(bottom = 48.dp),
         onDismissRequest = onDismissRequest,
     ) {
         content()

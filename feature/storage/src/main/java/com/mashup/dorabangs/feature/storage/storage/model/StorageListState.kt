@@ -2,7 +2,6 @@ package com.mashup.dorabangs.feature.storage.storage.model
 
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
-import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.storagedetail.model.ToastState
 
 data class StorageListState(
@@ -14,7 +13,6 @@ data class StorageListState(
     val needToUpdate: Boolean = false,
     val isFirstEntry: Boolean = true,
     val toastState: ToastState = ToastState(),
-    val folderEditType: FolderManageType? = null,
 )
 
 data class ToastState(

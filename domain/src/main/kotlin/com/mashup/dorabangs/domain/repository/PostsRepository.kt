@@ -11,11 +11,19 @@ interface PostsRepository {
 
     suspend fun getPosts(
         needFetchUpdate: Boolean,
+        cacheKey: String,
         order: String? = null,
         favorite: Boolean? = null,
         isRead: Boolean? = null,
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<Post>>
+
+    fun updatePostItem(
+        page: Int,
+        cacheKey: String,
+        cachedKeyList: List<String>,
+        item: Post,
+    )
 
     suspend fun saveLink(
         link: Link,
@@ -34,16 +42,4 @@ interface PostsRepository {
     ): DoraSampleResponse
 
     suspend fun getPostsCount(isRead: Boolean? = null): Int
-
-    suspend fun getPostsFromRemote(
-        needFetchUpdate: Boolean,
-        order: String? = null,
-        favorite: Boolean? = null,
-        isRead: Boolean? = null,
-        totalCount: (Int) -> Unit,
-    ): Flow<PagingData<Post>>
-
-    suspend fun deleteLocalPostItem(postId: String)
-
-    suspend fun updateBookMarkState(postId: String, isFavorite: Boolean)
 }

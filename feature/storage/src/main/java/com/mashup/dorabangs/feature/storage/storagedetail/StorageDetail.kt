@@ -48,7 +48,7 @@ fun StorageDetailRoute(
     folderItem: Folder,
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
-    onClickBackIcon: (Boolean) -> Unit,
+    onClickBackIcon: () -> Unit,
     navigateToWebView: (String) -> Unit,
     modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
@@ -63,13 +63,12 @@ fun StorageDetailRoute(
     val listState = rememberLazyListState()
     val linksPagingList = storageDetailViewModel.feedListState.collectAsLazyPagingItems()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(isChangedData) {
         if (state.folderInfo.folderId.isNullOrEmpty()) {
-            storageDetailViewModel.updateChangeData(false)
             storageDetailViewModel.setFolderInfo(folderItem)
         }
+
         if (isChangedData) {
-            storageDetailViewModel.updateChangeData(true)
             if (state.editActionType == EditActionType.FolderEdit) {
                 storageDetailViewModel.getFolderInfoById(
                     folderId = state.folderInfo.folderId.orEmpty(),
@@ -105,7 +104,7 @@ fun StorageDetailRoute(
             linksPagingList = linksPagingList,
             listState = listState,
             isCollapsed = isCollapsed,
-            onClickBackIcon = { onClickBackIcon(state.isChangeData) },
+            onClickBackIcon = onClickBackIcon,
             onClickTabItem = storageDetailViewModel::changeSelectedTabIdx,
             onClickSortedIcon = storageDetailViewModel::clickFeedSort,
             onClickBookMarkButton = storageDetailViewModel::addFavoriteItem,
