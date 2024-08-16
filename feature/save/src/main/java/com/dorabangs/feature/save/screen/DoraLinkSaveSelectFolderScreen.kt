@@ -57,6 +57,7 @@ fun DoraLinkSaveSelectFolderScreen(
             DoraSelectableFolderListItems(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState()),
+                isLoading = state.isLoading,
                 items = state.folderList.toSelectableItems(),
                 onClickItem = onClickItem,
             )

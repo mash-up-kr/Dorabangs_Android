@@ -11,6 +11,7 @@ import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.posts.SaveLinkUseCase
 import com.mashup.dorabangs.domain.usecase.save.DoraUrlCheckUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -33,6 +34,8 @@ class DoraSaveViewModel @Inject constructor(
     }
 
     fun getFolderList() = viewModelScope.doraLaunch {
+        intent { reduce { state.copy(isLoading = true) } }
+        delay(4000L)
         val list = getFolderListUseCase.invoke()
         val firstItem = listOf(
             SelectableFolder(
@@ -61,6 +64,12 @@ class DoraSaveViewModel @Inject constructor(
                 state.copy(
                     folderList = firstItem + newList,
                 )
+            }
+        }
+    }.invokeOnCompletion {
+        intent {
+            reduce {
+                state.copy(isLoading = false)
             }
         }
     }
