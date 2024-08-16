@@ -114,18 +114,18 @@ fun MainNavHost(
                 val isVisibleBottomSheet = folderType == FolderManageType.CREATE
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set(
                     "isVisibleBottomSheet",
-                    isVisibleBottomSheet
+                    isVisibleBottomSheet,
                 )
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set(
                     "isChanged",
-                    false
+                    false,
                 )
                 appState.navController.popBackStackWithClearFocus()
             },
             navigateToComplete = {
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set(
                     "isChanged",
-                    true
+                    true,
                 )
                 appState.navController.popBackStackWithClearFocus()
             },
@@ -134,11 +134,11 @@ fun MainNavHost(
             onClickBackIcon = { isChanged ->
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set(
                     "isRemoveSuccess",
-                    false
+                    false,
                 )
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set(
                     "isChanged",
-                    isChanged
+                    isChanged,
                 )
                 appState.navController.popBackStackWithClearFocus()
             },
@@ -148,17 +148,17 @@ fun MainNavHost(
                 appState.navController.navigateToStorageFolderManage(
                     folderManageType = folderManageType,
                     actionType = type,
-                    itemId = itemId
+                    itemId = itemId,
                 )
             },
             navigateToStorage = { isRemoveSuccess ->
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set(
                     "isChanged",
-                    isRemoveSuccess
+                    isRemoveSuccess,
                 )
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set(
                     "isRemoveSuccess",
-                    isRemoveSuccess
+                    isRemoveSuccess,
                 )
                 appState.navController.popBackStackWithClearFocus()
             },
