@@ -3,7 +3,6 @@ package com.mashup.dorabangs.feature.folders
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
-import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.NewFolderName
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.model.toSampleResponse
@@ -49,7 +48,6 @@ class FolderManageViewModel @Inject constructor(
             FolderManageType.CHANGE -> {
                 editFolderNameUseCase.invoke(folderName = NewFolderName(name = folderName), folderId = folderId)
             }
-            else -> DoraSampleResponse()
         }
 
         if (isSuccessNewFolder.isSuccess) {

@@ -364,12 +364,9 @@ class HomeViewModel @Inject constructor(
      */
     fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
-
+        setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
-            intent {
-                setVisibleMovingFolderBottomSheet(false)
-                updateSelectFolderId(state.selectedFolderId)
-            }
+            // intent { postSideEffect(HomeSideEffect) }
         }
     }
 
