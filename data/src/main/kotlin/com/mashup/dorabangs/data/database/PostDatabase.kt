@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.mashup.dorabangs.data.utils.ListTypeConverters
 
-@Database(entities = [LocalPostItemEntity::class, RemoteKeys::class], version = 1)
+@Database(entities = [LocalPostItemEntity::class, RemoteKeys::class], version = 1, exportSchema = false)
 @TypeConverters(ListTypeConverters::class)
 abstract class PostDatabase : RoomDatabase() {
 

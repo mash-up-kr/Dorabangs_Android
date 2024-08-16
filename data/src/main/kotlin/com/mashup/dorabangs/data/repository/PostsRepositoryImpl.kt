@@ -10,6 +10,7 @@ import com.mashup.dorabangs.data.database.RemoteKeys
 import com.mashup.dorabangs.data.database.toLocalEntity
 import com.mashup.dorabangs.data.database.toPost
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
+import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.pagingsource.PostRemoteMediator
 import com.mashup.dorabangs.data.utils.PAGING_SIZE
 import com.mashup.dorabangs.data.utils.doraPager
@@ -17,6 +18,7 @@ import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
+import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.repository.PostsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -49,6 +51,9 @@ class PostsRepositoryImpl @Inject constructor(
     override suspend fun saveLink(link: Link) =
         postsRemoteDataSource.saveLink(link)
 
+    override suspend fun getPost(postId: String) =
+        postsRemoteDataSource.getPost(postId).toDomain()
+
     override suspend fun patchPostInfo(postId: String, postInfo: PostInfo): DoraSampleResponse =
         runCatching {
             postsRemoteDataSource.patchPostInfo(postId, postInfo)
@@ -75,6 +80,19 @@ class PostsRepositoryImpl @Inject constructor(
 
     override suspend fun getPostsCount(isRead: Boolean?): Int =
         postsRemoteDataSource.getPostsCount(isRead)
+
+    override suspend fun getPostsPage(
+        page: Int?,
+        order: String?,
+        favorite: Boolean?,
+        isRead: Boolean?,
+    ): Posts =
+        postsRemoteDataSource.getPostPage(
+            page = page,
+            order = order,
+            favorite = favorite,
+            isRead = isRead,
+        ).toDomain()
 
     @OptIn(ExperimentalPagingApi::class)
     override suspend fun getPostsFromRemote(

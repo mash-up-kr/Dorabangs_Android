@@ -3,6 +3,7 @@ package com.mashup.dorabangs.data.network.service
 import com.mashup.dorabangs.data.model.ChangePostFolderIdRequestModel
 import com.mashup.dorabangs.data.model.LinkRequestModel
 import com.mashup.dorabangs.data.model.PostInfoRequestModel
+import com.mashup.dorabangs.data.model.PostResponseModel
 import com.mashup.dorabangs.data.model.PostsResponseModel
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -25,6 +26,9 @@ interface PostsService {
 
     @POST("posts")
     suspend fun saveLink(@Body link: LinkRequestModel)
+
+    @GET("posts/{postId}")
+    suspend fun getPost(@Path("postId") postId: String): PostResponseModel
 
     @PATCH("posts/{postId}")
     suspend fun patchPostInfo(
