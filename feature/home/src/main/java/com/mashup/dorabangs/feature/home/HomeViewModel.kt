@@ -364,9 +364,12 @@ class HomeViewModel @Inject constructor(
      */
     fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
-        setVisibleMovingFolderBottomSheet(false)
+
         if (isSuccess) {
-            // intent { postSideEffect(HomeSideEffect) }
+            intent {
+                setVisibleMovingFolderBottomSheet(false)
+                updateSelectFolderId(state.selectedFolderId)
+            }
         }
     }
 
@@ -374,16 +377,24 @@ class HomeViewModel @Inject constructor(
      * 링크 수정 - 새 폴더 추가 후 폴더 이동
      */
     fun createFolderWithMoveLink(folderName: String, postId: String) = viewModelScope.doraLaunch {
-        val newFolder = createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
+        val newFolder =
+            createFolderUseCase.invoke(folderList = NewFolderNameList(names = listOf(folderName)))
         if (newFolder.isSuccess) {
             val newFolderId = newFolder.result.firstOrNull()?.id
             newFolderId?.let { folderId ->
-                val moveFolder = changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
+                val moveFolder =
+                    changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
                 if (moveFolder.isSuccess) {
                     intent {
                         postSideEffect(HomeSideEffect.NavigateToCompleteMovingFolder)
                         updateEditType(isEditPostFolder = false)
                     }
+                } else {
+                    setTextHelperEnable(
+                        isEnable = true,
+                        helperMsg = newFolder.errorMsg,
+                        lastCheckedFolderName = folderName,
+                    )
                 }
             }
         }

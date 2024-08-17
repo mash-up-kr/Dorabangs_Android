@@ -8,6 +8,7 @@ import com.mashup.dorabangs.domain.usecase.folder.DeleteFolderUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.user.GetNeedToUpdateDataUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetNeedToUpdateDataUseCase
+import com.mashup.dorabangs.feature.folders.model.FolderManageType
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListSideEffect
 import com.mashup.dorabangs.feature.storage.storage.model.StorageListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,11 +44,12 @@ class StorageViewModel @Inject constructor(
         }
     }
 
-    fun deleteFolder(folderId: String) = viewModelScope.doraLaunch {
+    fun deleteFolder(folderId: String, toastMsg: String) = viewModelScope.doraLaunch {
         val isSuccessDelete = deleteFolderUseCase(folderId = folderId)
         if (isSuccessDelete.isSuccess) {
             getFolderList()
             setVisibleDialog(false)
+            setToastState(toastMsg)
         } else {
             // TODO - 에러처리
         }
@@ -80,6 +82,10 @@ class StorageViewModel @Inject constructor(
 
     fun setIsFirstEntry(isFirst: Boolean) = intent {
         reduce { state.copy(isFirstEntry = isFirst) }
+    }
+
+    fun updateFolderEditType(type: FolderManageType?) = intent {
+        reduce { state.copy(folderEditType = type) }
     }
 
     fun setVisibleMoreButtonBottomSheet(visible: Boolean, isNavigate: Boolean = false) = intent {

@@ -28,5 +28,6 @@
 
     <string name="toast_remove_folder">삭제 완료했어요.</string>
     <string name="toast_rename_folder">폴더 이름을 변경했어요.</string>
+    <string name="toast_create_folder">폴더를 추가했어요.</string>
 
 </resources>
