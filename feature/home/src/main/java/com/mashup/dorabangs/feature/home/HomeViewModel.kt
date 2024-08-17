@@ -1,5 +1,6 @@
 package com.mashup.dorabangs.feature.home
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,11 +32,7 @@ import com.mashup.dorabangs.feature.model.PagingInfo
 import com.mashup.dorabangs.feature.model.toUiModel
 import com.mashup.dorabangs.feature.utils.getCacheKey
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -65,8 +62,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
-    private val _postList = MutableStateFlow<List<FeedUiModel.FeedCardUiModel>>(emptyList())
-    val postList: StateFlow<List<FeedUiModel.FeedCardUiModel>> = _postList.asStateFlow()
+    val postList = mutableStateListOf<FeedUiModel.FeedCardUiModel>()
 
     private val pagingInfoCache = HashMap<String, PagingInfo>()
 
@@ -97,7 +93,7 @@ class HomeViewModel @Inject constructor(
         setPostsCount()
     }
 
-    fun changeSelectedTapIdx(index: Int, firstVisibleItemPosition: Int) = intent {
+    fun changeSelectedTabIdx(index: Int, firstVisibleItemPosition: Int) = intent {
         scrollCache[state.selectedIndex] = firstVisibleItemPosition
 
         reduce {
@@ -281,7 +277,7 @@ class HomeViewModel @Inject constructor(
         intent {
             reduce { state.copy(isLoading = true) }
 
-            _postList.value = emptyList()
+            postList.clear()
             val cacheKey = cacheKey ?: getCacheKey(state)
 
             if (pagingInfoCache.containsKey(cacheKey).not()) {
@@ -298,7 +294,7 @@ class HomeViewModel @Inject constructor(
                 val cachedList = postIdCache[cacheKey]
                     ?.mapNotNull { postId -> postDataCache[postId] }
                     .orEmpty()
-                _postList.update { cachedList }
+                postList.addAll(cachedList)
             }
         }
     }.invokeOnCompletion {
@@ -367,7 +363,7 @@ class HomeViewModel @Inject constructor(
         postIdCache[cacheKey] =
             (postIdCache[cacheKey] ?: emptyList()) + newPostList.map { it.postId }
 
-        _postList.update { _postList.value + newPostList }
+        postList.addAll(newPostList)
         isScrollLoading = false
     }
 
@@ -375,12 +371,7 @@ class HomeViewModel @Inject constructor(
         val post = postDataCache[postId] ?: return@doraLaunch
         if (post.isFavorite == isFavorite) return@doraLaunch
 
-        intent {
-            postSideEffect(HomeSideEffect.UpdatePost(post.copy(isFavorite = isFavorite)))
-        }
-
-        val postIndex = postList.value.indexOfFirst { it.postId == postId }
-        if (postIndex == -1) return@doraLaunch
+        updatePost(post.copy(isFavorite = isFavorite))
 
         val postInfo = PostInfo(isFavorite = isFavorite)
 
@@ -389,12 +380,8 @@ class HomeViewModel @Inject constructor(
             postInfo = postInfo,
         )
 
-        if (response.isSuccess) {
-            postDataCache[post.postId] = post.copy(isFavorite = isFavorite)
-        } else {
-            intent {
-                postSideEffect(HomeSideEffect.UpdatePost(post.copy(isFavorite = isFavorite.not())))
-            }
+        if (response.isSuccess.not()) {
+            updatePost(post.copy(isFavorite = isFavorite.not()))
         }
     }
 
@@ -425,7 +412,7 @@ class HomeViewModel @Inject constructor(
         setVisibleDialog(false)
         if (response.isSuccess) {
             intent {
-                postSideEffect(HomeSideEffect.DeletePost(postId))
+                postList.removeIf { it.postId == postId }
                 listOf(getCacheKey(state), "all", "favorite").forEach { key ->
                     postIdCache[key] = postIdCache[key]?.filterNot { it == postId } ?: emptyList()
                 }
@@ -452,7 +439,7 @@ class HomeViewModel @Inject constructor(
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
             intent {
-                val beforeFolderId = postList.value.find { it.postId == postId }?.folderId.orEmpty()
+                val beforeFolderId = postList.find { it.postId == postId }?.folderId.orEmpty()
                 val category = state.folderList.find { it.id == folderId }?.name.orEmpty()
                 val changedPost = getPostUseCase(postId).toUiModel(category)
                 postDataCache[postId] = changedPost
@@ -460,7 +447,7 @@ class HomeViewModel @Inject constructor(
                 if (postIdCache[folderId].isNullOrEmpty().not()) {
                     postIdCache[folderId] = postIdCache[folderId]?.plus(postId) ?: emptyList()
                 }
-                postSideEffect(HomeSideEffect.UpdatePost(changedPost))
+                updatePost(changedPost)
             }
         }
     }
@@ -510,8 +497,7 @@ class HomeViewModel @Inject constructor(
 
     fun updatePost(postId: String) = viewModelScope.doraLaunch {
         intent {
-            val newPostList = postList.value.toMutableList()
-            val postIndex = postList.value.indexOfFirst { it.postId == postId }
+            val postIndex = postList.indexOfFirst { it.postId == postId }
             if (postIndex == -1) return@intent
 
             val post = getPostUseCase(postId)
@@ -524,10 +510,16 @@ class HomeViewModel @Inject constructor(
             val newPost = post.toUiModel(category)
 
             postDataCache[postId] = newPost
-            newPostList[postIndex] = newPost
-            _postList.value = newPostList
-            postSideEffect(HomeSideEffect.UpdatePost(newPost))
+            postList[postIndex] = newPost
         }
+    }
+
+    private fun updatePost(post: FeedUiModel.FeedCardUiModel) {
+        val postIndex = postList.indexOfFirst { it.postId == post.postId }
+        if (postIndex == -1) return
+
+        postList[postIndex] = post
+        postDataCache[post.postId] = post
     }
 
     companion object {

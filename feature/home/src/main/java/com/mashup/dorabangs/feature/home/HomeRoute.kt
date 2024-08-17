@@ -11,7 +11,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,10 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
-import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -52,7 +49,6 @@ fun HomeRoute(
     val scope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
 
-    val postList = remember { mutableStateListOf<FeedUiModel.FeedCardUiModel>() }
     var prevFolderIndex by remember { mutableIntStateOf(0) }
 
     val reachedBottom: Boolean by remember {
@@ -68,7 +64,7 @@ fun HomeRoute(
         }
     }
 
-    LaunchedEffect(postList.size) {
+    LaunchedEffect(viewModel.postList.size) {
         if (state.selectedIndex != prevFolderIndex) {
             scrollState.scrollToItem(viewModel.scrollCache[state.selectedIndex] ?: 0)
             prevFolderIndex = state.selectedIndex
@@ -77,16 +73,6 @@ fun HomeRoute(
 
     LaunchedEffect(Unit) {
         viewModel.initPostList()
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.postList.collectLatest { feedList ->
-            if (feedList.isEmpty()) return@collectLatest
-
-            val postIdSet = postList.map { it.postId }.toSet()
-            val newList = feedList.filter { post -> post.postId !in postIdSet }
-            postList.addAll(newList)
-        }
     }
 
     viewModel.collectSideEffect { sideEffect ->
@@ -109,21 +95,6 @@ fun HomeRoute(
                 navigateToCreateFolder()
             }
 
-            is HomeSideEffect.UpdatePost -> {
-                val post = sideEffect.post
-                val index = postList.indexOfFirst { it.postId == post.postId }
-                if (index != -1) {
-                    postList[index] = post
-                    if (state.selectedIndex > 1) {
-                        postList.removeIf { it.folderId != state.selectedFolderId }
-                    }
-                }
-            }
-
-            is HomeSideEffect.DeletePost -> {
-                postList.removeIf { it.postId == sideEffect.postId }
-            }
-
             else -> {}
         }
     }
@@ -132,12 +103,11 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
-            postsList = postList,
+            postsList = viewModel.postList,
             scrollState = scrollState,
             onClickChip = { index ->
                 if (index != state.selectedIndex) {
-                    postList.clear()
-                    viewModel.changeSelectedTapIdx(index, scrollState.firstVisibleItemIndex)
+                    viewModel.changeSelectedTabIdx(index, scrollState.firstVisibleItemIndex)
                 }
             },
             onClickMoreButton = { postId, folderId ->
