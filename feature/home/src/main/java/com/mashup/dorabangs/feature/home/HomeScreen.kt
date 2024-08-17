@@ -276,6 +276,7 @@ private fun LazyListScope.Feeds(
     requestUpdate: (String) -> Unit,
 ) {
     items(
+        key = { index -> feeds[index].postId },
         count = feeds.size,
         contentType = { index -> feeds[index].isLoading },
     ) { index ->

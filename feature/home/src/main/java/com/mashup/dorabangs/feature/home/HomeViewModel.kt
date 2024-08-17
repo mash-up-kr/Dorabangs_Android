@@ -46,11 +46,9 @@ class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
     private val getFolderList: GetFolderListUseCase,
-    private val getPostsPageUseCase: GetPostsPageUseCase,
     private val setLastCopiedUrlUseCase: SetLastCopiedUrlUseCase,
     private val createFolderUseCase: CreateFolderUseCase,
     private val saveLinkUseCase: SaveLinkUseCase,
-    private val getPostsFromFolderUseCase: GetPostsFromFolderUseCase,
     private val getUnReadPostsCountUseCase: GetUnReadPostsCountUseCase,
     private val getAIClassificationCount: GetAIClassificationCountUseCase,
     private val getIdFromLinkToReadLaterUseCase: GetIdFromLinkToReadLaterUseCase,
@@ -58,6 +56,8 @@ class HomeViewModel @Inject constructor(
     private val deletePostUseCase: DeletePostUseCase,
     private val changePostFolderUseCase: ChangePostFolder,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
+    private val getPostsPageUseCase: GetPostsPageUseCase,
+    private val getPostsFromFolderUseCase: GetPostsFromFolderUseCase,
     private val getPostUseCase: GetPostUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
@@ -296,10 +296,10 @@ class HomeViewModel @Inject constructor(
                     .orEmpty()
                 postList.addAll(cachedList)
             }
-        }
-    }.invokeOnCompletion {
-        intent {
-            reduce { state.copy(isLoading = false) }
+        }.invokeOnCompletion {
+            intent {
+                reduce { state.copy(isLoading = false) }
+            }
         }
     }
 
@@ -520,9 +520,5 @@ class HomeViewModel @Inject constructor(
 
         postList[postIndex] = post
         postDataCache[post.postId] = post
-    }
-
-    companion object {
-        const val FAVORITE_FOLDER_INDEX = 1
     }
 }
