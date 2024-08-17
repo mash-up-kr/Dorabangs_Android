@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.data.model.classification
 
 import com.mashup.dorabangs.data.model.PagingMetaDataResponseModel
+import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.model.toPagingMetaDomain
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo

@@ -3,7 +3,7 @@
 #project
 compile-sdk = "34"
 min-sdk = "28"
-target-sdk = "33"
+target-sdk = "34"
 version-code = "2"
 versionName = "1.0.0"
 
@@ -14,9 +14,9 @@ core-ktx = "1.13.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-lifecycle-runtime-ktx = "2.8.2"
-activity-compose = "1.9.0"
-compose-bom = "2024.05.00"
+lifecycle-runtime-ktx = "2.8.4"
+activity-compose = "1.9.1"
+compose-bom = "2024.06.00"
 appcompat = "1.6.1"
 material3 = "1.2.1"
 material = "1.12.0"
@@ -46,6 +46,8 @@ lottie = "6.4.1"
 paging = "3.3.0"
 paging-common = "3.1.1"
 exoplayer = "1.3.1"
+compose-webview = "0.31.3-beta"
+
 
 [libraries]
 kotlin-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin" }
@@ -122,6 +124,9 @@ paging-common = { group = "androidx.paging", name = "paging-common-ktx", version
 exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "exoplayer"}
 exoplayer-dash = { group = "androidx.media3", name = "media3-exoplayer-dash", version.ref = "exoplayer"}
 exoplayer-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "exoplayer"}
+
+#webview
+compose-webview = { module = "com.google.accompanist:accompanist-webview", version.ref="compose-webview" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

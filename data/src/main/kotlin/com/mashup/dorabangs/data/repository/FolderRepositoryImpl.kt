@@ -3,7 +3,6 @@ package com.mashup.dorabangs.data.repository
 import androidx.paging.PagingData
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.model.toDomain
-import com.mashup.dorabangs.data.model.toDomainModel
 import com.mashup.dorabangs.data.utils.doraConvertKey
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.DoraCreateFolderModel
@@ -13,7 +12,6 @@ import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.NewFolderName
 import com.mashup.dorabangs.domain.model.NewFolderNameList
 import com.mashup.dorabangs.domain.model.PageData
-import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import com.mashup.dorabangs.domain.repository.FolderRepository
 import kotlinx.coroutines.flow.Flow
@@ -88,21 +86,6 @@ class FolderRepositoryImpl @Inject constructor(
             totalCount = { total -> totalCount(total) },
             cachingData = { item, page -> pagingListCache[doraConvertKey(page, cacheKey)] = item },
         ).flow
-
-    override suspend fun getPostPageFromFolder(
-        folderId: String?,
-        page: Int,
-        order: String,
-        limit: Int,
-        isRead: Boolean?,
-    ): Posts =
-        remoteDataSource.getLinksFromFolder(
-            folderId = folderId,
-            page = page,
-            order = order,
-            limit = limit,
-            isRead = isRead,
-        ).toDomainModel()
 
     override fun updatePostItem(
         page: Int,
