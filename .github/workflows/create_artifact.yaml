@@ -45,6 +45,16 @@ jobs:
       - name: Build with assembleRelease
         run: ./gradlew assembleRelease
 
+      - name: print ls 1
+        run: |
+          ls
+          cd app
+
+      - name: print ls 2
+        run: |
+          ls
+          cd release
+
       - name: rename aab
         run: mv "../app/release/app-release.aab" "../app/release/dora-release.aab"
 
