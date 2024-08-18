@@ -50,18 +50,19 @@ jobs:
         with:
           name: dora-artifact.apk
           path: ./app/build/outputs/apk/release
+          retention-days: 7
+          overwrite: true
 
   post_github:
     needs: create_artifact
     runs-on: ubuntu-latest
     steps:
       - name: Post comment with artifact link
-        if: github.event_name == 'pull_request'
         uses: actions/github-script@v6
         with:
           script: |
             const artifact_url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts`;
-            const comment_body = `The AAB file is available for download: [Download Link](${artifact_url})`;
+            const comment_body = `APK 생성 성공했 도라 :kissing_smiling_eyes:: [APK Download Link](${artifact_url})`;
             const pull_request_number = context.issue.number;
             await github.rest.issues.createComment({
               ...context.repo,
