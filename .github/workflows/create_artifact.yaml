@@ -46,13 +46,14 @@ jobs:
         run: |
           cd app
           ls
-#      - name: Build with assembleRelease
-#        run: ./gradlew assembleRelease
-#
-#      - name: print ls 2
-#        run: |
-#          cd app/release
-#          ls
+
+      - name: Build with assembleRelease
+        run: ./gradlew assembleRelease
+
+      - name: print ls 2
+        run: |
+          cd app
+          ls
 #
 #      - name: rename aab
 #        run: mv "../app/release/app-release.aab" "../app/release/dora-release.aab"
