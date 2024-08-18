@@ -60,7 +60,7 @@ jobs:
         run: |
           artifact_id=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | \
-            jq -r '.artifacts[] | select(.name == "release-aab") | .id')
+            jq -r '.artifacts[] | select(.name == "dora-artifact.apk") | .id')
           echo "artifact_id=${artifact_id}" >> $GITHUB_ENV
 
       - name: Post comment with artifact link
