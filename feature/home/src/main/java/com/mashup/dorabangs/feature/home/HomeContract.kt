@@ -9,6 +9,7 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 
 data class HomeState(
     val isLoading: Boolean = false,
+    val isScrollLoading: Boolean = false,
     val clipBoardState: ClipBoardState = ClipBoardState(),
     val tapElements: List<FeedUiModel.DoraChipUiModel> = emptyList(),
     val folderList: List<Folder> = listOf(),

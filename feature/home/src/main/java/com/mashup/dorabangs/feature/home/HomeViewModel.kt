@@ -11,6 +11,7 @@ import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.model.Sort
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
@@ -39,6 +40,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,13 +66,10 @@ class HomeViewModel @Inject constructor(
 
     val postList = mutableStateListOf<FeedUiModel.FeedCardUiModel>()
 
-    private val pagingInfoCache = HashMap<String, PagingInfo>()
-
-    private val postIdCache = HashMap<String, List<String>>()
-    private val postDataCache = HashMap<String, FeedUiModel.FeedCardUiModel>()
-
-    val scrollCache = HashMap<Int, Int>()
-    var isScrollLoading: Boolean = false
+    private val pagingInfoCache = ConcurrentHashMap<String, PagingInfo>()
+    private val postIdCache = ConcurrentHashMap<String, List<String>>()
+    private val postDataCache = ConcurrentHashMap<String, FeedUiModel.FeedCardUiModel>()
+    val scrollCache = ConcurrentHashMap<Int, Int>()
 
     init {
         viewModelScope.doraLaunch {
@@ -304,10 +303,13 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadMore(state: HomeState) = viewModelScope.doraLaunch {
-        if (isScrollLoading) {
+        if (state.isScrollLoading) {
             return@doraLaunch
         }
-        isScrollLoading = true
+
+        intent {
+            reduce { state.copy(isScrollLoading = true) }
+        }
 
         val cacheKey = getCacheKey(state)
         val pagingInfo = pagingInfoCache[cacheKey] ?: return@doraLaunch
@@ -323,48 +325,38 @@ class HomeViewModel @Inject constructor(
     ) {
         if (pagingInfo.hasNext.not()) return
 
-        val newPosts = if (cacheKey == "all" || cacheKey == "favorite") {
-            getPostsPageUseCase(
-                page = pagingInfo.nextPage,
-                order = pagingInfo.order,
-                favorite = pagingInfo.favorite,
-            )
-        } else {
-            getPostsFromFolderUseCase(
-                folderId = cacheKey,
-                page = pagingInfo.nextPage,
-                order = pagingInfo.order ?: Sort.DESC.query,
-                limit = 10,
-                isRead = null,
-            )
-        }
+        val newPosts = getPosts(cacheKey, pagingInfo)
 
         pagingInfoCache[cacheKey] = pagingInfo.copy(
             nextPage = pagingInfo.nextPage + 1,
             hasNext = newPosts.metaData.hasNext,
         )
 
-        var folderList = state.folderList
-        if (folderList.isEmpty()) {
-            folderList = getFolderList().toList()
-        }
-
-        val newPostList = newPosts.items
-            .map { post ->
-                val category =
-                    folderList.firstOrNull { folder -> folder.id == post.folderId }?.name.orEmpty()
-                post.toUiModel(category)
-            }
-
-        newPostList.forEach { post ->
-            postDataCache[post.postId] = post
-        }
-
-        postIdCache[cacheKey] =
-            (postIdCache[cacheKey] ?: emptyList()) + newPostList.map { it.postId }
+        val newPostList = newPosts.items.toUIModel(state).caching(cacheKey)
 
         postList.addAll(newPostList)
-        isScrollLoading = false
+        intent {
+            reduce { state.copy(isScrollLoading = false) }
+        }
+    }
+
+    private suspend fun getPosts(
+        cacheKey: String,
+        pagingInfo: PagingInfo,
+    ) = if (cacheKey == "all" || cacheKey == "favorite") {
+        getPostsPageUseCase(
+            page = pagingInfo.nextPage,
+            order = pagingInfo.order,
+            favorite = pagingInfo.favorite,
+        )
+    } else {
+        getPostsFromFolderUseCase(
+            folderId = cacheKey,
+            page = pagingInfo.nextPage,
+            order = pagingInfo.order ?: Sort.DESC.query,
+            limit = 10,
+            isRead = null,
+        )
     }
 
     fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
@@ -524,6 +516,29 @@ class HomeViewModel @Inject constructor(
 
         postList[postIndex] = post
         postDataCache[post.postId] = post
+    }
+
+    private suspend fun List<Post>.toUIModel(state: HomeState): List<FeedUiModel.FeedCardUiModel> {
+        var folderList = state.folderList
+        if (folderList.isEmpty()) {
+            folderList = getFolderList().toList()
+        }
+
+        return this
+            .map { post ->
+                val category =
+                    folderList.firstOrNull { folder -> folder.id == post.folderId }?.name.orEmpty()
+                post.toUiModel(category)
+            }
+    }
+
+    private fun List<FeedUiModel.FeedCardUiModel>.caching(cacheKey: String): List<FeedUiModel.FeedCardUiModel> {
+        this.forEach { post ->
+            postDataCache[post.postId] = post
+        }
+        postIdCache[cacheKey] =
+            (postIdCache[cacheKey] ?: emptyList()) + this.map { it.postId }
+        return this
     }
 
     companion object {
