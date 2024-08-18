@@ -5,6 +5,8 @@ on:
     branches:
 #      - master
       - test**
+      - test
+      - test2
     types:
 #      - closed
       - synchronize
