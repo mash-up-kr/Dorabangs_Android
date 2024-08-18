@@ -296,10 +296,10 @@ class HomeViewModel @Inject constructor(
                     .orEmpty()
                 postList.addAll(cachedList)
             }
-        }
-    }.invokeOnCompletion {
-        intent {
-            reduce { state.copy(isLoading = false) }
+        }.invokeOnCompletion {
+            intent {
+                reduce { state.copy(isLoading = false) }
+            }
         }
     }
 
@@ -443,7 +443,9 @@ class HomeViewModel @Inject constructor(
                 val category = state.folderList.find { it.id == folderId }?.name.orEmpty()
                 val changedPost = getPostUseCase(postId).toUiModel(category)
                 postDataCache[postId] = changedPost
-                postIdCache[beforeFolderId] = postIdCache[beforeFolderId]?.toMutableList()?.filterNot { it == postId } ?: emptyList()
+                postIdCache[beforeFolderId] =
+                    postIdCache[beforeFolderId]?.toMutableList()?.filterNot { it == postId }
+                        ?: emptyList()
                 if (postIdCache[folderId].isNullOrEmpty().not()) {
                     postIdCache[folderId] = postIdCache[folderId]?.plus(postId) ?: emptyList()
                 }

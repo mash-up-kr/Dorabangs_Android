@@ -44,11 +44,4 @@ interface FolderRepository {
         limit: Int,
         isRead: Boolean?,
     ): Posts
-
-    fun updatePostItem(
-        page: Int,
-        cacheKey: String,
-        cachedKeyList: List<String>,
-        item: SavedLinkDetailInfo,
-    )
 }

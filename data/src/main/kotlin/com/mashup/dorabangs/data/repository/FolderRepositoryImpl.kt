@@ -134,6 +134,9 @@ class FolderRepositoryImpl @Inject constructor(
             },
         ).flow.map { data ->
             data.map { it.toSavedLinkDetailInfo() }
+        }
+    }
+
     override suspend fun getPostPageFromFolder(
         folderId: String?,
         page: Int,
@@ -148,29 +151,4 @@ class FolderRepositoryImpl @Inject constructor(
             limit = limit,
             isRead = isRead,
         ).toDomainModel()
-
-    override fun updatePostItem(
-        page: Int,
-        cacheKey: String,
-        cachedKeyList: List<String>,
-        item: SavedLinkDetailInfo,
-    ) {
-        val key = doraConvertKey(page, cacheKey)
-        val updatedData = pagingListCache[key]?.data?.map { post ->
-            if (post.id == item.id) {
-                item
-            } else {
-                post
-            }
-        }
-        cachedKeyList.forEach { currentKey ->
-            val listKey = doraConvertKey(page, currentKey)
-            val updatedPageData = updatedData?.let {
-                pagingListCache[listKey]?.copy(data = it)
-            }
-            updatedPageData?.let { data ->
-                pagingListCache[listKey] = data
-            }
-        }
-    }
 }
