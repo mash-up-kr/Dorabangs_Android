@@ -109,8 +109,9 @@ fun MainNavHost(
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", false)
                 appState.navController.popBackStackWithClearFocus()
             },
-            navigateToComplete = {
+            navigateToComplete = { folderName ->
                 appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", true)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("folderName", folderName)
                 appState.navController.popBackStackWithClearFocus()
             },
         )
