@@ -78,6 +78,7 @@ fun FolderManageScreen(
     val btnText = when (folderManageState.type) {
         FolderManageType.CREATE -> R.string.storage_create_folder_save
         FolderManageType.CHANGE -> R.string.storage_create_folder_edit
+        FolderManageType.NOTHING -> R.string.storage_create_folder_save
     }
 
     Column(

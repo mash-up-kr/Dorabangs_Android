@@ -28,6 +28,15 @@ interface FolderRepository {
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<SavedLinkDetailInfo>>
 
+    suspend fun getLinksFromFolderRemote(
+        needFetchUpdate: Boolean,
+        folderId: String?,
+        order: String,
+        limit: Int,
+        favorite: Boolean? = null,
+        isRead: Boolean? = null,
+        totalCount: (Int) -> Unit,
+    ): Flow<PagingData<SavedLinkDetailInfo>>
     suspend fun getPostPageFromFolder(
         folderId: String?,
         page: Int,

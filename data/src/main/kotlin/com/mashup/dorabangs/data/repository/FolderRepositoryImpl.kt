@@ -1,10 +1,20 @@
 package com.mashup.dorabangs.data.repository
 
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
+import com.mashup.dorabangs.data.database.PostDatabase
+import com.mashup.dorabangs.data.database.RemoteKeys
+import com.mashup.dorabangs.data.database.toLocalEntity
+import com.mashup.dorabangs.data.database.toSavedLinkDetailInfo
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.model.toDomainModel
 import com.mashup.dorabangs.data.utils.doraConvertKey
+import com.mashup.dorabangs.data.pagingsource.PostRemoteMediator
+import com.mashup.dorabangs.data.utils.PAGING_SIZE
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.DoraCreateFolderModel
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
@@ -17,13 +27,13 @@ import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import com.mashup.dorabangs.domain.repository.FolderRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FolderRepositoryImpl @Inject constructor(
     private val remoteDataSource: FolderRemoteDataSource,
+    private val database: PostDatabase,
 ) : FolderRepository {
-
-    private val pagingListCache = HashMap<String, PageData<List<SavedLinkDetailInfo>>>()
 
     override suspend fun getFolders(): FolderList =
         remoteDataSource.getFolders()
@@ -73,9 +83,6 @@ class FolderRepositoryImpl @Inject constructor(
         totalCount: (Int) -> Unit,
     ): Flow<PagingData<SavedLinkDetailInfo>> =
         doraPager(
-            needFetchUpdate = needFetchUpdate,
-            cachedList = pagingListCache,
-            cacheKey = cacheKey,
             apiExecutor = { page ->
                 remoteDataSource.getLinksFromFolder(
                     folderId = folderId,
@@ -86,9 +93,47 @@ class FolderRepositoryImpl @Inject constructor(
                 ).toDomain()
             },
             totalCount = { total -> totalCount(total) },
-            cachingData = { item, page -> pagingListCache[doraConvertKey(page, cacheKey)] = item },
         ).flow
 
+    @OptIn(ExperimentalPagingApi::class)
+    override suspend fun getLinksFromFolderRemote(
+        needFetchUpdate: Boolean,
+        folderId: String?,
+        order: String,
+        limit: Int,
+        favorite: Boolean?,
+        isRead: Boolean?,
+        totalCount: (Int) -> Unit,
+    ): Flow<PagingData<SavedLinkDetailInfo>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                initialLoadSize = PAGING_SIZE,
+            ),
+            remoteMediator = PostRemoteMediator(
+                database = database,
+                needFetchUpdate = needFetchUpdate,
+                totalCount = { total -> totalCount(total) },
+                toLocalEntity = { post -> post.toLocalEntity() },
+                getRemoteKey = { post -> RemoteKeys(postId = post.id.orEmpty()) },
+                apiExecutor = { page ->
+                    remoteDataSource.getLinksFromFolder(
+                        folderId = folderId,
+                        page = page,
+                        limit = limit,
+                        order = order,
+                        isRead = isRead,
+                    ).toDomain()
+                },
+            ),
+            pagingSourceFactory = {
+                if (order == "asc") {
+                    database.postDao().getAllPostsOrderedByAsc(isRead = isRead == null)
+                } else database.postDao().getAllPostsOrderedByDesc(isRead = isRead == null)
+            },
+        ).flow.map { data ->
+            data.map { it.toSavedLinkDetailInfo() }
     override suspend fun getPostPageFromFolder(
         folderId: String?,
         page: Int,
