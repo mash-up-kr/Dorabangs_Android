@@ -45,15 +45,15 @@ jobs:
       - name: print pwd
         run: pwd
 
-#      - name: Build with assembleRelease
-#        run: ./gradlew assembleRelease
-#
-#      - name: rename aab
-#        run: mv "./app/release/app-release.aab" "./app/release/dora-release.aab"
-#
-#      - name: upload artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: dora artifact
-#          path: ./app/release/dora-release.aab
+      - name: Build with assembleRelease
+        run: ./gradlew assembleRelease
+
+      - name: rename aab
+        run: mv "../app/release/app-release.aab" "../app/release/dora-release.aab"
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dora artifact
+          path: ../app/release/dora-release.aab
 
