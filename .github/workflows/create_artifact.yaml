@@ -47,11 +47,13 @@ jobs:
 
       - name: print ls 2
         run: |
-          cd app/build/outputs
+          cd app/build/outputs/apk
+          ls
+          cd app/build/outputs/apk/release
           ls
 #
 #      - name: rename aab
-#        run: mv "../app/release/app-release.aab" "../app/release/dora-release.aab"
+#        run: mv "../app/build/outputs/apk/release/app-release.aab" "../app/build/outputs/apk/release/dora-release.aab"
 #
 #      - name: upload artifact
 #        uses: actions/upload-artifact@v4
