@@ -67,9 +67,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const artifact_id = process.env.artifact_id;
-            echo "artifact is ${artifact_id}"
-            const artifact_url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${artifact_id}`;
+            const artifact_url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${process.env.artifact_id}`;
             const comment_body = `APK 생성 성공했 도라 :kissing_smiling_eyes:: [APK Download Link](${artifact_url})`;
             const pull_request_number = context.issue.number;
             await github.rest.issues.createComment({
