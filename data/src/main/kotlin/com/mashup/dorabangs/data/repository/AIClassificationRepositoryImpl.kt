@@ -23,7 +23,7 @@ class AIClassificationRepositoryImpl @Inject constructor(
         limit: Int,
         order: String,
     ): Flow<PagingData<AIClassificationFeedPost>> =
-        doraPager  (
+        doraPager(
             apiExecutor = { page ->
                 remoteDataSource.getAIClassificationPosts(
                     page = page,
