@@ -43,7 +43,11 @@ jobs:
           API_KEY: ${{ secrets.SERVER_BASE_URL }}
 
       - name: print pwd
-        run: pwd
+        run: |
+          cd app
+          pwd
+          cd release
+          pwd
 
       - name: Build with assembleRelease
         run: ./gradlew assembleRelease
