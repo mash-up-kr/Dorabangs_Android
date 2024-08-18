@@ -23,6 +23,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
@@ -71,7 +73,8 @@ fun HomeRoute(
         }
     }
 
-    LaunchedEffect(Unit) {
+    LifecycleEventEffect(Lifecycle.Event.ON_START) {
+        viewModel.setAIClassificationCount()
         viewModel.initPostList()
     }
 

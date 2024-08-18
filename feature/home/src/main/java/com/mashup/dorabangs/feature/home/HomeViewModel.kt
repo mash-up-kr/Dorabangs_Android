@@ -89,7 +89,6 @@ class HomeViewModel @Inject constructor(
         }
 
         updateFolderList()
-        setAIClassificationCount()
         setPostsCount()
     }
 
@@ -253,7 +252,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setAIClassificationCount() = viewModelScope.launch {
+    fun setAIClassificationCount() = viewModelScope.launch {
         val count = getAIClassificationCount()
         intent {
             reduce {

@@ -100,7 +100,7 @@ fun HomeScreen(
                         .align(Alignment.Center),
                 )
             }
-        } else if (postsList.size == 0) {
+        } else if (postsList.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
