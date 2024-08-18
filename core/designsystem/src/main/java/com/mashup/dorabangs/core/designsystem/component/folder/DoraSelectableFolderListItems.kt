@@ -71,7 +71,7 @@ fun DoraSelectableFolderListItems(
                             )
                         },
                     data = data,
-                    index = index
+                    index = index,
                 )
                 if (index != items.lastIndex) {
                     HorizontalDivider(
