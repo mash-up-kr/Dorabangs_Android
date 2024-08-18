@@ -177,12 +177,13 @@ fun StorageDetailRoute(
                     isNavigate = true,
                 )
             },
-            onClickMoveFolder = { selectFolderId -> storageDetailViewModel.updateSelectFolderId(selectFolderId) },
+            onClickMoveFolder = { selectFolder -> storageDetailViewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName) },
             btnEnable = state.folderInfo.folderId != state.changeClickFolderId,
             onClickCompleteButton = {
                 storageDetailViewModel.moveFolder(
                     postId = state.currentClickPostId,
                     folderId = state.changeClickFolderId,
+                    folderName = state.changeClickFolderName,
                 )
             },
         )
@@ -208,7 +209,7 @@ private fun handleSideEffect(
         is StorageDetailSideEffect.NavigateToHome -> navigateToStorage(true)
         is StorageDetailSideEffect.NavigateToFolderManage -> navigateToFolderManager(sideEffect.itemId)
         is StorageDetailSideEffect.RefreshPagingList -> refreshPagingList()
-        is StorageDetailSideEffect.ShowToastSnackBarRenameFolder -> showToastSnackBar()
+        is StorageDetailSideEffect.ShowToastSnackBar -> showToastSnackBar()
     }
 }
 
