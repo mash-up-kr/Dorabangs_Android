@@ -45,18 +45,11 @@ jobs:
       - name: Build with assembleRelease
         run: ./gradlew assembleRelease
 
-      - name: print ls 2
-        run: |
-          cd app/build/outputs/apk
-          ls
-          cd app/build/outputs/apk/release
-          ls
-#
-#      - name: rename aab
-#        run: mv "../app/build/outputs/apk/release/app-release.aab" "../app/build/outputs/apk/release/dora-release.aab"
-#
-#      - name: upload artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: dora artifact
-#          path: ../app/release/dora-release.aab
+      - name: rename aab
+        run: mv "app/build/outputs/apk/release/app-release.aab" "app/build/outputs/apk/release/dora-release.aab"
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dora artifact
+          path: app/build/outputs/apk/release/dora-release.aab
