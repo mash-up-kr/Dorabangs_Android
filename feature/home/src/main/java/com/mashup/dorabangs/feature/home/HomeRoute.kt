@@ -23,6 +23,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
@@ -71,8 +73,10 @@ fun HomeRoute(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.initPostList()
+    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+        if (state.isNeedToRefresh) {
+            viewModel.initPostList()
+        }
     }
 
     viewModel.collectSideEffect { sideEffect ->
@@ -119,7 +123,10 @@ fun HomeRoute(
                 viewModel.updateReadAt(cardInfo)
                 navigateToWebView(cardInfo.url)
             },
-            navigateToClassification = navigateToClassification,
+            navigateToClassification = {
+                viewModel.setIsNeedToRefresh(true)
+                navigateToClassification()
+            },
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
             requestUpdate = viewModel::updatePost,

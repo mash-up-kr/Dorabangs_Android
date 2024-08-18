@@ -298,7 +298,7 @@ class HomeViewModel @Inject constructor(
             }
         }.invokeOnCompletion {
             intent {
-                reduce { state.copy(isLoading = false) }
+                reduce { state.copy(isLoading = false, isNeedToRefresh = false) }
             }
         }
     }
@@ -520,5 +520,11 @@ class HomeViewModel @Inject constructor(
 
         postList[postIndex] = post
         postDataCache[post.postId] = post
+    }
+
+    fun setIsNeedToRefresh(isNeedToRefresh: Boolean) {
+        intent {
+            reduce { state.copy(isNeedToRefresh = isNeedToRefresh) }
+        }
     }
 }
