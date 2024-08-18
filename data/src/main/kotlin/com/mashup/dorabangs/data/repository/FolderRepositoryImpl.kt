@@ -12,7 +12,6 @@ import com.mashup.dorabangs.data.database.toSavedLinkDetailInfo
 import com.mashup.dorabangs.data.datasource.remote.api.FolderRemoteDataSource
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.model.toDomainModel
-import com.mashup.dorabangs.data.utils.doraConvertKey
 import com.mashup.dorabangs.data.pagingsource.PostRemoteMediator
 import com.mashup.dorabangs.data.utils.PAGING_SIZE
 import com.mashup.dorabangs.data.utils.doraPager
@@ -22,7 +21,6 @@ import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.NewFolderName
 import com.mashup.dorabangs.domain.model.NewFolderNameList
-import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import com.mashup.dorabangs.domain.repository.FolderRepository

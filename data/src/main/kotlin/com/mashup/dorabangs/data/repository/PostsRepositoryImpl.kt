@@ -11,13 +11,11 @@ import com.mashup.dorabangs.data.database.toLocalEntity
 import com.mashup.dorabangs.data.database.toPost
 import com.mashup.dorabangs.data.datasource.remote.api.PostsRemoteDataSource
 import com.mashup.dorabangs.data.model.toDomain
-import com.mashup.dorabangs.data.utils.doraConvertKey
 import com.mashup.dorabangs.data.pagingsource.PostRemoteMediator
 import com.mashup.dorabangs.data.utils.PAGING_SIZE
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.Link
-import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.model.Posts
