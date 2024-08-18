@@ -8,6 +8,7 @@ data class DoraSaveState(
     val thumbnailUrl: String = "",
     val isShortLink: Boolean = false,
     val isError: Boolean = false,
+    val isLoading: Boolean = false,
     val folderList: List<SelectableFolder> = listOf(),
 )
 

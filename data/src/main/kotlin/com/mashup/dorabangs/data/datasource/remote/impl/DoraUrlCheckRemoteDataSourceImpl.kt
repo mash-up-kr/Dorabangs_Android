@@ -39,9 +39,7 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
 
             val doc = response.parse()
 
-            // 오픈 그래프 태그에서 타이틀 추출
-            val titleElement: Element? = doc.select("meta[property=og:title]").first()
-            val title = titleElement?.attr("content")
+            val title = doc.title()
 
             // 오픈 그래프 태그에서 썸네일 URL 추출
             val thumbnailElement: Element? = doc.select("meta[property=og:image]").first()
@@ -49,7 +47,7 @@ class DoraUrlCheckRemoteDataSourceImpl @Inject constructor() : DoraUrlCheckRemot
 
             DoraUrlCheckResponse(
                 urlLink = longUrlLink ?: validUrlLink,
-                title = title.orEmpty(),
+                title = title,
                 thumbnailUrl = thumbnailUrl.orEmpty(),
                 isShortLink = longUrlLink == null,
             )
