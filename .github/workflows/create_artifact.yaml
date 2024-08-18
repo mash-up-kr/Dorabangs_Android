@@ -3,16 +3,13 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      #      - master
-      - test**
+      - master
     types:
-      #      - closed
       - synchronize
       - opened
 
 jobs:
   create_artifact:
-    #    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -57,11 +54,20 @@ jobs:
     needs: create_artifact
     runs-on: ubuntu-latest
     steps:
+      - name: Get artifact ID
+        id: get-artifact-id
+        run: |
+          artifact_id=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | \
+            jq -r '.artifacts[] | select(.name == "release-aab") | .id')
+          echo "artifact_id=${artifact_id}" >> $GITHUB_ENV
+
       - name: Post comment with artifact link
         uses: actions/github-script@v6
         with:
           script: |
-            const artifact_url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts`;
+            const artifact_id = process.env.artifact_id;
+            const artifact_url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${artifact_id}`;
             const comment_body = `APK 생성 성공했 도라 :kissing_smiling_eyes:: [APK Download Link](${artifact_url})`;
             const pull_request_number = context.issue.number;
             await github.rest.issues.createComment({
