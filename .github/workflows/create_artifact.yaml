@@ -3,16 +3,16 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-#      - master
+      #      - master
       - test**
     types:
-#      - closed
+      #      - closed
       - synchronize
       - opened
 
 jobs:
   create_artifact:
-#    if: github.event.pull_request.merged == true
+    #    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -42,29 +42,29 @@ jobs:
         env:
           API_KEY: ${{ secrets.SERVER_BASE_URL }}
 
-      - name: Build with assembleRelease(apk 생성)
+      - name: Build with assembleRelease
         run: ./gradlew assembleRelease
-
-      - name: print 1
-        run: |
-          cd app/build/outputs
-          ls
-
-      - name: print 2
-        run: |
-          cd app/build/outputs/apk
-          ls
-
-      - name: print 3
-        run: |
-          cd app/build/outputs/apk/release
-          ls
-
-      - name: rename apk
-        run: mv ./app/build/outputs/apk/release/app-release.apk ./app/build/outputs/apk/release/dora-release.apk
 
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: dora-artifact.apk
           path: ./app/build/outputs/apk/release
+
+  post_github:
+    needs: create_artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post comment with artifact link
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const artifact_url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts`;
+            const comment_body = `The AAB file is available for download: [Download Link](${artifact_url})`;
+            const pull_request_number = context.issue.number;
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: pull_request_number,
+              body: comment_body
+            });
