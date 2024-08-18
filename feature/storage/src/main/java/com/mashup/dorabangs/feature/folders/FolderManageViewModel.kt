@@ -55,13 +55,20 @@ class FolderManageViewModel @Inject constructor(
                 postSideEffect(FolderManageSideEffect.NavigateToComplete)
             }
         } else {
-            setTextHelperEnable(isEnable = true, helperMessage = isSuccessNewFolder.errorMsg)
+            setTextHelperEnable(
+                isEnable = true,
+                helperMsg = isSuccessNewFolder.errorMsg,
+                lastCheckedFolderName = folderName,
+            )
         }
     }
 
     fun setFolderName(folderName: String) = intent {
         reduce {
-            state.copy(folderName = folderName)
+            state.copy(
+                folderName = folderName,
+                helperEnable = folderName == state.lastCheckedFolderName,
+            )
         }
     }
 
@@ -78,10 +85,22 @@ class FolderManageViewModel @Inject constructor(
                     intent { postSideEffect(FolderManageSideEffect.NavigateToComplete) }
                 }
             }
+        } else {
+            setTextHelperEnable(
+                isEnable = true,
+                helperMsg = newFolder.errorMsg,
+                lastCheckedFolderName = folderName,
+            )
         }
     }
 
-    private fun setTextHelperEnable(isEnable: Boolean, helperMessage: String) = intent {
-        reduce { state.copy(helperEnable = isEnable, helperMessage = helperMessage) }
+    private fun setTextHelperEnable(
+        isEnable: Boolean,
+        helperMsg: String,
+        lastCheckedFolderName: String,
+    ) = intent {
+        reduce {
+            state.copy(helperEnable = isEnable, helperMessage = helperMsg, lastCheckedFolderName = lastCheckedFolderName)
+        }
     }
 }
