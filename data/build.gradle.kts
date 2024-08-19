@@ -89,6 +89,10 @@ dependencies {
     kapt(libs.room.compiler)
 
     implementation(libs.gson)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlin.test)
 }
 
 fun getSeverBaseUrl(propertyKey: String): String {
