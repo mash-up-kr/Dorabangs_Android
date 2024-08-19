@@ -54,14 +54,14 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         xml.required.set(false)
         csv.required.set(false)
         html.required.set(true)
-        html.outputLocation.set(file("${buildDir}/reports/jacoco/jacocoTestReport"))
+        html.outputLocation.set(file("$buildDir/reports/jacoco/jacocoTestReport"))
     }
 
     // `sourceDirectories` 설정
     sourceDirectories.setFrom(
         files(
             "src/main/kotlin",
-            "src/test/kotlin"
+            "src/test/kotlin",
         ),
     )
 
