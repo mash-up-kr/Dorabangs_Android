@@ -1,6 +1,5 @@
 package com.mashup.dorabangs.feature.home
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -64,8 +63,6 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
-    val postList = mutableStateListOf<FeedUiModel.FeedCardUiModel>()
-
     private val pagingInfoCache = ConcurrentHashMap<String, PagingInfo>()
     private val postIdCache = ConcurrentHashMap<String, List<String>>()
     private val postDataCache = ConcurrentHashMap<String, FeedUiModel.FeedCardUiModel>()
@@ -87,7 +84,6 @@ class HomeViewModel @Inject constructor(
             }
         }
 
-        updateFolderList()
         setAIClassificationCount()
         setPostsCount()
     }
@@ -154,7 +150,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateFolderList() = viewModelScope.doraLaunch {
+    fun updateFolderList() = viewModelScope.doraLaunch {
         val folderList = getFolderList().toList()
         if (getIdFromLinkToReadLaterUseCase.invoke().isBlank()) {
             folderList
@@ -273,10 +269,10 @@ class HomeViewModel @Inject constructor(
     fun initPostList(
         cacheKey: String? = null,
     ) = viewModelScope.doraLaunch {
+        var isCachedData = false
         intent {
-            reduce { state.copy(isLoading = true) }
+            reduce { state.copy(isLoading = true, postList = emptyList()) }
 
-            postList.clear()
             val cacheKey = cacheKey ?: getCacheKey(state)
 
             if (pagingInfoCache.containsKey(cacheKey).not()) {
@@ -285,7 +281,6 @@ class HomeViewModel @Inject constructor(
 
             if (postIdCache[cacheKey].isNullOrEmpty()) {
                 loadPostList(
-                    state = state,
                     cacheKey = cacheKey,
                     pagingInfo = pagingInfoCache[cacheKey] ?: PagingInfo.getDefault(cacheKey),
                 )
@@ -293,11 +288,14 @@ class HomeViewModel @Inject constructor(
                 val cachedList = postIdCache[cacheKey]
                     ?.mapNotNull { postId -> postDataCache[postId] }
                     .orEmpty()
-                postList.addAll(cachedList)
+                reduce { state.copy(postList = cachedList) }
+                isCachedData = true
             }
         }.invokeOnCompletion {
-            intent {
-                reduce { state.copy(isLoading = false) }
+            if (isCachedData) {
+                intent {
+                    reduce { state.copy(isLoading = false) }
+                }
             }
         }
     }
@@ -315,28 +313,31 @@ class HomeViewModel @Inject constructor(
         val pagingInfo = pagingInfoCache[cacheKey] ?: return@doraLaunch
 
         if (pagingInfo.hasNext.not()) return@doraLaunch
-        loadPostList(state, cacheKey, pagingInfo)
+        loadPostList(cacheKey, pagingInfo)
     }
 
     private suspend fun loadPostList(
-        state: HomeState,
         cacheKey: String,
         pagingInfo: PagingInfo,
     ) {
-        if (pagingInfo.hasNext.not()) return
-
-        val newPosts = getPosts(cacheKey, pagingInfo)
-
-        pagingInfoCache[cacheKey] = pagingInfo.copy(
-            nextPage = pagingInfo.nextPage + 1,
-            hasNext = newPosts.metaData.hasNext,
-        )
-
-        val newPostList = newPosts.items.toUIModel(state).caching(cacheKey)
-
-        postList.addAll(newPostList)
         intent {
-            reduce { state.copy(isScrollLoading = false) }
+            if (pagingInfo.hasNext.not()) return@intent
+
+            val newPosts = getPosts(cacheKey, pagingInfo)
+
+            pagingInfoCache[cacheKey] = pagingInfo.copy(
+                nextPage = pagingInfo.nextPage + 1,
+                hasNext = newPosts.metaData.hasNext,
+            )
+
+            val newPostList = newPosts.items.toUIModel(state).caching(cacheKey)
+
+
+            reduce { state.copy(isScrollLoading = false, postList = state.postList + newPostList) }
+        }.invokeOnCompletion {
+            intent {
+                reduce { state.copy(isLoading = false) }
+            }
         }
     }
 
@@ -404,7 +405,7 @@ class HomeViewModel @Inject constructor(
         setVisibleDialog(false)
         if (response.isSuccess) {
             intent {
-                postList.removeIf { it.postId == postId }
+                reduce { state.copy(postList = state.postList.filter { it.postId != postId }) }
                 listOf(getCacheKey(state), "all", "favorite").forEach { key ->
                     postIdCache[key] = postIdCache[key]?.filterNot { it == postId } ?: emptyList()
                 }
@@ -431,7 +432,7 @@ class HomeViewModel @Inject constructor(
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
             intent {
-                val beforeFolderId = postList.find { it.postId == postId }?.folderId.orEmpty()
+                val beforeFolderId = state.postList.find { it.postId == postId }?.folderId.orEmpty()
                 val category = state.folderList.find { it.id == folderId }?.name.orEmpty()
                 val changedPost = getPostUseCase(postId).toUiModel(category)
                 postDataCache[postId] = changedPost
@@ -493,7 +494,7 @@ class HomeViewModel @Inject constructor(
 
     fun updatePost(postId: String) = viewModelScope.doraLaunch {
         intent {
-            val postIndex = postList.indexOfFirst { it.postId == postId }
+            val postIndex = state.postList.indexOfFirst { it.postId == postId }
             if (postIndex == -1) return@intent
 
             val post = getPostUseCase(postId)
@@ -503,19 +504,22 @@ class HomeViewModel @Inject constructor(
             }
 
             val category = folderList.firstOrNull { it.id == post.folderId }?.name.orEmpty()
-            val newPost = post.toUiModel(category)
-
-            postDataCache[postId] = newPost
-            postList[postIndex] = newPost
+            updatePost(post.toUiModel(category))
         }
     }
 
     private fun updatePost(post: FeedUiModel.FeedCardUiModel) {
-        val postIndex = postList.indexOfFirst { it.postId == post.postId }
-        if (postIndex == -1) return
+        intent {
+            val postIndex = state.postList.indexOfFirst { it.postId == post.postId }
+            if (postIndex == -1) return@intent
 
-        postList[postIndex] = post
-        postDataCache[post.postId] = post
+            postDataCache[post.postId] = post
+
+            val newPostList = state.postList.toMutableList().apply { set(postIndex, post) }.toList()
+            reduce {
+                state.copy(postList = newPostList)
+            }
+        }
     }
 
     private suspend fun List<Post>.toUIModel(state: HomeState): List<FeedUiModel.FeedCardUiModel> {

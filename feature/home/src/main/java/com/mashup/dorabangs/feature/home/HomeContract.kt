@@ -25,6 +25,7 @@ data class HomeState(
     val toastState: ToastState = ToastState(),
     val unReadPostCount: Int = 0,
     val isEditPostFolder: Boolean = false,
+    val postList: List<FeedUiModel.FeedCardUiModel> = emptyList(),
 ) {
     companion object {
         // TODO - 추후 sotrageMapper와 합치기
