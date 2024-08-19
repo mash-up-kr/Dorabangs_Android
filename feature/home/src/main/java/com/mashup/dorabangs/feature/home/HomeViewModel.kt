@@ -332,7 +332,6 @@ class HomeViewModel @Inject constructor(
 
             val newPostList = newPosts.items.toUIModel(state).caching(cacheKey)
 
-
             reduce { state.copy(isScrollLoading = false, postList = state.postList + newPostList) }
         }.invokeOnCompletion {
             intent {
