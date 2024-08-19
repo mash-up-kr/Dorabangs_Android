@@ -164,3 +164,9 @@ dependencies {
 fun getSeverBaseUrl(propertyKey: String): String {
     return gradleLocalProperties(rootDir).getProperty(propertyKey).orEmpty()
 }
+
+tasks.register("dataCoverage") {
+    group = "verification"
+    description = "Run tests and generate jacoco report"
+    dependsOn("testDebugUnitTest", "jacocoTestReport")
+}
