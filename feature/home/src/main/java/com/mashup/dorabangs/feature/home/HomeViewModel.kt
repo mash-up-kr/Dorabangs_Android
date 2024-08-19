@@ -9,6 +9,7 @@ import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
+import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
@@ -344,6 +345,7 @@ class HomeViewModel @Inject constructor(
         if (response.isSuccess) {
             intent {
                 postSideEffect(HomeSideEffect.RefreshPostList)
+                updateToastState(R.string.home_toast_remove_folder_complete)
             }
         }
     }
@@ -416,6 +418,18 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun updateToastState(toastMsg: Int) = intent {
+        reduce {
+            state.copy(
+                toastState = state.toastState.copy(
+                    text = toastMsg,
+                    toastStyle = ToastStyle.CHECK,
+                ),
+            )
+        }
+        postSideEffect(HomeSideEffect.ShowToastSnackBar(toastMsg))
     }
 
     companion object {

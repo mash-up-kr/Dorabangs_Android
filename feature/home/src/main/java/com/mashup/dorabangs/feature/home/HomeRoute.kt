@@ -3,6 +3,7 @@ package com.mashup.dorabangs.feature.home
 import android.view.View
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
+import com.mashup.dorabangs.core.designsystem.component.toast.DoraToast
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
@@ -44,6 +47,8 @@ fun HomeRoute(
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
     val pagingList = state.feedCards.collectAsLazyPagingItems()
+    val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
+    val context = LocalContext.current
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -66,6 +71,11 @@ fun HomeRoute(
             }
 
             is HomeSideEffect.RefreshPostList -> pagingList.refresh()
+
+            is HomeSideEffect.ShowToastSnackBar -> {
+                val msg = context.getString(sideEffect.toastMsg)
+                scope.launch { toastSnackBarHostState.showSnackbar(msg) }
+            }
             else -> {}
         }
     }
@@ -163,6 +173,15 @@ fun HomeRoute(
             disMissBtnText = stringResource(R.string.remove_dialog_cancil),
             onDisMissRequest = { viewModel.setVisibleDialog(false) },
             onClickConfirmBtn = { viewModel.deletePost(state.selectedPostId) },
+        )
+
+        DoraToast(
+            text = stringResource(id = state.toastState.text),
+            toastStyle = state.toastState.toastStyle,
+            snackBarHostState = toastSnackBarHostState,
+            modifier = modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 20.dp),
         )
     }
 }
