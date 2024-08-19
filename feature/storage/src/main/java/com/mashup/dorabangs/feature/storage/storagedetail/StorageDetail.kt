@@ -46,6 +46,7 @@ val MaxToolbarHeight = 161.dp
 @Composable
 fun StorageDetailRoute(
     folderItem: Folder,
+    isUnread: Boolean,
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: (Boolean) -> Unit,
@@ -64,6 +65,9 @@ fun StorageDetailRoute(
     val linksPagingList = storageDetailViewModel.feedListState.collectAsLazyPagingItems()
 
     LaunchedEffect(Unit) {
+        if (state.isUnreadChecked.not()) {
+            storageDetailViewModel.updateIsUnread(isUnread)
+        }
         if (state.folderInfo.folderId.isNullOrEmpty()) {
             storageDetailViewModel.updateChangeData(false)
             storageDetailViewModel.setFolderInfo(folderItem)
@@ -263,5 +267,6 @@ fun PreviewStorageDetailScreen() {
         navigateToFolderManager = { id, type -> },
         onClickBackIcon = {},
         navigateToWebView = {},
+        isUnread = false,
     )
 }

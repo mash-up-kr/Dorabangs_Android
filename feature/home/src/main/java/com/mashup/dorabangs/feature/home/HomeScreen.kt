@@ -80,6 +80,7 @@ fun HomeScreen(
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
     requestUpdate: (String) -> Unit = {},
+    navigateToUnreadStorageDetail: () -> Unit = {},
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -200,11 +201,11 @@ fun HomeScreen(
                                             append(stringResource(id = R.string.home_carousel_its_here))
                                         }
                                     },
-                                    onClickButton = navigateToClassification,
+                                    onClickButton = navigateToUnreadStorageDetail,
                                     isVisible = state.unReadPostCount > 0,
                                 ),
                                 HomeCarouselItem(
-                                    lottieRes = R.raw.unread,
+                                    lottieRes = R.raw.tutorial,
                                     description = buildAnnotatedString {
                                         withStyle(SpanStyle(color = DoraColorTokens.Black)) {
                                             append(stringResource(id = R.string.home_carousel_save_introduce))

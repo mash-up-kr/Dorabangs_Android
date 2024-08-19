@@ -10,7 +10,7 @@ data class FolderList(
 ) {
     fun toList() = defaultFolders + customFolders.sortedWith(
         compareBy<Folder> { -it.postCount }
-            .thenByDescending { it.createdAt.convertCreatedSecond() }
+            .thenByDescending { it.createdAt.convertCreatedSecond() },
     )
 }
 

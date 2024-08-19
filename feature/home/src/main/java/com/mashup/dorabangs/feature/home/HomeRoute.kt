@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
+import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
@@ -45,6 +46,7 @@ fun HomeRoute(
     navigateToClassification: () -> Unit = {},
     navigateToSaveScreenWithLink: (String) -> Unit = {},
     navigateToSaveScreenWithoutLink: () -> Unit = {},
+    navigateToUnreadStorageDetail: (Folder) -> Unit = {},
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -117,7 +119,12 @@ fun HomeRoute(
                 viewModel.updateSelectedPostItem(postId = postId, folderId)
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
-            onClickBookMarkButton = { postId, isFavorite -> viewModel.updateFavoriteItem(postId, isFavorite) },
+            onClickBookMarkButton = { postId, isFavorite ->
+                viewModel.updateFavoriteItem(
+                    postId,
+                    isFavorite,
+                )
+            },
             onClickCardItem = { cardInfo ->
                 viewModel.updateReadAt(cardInfo)
                 navigateToWebView(cardInfo.url)
@@ -125,6 +132,10 @@ fun HomeRoute(
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
+            navigateToUnreadStorageDetail = {
+                val folder = state.allFolder ?: return@HomeScreen
+                navigateToUnreadStorageDetail(folder)
+            },
             requestUpdate = viewModel::updatePost,
         )
 
@@ -190,7 +201,12 @@ fun HomeRoute(
                 viewModel.updateSelectFolderId(selectFolder)
             },
             btnEnable = state.selectedFolderId != state.changeFolderId,
-            onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId) },
+            onClickCompleteButton = {
+                viewModel.moveFolder(
+                    state.selectedPostId,
+                    state.changeFolderId,
+                )
+            },
         )
 
         DoraDialog(

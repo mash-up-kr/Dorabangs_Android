@@ -156,6 +156,12 @@ class HomeViewModel @Inject constructor(
 
     private fun updateFolderList() = viewModelScope.doraLaunch {
         val folderList = getFolderList().toList()
+        intent {
+            reduce {
+                state.copy(allFolder = folderList.firstOrNull())
+            }
+        }
+
         if (getIdFromLinkToReadLaterUseCase.invoke().isBlank()) {
             folderList
                 .firstOrNull { it.folderType == FolderType.DEFAULT }
