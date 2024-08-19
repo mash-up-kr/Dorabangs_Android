@@ -32,7 +32,7 @@ class AIClassificationRepositoryImplTest {
         val suggestionId = "abcde"
         val expected = DoraSampleResponse(isSuccess = false, errorMsg = "에러임")
         coEvery { dataSource.moveAllPostsToRecommendedFolder(suggestionId) } throws IllegalStateException(
-            "에러임"
+            "에러임",
         )
 
         val result = repository.moveAllPostsToRecommendedFolder(suggestionId)
