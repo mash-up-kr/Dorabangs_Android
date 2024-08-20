@@ -64,7 +64,7 @@ jobs:
           echo "new_tag=v$major.$minor.$patch" >> $GITHUB_ENV
 
       - name: tagging
-        if: $new_tag != $LATEST_TAG_VERSION
+        if: ${{ env.new_tag != env.LATEST_TAG_VERSION }}
         run: |
           git tag $new_tag
           git push origin $new_tag
