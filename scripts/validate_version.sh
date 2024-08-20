@@ -1,3 +1,5 @@
+#!/bin/bash
+
 NEW_TAG="${new_tag}"
 LAST_TAG="${latest_tag_version}"
 
