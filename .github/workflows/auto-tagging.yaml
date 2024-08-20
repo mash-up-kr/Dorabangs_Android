@@ -23,7 +23,7 @@ jobs:
         run: |
           git fetch origin test/tagging:test/tagging
           git checkout test/tagging
-          latest_tag_version=$(git describe --tags --abbrev=0 > tag_version)
+          latest_tag_version=$(git describe --tags --abbrev=0)
           echo "latest tag version is $latest_tag_version"
           echo "LATEST_TAG_VERSION=${latest_tag_version}" >> $GITHUB_ENV
 
