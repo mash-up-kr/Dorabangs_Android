@@ -38,7 +38,7 @@ jobs:
       - name: major version up
         if: contains(github.event.pull_request.labels.*.name, 'major')
         run: |
-          new_major=$(${major} + 1)
+          new_major=$((major + 1))
           echo "new major is $new_major
           
           echo "major=${new_major}" >> $GITHUB_ENV
@@ -47,7 +47,7 @@ jobs:
       - name: minor version up
         if: contains(github.event.pull_request.labels.*.name, 'minor')
         run: |
-          new_minor=$(${minor} + 1)
+          new_minor=$((minor + 1))
           echo "new minor is $new_minor
           
           echo "minor=$new_minor" >> $GITHUB_ENV
@@ -56,7 +56,7 @@ jobs:
       - name: patch version up
         if: contains(github.event.pull_request.labels.*.name, 'patch')
         run: |
-          new_patch=$(${patch} + 1)
+          new_patch=$((patch + 1))
           echo "new patch is $new_patch
           
           echo "patch=${new_patch}" >> $GITHUB_ENV
