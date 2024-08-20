@@ -20,4 +20,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: get latest tag
         run: |
-          git tag --merged test/tagging --sort=-creatordate | head -n 1
+          git checkout test/tagging
+          git describe --tags --abbrev=0
