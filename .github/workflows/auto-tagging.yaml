@@ -1,0 +1,22 @@
+name: auto-tagging
+
+on:
+  pull_request:
+    branches:
+#      - master
+      - test**
+    types:
+#      - closed
+      - opened
+      - synchronize
+
+#    if: github.event.pull_request.merged == true
+jobs:
+  auto-tagging:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: get latest tag
+        run: |
+          git describe master --abbrev=0
