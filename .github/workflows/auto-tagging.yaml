@@ -66,9 +66,9 @@ jobs:
 
       # 두 버전이 같은 경우 (아무런 라벨이 없다면) 태그 만들지 않고 종료
       - name: validate new tag
-        working-directory: ./scripts
+        working-directory: scripts
         run: |
-          chmod +x scripts/check_version.sh
+          chmod +x validate_version.sh
           ./validate_version.sh
 
       - name: tagging
