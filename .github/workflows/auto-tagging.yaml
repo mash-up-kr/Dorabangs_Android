@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
       - name: get latest tag
         run: |
           git fetch origin test/tagging:test/tagging
@@ -61,8 +62,6 @@ jobs:
         run: |
           echo "update version is v$major.$minor.$patch"
           echo "new_tag=v$major.$minor.$patch" >> $GITHUB_ENV
-
-      - uses: actions/checkout@v4
 
       - name: List all files in current directory
         run: ls -alR .
