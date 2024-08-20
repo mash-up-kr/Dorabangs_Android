@@ -64,6 +64,9 @@ jobs:
           echo "update version is v$major.$minor.$patch"
           echo "new_tag=v$major.$minor.$patch" >> $GITHUB_ENV
 
+      - name: List all files in current directory
+        run: ls -alR .
+        
       # 두 버전이 같은 경우 (아무런 라벨이 없다면) 태그 만들지 않고 종료
       - name: validate new tag
         run: |
