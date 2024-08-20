@@ -14,11 +14,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      # 마스터 브랜치로 가서 최신의 tag를 가져옴
       - name: get latest tag
         run: |
-          git fetch origin master
-          git checkout master
           latest_tag_version=$(git tag --sort=-v:refname | head -n 1)
           echo "latest tag version is $latest_tag_version"
           echo "LATEST_TAG_VERSION=${latest_tag_version}" >> $GITHUB_ENV
