@@ -17,13 +17,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
       - name: get latest tag
         run: |
           git fetch origin test/tagging:test/tagging
           git checkout test/tagging
-          git branch
           latest_tag_version=$(git tag --sort=-v:refname | head -n 1)
           echo "latest tag version is $latest_tag_version"
           echo "LATEST_TAG_VERSION=${latest_tag_version}" >> $GITHUB_ENV
@@ -65,11 +62,7 @@ jobs:
           echo "update version is v$major.$minor.$patch"
           echo "new_tag=v$major.$minor.$patch" >> $GITHUB_ENV
 
-      - name: print
-        run: |
-          git fetch origin test/last_tag_test:test/last_tag_test
-          git checkout test/last_tag_test
-          git branch
+      - uses: actions/checkout@v4
 
       - name: List all files in current directory
         run: ls -alR .
@@ -77,8 +70,8 @@ jobs:
       # 두 버전이 같은 경우 (아무런 라벨이 없다면) 태그 만들지 않고 종료
       - name: validate new tag
         run: |
-          chmod +x ./Dorabangs_Android/scripts/validate_version.sh
-          ./Dorabangs_Android/scripts/validate_version.sh
+          chmod +x ./scripts/validate_version.sh
+          ./scripts/validate_version.sh
 
       - name: tagging
         run: |
