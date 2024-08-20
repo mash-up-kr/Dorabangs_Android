@@ -4,13 +4,15 @@ name: auto-tagging
 on:
   pull_request:
     branches:
-      - master
+#      - master
+      - test**
     types:
-      - closed
+#      - closed
+      - synchronize
 
+#  if: github.event.pull_request.merged == true
 jobs:
   auto-tagging:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
