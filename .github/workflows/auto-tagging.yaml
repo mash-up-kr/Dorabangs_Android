@@ -4,20 +4,18 @@ name: auto-tagging
 on:
   pull_request:
     branches:
-#      - master
-      - test**
+      - master
     types:
-#      - closed
-      - opened
-      - synchronize
+      - closed
 
-#    if: github.event.pull_request.merged == true
 jobs:
   auto-tagging:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+      # 마스터 브랜치로 가서 최신의 tag를 가져옴
       - name: get latest tag
         run: |
           git fetch origin test/tagging:test/tagging
@@ -63,18 +61,8 @@ jobs:
           echo "update version is v$major.$minor.$patch"
           echo "new_tag=v$major.$minor.$patch" >> $GITHUB_ENV
 
-      - name: original branch checkout
-        run: |
-          git fetch origin test/last_tag_test:test/last_tag_test
-          git checkout test/last_tag_test
-
-      # 두 버전이 같은 경우 (아무런 라벨이 없다면) 태그 만들지 않고 종료
-      - name: validate new tag
-        run: |
-          chmod +x ./scripts/validate_version.sh
-          ./scripts/validate_version.sh
-
       - name: tagging
+        if: $new_tag != $LATEST_TAG_VERSION
         run: |
           git tag $new_tag
           git push origin $new_tag
