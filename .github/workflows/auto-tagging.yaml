@@ -66,6 +66,7 @@ jobs:
         run: |
           new_tag="v$major.$minor.$patch"
           
+          git checkout test/tagging
           git tag $new_tag
           git push origin $new_tag
 
