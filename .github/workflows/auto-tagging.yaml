@@ -40,7 +40,7 @@ jobs:
         run: |
           major=(${major} + 1)
           
-          echo "major=${major} >> $GITHUB_ENV
+          echo "major=${major}" >> $GITHUB_ENV
           echo "new major version is $major"
 
       - name: minor version up
@@ -48,7 +48,7 @@ jobs:
         run: |
           minor=(${minor} + 1)
           
-          echo "minor=${minor} >> $GITHUB_ENV
+          echo "minor=${minor}" >> $GITHUB_ENV
           echo "new minor version is $minor"
 
       - name: patch version up
@@ -56,7 +56,7 @@ jobs:
         run: |
           patch=(${patch} + 1)
           
-          echo "patch=${patch} >> $GITHUB_ENV
+          echo "patch=${patch}" >> $GITHUB_ENV
           echo "new patch version is $patch"
 
       - name: print all version
