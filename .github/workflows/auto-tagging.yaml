@@ -67,8 +67,8 @@ jobs:
       # 두 버전이 같은 경우 (아무런 라벨이 없다면) 태그 만들지 않고 종료
       - name: validate new tag
         run: |
-          chmod +x ./scripts/validate_version.sh
-          ./scripts/validate_version.sh
+          chmod +x ./Dorabangs_Android/scripts/validate_version.sh
+          ./Dorabangs_Android/scripts/validate_version.sh
 
       - name: tagging
         run: |
