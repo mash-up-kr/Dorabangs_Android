@@ -28,7 +28,7 @@ jobs:
           echo "LATEST_TAG_VERSION=${latest_tag_version}" >> $GITHUB_ENV
 
       - name: major version up
-        if: ${{ github.event.pull_request.labels.*.name == 'major' }}
+        if: contains(github.event.pull_request.labels.*.name, 'major')
         run: |
           current_tag=$(echo $LATEST_TAG_VERSION | sed 's/v//')
           major=${echo $current_tag | cut -d. -f1)
