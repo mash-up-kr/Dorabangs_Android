@@ -23,6 +23,7 @@ jobs:
         run: |
           git fetch origin test/tagging:test/tagging
           git checkout test/tagging
+          git branch
           latest_tag_version=$(git tag --sort=-v:refname | head -n 1)
           echo "latest tag version is $latest_tag_version"
           echo "LATEST_TAG_VERSION=${latest_tag_version}" >> $GITHUB_ENV
@@ -65,8 +66,11 @@ jobs:
           echo "new_tag=v$major.$minor.$patch" >> $GITHUB_ENV
 
       - name: List all files in current directory
-        run: ls -alR .
-        
+        run: |
+          git checkout test/last_tag_test
+          git branch
+          ls -alR .
+
       # 두 버전이 같은 경우 (아무런 라벨이 없다면) 태그 만들지 않고 종료
       - name: validate new tag
         run: |
