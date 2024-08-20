@@ -38,25 +38,25 @@ jobs:
       - name: major version up
         if: contains(github.event.pull_request.labels.*.name, 'major')
         run: |
-          major=(${major} + 1)
+          new_major=(${major} + 1)
           
-          echo "major=${major}" >> $GITHUB_ENV
+          echo "major=${new_major}" >> $GITHUB_ENV
           echo "new major version is $major"
 
       - name: minor version up
         if: contains(github.event.pull_request.labels.*.name, 'minor')
         run: |
-          minor=(${minor} + 1)
+          new_minor=(${minor} + 1)
           
-          echo "minor=${minor}" >> $GITHUB_ENV
+          echo "minor=${new_minor}" >> $GITHUB_ENV
           echo "new minor version is $minor"
 
       - name: patch version up
         if: contains(github.event.pull_request.labels.*.name, 'patch')
         run: |
-          patch=(${patch} + 1)
+          new_patch=(${patch} + 1)
           
-          echo "patch=${patch}" >> $GITHUB_ENV
+          echo "patch=${new_patch}" >> $GITHUB_ENV
           echo "new patch version is $patch"
 
       - name: print all version
