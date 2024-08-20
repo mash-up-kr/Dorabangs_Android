@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.feature.home
 
-import androidx.annotation.StringRes
-
 sealed class HomeSideEffect {
     data class ShowSnackBar(val copiedText: String) : HomeSideEffect()
     object HideSnackBar : HomeSideEffect()
@@ -12,5 +10,5 @@ sealed class HomeSideEffect {
     data class NavigateSelectLinkFromService(val urlLink: String) : HomeSideEffect()
     object RefreshPostList : HomeSideEffect()
     object NavigateToCompleteMovingFolder : HomeSideEffect()
-    data class ShowToastSnackBar(@StringRes val toastMsg: Int) : HomeSideEffect()
+    data class ShowToastSnackBar(val toastMsg: String) : HomeSideEffect()
 }

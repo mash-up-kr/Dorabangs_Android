@@ -9,8 +9,13 @@ import androidx.navigation.navArgument
 import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.feature.home.HomeRoute
 
-fun NavController.navigateToHome(navOptions: NavOptions? = null, isVisibleMovingBottomSheet: Boolean = false, folderRemoveSuccess: Boolean = false) =
-    navigate("${NavigationRoute.HomeScreen.route}/$isVisibleMovingBottomSheet/$folderRemoveSuccess", navOptions)
+fun NavController.navigateToHome(
+    navOptions: NavOptions? = null,
+    isVisibleMovingBottomSheet: Boolean = false,
+    folderRemoveSuccess: Boolean = false,
+    isShowToast: Boolean = false,
+) =
+    navigate("${NavigationRoute.HomeScreen.route}/$isVisibleMovingBottomSheet/$folderRemoveSuccess/$isShowToast", navOptions)
 
 fun NavGraphBuilder.homeNavigation(
     navigateToClassification: () -> Unit,
@@ -21,9 +26,13 @@ fun NavGraphBuilder.homeNavigation(
     navigateToWebView: (String) -> Unit,
 ) {
     composable(
-        route = "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}",
+        route = "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}/{isShowToast}",
         arguments = listOf(
             navArgument(name = "isVisibleMovingBottomSheet") {
+                type = NavType.BoolType
+                defaultValue = false
+            },
+            navArgument(name = "isShowToast") {
                 type = NavType.BoolType
                 defaultValue = false
             },

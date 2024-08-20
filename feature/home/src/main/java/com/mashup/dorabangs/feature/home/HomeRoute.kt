@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -48,7 +47,6 @@ fun HomeRoute(
     val scope = rememberCoroutineScope()
     val pagingList = state.feedCards.collectAsLazyPagingItems()
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
-    val context = LocalContext.current
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -73,8 +71,7 @@ fun HomeRoute(
             is HomeSideEffect.RefreshPostList -> pagingList.refresh()
 
             is HomeSideEffect.ShowToastSnackBar -> {
-                val msg = context.getString(sideEffect.toastMsg)
-                scope.launch { toastSnackBarHostState.showSnackbar(msg) }
+                scope.launch { toastSnackBarHostState.showSnackbar(sideEffect.toastMsg) }
             }
             else -> {}
         }
@@ -121,7 +118,6 @@ fun HomeRoute(
                 viewModel.hideSnackBar()
             },
         )
-
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
             isShowSheet = state.isShowMoreButtonSheet,
@@ -159,10 +155,10 @@ fun HomeRoute(
                 )
             },
             onClickMoveFolder = { selectFolder ->
-                viewModel.updateSelectFolderId(selectFolder.id)
+                viewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName)
             },
             btnEnable = state.selectedFolderId != state.changeFolderId,
-            onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId) },
+            onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId, state.changeFolderName) },
         )
 
         DoraDialog(
@@ -176,7 +172,7 @@ fun HomeRoute(
         )
 
         DoraToast(
-            text = stringResource(id = state.toastState.text),
+            text = state.toastState.text,
             toastStyle = state.toastState.toastStyle,
             snackBarHostState = toastSnackBarHostState,
             modifier = modifier

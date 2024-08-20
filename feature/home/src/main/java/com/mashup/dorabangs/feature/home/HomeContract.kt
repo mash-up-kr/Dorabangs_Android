@@ -1,13 +1,11 @@
 package com.mashup.dorabangs.feature.home
 
-import androidx.annotation.StringRes
 import androidx.paging.PagingData
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.SelectableBottomSheetItemUIModel
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.utils.isValidUrl
-import com.mashup.dorabangs.home.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import com.mashup.dorabangs.core.designsystem.R as coreR
@@ -21,6 +19,7 @@ data class HomeState(
     val selectedPostId: String = "",
     val selectedFolderId: String = "",
     val changeFolderId: String = selectedFolderId,
+    val changeFolderName: String = "",
     val isShowMoreButtonSheet: Boolean = false,
     val isShowDialog: Boolean = false,
     val isShowMovingFolderSheet: Boolean = false,
@@ -60,6 +59,6 @@ data class HomeCreateFolder(
 )
 
 data class ToastState(
-    @StringRes val text: Int = R.string.home_toast_remove_folder_complete,
+    val text: String = "",
     val toastStyle: ToastStyle = ToastStyle.CHECK,
 )

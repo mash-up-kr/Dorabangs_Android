@@ -78,6 +78,18 @@ class HomeViewModel @Inject constructor(
                     initialValue = "",
                 ).collect { urlLink -> setStateUrlLink(urlLink) }
             }
+            launch {
+                savedStateHandle.getStateFlow(
+                    "isShowToast",
+                    initialValue = false,
+                ).collect { isShowToast ->
+                    if (isShowToast) {
+                        intent {
+                            updateToastState("${state.changeFolderName}(으)로 이동했어요.")
+                        }
+                    }
+                }
+            }
         }
 
         updateFolderList()
@@ -345,7 +357,7 @@ class HomeViewModel @Inject constructor(
         if (response.isSuccess) {
             intent {
                 postSideEffect(HomeSideEffect.RefreshPostList)
-                updateToastState(R.string.home_toast_remove_folder_complete)
+                updateToastState("삭제 완료했어요.")
             }
         }
     }
@@ -357,20 +369,21 @@ class HomeViewModel @Inject constructor(
         reduce { state.copy(selectedPostId = postId, selectedFolderId = folderId) }
     }
 
-    fun updateSelectFolderId(folderId: String) = intent {
-        reduce { state.copy(changeFolderId = folderId) }
+    fun updateSelectFolderId(folderId: String, folderName: String = "") = intent {
+        reduce { state.copy(changeFolderId = folderId, changeFolderName = folderName) }
     }
 
     /**
      * 링크 폴더 이동
      */
-    fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
+    fun moveFolder(postId: String, folderId: String, folderName: String) = viewModelScope.doraLaunch {
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
 
         if (isSuccess) {
             intent {
                 setVisibleMovingFolderBottomSheet(false)
                 updateSelectFolderId(state.selectedFolderId)
+                updateToastState("$folderName(으)로 이동했어요.")
             }
         }
     }
@@ -388,6 +401,7 @@ class HomeViewModel @Inject constructor(
                     changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
                 if (moveFolder.isSuccess) {
                     intent {
+                        reduce { state.copy(changeFolderName = folderName) }
                         postSideEffect(HomeSideEffect.NavigateToCompleteMovingFolder)
                         updateEditType(isEditPostFolder = false)
                     }
@@ -420,7 +434,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateToastState(toastMsg: Int) = intent {
+    private fun updateToastState(toastMsg: String) = intent {
         reduce {
             state.copy(
                 toastState = state.toastState.copy(

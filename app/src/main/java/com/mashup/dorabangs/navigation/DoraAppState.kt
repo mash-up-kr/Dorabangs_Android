@@ -48,7 +48,7 @@ class DoraAppState(
 
     @Composable
     fun isBottomBarVisible(): Boolean {
-        val homeRoute = "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}"
+        val homeRoute = "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}/{isShowToast}"
         return when (currentDestination?.route) {
             homeRoute, NavigationRoute.StorageScreen.route -> true
             else -> false
