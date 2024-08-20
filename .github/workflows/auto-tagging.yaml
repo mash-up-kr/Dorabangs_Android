@@ -31,7 +31,7 @@ jobs:
         if: contains(github.event.pull_request.labels.*.name, 'major')
         run: |
           current_tag=$(echo $LATEST_TAG_VERSION | sed 's/v//')
-          major=${echo $current_tag | cut -d. -f1)
+          major=$(echo $current_tag | cut -d. -f1)
           minor=$(echo $current_tag | cut -d. -f2)
           patch=$(echo $current_tag | cut -d. -f3)
          
