@@ -18,6 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # 마스터 브랜치로 가서 최신의 tag를 가져옴
+      - name: test
+        run: |
+          test=$(git tag --sort=-v:refname | head -n 1)
+          echo "test is $test"
+
       - name: get latest tag
         run: |
           git fetch origin test/tagging:test/tagging
