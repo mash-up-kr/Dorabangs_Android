@@ -20,6 +20,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: get latest tag
         run: |
-          git origin test/tagging:test/tagging
+          git fetch origin test/tagging:test/tagging
           git checkout test/tagging
           git describe --tags --abbrev=0
