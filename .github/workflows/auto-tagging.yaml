@@ -62,11 +62,11 @@ jobs:
       - name: print all version
         run: |
           echo "update version is v$major.$minor.$patch"
-          echo "new_tag=v$major.$minor.$path" >> $GITHUB_ENV
+          echo "new_tag=v$major.$minor.$patch" >> $GITHUB_ENV
 
       # 두 버전이 같은 경우 (아무런 라벨이 없다면) 태그 만들지 않고 종료
       - name: validate new tag
-        working-directory: scripts
+        working-directory: ${{ github.workspace }}
         run: |
           chmod +x validate_version.sh
           ./validate_version.sh
