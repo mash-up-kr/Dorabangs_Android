@@ -20,10 +20,9 @@ import com.dorabangs.feature.save.SelectableFolder
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.component.folder.DoraSelectableFolderItem
 import com.mashup.dorabangs.core.designsystem.component.folder.DoraSelectableFolderListItems
-import com.mashup.dorabangs.core.designsystem.component.folder.icnewfolder.IcNewFolder
-import com.mashup.dorabangs.core.designsystem.component.folder.icnewfolder.NewFolder
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
+import com.mashup.dorabangs.core.designsystem.R as coreR
 
 @Composable
 fun DoraLinkSaveSelectFolderScreen(
@@ -57,6 +56,7 @@ fun DoraLinkSaveSelectFolderScreen(
             DoraSelectableFolderListItems(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState()),
+                isLoading = state.isLoading,
                 items = state.folderList.toSelectableItems(),
                 onClickItem = onClickItem,
             )
@@ -78,7 +78,7 @@ fun List<SelectableFolder>.toSelectableItems() = map {
     DoraSelectableFolderItem(
         itemName = it.name,
         isSelected = it.isSelected,
-        vector = NewFolder.IcNewFolder,
+        vector = coreR.drawable.ic_3d_folder_small,
     )
 }
 

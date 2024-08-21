@@ -67,14 +67,21 @@ fun MainNavHost(
         homeCreateFolderNavigation(
             navController = appState.navController,
             onClickBackIcon = {
-                appState.navController.navigateToHome(
-                    isVisibleMovingBottomSheet = true,
-                    navOptions = navOptions {
-                        popUpTo(appState.navController.graph.id) {
-                            inclusive = true
-                        }
-                    },
-                )
+                val backStackEntry =
+                    kotlin.runCatching { appState.navController.getBackStackEntry("save/folder/{copiedUrl}") }
+                        .getOrNull()
+                if (backStackEntry == null) {
+                    appState.navController.navigateToHome(
+                        isVisibleMovingBottomSheet = true,
+                        navOptions = navOptions {
+                            popUpTo(appState.navController.graph.id) {
+                                inclusive = true
+                            }
+                        },
+                    )
+                } else {
+                    appState.navController.popBackStackWithClearFocus()
+                }
             },
             navigateToHome = { appState.navController.popBackStackWithClearFocus() },
             navigateToHomeAfterSaveLink = {
@@ -106,8 +113,14 @@ fun MainNavHost(
         storageFolderManageNavigation(
             onClickBackIcon = { folderType ->
                 val isVisibleBottomSheet = folderType == FolderManageType.CREATE
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isVisibleBottomSheet", isVisibleBottomSheet)
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", false)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set(
+                    "isVisibleBottomSheet",
+                    isVisibleBottomSheet,
+                )
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set(
+                    "isChanged",
+                    false,
+                )
                 appState.navController.popBackStackWithClearFocus()
             },
             navigateToComplete = { folderName ->
@@ -118,17 +131,34 @@ fun MainNavHost(
         )
         storageDetailNavigation(
             onClickBackIcon = { isChanged ->
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isRemoveSuccess", false)
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", isChanged)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set(
+                    "isRemoveSuccess",
+                    false,
+                )
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set(
+                    "isChanged",
+                    isChanged,
+                )
                 appState.navController.popBackStackWithClearFocus()
             },
             navigateToFolderManager = { itemId, type ->
-                val folderManageType = if (type == EditActionType.FolderEdit) FolderManageType.CHANGE else FolderManageType.CREATE
-                appState.navController.navigateToStorageFolderManage(folderManageType = folderManageType, actionType = type, itemId = itemId)
+                val folderManageType =
+                    if (type == EditActionType.FolderEdit) FolderManageType.CHANGE else FolderManageType.CREATE
+                appState.navController.navigateToStorageFolderManage(
+                    folderManageType = folderManageType,
+                    actionType = type,
+                    itemId = itemId,
+                )
             },
             navigateToStorage = { isRemoveSuccess ->
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", isRemoveSuccess)
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isRemoveSuccess", isRemoveSuccess)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set(
+                    "isChanged",
+                    isRemoveSuccess,
+                )
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set(
+                    "isRemoveSuccess",
+                    isRemoveSuccess,
+                )
                 appState.navController.popBackStackWithClearFocus()
             },
             navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
