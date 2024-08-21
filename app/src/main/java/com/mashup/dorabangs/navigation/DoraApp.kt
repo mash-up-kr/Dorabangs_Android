@@ -44,7 +44,7 @@ fun DoraApp(
                     if (isFirstEntry) {
                         NavigationRoute.OnBoardingScreen.route
                     } else {
-                        "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}/{isShowToast}"
+                        "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}"
                     },
                     hideKeyboardAction = hideKeyboardAction,
                 )

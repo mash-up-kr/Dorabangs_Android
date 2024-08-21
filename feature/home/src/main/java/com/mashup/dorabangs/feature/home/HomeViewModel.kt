@@ -434,7 +434,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateToastState(toastMsg: String) = intent {
+    fun updateToastState(toastMsg: String) = intent {
         reduce {
             state.copy(
                 toastState = state.toastState.copy(

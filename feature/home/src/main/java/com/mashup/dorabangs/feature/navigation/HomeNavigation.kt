@@ -13,9 +13,8 @@ fun NavController.navigateToHome(
     navOptions: NavOptions? = null,
     isVisibleMovingBottomSheet: Boolean = false,
     folderRemoveSuccess: Boolean = false,
-    isShowToast: Boolean = false,
 ) =
-    navigate("${NavigationRoute.HomeScreen.route}/$isVisibleMovingBottomSheet/$folderRemoveSuccess/$isShowToast", navOptions)
+    navigate("${NavigationRoute.HomeScreen.route}/$isVisibleMovingBottomSheet/$folderRemoveSuccess", navOptions)
 
 fun NavGraphBuilder.homeNavigation(
     navigateToClassification: () -> Unit,
@@ -26,19 +25,18 @@ fun NavGraphBuilder.homeNavigation(
     navigateToWebView: (String) -> Unit,
 ) {
     composable(
-        route = "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}/{isShowToast}",
+        route = "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}",
         arguments = listOf(
             navArgument(name = "isVisibleMovingBottomSheet") {
                 type = NavType.BoolType
                 defaultValue = false
             },
-            navArgument(name = "isShowToast") {
-                type = NavType.BoolType
-                defaultValue = false
-            },
         ),
-    ) {
+    ) { navBackStackEntry ->
+        val isShowToast = navBackStackEntry.savedStateHandle.get<Boolean>("isShowToast") ?: false
+
         HomeRoute(
+            isShowToast = isShowToast,
             navigateToClassification = navigateToClassification,
             navigateToSaveScreenWithLink = navigateToSaveScreenWithLink,
             navigateToSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,

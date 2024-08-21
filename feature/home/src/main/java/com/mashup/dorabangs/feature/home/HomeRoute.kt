@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +37,7 @@ fun HomeRoute(
     navigateToCreateFolder: () -> Unit,
     navigateToHomeTutorial: () -> Unit,
     navigateToWebView: (String) -> Unit,
+    isShowToast: Boolean = false,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToClassification: () -> Unit = {},
@@ -47,6 +49,10 @@ fun HomeRoute(
     val scope = rememberCoroutineScope()
     val pagingList = state.feedCards.collectAsLazyPagingItems()
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
+
+    LaunchedEffect(Unit) {
+        if (isShowToast) viewModel.updateToastState("${state.changeFolderName}(으)로 이동했어요.")
+    }
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {

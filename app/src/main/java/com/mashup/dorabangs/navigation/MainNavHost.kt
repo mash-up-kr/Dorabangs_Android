@@ -67,7 +67,6 @@ fun MainNavHost(
         homeCreateFolderNavigation(
             navController = appState.navController,
             onClickBackIcon = {
-                hideKeyboardAction()
                 appState.navController.navigateToHome(
                     isVisibleMovingBottomSheet = true,
                     navOptions = navOptions {
@@ -79,21 +78,13 @@ fun MainNavHost(
             },
             navigateToHome = { appState.navController.popBackStackWithClearFocus() },
             navigateToHomeAfterSaveLink = {
-                hideKeyboardAction()
                 appState.navController.navigateToHome(
                     isVisibleMovingBottomSheet = false,
                 )
             },
             navigateToHomeAfterMovingFolder = {
-                hideKeyboardAction()
-                appState.navController.navigateToHome(
-                    isShowToast = true,
-                    navOptions = navOptions {
-                        popUpTo(appState.navController.graph.id) {
-                            inclusive = true
-                        }
-                    },
-                )
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isShowToast", true)
+                appState.navController.popBackStackWithClearFocus()
             },
         )
         homeTutorialNavigation(
