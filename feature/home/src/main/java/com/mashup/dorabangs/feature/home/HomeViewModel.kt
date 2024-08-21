@@ -78,18 +78,6 @@ class HomeViewModel @Inject constructor(
                     initialValue = "",
                 ).collect { urlLink -> setStateUrlLink(urlLink) }
             }
-            launch {
-                savedStateHandle.getStateFlow(
-                    "isShowToast",
-                    initialValue = false,
-                ).collect { isShowToast ->
-                    if (isShowToast) {
-                        intent {
-                            updateToastState("${state.changeFolderName}(으)로 이동했어요.")
-                        }
-                    }
-                }
-            }
         }
 
         updateFolderList()
