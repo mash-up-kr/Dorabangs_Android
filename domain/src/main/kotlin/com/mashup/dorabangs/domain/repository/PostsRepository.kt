@@ -5,6 +5,7 @@ import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
+import com.mashup.dorabangs.domain.model.Posts
 import kotlinx.coroutines.flow.Flow
 
 interface PostsRepository {
@@ -20,6 +21,8 @@ interface PostsRepository {
     suspend fun saveLink(
         link: Link,
     )
+
+    suspend fun getPost(postId: String): Post
 
     suspend fun patchPostInfo(
         postId: String,
@@ -46,4 +49,11 @@ interface PostsRepository {
     suspend fun deleteLocalPostItem(postId: String)
 
     suspend fun updateBookMarkState(postId: String, isFavorite: Boolean)
+
+    suspend fun getPostsPage(
+        page: Int?,
+        order: String?,
+        favorite: Boolean?,
+        isRead: Boolean?,
+    ): Posts
 }

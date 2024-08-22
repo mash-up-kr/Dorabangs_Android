@@ -37,7 +37,6 @@ import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCa
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCardUiModel.Companion.convertCreatedSecond
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
-import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import kotlinx.coroutines.delay
 
@@ -49,7 +48,7 @@ fun FeedCard(
     onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickBookMarkButton: () -> Unit = {},
     onClickMoreButton: () -> Unit = {},
-    updateCardState: () -> Unit = {},
+    requestUpdate: (String) -> Unit = {},
 ) {
     val loadingSecond = if (!cardInfo.createdAt.isNullOrBlank()) {
         cardInfo.createdAt.convertCreatedSecond()
@@ -61,13 +60,13 @@ fun FeedCard(
         var requested = false
         while (cardInfo.isLoading) {
             val currentLoadingSecond = if (requested) {
-                4000
+                8000
             } else {
                 requested = true
                 loadingSecond * 1000L
             }
             delay(currentLoadingSecond)
-            updateCardState()
+            requestUpdate.invoke(cardInfo.postId)
         }
     }
     Column(
@@ -100,15 +99,6 @@ fun FeedCard(
             )
         }
         if (cardInfo.isLoading) {
-            CardProgressBar(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .fillMaxWidth()
-                    .height(4.dp),
-                completedColor = DoraColorTokens.Primary,
-                remainColor = DoraGradientToken.Gradient2,
-                timeInProgress = minOf(0.8f, cardInfo.createdAt.convertCreatedSecond() / 8f),
-            )
             FeedCardCategoryAndDayLabel(
                 cardInfo = cardInfo,
             )
@@ -271,8 +261,9 @@ fun FeedCardCategoryAndDayLabel(
         )
         cardInfo.createdAt?.let { day ->
             if (day.isNotEmpty()) {
+                val days = day.convertCreatedDate()
                 Text(
-                    text = "${day.convertCreatedDate()}일 전",
+                    text = if (days == 0L) "오늘" else "${day.convertCreatedDate()}일 전",
                     style = DoraTypoTokens.XSNormal,
                     color = DoraColorTokens.G5,
                 )
