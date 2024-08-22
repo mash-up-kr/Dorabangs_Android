@@ -93,6 +93,7 @@ fun FeedCard(
                     .aspectRatio(1f)
                     .background(color = DoraColorTokens.G1),
                 model = cardInfo.thumbnail,
+                error = painterResource(id = R.drawable.default_thumbnail),
                 contentScale = ContentScale.Crop,
                 contentDescription = "url 썸네일",
             )
@@ -311,6 +312,23 @@ sealed class FeedCardEntryPoint {
     object StorageDetail : FeedCardEntryPoint()
     object AiClassification : FeedCardEntryPoint()
     object Home : FeedCardEntryPoint()
+}
+
+@Preview
+@Composable
+private fun PreviewFeedCardWithEmptyUrl() {
+    val cardInfo =
+        FeedUiModel.FeedCardUiModel(
+            postId = "",
+            title = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
+            content = "실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기실험 0건인 조직에서, 가장 실험을 활발하게 하는 조직 되기",
+            keywordList = listOf("다연", "호현", "석주"),
+            category = "디자인",
+            createdAt = "2024-07-18T15:50:36.181Z",
+            thumbnail = "https://www.naver.com",
+            folderId = "",
+        )
+    FeedCard(cardInfo = cardInfo, feedCardEntryPoint = FeedCardEntryPoint.StorageDetail)
 }
 
 @Preview

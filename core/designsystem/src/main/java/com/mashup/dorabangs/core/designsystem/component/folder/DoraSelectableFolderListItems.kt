@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,12 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mashup.dorabangs.core.designsystem.component.folder.icnewfolder.IcNewFolder
-import com.mashup.dorabangs.core.designsystem.component.folder.icnewfolder.NewFolder
+import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.folder.icselect.IcSelect
 import com.mashup.dorabangs.core.designsystem.component.folder.icselect.ImgSelect
+import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.BottomSheetColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
@@ -30,36 +33,55 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 fun DoraSelectableFolderListItems(
     items: List<DoraSelectableFolderItem>,
     modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
     onClickItem: (Int) -> Unit = {},
 ) {
-    Column(modifier) {
-        items.forEachIndexed { index, data ->
-            DoraFolderSelectableListItem(
+    if (isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+        ) {
+            LottieLoader(
+                lottieRes = R.raw.spinner,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onClickItem(index) }
-                    .thenIf(index == 0) {
-                        background(
-                            color = BottomSheetColorTokens.ItemColor,
-                            shape = DoraRoundTokens.TopRound12,
-                        )
-                    }
-                    .thenIf(index == items.lastIndex) {
-                        background(
-                            color = BottomSheetColorTokens.ItemColor,
-                            shape = DoraRoundTokens.BottomRound12,
-                        )
-                    },
-                data = data,
+                    .padding(top = 40.dp)
+                    .size(54.dp)
+                    .align(Alignment.TopCenter),
+                reverseOnRepeat = true,
+                iterations = 200,
             )
-            if (index != items.lastIndex) {
-                HorizontalDivider(
+        }
+    } else {
+        Column(modifier) {
+            items.forEachIndexed { index, data ->
+                DoraFolderSelectableListItem(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    thickness = 0.5.dp,
-                    color = BottomSheetColorTokens.DividerColor,
+                        .clickable { onClickItem(index) }
+                        .thenIf(index == 0) {
+                            background(
+                                color = BottomSheetColorTokens.ItemColor,
+                                shape = DoraRoundTokens.TopRound12,
+                            )
+                        }
+                        .thenIf(index == items.lastIndex) {
+                            background(
+                                color = BottomSheetColorTokens.ItemColor,
+                                shape = DoraRoundTokens.BottomRound12,
+                            )
+                        },
+                    data = data,
+                    index = index,
                 )
+                if (index != items.lastIndex) {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        thickness = 0.5.dp,
+                        color = BottomSheetColorTokens.DividerColor,
+                    )
+                }
             }
         }
     }
@@ -67,6 +89,7 @@ fun DoraSelectableFolderListItems(
 
 @Composable
 fun DoraFolderSelectableListItem(
+    index: Int,
     data: DoraSelectableFolderItem,
     modifier: Modifier = Modifier,
 ) {
@@ -84,14 +107,18 @@ fun DoraFolderSelectableListItem(
         ) {
             Image(
                 modifier = Modifier.size(size = 20.dp),
-                imageVector = data.vector,
+                painter = if (index == 0) {
+                    painterResource(id = R.drawable.ic_add_folder_purple)
+                } else {
+                    painterResource(id = data.vector)
+                },
                 contentDescription = "",
             )
             Text(
                 modifier = Modifier.padding(start = 12.dp),
                 text = data.itemName,
                 style = DoraTypoTokens.caption3Normal,
-                color = DoraColorTokens.Black,
+                color = if (index == 0) DoraColorTokens.Primary else DoraColorTokens.Black,
             )
         }
         if (data.isSelected) {
@@ -110,14 +137,13 @@ fun DoraSelectableFolderListItemsPreview() {
     DoraSelectableFolderListItems(
         items = listOf(
             DoraSelectableFolderItem(
-                vector = NewFolder.IcNewFolder,
+                vector = R.drawable.ic_3d_folder_small,
                 itemName = "새 폴더 추가",
                 isSelected = true,
             ),
 
-            // TODO 3D 이미지가 안보여요~
             DoraSelectableFolderItem(
-                vector = NewFolder.IcNewFolder,
+                vector = R.drawable.ic_3d_folder_small,
                 itemName = "폴더 이름",
                 isSelected = false,
             ),

@@ -33,6 +33,7 @@ class DoraSaveViewModel @Inject constructor(
     }
 
     fun getFolderList() = viewModelScope.doraLaunch {
+        intent { reduce { state.copy(isLoading = true) } }
         val list = getFolderListUseCase.invoke()
         val firstItem = listOf(
             SelectableFolder(
@@ -61,6 +62,12 @@ class DoraSaveViewModel @Inject constructor(
                 state.copy(
                     folderList = firstItem + newList,
                 )
+            }
+        }
+    }.invokeOnCompletion {
+        intent {
+            reduce {
+                state.copy(isLoading = false)
             }
         }
     }

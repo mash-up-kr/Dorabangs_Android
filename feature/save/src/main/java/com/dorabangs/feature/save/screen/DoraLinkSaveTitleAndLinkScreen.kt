@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +28,7 @@ import com.dorabangs.feature.save.DoraSaveState
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
+import com.mashup.dorabangs.core.designsystem.R as DR
 
 @Composable
 fun DoraLinkSaveTitleAndLinkScreen(
@@ -46,6 +48,7 @@ fun DoraLinkSaveTitleAndLinkScreen(
                 .data(state.thumbnailUrl)
                 .crossfade(false)
                 .build(),
+            error = painterResource(id = DR.drawable.default_thumbnail),
             contentDescription = "url 썸네일",
         )
         Column(
