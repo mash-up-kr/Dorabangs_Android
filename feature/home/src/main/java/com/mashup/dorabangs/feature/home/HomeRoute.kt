@@ -63,12 +63,12 @@ fun HomeRoute(
     }
 
     LaunchedEffect(reachedBottom) {
-        if (reachedBottom && viewModel.isScrollLoading.not()) {
+        if (reachedBottom && state.isScrollLoading.not()) {
             viewModel.loadMore(state)
         }
     }
 
-    LaunchedEffect(viewModel.postList.size) {
+    LaunchedEffect(state.postList.size) {
         if (state.selectedIndex != prevFolderIndex) {
             scrollState.scrollToItem(viewModel.scrollCache[state.selectedIndex] ?: 0)
             prevFolderIndex = state.selectedIndex
@@ -78,6 +78,7 @@ fun HomeRoute(
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
         viewModel.setAIClassificationCount()
         viewModel.initPostList()
+        viewModel.updateFolderList()
     }
 
     viewModel.collectSideEffect { sideEffect ->
@@ -108,7 +109,7 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
-            postsList = viewModel.postList,
+            postsList = state.postList,
             scrollState = scrollState,
             onClickChip = { index ->
                 if (index != state.selectedIndex) {

@@ -9,6 +9,7 @@ import com.mashup.dorabangs.core.designsystem.R as coreR
 
 data class HomeState(
     val isLoading: Boolean = false,
+    val isScrollLoading: Boolean = false,
     val clipBoardState: ClipBoardState = ClipBoardState(),
     val tapElements: List<FeedUiModel.DoraChipUiModel> = emptyList(),
     val folderList: List<Folder> = listOf(),
@@ -25,6 +26,7 @@ data class HomeState(
     val unReadPostCount: Int = 0,
     val isEditPostFolder: Boolean = false,
     val allFolder: Folder? = null,
+    val postList: List<FeedUiModel.FeedCardUiModel> = emptyList(),
 ) {
     companion object {
         // TODO - 추후 sotrageMapper와 합치기

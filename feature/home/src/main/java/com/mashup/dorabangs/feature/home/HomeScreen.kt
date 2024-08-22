@@ -30,7 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,7 +68,7 @@ import dev.chrisbanes.haze.hazeChild
 @Composable
 fun HomeScreen(
     state: HomeState,
-    postsList: SnapshotStateList<FeedUiModel.FeedCardUiModel>,
+    postsList: List<FeedUiModel.FeedCardUiModel>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
     onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
@@ -270,7 +269,7 @@ fun HomeScreen(
 }
 
 private fun LazyListScope.Feeds(
-    feeds: SnapshotStateList<FeedUiModel.FeedCardUiModel>,
+    feeds: List<FeedUiModel.FeedCardUiModel>,
     onClickMoreButton: (String, String) -> Unit,
     onClickBookMarkButton: (String, Boolean) -> Unit,
     onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
