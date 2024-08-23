@@ -470,6 +470,12 @@ class HomeViewModel @Inject constructor(
                     )
                 }
             }
+        } else {
+            setTextHelperEnable(
+                isEnable = true,
+                helperMsg = newFolder.errorMsg,
+                lastCheckedFolderName = folderName,
+            )
         }
     }
 
