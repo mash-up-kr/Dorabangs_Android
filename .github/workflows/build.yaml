@@ -15,9 +15,9 @@ jobs:
           cd /home/runner/work/Dorabangs_Android/Dorabangs_Android/
           ls
           echo "절취선"
-          
+
       - name: Common Setup
-        uses: ./.github/workflows/common-setup.yaml
+        uses: Dorabangs_Android/.github/workflows/common-setup.yaml
           
       - name: Build with Gradle
         run: ./gradlew assembleDebug
