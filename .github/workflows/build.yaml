@@ -12,8 +12,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Common Setup
-        uses: Dorabangs_Android/.github/workflows/common-setup.yaml
+      - uses: ./.github/workflows/common-setup.yaml
           
       - name: Build with Gradle
         run: ./gradlew assembleDebug
