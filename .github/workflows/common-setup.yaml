@@ -31,5 +31,5 @@ jobs:
         with:
           name: common-setup-files
           path: |
-            home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
-            home/runner/work/Dorabangs_Android/Dorabangs_Android/app/local.properties
+            local.properties
+            google-services.json
