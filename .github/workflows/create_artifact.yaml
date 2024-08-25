@@ -48,21 +48,28 @@ jobs:
           fileDir: '/home/runner/work/Dorabangs_Android/Dorabangs_Android/android'
           encodedString: ${{ secrets.RELEASE_KEYSTORE }}
 
-      - name: sign aab
-        id: sign
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: build/app/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
-          alias: ${{ secrets.RELEASE_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
-
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
 
       - name: Build with bundleRelease for aab
         run: ./gradlew bundleRelease
+
+      - name: print all
+        run: |
+          cd /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/
+          ls
+          cd bundle
+          ls
+
+      - name: sign aab
+        id: sign
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
+          alias: ${{ secrets.RELEASE_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
       - name: upload artifact with apk
         uses: actions/upload-artifact@v4
