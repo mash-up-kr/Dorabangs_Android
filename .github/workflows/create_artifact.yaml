@@ -12,7 +12,7 @@ on:
 
 jobs:
   common_setup:
-    uses: mash-up-kr/Dorabangs_Android/.github/workflows/common-setup.yaml@3f31e3173babb25eb8bd1a12bb4d550905a0b251
+    uses: mash-up-kr/Dorabangs_Android/.github/workflows/common-setup.yaml@896319fa7ed3fe07ff7e3449def5e9b416436db8
 
   upload_apk:
     needs: common_setup
