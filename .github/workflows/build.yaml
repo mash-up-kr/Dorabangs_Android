@@ -7,12 +7,17 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/workflows/common-setup.yaml
+      - name: print all
+        run: |
+          cd /home/runner/work/Dorabangs_Android/Dorabangs_Android/
+          ls
+          echo "절취선"
+          
+      - name: Common Setup
+        uses: ./.github/workflows/common-setup.yaml
           
       - name: Build with Gradle
         run: ./gradlew assembleDebug

@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/workflows/common-setup.yaml
+      - name: Common Setup
+        uses: ./.github/workflows/common-setup.yaml
 
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
@@ -32,7 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/workflows/common-setup.yaml
+      - name: Common Setup
+        uses: ./.github/workflows/common-setup.yaml
 
       - name: Decode release key
         id: decode_keystore
