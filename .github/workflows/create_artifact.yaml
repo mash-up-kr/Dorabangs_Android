@@ -14,6 +14,7 @@ jobs:
   upload_apk:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Common Setup
         uses: ./.github/workflows/common-setup.yaml
 
@@ -32,6 +33,7 @@ jobs:
     needs: pre_setting
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Common Setup
         uses: ./.github/workflows/common-setup.yaml
 
