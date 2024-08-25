@@ -59,6 +59,7 @@ jobs:
           cd /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/
           ls
           cd bundle
+          echo "중앙선"
           ls
 
       - name: sign aab
