@@ -11,6 +11,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: debugging - 1
+        run : echo ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+      - name: debugging - 2
+        run: echo ${{ secrets.SERVER_BASE_URL }}
+
       - name: Create Google Json file
         run: echo ${{ secrets.GOOGLE_SERVICES_JSON }} | base64 -d > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
 
@@ -19,11 +25,9 @@ jobs:
 
       - name: Access SERVER_BASE_URL
         run: |
-          echo server_base_url=\"$API_KEY\" > local.properties
+          echo server_base_url=\"${{ secrets.SERVER_BASE_URL }}\" > local.properties
         shell: bash
-        env:
-          API_KEY: ${{ secrets.SERVER_BASE_URL }}
-      
+
       - name: print
         run: |
           cat /home/runner/work/Dorabangs_Android/Dorabangs_Android/local.properties
