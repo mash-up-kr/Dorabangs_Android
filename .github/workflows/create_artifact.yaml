@@ -54,14 +54,6 @@ jobs:
       - name: Build with bundleRelease for aab
         run: ./gradlew bundleRelease
 
-      - name: print all
-        run: |
-          cd /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/
-          ls
-          cd bundle
-          echo "중앙선"
-          ls
-
       - name: sign aab
         id: sign
         uses: r0adkll/sign-android-release@v1
@@ -92,7 +84,7 @@ jobs:
     needs: create_artifact
     runs-on: ubuntu-latest
     steps:
-      - name: Get artifact ID
+      - name: Get artifact ID for apk
         id: get-artifact-id
         run: |
           artifact_id=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -114,7 +106,7 @@ jobs:
           script: |
             const artifact_url_apk = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${process.env.artifact_id}`;
             const artifact_url_aab = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${process.env.artifact_id_aab}`;
-            const comment_body = `Artifact 생성 성공했 도라 :kissing_smiling_eyes:: [APK Download Link](${artifact_url_apk}, [AAB Downloads Link](${artifact_url_aab})`;
+            const comment_body = `Artifact 생성 성공했 도라 :kissing_smiling_eyes:: [APK Download Link](${artifact_url_apk}), [AAB Downloads Link](${artifact_url_aab})`;
             const pull_request_number = context.issue.number;
             await github.rest.issues.createComment({
               ...context.repo,
