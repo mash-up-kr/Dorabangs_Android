@@ -30,3 +30,11 @@ jobs:
         shell: bash
         env:
           API_KEY: ${{ secrets.SERVER_BASE_URL }}
+
+      - name: Upload setup artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: common-setup-files
+          path: |
+            google-services.json
+            local.properties
