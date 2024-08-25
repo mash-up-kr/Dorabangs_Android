@@ -6,13 +6,14 @@ on:
     branches: [ "feature**", "hotfix**", "release**", "develop**", "master" ]
 
 jobs:
+  common_setup:
+    uses: mash-up-kr/Dorabangs_Android/.github/workflows/common-setup.yaml@a311901def5b5f1cb29c5cee0c310eeef20787d6
+
   build:
+    needs: common_setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Common Setup
-        uses: mash-up-kr/Dorabangs_Android/.github/workflows/common-setup.yaml@a311901def5b5f1cb29c5cee0c310eeef20787d6
-          
       - name: Build with Gradle
         run: ./gradlew assembleDebug
