@@ -9,9 +9,13 @@ on:
       - opened
 
 jobs:
-  create_artifact:
-    runs-on: ubuntu-latest
+  common_setup:
+    uses: ./.github/workflows/common-setup.yaml
+    secrets: inherit
 
+  upload_apk:
+    needs: common_setup
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: set up JDK 18
@@ -21,28 +25,15 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Download common setup files
+        uses: actions/download-artifact@v4
+        with:
+          name: common-setup-files
 
-      - name: Create Google Json file
-        run: cat /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json | base64
-
-      - name: Putting Json data
-        env:
-          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo $DATA > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
-
-      - name: Access SERVER_BASE_URL
-        run: |
-          echo server_base_url=\"$API_KEY\" > local.properties
-        shell: bash
-        env:
-          API_KEY: ${{ secrets.SERVER_BASE_URL }}
-
-      - name: Build with assembleRelease
+      - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
 
-      - name: upload artifact
+      - name: upload artifact with apk
         uses: actions/upload-artifact@v4
         with:
           name: dora-artifact.apk
@@ -50,11 +41,56 @@ jobs:
           retention-days: 7
           overwrite: true
 
-  post_github:
-    needs: create_artifact
+  upload_aab:
+    needs: common_setup
     runs-on: ubuntu-latest
     steps:
-      - name: Get artifact ID
+      - uses: actions/checkout@v4
+      - name: set up JDK 18
+        uses: actions/setup-java@v3
+        with:
+          java-version: '18'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Download common setup files
+        uses: actions/download-artifact@v4
+        with:
+          name: common-setup-files
+
+      - name: Decode release key
+        id: decode_keystore
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'dorabangsKey.keystore'
+          fileDir: '/home/runner/work/Dorabangs_Android/Dorabangs_Android/android'
+          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
+
+      - name: Build with bundleRelease for aab
+        run: ./gradlew bundleRelease
+
+      - name: sign aab
+        id: sign_app
+        uses: r0adkll/sign-android-release@v1.0.4
+        with:
+          releaseDirectory: /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
+          alias: ${{ secrets.RELEASE_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
+
+      - name: upload artifact with aab
+        uses: actions/upload-artifact@v4
+        with:
+          name: dora-artifact.aab
+          path: ./app/build/outputs/bundle/release
+          retention-days: 7
+          overwrite: true
+
+  post_github:
+    needs: [ upload_apk, upload_aab ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get artifact ID for apk
         id: get-artifact-id
         run: |
           artifact_id=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -62,12 +98,21 @@ jobs:
             jq -r '.artifacts[] | select(.name == "dora-artifact.apk") | .id')
           echo "artifact_id=${artifact_id}" >> $GITHUB_ENV
 
+      - name: Get artifact ID for AAB
+        id: get-artifact-id-aab
+        run: |
+          artifact_id=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" | \
+            jq -r '.artifacts[] | select(.name == "dora-artifact.aab") | .id')
+          echo "artifact_id_aab=${artifact_id}" >> $GITHUB_ENV
+
       - name: Post comment with artifact link
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7.0.1
         with:
           script: |
-            const artifact_url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${process.env.artifact_id}`;
-            const comment_body = `APK 생성 성공했 도라 :kissing_smiling_eyes:: [APK Download Link](${artifact_url})`;
+            const artifact_url_apk = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${process.env.artifact_id}`;
+            const artifact_url_aab = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${process.env.artifact_id_aab}`;
+            const comment_body = `Artifact 생성 성공했 도라 :kissing_smiling_eyes:: [APK Download Link](${artifact_url_apk}), [AAB Downloads Link](${artifact_url_aab})`;
             const pull_request_number = context.issue.number;
             await github.rest.issues.createComment({
               ...context.repo,
