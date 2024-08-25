@@ -45,6 +45,7 @@ jobs:
     needs: pre_setting
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
 
@@ -60,6 +61,7 @@ jobs:
     needs: pre_setting
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Decode release key
         id: decode_keystore
         uses: timheuer/base64-to-file@v1.2
