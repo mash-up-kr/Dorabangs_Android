@@ -30,7 +30,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: common-setup-files
-          path: ${GITHUB_WORKSPACE}/app
+          path: $GITHUB_WORKSPACE/app
 
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
@@ -58,7 +58,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: common-setup-files
-          path: ${GITHUB_WORKSPACE}/app
+          path: $GITHUB_WORKSPACE/app
 
       - name: Decode release key
         id: decode_keystore
