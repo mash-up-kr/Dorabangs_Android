@@ -15,43 +15,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - name: set up JDK 18
-        uses: actions/setup-java@v3
-        with:
-          java-version: '18'
-          distribution: 'temurin'
-          cache: gradle
+      - &common-setup
+        - uses: actions/checkout@v4
+        - name: set up JDK 18
+          uses: actions/setup-java@v3
+          with:
+            java-version: '18'
+            distribution: 'temurin'
+            cache: gradle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        - name: Grant execute permission for gradlew
+          run: chmod +x gradlew
 
-      - name: Create Google Json file
-        run: cat /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json | base64
+        - name: Create Google Json file
+          run: cat /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json | base64
 
-      - name: Putting Json data
-        env:
-          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo $DATA > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
+        - name: Putting Json data
+          env:
+            DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          run: echo $DATA > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
 
-      - name: Access SERVER_BASE_URL
-        run: |
-          echo server_base_url=\"$API_KEY\" > local.properties
-        shell: bash
-        env:
-          API_KEY: ${{ secrets.SERVER_BASE_URL }}
+        - name: Access SERVER_BASE_URL
+          run: |
+            echo server_base_url=\"$API_KEY\" > local.properties
+          shell: bash
+          env:
+            API_KEY: ${{ secrets.SERVER_BASE_URL }}
 
   upload_apk:
     needs: pre_setting
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: set up JDK 18
-        uses: actions/setup-java@v3
-        with:
-          java-version: '18'
-          distribution: 'temurin'
-          cache: gradle
+      - *common-setup
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
 
@@ -67,13 +62,7 @@ jobs:
     needs: pre_setting
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: set up JDK 18
-        uses: actions/setup-java@v3
-        with:
-          java-version: '18'
-          distribution: 'temurin'
-          cache: gradle
+      - *common-setup
       - name: Decode release key
         id: decode_keystore
         uses: timheuer/base64-to-file@v1.2
