@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Common Setup
-        uses: Dorabangs_Android/.github/workflows/common-setup.yaml
+        uses: Dorabangs_Android/.github/workflows/common-setup.yaml@a311901def5b5f1cb29c5cee0c310eeef20787d6
 
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Common Setup
-        uses: Dorabangs_Android/.github/workflows/common-setup.yaml
+        uses: Dorabangs_Android/.github/workflows/common-setup.yaml@a311901def5b5f1cb29c5cee0c310eeef20787d6
 
       - name: Decode release key
         id: decode_keystore
