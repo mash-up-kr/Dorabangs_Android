@@ -7,7 +7,7 @@ on:
 
 jobs:
   common_setup:
-    uses: mash-up-kr/Dorabangs_Android/.github/workflows/common-setup.yaml@ba9d600a0e8bcbcf09fbd8450b15e0d13f28dd57
+    uses: ./.github/workflows/common-setup.yaml
     secrets: inherit
 
   build:
