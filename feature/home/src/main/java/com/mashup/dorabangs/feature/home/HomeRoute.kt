@@ -161,7 +161,7 @@ fun HomeRoute(
                 )
             },
             onClickMoveFolder = { selectFolder ->
-                viewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName)
+                selectFolder?.let { viewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName) }
             },
             btnEnable = state.selectedFolderId != state.changeFolderId,
             onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId, state.changeFolderName) },

@@ -77,7 +77,7 @@ object DoraBottomSheet : BottomSheetType {
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
         onClickCreateFolder: () -> Unit,
-        onClickMoveFolder: (SelectableBottomSheetItemUIModel) -> Unit,
+        onClickMoveFolder: (SelectableBottomSheetItemUIModel?) -> Unit,
         onClickCompleteButton: () -> Unit,
     ) {
         if (isShowSheet) {
@@ -115,9 +115,9 @@ object DoraBottomSheet : BottomSheetType {
                     items(folderList.size) { index ->
                         DoraBottomSheetFolderItem(
                             modifier = Modifier.fillMaxWidth(),
-                            data = folderList[index],
+                            data = folderList.getOrNull(index),
                             onClickItem = {
-                                onClickMoveFolder(folderList[index])
+                                onClickMoveFolder(folderList.getOrNull(index))
                             },
                             isLastItem = index == folderList.lastIndex,
                         )
@@ -160,7 +160,7 @@ sealed interface BottomSheetType {
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
         onClickCreateFolder: () -> Unit,
-        onClickMoveFolder: (SelectableBottomSheetItemUIModel) -> Unit,
+        onClickMoveFolder: (SelectableBottomSheetItemUIModel?) -> Unit,
         onClickCompleteButton: () -> Unit,
     )
 }
