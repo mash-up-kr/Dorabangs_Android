@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - master
+      - develop2
     types:
       - synchronize
       - opened
@@ -57,13 +58,13 @@ jobs:
         with:
           name: common-setup-files
 
-      - name: Decode release key
-        id: decode_keystore
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: 'dorabangsKey.keystore'
-          fileDir: '/home/runner/work/Dorabangs_Android/Dorabangs_Android/android'
-          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
+#      - name: Decode release key
+#        id: decode_keystore
+#        uses: timheuer/base64-to-file@v1.2
+#        with:
+#          fileName: 'dorabangsKey.keystore'
+#          fileDir: '/home/runner/work/Dorabangs_Android/Dorabangs_Android/android'
+#          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
 
       - name: Build with bundleRelease for aab
         run: ./gradlew bundleRelease
