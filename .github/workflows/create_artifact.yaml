@@ -31,8 +31,26 @@ jobs:
         with:
           name: common-setup-files
 
+      - name: Decode release key
+        id: decode_keystore
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'dorabangsKey.keystore'
+          fileDir: '/home/runner/work/Dorabangs_Android/Dorabangs_Android/android'
+          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
+
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
+
+      - name: sign apk
+        id: sign_app
+        uses: r0adkll/sign-android-release@v1.0.4
+        with:
+          releaseDirectory: /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
+          alias: ${{ secrets.RELEASE_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
       - name: upload artifact with apk
         uses: actions/upload-artifact@v4
@@ -58,13 +76,13 @@ jobs:
         with:
           name: common-setup-files
 
-#      - name: Decode release key
-#        id: decode_keystore
-#        uses: timheuer/base64-to-file@v1.2
-#        with:
-#          fileName: 'dorabangsKey.keystore'
-#          fileDir: '/home/runner/work/Dorabangs_Android/Dorabangs_Android/android'
-#          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
+      - name: Decode release key
+        id: decode_keystore
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'dorabangsKey.keystore'
+          fileDir: '/home/runner/work/Dorabangs_Android/Dorabangs_Android/android'
+          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
 
       - name: Build with bundleRelease for aab
         run: ./gradlew bundleRelease
