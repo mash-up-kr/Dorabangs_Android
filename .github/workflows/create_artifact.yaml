@@ -42,22 +42,6 @@ jobs:
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
 
-      - name: print file list
-        run: |
-          cd /home/runner/work/Dorabangs_Android/Dorabangs_Android/app
-          ls
-          echo "절취선"
-          cd build
-          ls
-          echo "절취선2"
-          cd outputs
-          ls
-          echo "절취선3"
-          cd apk
-          ls
-          echo "절취선4"
-
-
       - name: sign apk
         id: sign_app
         uses: r0adkll/sign-android-release@v1.0.4
@@ -67,6 +51,8 @@ jobs:
           alias: ${{ secrets.RELEASE_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
 
       - name: upload artifact with apk
         uses: actions/upload-artifact@v4
