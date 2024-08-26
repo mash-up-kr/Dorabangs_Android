@@ -4,13 +4,18 @@ import android.view.View
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -19,7 +24,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
@@ -46,8 +50,36 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
-    val pagingList = state.feedCards.collectAsLazyPagingItems()
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
+
+    val scrollState = rememberLazyListState()
+
+    var prevFolderIndex by remember { mutableIntStateOf(0) }
+
+    val reachedBottom: Boolean by remember {
+        derivedStateOf {
+            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
+            lastVisibleItem?.index != 0 && lastVisibleItem?.index == scrollState.layoutInfo.totalItemsCount - 5
+        }
+    }
+
+    LaunchedEffect(reachedBottom) {
+        if (reachedBottom && state.isScrollLoading.not()) {
+            viewModel.loadMore(state)
+        }
+    }
+
+    LaunchedEffect(state.postList.size) {
+        if (state.selectedIndex != prevFolderIndex) {
+            scrollState.scrollToItem(viewModel.scrollCache[state.selectedIndex] ?: 0)
+            prevFolderIndex = state.selectedIndex
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.initPostList()
+        viewModel.updateFolderList()
+    }
 
     if (isShowToast && state.hasShowToastState.not()) {
         viewModel.updateToastState("${state.changeFolderName}(으)로 이동했어요.")
@@ -73,9 +105,6 @@ fun HomeRoute(
                 viewModel.updateEditType(isEditPostFolder = true)
                 navigateToCreateFolder()
             }
-
-            is HomeSideEffect.RefreshPostList -> pagingList.refresh()
-
             is HomeSideEffect.ShowToastSnackBar -> {
                 scope.launch { toastSnackBarHostState.showSnackbar(sideEffect.toastMsg) }
             }
@@ -87,8 +116,13 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
-            postsPagingList = pagingList,
-            onClickChip = viewModel::changeSelectedTapIdx,
+            postsList = state.postList,
+            scrollState = scrollState,
+            onClickChip = { index ->
+                if (index != state.selectedIndex) {
+                    viewModel.changeSelectedTabIdx(index, scrollState.firstVisibleItemIndex)
+                }
+            },
             onClickMoreButton = { postId, folderId ->
                 viewModel.updateSelectedPostItem(postId = postId, folderId)
                 viewModel.setVisibleMoreButtonBottomSheet(true)
@@ -101,6 +135,7 @@ fun HomeRoute(
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
             navigateToHomeTutorial = navigateToHomeTutorial,
+            requestUpdate = viewModel::updatePost,
         )
 
         HomeDoraSnackBar(

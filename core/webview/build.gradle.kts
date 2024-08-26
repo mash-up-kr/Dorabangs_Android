@@ -7,10 +7,10 @@ plugins {
 
 android {
     namespace = "com.mashup.dorabangs.core.webview"
-    compileSdk = 34
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = 24
+        minSdk = libs.versions.min.sdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -62,7 +62,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.lifecycle.compose.ktx)
 
-    // hilt
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

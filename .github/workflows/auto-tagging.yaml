@@ -1,0 +1,67 @@
+name: auto-tagging
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - closed
+
+jobs:
+  auto-tagging:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: get latest tag
+        run: |
+          latest_tag_version=$(git tag --sort=-v:refname | head -n 1)
+          echo "latest tag version is $latest_tag_version"
+          echo "LATEST_TAG_VERSION=${latest_tag_version}" >> $GITHUB_ENV
+
+      - name: set default tag version
+        run: |
+          current_tag=$(echo $LATEST_TAG_VERSION | sed 's/v//')
+          
+          echo "major=$(echo $current_tag | cut -d. -f1)" >> $GITHUB_ENV
+          echo "minor=$(echo $current_tag | cut -d. -f2)" >> $GITHUB_ENV
+          echo "patch=$(echo $current_tag | cut -d. -f3)" >> $GITHUB_ENV
+
+      - name: major version up
+        if: contains(github.event.pull_request.labels.*.name, 'major')
+        run: |
+          new_major=$((major + 1))
+          
+          echo "major=${new_major}" >> $GITHUB_ENV
+          echo "new major version is $new_major"
+
+      - name: minor version up
+        if: contains(github.event.pull_request.labels.*.name, 'minor')
+        run: |
+          new_minor=$((minor + 1))
+          
+          echo "minor=$new_minor" >> $GITHUB_ENV
+          echo "new minor version is $new_minor"
+
+      - name: patch version up
+        if: contains(github.event.pull_request.labels.*.name, 'patch')
+        run: |
+          new_patch=$((patch + 1))
+          
+          echo "patch=${new_patch}" >> $GITHUB_ENV
+          echo "new patch version is $new_patch"
+
+      - name: print all version
+        run: |
+          echo "update version is v$major.$minor.$patch"
+          echo "new_tag=v$major.$minor.$patch" >> $GITHUB_ENV
+
+      - name: tagging
+        if: ${{ env.new_tag != env.LATEST_TAG_VERSION }}
+        run: |
+          git tag $new_tag
+          git push origin $new_tag
+
+      - name: print current tag
+        run: git tag

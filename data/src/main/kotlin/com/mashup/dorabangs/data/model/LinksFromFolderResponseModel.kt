@@ -1,7 +1,10 @@
 package com.mashup.dorabangs.data.model
+
 import com.mashup.dorabangs.domain.model.LinkKeywordInfo
 import com.mashup.dorabangs.domain.model.PageData
 import com.mashup.dorabangs.domain.model.PagingInfo
+import com.mashup.dorabangs.domain.model.Post
+import com.mashup.dorabangs.domain.model.Posts
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
 import kotlinx.serialization.Serializable
 
@@ -23,7 +26,7 @@ data class SavedLinkInfoResponseModel(
     val url: String? = "",
     val userId: String? = "",
     val thumbnailImgUrl: String = "",
-    val aiStatusResponseModel: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
+    val aiStatus: AIStatusResponseModel = AIStatusResponseModel.NOTHING,
     val readAt: String?,
 )
 
@@ -43,6 +46,25 @@ fun LinksFromFolderResponseModel.toDomain(): PageData<List<SavedLinkDetailInfo>>
     )
 }
 
+fun LinksFromFolderResponseModel.toDomainModel() =
+    Posts(
+        metaData = metadata.toDomain(),
+        items = list.map {
+            Post(
+                id = it.id.orEmpty(),
+                folderId = it.folderId.orEmpty(),
+                url = it.url.orEmpty(),
+                title = it.title.orEmpty(),
+                description = it.description.orEmpty(),
+                isFavorite = it.isFavorite,
+                createdAt = it.createdAt.orEmpty(),
+                thumbnailImgUrl = it.thumbnailImgUrl,
+                aiStatus = it.aiStatus.toDomain(),
+                readAt = it.readAt,
+            )
+        },
+    )
+
 fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
     return SavedLinkDetailInfo(
         createdAt = createdAt,
@@ -55,7 +77,7 @@ fun SavedLinkInfoResponseModel.toDomain(): SavedLinkDetailInfo {
         url = url,
         userId = userId,
         thumbnailImgUrl = thumbnailImgUrl,
-        aiStatus = aiStatusResponseModel.toDomain(),
+        aiStatus = aiStatus.toDomain(),
         readAt = readAt,
     )
 }
