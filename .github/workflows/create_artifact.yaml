@@ -62,7 +62,7 @@ jobs:
         id: sign_app
         uses: r0adkll/sign-android-release@v1.0.4
         with:
-          releaseDirectory: /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/apk/release
+          releaseDirectory: /app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
           alias: ${{ secrets.RELEASE_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
@@ -107,7 +107,7 @@ jobs:
         id: sign_app
         uses: r0adkll/sign-android-release@v1.0.4
         with:
-          releaseDirectory: /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/bundle/release
+          releaseDirectory: /app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
           alias: ${{ secrets.RELEASE_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
