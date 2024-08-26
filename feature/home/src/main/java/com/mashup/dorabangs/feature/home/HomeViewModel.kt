@@ -434,6 +434,12 @@ class HomeViewModel @Inject constructor(
         postSideEffect(HomeSideEffect.ShowToastSnackBar(toastMsg))
     }
 
+    fun updateHasShowToast(isShowToast: Boolean) = intent {
+        reduce {
+            state.copy(hasShowToastState = isShowToast)
+        }
+    }
+
     companion object {
         const val FAVORITE_FOLDER_INDEX = 1
     }

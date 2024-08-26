@@ -22,6 +22,7 @@ data class HomeState(
     val changeFolderName: String = "",
     val isShowMoreButtonSheet: Boolean = false,
     val isShowDialog: Boolean = false,
+    val hasShowToastState: Boolean = false,
     val isShowMovingFolderSheet: Boolean = false,
     val homeCreateFolder: HomeCreateFolder = HomeCreateFolder(),
     val aiClassificationCount: Int = 0,
