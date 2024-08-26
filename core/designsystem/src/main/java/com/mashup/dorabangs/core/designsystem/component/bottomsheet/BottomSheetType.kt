@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -88,9 +87,9 @@ object DoraBottomSheet : BottomSheetType {
                 containerColor = BottomSheetColorTokens.MovingFolderColor,
                 onDismissRequest = onDismissRequest,
             ) {
-                Column{
+                Column {
                     Column(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     ) {
                         Text(
                             modifier = Modifier
@@ -127,9 +126,10 @@ object DoraBottomSheet : BottomSheetType {
                             }
                         }
                     }
-                    Box(modifier = Modifier
-                        .background(DoraColorTokens.White)
-                        .padding(horizontal = 20.dp, vertical = 16.dp)
+                    Box(
+                        modifier = Modifier
+                            .background(DoraColorTokens.White)
+                            .padding(horizontal = 20.dp, vertical = 16.dp),
                     ) {
                         DoraButtons.DoraBtnMaxFull(
                             modifier = Modifier
