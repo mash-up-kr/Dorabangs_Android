@@ -31,14 +31,6 @@ jobs:
         with:
           name: common-setup-files
 
-      - name: Decode release key
-        id: decode_keystore
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: 'dorabangsKey.keystore'
-          fileDir: '/home/runner/work/Dorabangs_Android/Dorabangs_Android/android'
-          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
-
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
 
@@ -47,7 +39,7 @@ jobs:
         uses: r0adkll/sign-android-release@v1.0.4
         with:
           releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
+          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE_JKS }}
           alias: ${{ secrets.RELEASE_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
@@ -78,14 +70,6 @@ jobs:
         with:
           name: common-setup-files
 
-      - name: Decode release key
-        id: decode_keystore
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: 'dorabangsKey.keystore'
-          fileDir: '/home/runner/work/Dorabangs_Android/Dorabangs_Android/android'
-          encodedString: ${{ secrets.RELEASE_KEYSTORE }}
-
       - name: Build with bundleRelease for aab
         run: ./gradlew bundleRelease
 
@@ -94,7 +78,7 @@ jobs:
         uses: r0adkll/sign-android-release@v1.0.4
         with:
           releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
+          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE_JKS }}
           alias: ${{ secrets.RELEASE_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
