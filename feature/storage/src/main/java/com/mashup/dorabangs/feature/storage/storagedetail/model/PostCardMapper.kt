@@ -30,7 +30,7 @@ fun Post.toUiModel(): FeedUiModel.FeedCardUiModel {
         title = this.title,
         content = this.description,
         createdAt = this.createdAt,
-        keywordList = listOf(),
+        keywordList = this.keywords?.map { it.name },
         isFavorite = isFavorite,
         thumbnail = this.thumbnailImgUrl,
         folderId = this.folderId,
