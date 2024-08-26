@@ -11,6 +11,8 @@ jobs:
     secrets: inherit
 
   build:
+    env:
+      SEGMENT_DOWNLOAD_TIMEOUT_MINS: '3'
     needs: common_setup
     runs-on: ubuntu-latest
     steps:
@@ -20,7 +22,7 @@ jobs:
         with:
           java-version: '18'
           distribution: 'temurin'
-          cache: gradle
+          cache: 'gradle'
       - name: Download common setup files
         uses: actions/download-artifact@v4
         with:
