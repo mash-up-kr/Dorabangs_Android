@@ -32,12 +32,12 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeRoute(
-    modifier: Modifier = Modifier,
-    view: View = LocalView.current,
     navigateToCreateFolder: () -> Unit,
     navigateToHomeTutorial: () -> Unit,
     navigateToWebView: (String) -> Unit,
+    modifier: Modifier = Modifier,
     isShowToast: Boolean = false,
+    view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToClassification: () -> Unit = {},
