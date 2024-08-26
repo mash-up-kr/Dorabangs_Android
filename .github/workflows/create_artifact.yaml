@@ -46,11 +46,13 @@ jobs:
         id: sign_app
         uses: r0adkll/sign-android-release@v1.0.4
         with:
-          releaseDirectory: /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/apk/release
+          releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
           alias: ${{ secrets.RELEASE_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
 
       - name: upload artifact with apk
         uses: actions/upload-artifact@v4
@@ -91,7 +93,7 @@ jobs:
         id: sign_app
         uses: r0adkll/sign-android-release@v1.0.4
         with:
-          releaseDirectory: /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/build/outputs/bundle/release
+          releaseDirectory: app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
           alias: ${{ secrets.RELEASE_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.RELEASE_KEY_STORE_PASSWORD }}
