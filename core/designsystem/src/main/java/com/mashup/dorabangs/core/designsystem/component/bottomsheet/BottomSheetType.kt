@@ -114,7 +114,11 @@ object DoraBottomSheet : BottomSheetType {
                                 )
                             }
 
-                            items(folderList.size) { index ->
+                            items(
+                                count = folderList.size,
+                                contentType = { "FolderItem" },
+                                key = { idx -> folderList[idx].id },
+                            ) { index ->
                                 DoraBottomSheetFolderItem(
                                     modifier = Modifier.fillMaxWidth(),
                                     data = folderList[index],
