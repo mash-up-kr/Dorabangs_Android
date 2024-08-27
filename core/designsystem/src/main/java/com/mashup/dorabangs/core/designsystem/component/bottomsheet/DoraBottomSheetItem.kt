@@ -91,7 +91,7 @@ fun DoraFolderListItem(
 
 @Composable
 fun DoraBottomSheetFolderItem(
-    data: SelectableBottomSheetItemUIModel,
+    data: SelectableBottomSheetItemUIModel?,
     isLastItem: Boolean,
     modifier: Modifier = Modifier,
     background: Color = BottomSheetColorTokens.MovingFolderColor,
@@ -106,20 +106,22 @@ fun DoraBottomSheetFolderItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            DoraFolderListItem(
-                data = BottomSheetItemUIModel(
-                    icon = data.icon,
-                    itemName = data.itemName,
-                    color = data.color,
-                ),
-            )
-            if (data.isSelected) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_check),
-                    contentDescription = "selectedIcon",
+            data?.let { item ->
+                DoraFolderListItem(
+                    data = BottomSheetItemUIModel(
+                        icon = data.icon,
+                        itemName = data.itemName,
+                        color = data.color,
+                    ),
                 )
-            } else {
-                Box(modifier = Modifier.size(24.dp))
+                if (data.isSelected) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_check),
+                        contentDescription = "selectedIcon",
+                    )
+                } else {
+                    Box(modifier = Modifier.size(24.dp))
+                }
             }
         }
         if (!isLastItem) {

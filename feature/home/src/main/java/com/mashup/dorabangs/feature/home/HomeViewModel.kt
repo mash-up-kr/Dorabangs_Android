@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
+import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
@@ -404,6 +405,7 @@ class HomeViewModel @Inject constructor(
         setVisibleDialog(false)
         if (response.isSuccess) {
             intent {
+                updateToastState("삭제 완료했어요.")
                 reduce { state.copy(postList = state.postList.filter { it.postId != postId }) }
                 listOf(getCacheKey(state), "all", "favorite").forEach { key ->
                     postIdCache[key] = postIdCache[key]?.filterNot { it == postId } ?: emptyList()
@@ -419,18 +421,21 @@ class HomeViewModel @Inject constructor(
         reduce { state.copy(selectedPostId = postId, selectedFolderId = folderId) }
     }
 
-    fun updateSelectFolderId(folderId: String) = intent {
-        reduce { state.copy(changeFolderId = folderId) }
+    fun updateSelectFolderId(folderId: String, folderName: String = "") = intent {
+        reduce { state.copy(changeFolderId = folderId, changeFolderName = folderName) }
     }
 
     /**
      * 링크 폴더 이동
      */
-    fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
+    fun moveFolder(postId: String, folderId: String, folderName: String) = viewModelScope.doraLaunch {
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
             intent {
+                setVisibleMovingFolderBottomSheet(false)
+                updateSelectFolderId(state.selectedFolderId)
+                updateToastState("$folderName(으)로 이동했어요.")
                 val beforeFolderId = state.postList.find { it.postId == postId }?.folderId.orEmpty()
                 val category = state.folderList.find { it.id == folderId }?.name.orEmpty()
                 val changedPost = getPostUseCase(postId).toUiModel(category)
@@ -459,6 +464,7 @@ class HomeViewModel @Inject constructor(
                     changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
                 if (moveFolder.isSuccess) {
                     intent {
+                        reduce { state.copy(changeFolderName = folderName) }
                         postSideEffect(HomeSideEffect.NavigateToCompleteMovingFolder)
                         updateEditType(isEditPostFolder = false)
                     }
@@ -494,6 +500,24 @@ class HomeViewModel @Inject constructor(
                     PostInfo(readAt = FeedUiModel.FeedCardUiModel.createCurrentTime()),
                 )
             }
+        }
+    }
+
+    fun updateToastState(toastMsg: String) = intent {
+        reduce {
+            state.copy(
+                toastState = state.toastState.copy(
+                    text = toastMsg,
+                    toastStyle = ToastStyle.CHECK,
+                ),
+            )
+        }
+        postSideEffect(HomeSideEffect.ShowToastSnackBar(toastMsg))
+    }
+
+    fun updateHasShowToast(isShowToast: Boolean) = intent {
+        reduce {
+            state.copy(hasShowToastState = isShowToast)
         }
     }
 

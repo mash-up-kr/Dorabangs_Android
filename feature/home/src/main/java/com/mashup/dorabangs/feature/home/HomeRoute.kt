@@ -3,6 +3,7 @@ package com.mashup.dorabangs.feature.home
 import android.view.View
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -26,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
+import com.mashup.dorabangs.core.designsystem.component.toast.DoraToast
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
@@ -33,11 +35,12 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeRoute(
-    modifier: Modifier = Modifier,
-    view: View = LocalView.current,
     navigateToCreateFolder: () -> Unit,
     navigateToHomeTutorial: () -> Unit,
     navigateToWebView: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    isShowToast: Boolean = false,
+    view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToClassification: () -> Unit = {},
@@ -47,6 +50,8 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
+    val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
+
     val scrollState = rememberLazyListState()
 
     var prevFolderIndex by remember { mutableIntStateOf(0) }
@@ -76,6 +81,11 @@ fun HomeRoute(
         viewModel.updateFolderList()
     }
 
+    if (isShowToast && state.hasShowToastState.not()) {
+        viewModel.updateToastState("${state.changeFolderName}(으)로 이동했어요.")
+        viewModel.updateHasShowToast(true)
+    }
+
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is HomeSideEffect.ShowSnackBar -> {
@@ -95,7 +105,9 @@ fun HomeRoute(
                 viewModel.updateEditType(isEditPostFolder = true)
                 navigateToCreateFolder()
             }
-
+            is HomeSideEffect.ShowToastSnackBar -> {
+                scope.launch { toastSnackBarHostState.showSnackbar(sideEffect.toastMsg) }
+            }
             else -> {}
         }
     }
@@ -147,7 +159,6 @@ fun HomeRoute(
                 viewModel.hideSnackBar()
             },
         )
-
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
             isShowSheet = state.isShowMoreButtonSheet,
@@ -185,10 +196,10 @@ fun HomeRoute(
                 )
             },
             onClickMoveFolder = { selectFolder ->
-                viewModel.updateSelectFolderId(selectFolder)
+                selectFolder?.let { viewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName) }
             },
             btnEnable = state.selectedFolderId != state.changeFolderId,
-            onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId) },
+            onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId, state.changeFolderName) },
         )
 
         DoraDialog(
@@ -199,6 +210,15 @@ fun HomeRoute(
             disMissBtnText = stringResource(R.string.remove_dialog_cancil),
             onDisMissRequest = { viewModel.setVisibleDialog(false) },
             onClickConfirmBtn = { viewModel.deletePost(state.selectedPostId) },
+        )
+
+        DoraToast(
+            text = state.toastState.text,
+            toastStyle = state.toastState.toastStyle,
+            snackBarHostState = toastSnackBarHostState,
+            modifier = modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 20.dp),
         )
     }
 }
