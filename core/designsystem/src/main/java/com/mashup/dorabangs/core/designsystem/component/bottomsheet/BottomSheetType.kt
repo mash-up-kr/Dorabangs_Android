@@ -78,7 +78,7 @@ object DoraBottomSheet : BottomSheetType {
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
         onClickCreateFolder: () -> Unit,
-        onClickMoveFolder: (String) -> Unit,
+        onClickMoveFolder: (SelectableBottomSheetItemUIModel?) -> Unit,
         onClickCompleteButton: () -> Unit,
     ) {
         if (isShowSheet) {
@@ -170,7 +170,7 @@ sealed interface BottomSheetType {
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
         onClickCreateFolder: () -> Unit,
-        onClickMoveFolder: (String) -> Unit,
+        onClickMoveFolder: (SelectableBottomSheetItemUIModel?) -> Unit,
         onClickCompleteButton: () -> Unit,
     )
 }

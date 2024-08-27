@@ -28,7 +28,7 @@ fun NavController.navigateToStorageFolderManage(
 
 fun NavGraphBuilder.storageFolderManageNavigation(
     onClickBackIcon: (FolderManageType) -> Unit = {},
-    navigateToComplete: () -> Unit,
+    navigateToComplete: (String) -> Unit,
 ) {
     composable(
         route = "${NavigationRoute.StorageScreen.StorageFolderManageScreen.route}/{folderManageType}?itemId={itemId}/{editType}",

@@ -31,13 +31,13 @@ fun StorageFolderManageRoute(
     folderManageType: String,
     editType: EditActionType?,
     onClickBackIcon: (FolderManageType) -> Unit,
-    navigateToComplete: () -> Unit,
+    navigateToComplete: (String) -> Unit,
     folderManageViewModel: FolderManageViewModel = hiltViewModel(),
 ) {
     val folderManageState by folderManageViewModel.collectAsState()
     folderManageViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is FolderManageSideEffect.NavigateToComplete -> navigateToComplete()
+            is FolderManageSideEffect.NavigateToComplete -> navigateToComplete(sideEffect.folderName)
             is FolderManageSideEffect.NavigateToBackStack -> onClickBackIcon(folderManageState.type)
         }
     }

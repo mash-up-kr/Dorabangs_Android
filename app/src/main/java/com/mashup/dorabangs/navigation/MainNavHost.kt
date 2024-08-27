@@ -90,7 +90,8 @@ fun MainNavHost(
                 )
             },
             navigateToHomeAfterMovingFolder = {
-                appState.navController.popBackStack()
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isShowToast", true)
+                appState.navController.popBackStackWithClearFocus()
             },
         )
         homeTutorialNavigation(
@@ -122,11 +123,9 @@ fun MainNavHost(
                 )
                 appState.navController.popBackStackWithClearFocus()
             },
-            navigateToComplete = {
-                appState.navController.previousBackStackEntry?.savedStateHandle?.set(
-                    "isChanged",
-                    true,
-                )
+            navigateToComplete = { folderName ->
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("isChanged", true)
+                appState.navController.previousBackStackEntry?.savedStateHandle?.set("folderName", folderName)
                 appState.navController.popBackStackWithClearFocus()
             },
         )

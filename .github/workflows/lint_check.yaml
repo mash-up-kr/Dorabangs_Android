@@ -4,6 +4,8 @@ on: pull_request
 
 jobs:
   lint-check:
+    env:
+      SEGMENT_DOWNLOAD_TIMEOUT_MINS: '3'
     runs-on: ubuntu-latest
 
     steps:
@@ -13,7 +15,7 @@ jobs:
         with:
           java-version: '18'
           distribution: 'temurin'
-          cache: gradle
+          cache: 'gradle'
 
       - name: Cache Gradle Packages
         uses: actions/cache@v3
