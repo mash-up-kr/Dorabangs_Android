@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -37,6 +38,7 @@ import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCa
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCardUiModel.Companion.convertCreatedSecond
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
+import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import kotlinx.coroutines.delay
 
@@ -91,6 +93,7 @@ fun FeedCard(
                 modifier = Modifier
                     .size(size = 80.dp)
                     .aspectRatio(1f)
+                    .clip(DoraRoundTokens.Round4)
                     .background(color = DoraColorTokens.G1),
                 model = cardInfo.thumbnail,
                 error = painterResource(id = R.drawable.default_thumbnail),

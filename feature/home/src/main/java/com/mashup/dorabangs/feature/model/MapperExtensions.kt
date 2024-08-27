@@ -13,7 +13,7 @@ fun Post.toUiModel(category: String?): FeedUiModel.FeedCardUiModel {
         content = this.description,
         category = category.orEmpty(),
         createdAt = this.createdAt,
-        keywordList = listOf(),
+        keywordList = this.keywords?.map { it.name },
         isFavorite = isFavorite,
         thumbnail = thumbnailImgUrl,
         url = this.url,
