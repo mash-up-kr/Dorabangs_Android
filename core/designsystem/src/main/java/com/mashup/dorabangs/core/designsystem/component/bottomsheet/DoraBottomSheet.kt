@@ -20,7 +20,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DoraBaseBottomSheet(
-    state: SheetState = rememberModalBottomSheetState(),
+    state: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     modifier: Modifier = Modifier,
     containerColor: Color = BottomSheetColorTokens.MoreViewBackgroundColor,
     onDismissRequest: () -> Unit,
