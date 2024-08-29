@@ -79,6 +79,7 @@ fun HomeScreen(
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
     requestUpdate: (String) -> Unit = {},
+    navigateToUnreadStorageDetail: () -> Unit = {},
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -99,7 +100,7 @@ fun HomeScreen(
                         .align(Alignment.Center),
                 )
             }
-        } else if (postsList.size == 0) {
+        } else if (postsList.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -199,11 +200,11 @@ fun HomeScreen(
                                             append(stringResource(id = R.string.home_carousel_its_here))
                                         }
                                     },
-                                    onClickButton = navigateToClassification,
+                                    onClickButton = navigateToUnreadStorageDetail,
                                     isVisible = state.unReadPostCount > 0,
                                 ),
                                 HomeCarouselItem(
-                                    lottieRes = R.raw.unread,
+                                    lottieRes = R.raw.tutorial,
                                     description = buildAnnotatedString {
                                         withStyle(SpanStyle(color = DoraColorTokens.Black)) {
                                             append(stringResource(id = R.string.home_carousel_save_introduce))
@@ -295,13 +296,15 @@ private fun LazyListScope.Feeds(
             onClickCardItem = onClickCardItem,
         )
 
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .fillMaxWidth()
-                .height(0.5.dp)
-                .background(DoraColorTokens.G2),
-        )
+        if (index != feeds.lastIndex) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .height(0.5.dp)
+                    .background(DoraColorTokens.G2),
+            )
+        }
     }
 }
 

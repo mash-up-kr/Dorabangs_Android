@@ -19,6 +19,11 @@ fun NavController.navigateToStorageDetail(folder: Folder) {
     navigate("${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folder=$folderItem?")
 }
 
+fun NavController.navigateToUnreadStorageDetail(folder: Folder) {
+    val folderItem = Uri.encode(Json.encodeToString(folder))
+    navigate("${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folder=$folderItem?unread=true")
+}
+
 fun NavGraphBuilder.storageDetailNavigation(
     onClickBackIcon: (Boolean) -> Unit,
     navigateToWebView: (String) -> Unit,
@@ -26,14 +31,18 @@ fun NavGraphBuilder.storageDetailNavigation(
     navigateToFolderManager: (String, EditActionType) -> Unit,
 ) {
     composable(
-        route = "${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folder={folder}?",
+        route = "${NavigationRoute.StorageScreen.StorageDetailScreen.route}/folder={folder}?unread={unread}",
         arguments = listOf(
             navArgument("folder") {
                 type = serializableNavType<Folder>()
             },
+            navArgument("unread") {
+                defaultValue = false
+            },
         ),
     ) { navBackStackEntry ->
         val folderItem = navBackStackEntry.arguments?.bundleSerializable("folder") as Folder?
+        val isUnread = navBackStackEntry.arguments?.bundleSerializable("unread") as? Boolean ?: false
         val isVisibleBottomSheet = navBackStackEntry.savedStateHandle.get<Boolean>("isVisibleBottomSheet") ?: false
         val isChangedData = navBackStackEntry.savedStateHandle.get<Boolean>("isChanged") ?: false
         val changeFolderName = navBackStackEntry.savedStateHandle.get<String>("folderName").orEmpty()
@@ -41,6 +50,7 @@ fun NavGraphBuilder.storageDetailNavigation(
         folderItem?.let { item ->
             StorageDetailRoute(
                 folderItem = item,
+                isUnread = isUnread,
                 isVisibleBottomSheet = isVisibleBottomSheet,
                 isChangedData = isChangedData,
                 changeFolderName = changeFolderName,

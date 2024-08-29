@@ -24,10 +24,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.component.toast.DoraToast
+import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
@@ -46,6 +49,7 @@ fun HomeRoute(
     navigateToClassification: () -> Unit = {},
     navigateToSaveScreenWithLink: (String) -> Unit = {},
     navigateToSaveScreenWithoutLink: () -> Unit = {},
+    navigateToUnreadStorageDetail: (Folder) -> Unit = {},
 ) {
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
@@ -76,9 +80,13 @@ fun HomeRoute(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.initPostList()
-        viewModel.updateFolderList()
+    LifecycleEventEffect(Lifecycle.Event.ON_START) {
+        if (state.isNeedToRefreshOnStart) {
+            viewModel.setAIClassificationCount()
+            viewModel.initPostList()
+            viewModel.updateFolderList()
+            viewModel.setIsNeedToRefreshOnStart(false)
+        }
     }
 
     if (isShowToast && state.hasShowToastState.not()) {
@@ -127,14 +135,22 @@ fun HomeRoute(
                 viewModel.updateSelectedPostItem(postId = postId, folderId)
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
-            onClickBookMarkButton = { postId, isFavorite -> viewModel.updateFavoriteItem(postId, isFavorite) },
+            onClickBookMarkButton = viewModel::updateFavoriteItem,
             onClickCardItem = { cardInfo ->
                 viewModel.updateReadAt(cardInfo)
                 navigateToWebView(cardInfo.url)
             },
             navigateToClassification = navigateToClassification,
-            navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
+            navigateSaveScreenWithoutLink = {
+                navigateToSaveScreenWithoutLink()
+                viewModel.setIsNeedToRefreshOnStart(true)
+            },
             navigateToHomeTutorial = navigateToHomeTutorial,
+            navigateToUnreadStorageDetail = {
+                val folder = state.allFolder ?: return@HomeScreen
+                navigateToUnreadStorageDetail(folder)
+                viewModel.setIsNeedToRefreshOnStart(true)
+            },
             requestUpdate = viewModel::updatePost,
         )
 
@@ -159,6 +175,7 @@ fun HomeRoute(
                 viewModel.hideSnackBar()
             },
         )
+
         DoraBottomSheet.MoreButtonBottomSheet(
             modifier = Modifier.height(320.dp),
             isShowSheet = state.isShowMoreButtonSheet,
