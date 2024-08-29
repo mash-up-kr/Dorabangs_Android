@@ -1,3 +1,5 @@
+import java.io.ByteArrayOutputStream
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.application)
@@ -11,12 +13,26 @@ plugins {
 android {
     namespace = "com.mashup.dorabangs"
     compileSdk = libs.versions.compile.sdk.get().toInt()
+    fun getGitCommitCount(): Int {
+        return try {
+            val stdout = ByteArrayOutputStream()
+            exec {
+                commandLine = listOf("git", "rev-list", "--count", "HEAD")
+                standardOutput = stdout
+            }
+            stdout.toString().trim().toInt()
+        } catch (e: Exception) {
+            1 // 예외가 발생할 경우 기본값으로 1을 반환
+        }
+    }
+
+    val gitCommitCount = getGitCommitCount()
 
     defaultConfig {
         applicationId = "com.mashup.dorabangs"
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = libs.versions.version.code.get().toInt()
+        versionCode = gitCommitCount
         versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
