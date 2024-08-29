@@ -1,8 +1,11 @@
 package com.mashup.dorabangs.core.designsystem.component.bottomsheet
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -75,17 +78,19 @@ object DoraBottomSheet : BottomSheetType {
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
         onClickCreateFolder: () -> Unit,
-        onClickMoveFolder: (String) -> Unit,
+        onClickMoveFolder: (SelectableBottomSheetItemUIModel?) -> Unit,
         onClickCompleteButton: () -> Unit,
     ) {
         if (isShowSheet) {
             DoraBaseBottomSheet(
-                modifier = modifier.fillMaxHeight(0.6f),
+                modifier = modifier.heightIn(max = 441.dp),
                 containerColor = BottomSheetColorTokens.MovingFolderColor,
                 onDismissRequest = onDismissRequest,
             ) {
-                LazyColumn {
-                    item {
+                Column {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                    ) {
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -94,38 +99,45 @@ object DoraBottomSheet : BottomSheetType {
                             text = stringResource(id = R.string.moving_folder_dialog_title),
                             style = DoraTypoTokens.base2Bold,
                         )
-                    }
+                        LazyColumn {
+                            item {
+                                DoraBottomSheetFolderItem(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    data = SelectableBottomSheetItemUIModel(
+                                        icon = R.drawable.ic_add_folder_purple,
+                                        itemName = stringResource(id = R.string.moving_folder_dialog_add_folder),
+                                        isSelected = false,
+                                        color = DoraColorTokens.Primary,
+                                    ),
+                                    onClickItem = onClickCreateFolder,
+                                    isLastItem = false,
+                                )
+                            }
 
-                    item {
-                        DoraBottomSheetFolderItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            data = SelectableBottomSheetItemUIModel(
-                                icon = R.drawable.ic_add_folder_purple,
-                                itemName = stringResource(id = R.string.moving_folder_dialog_add_folder),
-                                isSelected = false,
-                                color = DoraColorTokens.Primary,
-                            ),
-                            onClickItem = onClickCreateFolder,
-                            isLastItem = false,
-                        )
+                            items(
+                                count = folderList.size,
+                                contentType = { "FolderItem" },
+                                key = { idx -> folderList[idx].id },
+                            ) { index ->
+                                DoraBottomSheetFolderItem(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    data = folderList[index],
+                                    onClickItem = {
+                                        onClickMoveFolder(folderList[index].id)
+                                    },
+                                    isLastItem = index == folderList.lastIndex,
+                                )
+                            }
+                        }
                     }
-
-                    items(folderList.size) { index ->
-                        DoraBottomSheetFolderItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            data = folderList[index],
-                            onClickItem = {
-                                onClickMoveFolder(folderList[index].id)
-                            },
-                            isLastItem = index == folderList.lastIndex,
-                        )
-                    }
-
-                    item {
+                    Box(
+                        modifier = Modifier
+                            .background(DoraColorTokens.White)
+                            .padding(horizontal = 20.dp, vertical = 16.dp),
+                    ) {
                         DoraButtons.DoraBtnMaxFull(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp, vertical = 16.dp),
+                                .fillMaxWidth(),
                             buttonText = stringResource(id = R.string.moving_folder_bottom_sheet_complete),
                             enabled = btnEnable,
                             onClickButton = onClickCompleteButton,
@@ -158,7 +170,7 @@ sealed interface BottomSheetType {
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
         onClickCreateFolder: () -> Unit,
-        onClickMoveFolder: (String) -> Unit,
+        onClickMoveFolder: (SelectableBottomSheetItemUIModel?) -> Unit,
         onClickCompleteButton: () -> Unit,
     )
 }

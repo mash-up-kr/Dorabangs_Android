@@ -23,7 +23,7 @@ dependencies {
     implementation(libs.serialization)
 }
 
-tasks.register("dorabangs") {
+tasks.register("domainCoverage") {
     group = "verification"
     description = "Run tests and generate jacoco report"
     dependsOn("test", "jacocoTestReport")

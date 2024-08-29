@@ -45,6 +45,7 @@ fun NavGraphBuilder.storageDetailNavigation(
         val isUnread = navBackStackEntry.arguments?.bundleSerializable("unread") as? Boolean ?: false
         val isVisibleBottomSheet = navBackStackEntry.savedStateHandle.get<Boolean>("isVisibleBottomSheet") ?: false
         val isChangedData = navBackStackEntry.savedStateHandle.get<Boolean>("isChanged") ?: false
+        val changeFolderName = navBackStackEntry.savedStateHandle.get<String>("folderName").orEmpty()
 
         folderItem?.let { item ->
             StorageDetailRoute(
@@ -52,6 +53,7 @@ fun NavGraphBuilder.storageDetailNavigation(
                 isUnread = isUnread,
                 isVisibleBottomSheet = isVisibleBottomSheet,
                 isChangedData = isChangedData,
+                changeFolderName = changeFolderName,
                 onClickBackIcon = onClickBackIcon,
                 navigateToStorage = navigateToStorage,
                 navigateToFolderManager = navigateToFolderManager,

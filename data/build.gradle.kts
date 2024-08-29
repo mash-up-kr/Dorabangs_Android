@@ -2,6 +2,7 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
+    id("jacoco")
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
@@ -40,6 +41,71 @@ android {
     buildFeatures {
         buildConfig = true
     }
+}
+
+jacoco {
+    toolVersion = "0.8.11" // JaCoCo의 적절한 버전 선택
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn(tasks.named("testDebugUnitTest"))
+
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+        html.required.set(true)
+        html.outputLocation.set(file("$buildDir/reports/jacoco/jacocoTestReport"))
+    }
+
+    // `sourceDirectories` 설정
+    sourceDirectories.setFrom(
+        files(
+            "src/main/kotlin",
+            "src/test/kotlin",
+        ),
+    )
+
+    // `classDirectories` 설정
+    classDirectories.setFrom(
+        fileTree(
+            mapOf(
+                "dir" to "$buildDir/tmp/kotlin-classes/debug", // 실제 테스트 클래스가 위치한 경로를 확인
+                "exclude" to listOf(
+                    "**/R.class",
+                    "**/R$*.class",
+                    "**/BuildConfig.*",
+                    "**/Manifest*.*",
+                    "**/*Test*.*",
+                    "android/**/*.*",
+                    "androidx/**/*.*",
+                    "**/*\$ViewInjector*.*",
+                    "**/*Dagger*.*",
+                    "**/*MembersInjector*.*",
+                    "**/*_Factory.*",
+                    "**/*_Provide*Factory*.*",
+                    "**/*_ViewBinding*.*",
+                    "**/AutoValue_*.*",
+                    "**/R2.class",
+                    "**/R2$*.class",
+                    "**/*Directions$*",
+                    "**/*Directions.*",
+                    "**/*Binding.*",
+                    "**/*\$Lambda$*.*",
+                    "**/*\$inlined$*.*",
+                ),
+            ),
+        ),
+    )
+
+    // `executionData` 설정
+    executionData.setFrom(
+        fileTree(
+            mapOf(
+                "dir" to "$buildDir/outputs/unit_test_code_coverage/debugUnitTest", // 실제 exec 파일 위치 확인
+                "includes" to listOf("**/*.exec"),
+            ),
+        ),
+    )
 }
 
 dependencies {
@@ -97,4 +163,10 @@ dependencies {
 
 fun getSeverBaseUrl(propertyKey: String): String {
     return gradleLocalProperties(rootDir).getProperty(propertyKey).orEmpty()
+}
+
+tasks.register("dataCoverage") {
+    group = "verification"
+    description = "Run tests and generate jacoco report"
+    dependsOn("testDebugUnitTest", "jacocoTestReport")
 }

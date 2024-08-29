@@ -113,7 +113,7 @@ class StorageDetailViewModel @Inject constructor(
                     ),
                 )
             }
-            postSideEffect(StorageDetailSideEffect.ShowToastSnackBarRenameFolder)
+            postSideEffect(StorageDetailSideEffect.ShowToastSnackBar)
         }
     }
 
@@ -323,6 +323,7 @@ class StorageDetailViewModel @Inject constructor(
         if (isSuccessDeleted) {
             updateChangeData(true)
             deletePostLocalUseCase(postId)
+            updateToastState("삭제 완료했어요.")
         }
     }
 
@@ -348,7 +349,7 @@ class StorageDetailViewModel @Inject constructor(
     /**
      * 링크 폴더 이동
      */
-    fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
+    fun moveFolder(postId: String, folderId: String, folderName: String) = viewModelScope.doraLaunch {
         val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
         setVisibleMovingFolderBottomSheet(false)
         if (isSuccess) {
@@ -356,6 +357,7 @@ class StorageDetailViewModel @Inject constructor(
             intent {
                 deletePostLocalUseCase(postId)
                 updateSelectFolderId(state.folderInfo.folderId.orEmpty())
+                updateToastState("$folderName(으)로 이동했어요.")
             }
         }
     }
@@ -384,6 +386,18 @@ class StorageDetailViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun updateToastState(toastMsg: String) = intent {
+        reduce {
+            state.copy(
+                toastState = state.toastState.copy(
+                    text = toastMsg,
+                    toastStyle = ToastStyle.CHECK,
+                ),
+            )
+        }
+        postSideEffect(StorageDetailSideEffect.ShowToastSnackBar)
     }
 
     fun setVisibleMoreButtonBottomSheet(visible: Boolean) = intent {
@@ -434,8 +448,8 @@ class StorageDetailViewModel @Inject constructor(
         reduce { state.copy(editActionType = type, currentClickPostId = postId) }
     }
 
-    fun updateSelectFolderId(folderId: String) = intent {
-        reduce { state.copy(changeClickFolderId = folderId) }
+    fun updateSelectFolderId(folderId: String, folderName: String = "") = intent {
+        reduce { state.copy(changeClickFolderId = folderId, changeClickFolderName = folderName) }
     }
 
     fun moveToEditFolderName(folderId: String?) = intent {

@@ -10,7 +10,11 @@ import com.mashup.core.navigation.NavigationRoute
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.home.HomeRoute
 
-fun NavController.navigateToHome(navOptions: NavOptions? = null, isVisibleMovingBottomSheet: Boolean = false, folderRemoveSuccess: Boolean = false) =
+fun NavController.navigateToHome(
+    navOptions: NavOptions? = null,
+    isVisibleMovingBottomSheet: Boolean = false,
+    folderRemoveSuccess: Boolean = false,
+) =
     navigate("${NavigationRoute.HomeScreen.route}/$isVisibleMovingBottomSheet/$folderRemoveSuccess", navOptions)
 
 fun NavGraphBuilder.homeNavigation(
@@ -30,8 +34,11 @@ fun NavGraphBuilder.homeNavigation(
                 defaultValue = false
             },
         ),
-    ) {
+    ) { navBackStackEntry ->
+        val isShowToast = navBackStackEntry.savedStateHandle.get<Boolean>("isShowToast") ?: false
+
         HomeRoute(
+            isShowToast = isShowToast,
             navigateToClassification = navigateToClassification,
             navigateToSaveScreenWithLink = navigateToSaveScreenWithLink,
             navigateToSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,

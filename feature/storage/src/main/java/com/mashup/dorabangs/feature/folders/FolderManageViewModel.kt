@@ -54,7 +54,7 @@ class FolderManageViewModel @Inject constructor(
 
         if (isSuccessNewFolder.isSuccess) {
             intent {
-                postSideEffect(FolderManageSideEffect.NavigateToComplete)
+                postSideEffect(FolderManageSideEffect.NavigateToComplete(folderName))
             }
         } else {
             setTextHelperEnable(
@@ -84,7 +84,7 @@ class FolderManageViewModel @Inject constructor(
             newFolderId?.let { folderId ->
                 val moveFolder = changePostFolderUseCase.invoke(postId = postId, folderId = folderId)
                 if (moveFolder.isSuccess) {
-                    intent { postSideEffect(FolderManageSideEffect.NavigateToComplete) }
+                    intent { postSideEffect(FolderManageSideEffect.NavigateToComplete(folderName)) }
                 }
             }
         } else {

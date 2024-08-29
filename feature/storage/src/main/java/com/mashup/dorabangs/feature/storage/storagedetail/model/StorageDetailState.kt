@@ -16,6 +16,7 @@ data class StorageDetailState(
     val editActionType: EditActionType = EditActionType.FolderEdit,
     val currentClickPostId: String = "",
     val changeClickFolderId: String = folderInfo.folderId.orEmpty(),
+    val changeClickFolderName: String = "",
     val folderList: List<Folder> = listOf(),
     val toastState: ToastState = ToastState(),
     val isChangeData: Boolean = false,

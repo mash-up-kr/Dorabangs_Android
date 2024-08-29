@@ -50,6 +50,7 @@ fun PostResponseModel.toDomain(): Post {
         description = description,
         isFavorite = isFavorite,
         createdAt = createdAt,
+        keywords = keywords.map { it.toDomain() },
         thumbnailImgUrl = thumbnailImgUrl,
         aiStatus = aiStatus.toDomain(),
         readAt = readAt,

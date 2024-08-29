@@ -47,6 +47,7 @@ val MaxToolbarHeight = 161.dp
 fun StorageDetailRoute(
     folderItem: Folder,
     isUnread: Boolean,
+    changeFolderName: String,
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: (Boolean) -> Unit,
@@ -79,8 +80,12 @@ fun StorageDetailRoute(
                     folderId = state.folderInfo.folderId.orEmpty(),
                     toastMsg = context.getString(storageR.string.toast_rename_folder),
                 )
-            } else
+            } else {
+                if (changeFolderName.isNotEmpty()) {
+                    storageDetailViewModel.updateToastState("$changeFolderName(으)로 이동했어요.")
+                }
                 storageDetailViewModel.refresh()
+            }
         }
         storageDetailViewModel.setVisibleMovingFolderBottomSheet(isVisibleBottomSheet)
     }
@@ -181,12 +186,17 @@ fun StorageDetailRoute(
                     isNavigate = true,
                 )
             },
-            onClickMoveFolder = { selectFolderId -> storageDetailViewModel.updateSelectFolderId(selectFolderId) },
+            onClickMoveFolder = { selectFolder ->
+                selectFolder?.let {
+                    storageDetailViewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName)
+                }
+            },
             btnEnable = state.folderInfo.folderId != state.changeClickFolderId,
             onClickCompleteButton = {
                 storageDetailViewModel.moveFolder(
                     postId = state.currentClickPostId,
                     folderId = state.changeClickFolderId,
+                    folderName = state.changeClickFolderName,
                 )
             },
         )
@@ -212,7 +222,7 @@ private fun handleSideEffect(
         is StorageDetailSideEffect.NavigateToHome -> navigateToStorage(true)
         is StorageDetailSideEffect.NavigateToFolderManage -> navigateToFolderManager(sideEffect.itemId)
         is StorageDetailSideEffect.RefreshPagingList -> refreshPagingList()
-        is StorageDetailSideEffect.ShowToastSnackBarRenameFolder -> showToastSnackBar()
+        is StorageDetailSideEffect.ShowToastSnackBar -> showToastSnackBar()
     }
 }
 
@@ -267,6 +277,7 @@ fun PreviewStorageDetailScreen() {
         navigateToFolderManager = { id, type -> },
         onClickBackIcon = {},
         navigateToWebView = {},
+        changeFolderName = "",
         isUnread = false,
     )
 }
