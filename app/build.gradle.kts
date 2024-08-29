@@ -13,18 +13,6 @@ plugins {
 android {
     namespace = "com.mashup.dorabangs"
     compileSdk = libs.versions.compile.sdk.get().toInt()
-    fun getGitCommitCount(): Int {
-        return try {
-            val stdout = ByteArrayOutputStream()
-            exec {
-                commandLine = listOf("git", "rev-list", "--count", "HEAD")
-                standardOutput = stdout
-            }
-            stdout.toString().trim().toInt()
-        } catch (e: Exception) {
-            1 // 예외가 발생할 경우 기본값으로 1을 반환
-        }
-    }
 
     val gitCommitCount = getGitCommitCount()
 
@@ -117,4 +105,17 @@ dependencies {
 
     // Firebase
     implementation(platform(libs.firebase.bom))
+}
+
+fun getGitCommitCount(): Int {
+    return try {
+        val stdout = ByteArrayOutputStream()
+        exec {
+            commandLine = listOf("git", "rev-list", "--count", "HEAD")
+            standardOutput = stdout
+        }
+        stdout.toString().trim().toInt()
+    } catch (e: Exception) {
+        1 // 예외가 발생할 경우 기본값으로 1을 반환
+    }
 }
