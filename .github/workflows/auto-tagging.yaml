@@ -4,15 +4,12 @@ on:
   pull_request:
     branches:
       - master
-      - feature**
-      - develop
     types:
       - closed
-      - synchronize
 
 jobs:
   auto-tagging:
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -24,8 +21,6 @@ jobs:
       - name: get latest tag
         run: |
           latest_tag_version=$(git tag --sort=-v:refname | head -n 1)
-          a = git tag --sort=-v:refname | head -n 1
-          echo "$a"
           echo "latest tag version is $latest_tag_version"
           echo "LATEST_TAG_VERSION=${latest_tag_version}" >> $GITHUB_ENV
 
