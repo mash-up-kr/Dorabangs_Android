@@ -21,6 +21,7 @@ import com.mashup.dorabangs.feature.navigation.navigateToHomeCrateFolder
 import com.mashup.dorabangs.feature.navigation.navigateToHomeTutorial
 import com.mashup.dorabangs.feature.navigation.navigateToStorageDetail
 import com.mashup.dorabangs.feature.navigation.navigateToStorageFolderManage
+import com.mashup.dorabangs.feature.navigation.navigateToUnreadStorageDetail
 import com.mashup.dorabangs.feature.navigation.onBoardingNavigation
 import com.mashup.dorabangs.feature.navigation.storageDetailNavigation
 import com.mashup.dorabangs.feature.navigation.storageFolderManageNavigation
@@ -63,6 +64,7 @@ fun MainNavHost(
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
             navigateToHomeTutorial = { appState.navController.navigateToHomeTutorial() },
             navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
+            navigateToUnreadStorageDetail = { folder -> appState.navController.navigateToUnreadStorageDetail(folder) },
         )
         homeCreateFolderNavigation(
             navController = appState.navController,

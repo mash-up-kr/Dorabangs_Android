@@ -153,6 +153,12 @@ class HomeViewModel @Inject constructor(
 
     fun updateFolderList() = viewModelScope.doraLaunch {
         val folderList = getFolderList().toList()
+        intent {
+            reduce {
+                state.copy(allFolder = folderList.firstOrNull())
+            }
+        }
+
         if (getIdFromLinkToReadLaterUseCase.invoke().isBlank()) {
             folderList
                 .firstOrNull { it.folderType == FolderType.DEFAULT }
@@ -249,7 +255,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setAIClassificationCount() = viewModelScope.launch {
+    fun setAIClassificationCount() = viewModelScope.doraLaunch {
         val count = getAIClassificationCount()
         intent {
             reduce {
@@ -258,7 +264,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setPostsCount() = viewModelScope.launch {
+    private fun setPostsCount() = viewModelScope.doraLaunch {
         val count = getUnReadPostsCountUseCase()
         intent {
             reduce {
@@ -548,6 +554,12 @@ class HomeViewModel @Inject constructor(
             reduce {
                 state.copy(postList = newPostList)
             }
+        }
+    }
+
+    fun setIsNeedToRefreshOnStart(isNeed: Boolean) = viewModelScope.doraLaunch {
+        intent {
+            reduce { state.copy(isNeedToRefreshOnStart = isNeed) }
         }
     }
 

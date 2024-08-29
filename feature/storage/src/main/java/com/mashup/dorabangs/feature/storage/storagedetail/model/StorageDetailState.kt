@@ -21,6 +21,7 @@ data class StorageDetailState(
     val toastState: ToastState = ToastState(),
     val isChangeData: Boolean = false,
     val scrollPosition: Int = 0,
+    val isUnreadChecked: Boolean = false,
 ) {
     companion object {
         fun getDefaultTabTitleList() = listOf(StorageDetailTab.ALL, StorageDetailTab.UNREAD)
