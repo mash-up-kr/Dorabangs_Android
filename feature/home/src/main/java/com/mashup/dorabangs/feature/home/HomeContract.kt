@@ -26,6 +26,7 @@ data class HomeState(
     val unReadPostCount: Int = 0,
     val isEditPostFolder: Boolean = false,
     val allFolder: Folder? = null,
+    val isNeedToRefreshOnStart: Boolean = true,
     val postList: List<FeedUiModel.FeedCardUiModel> = emptyList(),
 ) {
     companion object {

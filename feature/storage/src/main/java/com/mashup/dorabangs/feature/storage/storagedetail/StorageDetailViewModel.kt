@@ -452,7 +452,11 @@ class StorageDetailViewModel @Inject constructor(
     fun updateIsUnread(isUnread: Boolean) = intent {
         reduce { state.copy(isUnreadChecked = true) }
         if (isUnread) {
-            changeSelectedTabIdx(1)
+            changeSelectedTabIdx(UNREAD_TAB_INDEX)
         }
+    }
+
+    companion object {
+        private const val UNREAD_TAB_INDEX = 1
     }
 }

@@ -254,7 +254,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setAIClassificationCount() = viewModelScope.launch {
+    fun setAIClassificationCount() = viewModelScope.doraLaunch {
         val count = getAIClassificationCount()
         intent {
             reduce {
@@ -263,7 +263,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setPostsCount() = viewModelScope.launch {
+    private fun setPostsCount() = viewModelScope.doraLaunch {
         val count = getUnReadPostsCountUseCase()
         intent {
             reduce {
@@ -432,24 +432,30 @@ class HomeViewModel @Inject constructor(
     /**
      * 링크 폴더 이동
      */
-    fun moveFolder(postId: String, folderId: String) = viewModelScope.doraLaunch {
-        val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
-        setVisibleMovingFolderBottomSheet(false)
-        if (isSuccess) {
-            intent {
-                val beforeFolderId = state.postList.find { it.postId == postId }?.folderId.orEmpty()
-                val category = state.folderList.find { it.id == folderId }?.name.orEmpty()
-                val changedPost = getPostUseCase(postId).toUiModel(category)
-                postDataCache[postId] = changedPost
-                postIdCache[beforeFolderId] =
-                    postIdCache[beforeFolderId]?.toMutableList()?.filterNot { it == postId }
-                        ?: emptyList()
-                if (postIdCache[folderId].isNullOrEmpty().not()) {
-                    postIdCache[folderId] = postIdCache[folderId]?.plus(postId) ?: emptyList()
+    fun moveFolder() = viewModelScope.doraLaunch {
+        intent {
+            val postId = state.selectedPostId
+            val folderId = state.changeFolderId
+
+            val isSuccess = changePostFolderUseCase(postId = postId, folderId = folderId).isSuccess
+            setVisibleMovingFolderBottomSheet(false)
+            if (isSuccess) {
+                intent {
+                    val beforeFolderId = state.postList.find { it.postId == postId }?.folderId.orEmpty()
+                    val category = state.folderList.find { it.id == folderId }?.name.orEmpty()
+                    val changedPost = getPostUseCase(postId).toUiModel(category)
+                    postDataCache[postId] = changedPost
+                    postIdCache[beforeFolderId] =
+                        postIdCache[beforeFolderId]?.toMutableList()?.filterNot { it == postId }
+                            ?: emptyList()
+                    if (postIdCache[folderId].isNullOrEmpty().not()) {
+                        postIdCache[folderId] = postIdCache[folderId]?.plus(postId) ?: emptyList()
+                    }
+                    updatePost(changedPost)
                 }
-                updatePost(changedPost)
             }
         }
+
     }
 
     /**
@@ -524,6 +530,12 @@ class HomeViewModel @Inject constructor(
             reduce {
                 state.copy(postList = newPostList)
             }
+        }
+    }
+
+    fun setIsNeedToRefreshOnStart(isNeed: Boolean) = viewModelScope.doraLaunch {
+        intent {
+            reduce { state.copy(isNeedToRefreshOnStart = isNeed) }
         }
     }
 

@@ -76,9 +76,12 @@ fun HomeRoute(
     }
 
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
-        viewModel.setAIClassificationCount()
-        viewModel.initPostList()
-        viewModel.updateFolderList()
+        if (state.isNeedToRefreshOnStart) {
+            viewModel.setAIClassificationCount()
+            viewModel.initPostList()
+            viewModel.updateFolderList()
+            viewModel.setIsNeedToRefreshOnStart(false)
+        }
     }
 
     viewModel.collectSideEffect { sideEffect ->
@@ -120,22 +123,21 @@ fun HomeRoute(
                 viewModel.updateSelectedPostItem(postId = postId, folderId)
                 viewModel.setVisibleMoreButtonBottomSheet(true)
             },
-            onClickBookMarkButton = { postId, isFavorite ->
-                viewModel.updateFavoriteItem(
-                    postId,
-                    isFavorite,
-                )
-            },
+            onClickBookMarkButton = viewModel::updateFavoriteItem,
             onClickCardItem = { cardInfo ->
                 viewModel.updateReadAt(cardInfo)
                 navigateToWebView(cardInfo.url)
             },
             navigateToClassification = navigateToClassification,
-            navigateSaveScreenWithoutLink = navigateToSaveScreenWithoutLink,
+            navigateSaveScreenWithoutLink = {
+                navigateToSaveScreenWithoutLink()
+                viewModel.setIsNeedToRefreshOnStart(true)
+            },
             navigateToHomeTutorial = navigateToHomeTutorial,
             navigateToUnreadStorageDetail = {
                 val folder = state.allFolder ?: return@HomeScreen
                 navigateToUnreadStorageDetail(folder)
+                viewModel.setIsNeedToRefreshOnStart(true)
             },
             requestUpdate = viewModel::updatePost,
         )
@@ -202,12 +204,7 @@ fun HomeRoute(
                 viewModel.updateSelectFolderId(selectFolder)
             },
             btnEnable = state.selectedFolderId != state.changeFolderId,
-            onClickCompleteButton = {
-                viewModel.moveFolder(
-                    state.selectedPostId,
-                    state.changeFolderId,
-                )
-            },
+            onClickCompleteButton = viewModel::moveFolder,
         )
 
         DoraDialog(
