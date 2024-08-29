@@ -17,7 +17,6 @@ jobs:
       - name: Putting Json data
         run: |
           DATA=${{ secrets.GOOGLE_SERVICES_JSON }}
-          echo $DATA
           echo $DATA > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
 
       - name: Access SERVER_BASE_URL
