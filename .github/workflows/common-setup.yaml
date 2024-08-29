@@ -14,7 +14,7 @@ jobs:
       - name: Putting Json data
         run: |
           DATA=${{ secrets.GOOGLE_SERVICES_JSON }} | base64 -d google-services.json
-          echo $DATA > /home/runner/work/Dorabangs_Android/Dor abangs_Android/app/google-services.json
+          echo $DATA > /home/runner/work/Dorabangs_Android/Dor abangs_Android/app
 
       - name: Access SERVER_BASE_URL
         run: |
