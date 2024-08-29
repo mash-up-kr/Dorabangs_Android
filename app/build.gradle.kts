@@ -1,4 +1,3 @@
-import java.io.ByteArrayOutputStream
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
@@ -14,13 +13,11 @@ android {
     namespace = "com.mashup.dorabangs"
     compileSdk = libs.versions.compile.sdk.get().toInt()
 
-    val gitCommitCount = getGitCommitCount()
-
     defaultConfig {
         applicationId = "com.mashup.dorabangs"
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = gitCommitCount
+        versionCode = GitUtil.getGitCommitCount(project)
         versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -105,19 +102,4 @@ dependencies {
 
     // Firebase
     implementation(platform(libs.firebase.bom))
-}
-
-/**
- * 일단 defaultValue를 1로 주어, 익셉션시에 1로 세팅되겠지만,
- * 앱은 못올릴 것 (1은 중복이라)
- */
-fun getGitCommitCount(): Int {
-    return runCatching {
-        val stdout = ByteArrayOutputStream()
-        exec {
-            commandLine = listOf("git", "rev-list", "--count", "HEAD")
-            standardOutput = stdout
-        }
-        stdout.toString().trim().toInt()
-    }.getOrDefault(1)
 }
