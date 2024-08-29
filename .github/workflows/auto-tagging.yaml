@@ -18,11 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           fetch-tags: true
 
       - name: get latest tag
         run: |
           latest_tag_version=$(git tag --sort=-v:refname | head -n 1)
+          a = git tag --sort=-v:refname | head -n 1
+          echo "$a"
           echo "latest tag version is $latest_tag_version"
           echo "LATEST_TAG_VERSION=${latest_tag_version}" >> $GITHUB_ENV
 
