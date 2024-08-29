@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="storage_detail_header_title_later_read">나중에 읽을 링크</string>
+    <string name="storage_detail_header_title_all">모든 링크</string>
+    <string name="storage_detail_header_title_favorite">즐겨찾기</string>
+    <string name="storage_detail_sort_latest">최신순</string>
+    <string name="storage_detail_sort_past">과거순</string>
+    <string name="storage_detail_tab_all">전체</string>
+    <string name="storage_detail_tab_unread">읽지 않은</string>
+    <string name="storage">보관함</string>
+    <string name="storage_detail_empty_list">아직 생성된 게시글이 없어요</string>
+
+    <string name="storage_create_folder_hint">폴더명을 입력해주세요.</string>
+    <string name="storage_create_folder_label">폴더명</string>
+    <string name="storage_create_folder_helper">같은 이름의 폴더 있어요</string>
+    <string name="storage_create_folder_save">저장</string>
+    <string name="storage_create_folder_edit">수정</string>
+    <string name="storage_create_folder_title">새 폴더 추가</string>
+    <string name="storage_edit_folder_title">폴더 이름 변경</string>
+
+    <string name="storage_more_bottom_sheet_folder_remove">폴더 삭제</string>
+    <string name="storage_more_bottom_sheet_folder_name_change">폴더 이름 변경</string>
+
+    <string name="dialog_folder_remove_title">폴더 삭제</string>
+    <string name="dialog_folder_remove_content">폴더를 삭제하면 모든 데이터가 영구적으로\n삭제되어 복구할 수 없어요.\n그래도 삭제하시겠어요?</string>
+    <string name="dialog_folder_remove_button_cancel">취소</string>
+    <string name="dialog_folder_remove_button_remove">삭제</string>
+
+    <string name="toast_remove_folder">삭제 완료했어요.</string>
+    <string name="toast_rename_folder">폴더 이름을 변경했어요.</string>
+    <string name="toast_create_folder">폴더를 추가했어요.</string>
+
+</resources>

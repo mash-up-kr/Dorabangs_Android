@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feed_card_content_title">주요 내용</string>
+    <string name="feed_card_summarizing_content__title">요약중</string>
+    <string name="home">홈</string>
+    <string name="storage">보관함</string>
+    <string name="home_empty_feed">생성된 게시글이 없어요</string>
+    <string name="home_carousel_checking_button">확인하기</string>
+    <string name="snack_bar_title">클립보드에 복사한 링크 저장</string>
+    <string name="snack_bar_cancel_description">스낵바 취소</string>
+    <string name="text_field_url_text_clear">url 모두 지우기</string>
+    <string name="remove_dialog_title">링크 삭제</string>
+    <string name="remove_dialog_content">한 번 삭제한 링크는 다시 복구할 수 없어요.\n그래도 삭제하시겠어요?</string>
+    <string name="remove_dialog_confirm">삭제</string>
+    <string name="remove_dialog_cancil">취소</string>
+    <string name="remove_dialog_folder_title">폴더 삭제</string>
+    <string name="remove_dialog_folder_cont">폴더를 삭제하면 모든 데이터가 영구적으로\n삭제되어 복구할 수 없어요.\n그래도 삭제하시겠어요?</string>
+    <string name="moving_folder_dialog_title">폴더 이동</string>
+    <string name="rename_folder_bottom_sheet_title">폴더 이름 변경</string>
+    <string name="moving_folder_dialog_add_folder">새 폴더 추가</string>
+    <string name="more_button_bottom_sheet_remove_link">링크 삭제</string>
+    <string name="more_button_bottom_sheet_moving_folder">폴더 이동</string>
+    <string name="moving_folder_bottom_sheet_complete">완료</string>
+    <string name="onboarding_screen_title">주로 어떤 링크를 저장하시나요?</string>
+    <string name="onboarding_screen_sub_title">1개 이상을 선택해주세요</string>
+    <string name="onboarding_screen_complete_button">완료</string>
+    <string name="onboarding_screen_ok_button">확인</string>
+    <string name="home_carousel_classified_link_as_ai">AI로 분류한 링크가</string>
+    <string name="home_carousel_not_read_yet">아직 읽지 않은 링크가</string>
+    <string name="home_carousel_count">%s개</string>
+    <string name="home_carousel_its_here">있어요</string>
+    <string name="home_carousel_save_introduce">3초만에 링크를 \n저장하는 방법이에요</string>
+    <string name="home_toast_remove_folder_complete">삭제 완료했어요.</string>
+</resources>

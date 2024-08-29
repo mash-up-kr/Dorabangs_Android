@@ -1,0 +1,30 @@
+name: Common Setup
+
+on: workflow_call
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Putting Json data
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo "$GOOGLE_SERVICES_JSON" > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
+
+      - name: Access SERVER_BASE_URL
+        run: |
+          echo server_base_url=\"${{ secrets.SERVER_BASE_URL }}\" > local.properties
+        shell: bash
+
+      - name: Upload setup artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: common-setup-files
+          path: |
+            /home/runner/work/Dorabangs_Android/Dorabangs_Android/local.properties
+            /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json

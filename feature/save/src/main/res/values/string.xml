@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="link_save_hint_text">URL을 입력해주세요.</string>
+    <string name="link_save_label_text">링크</string>
+    <string name="link_save_error_text">유효한 링크를 입력해주세요.</string>
+    <string name="link_save_button_text">저장</string>
+    <string name="link_save_title_text">링크저장</string>
+    <string name="link_save_add_new_folder">새 폴더 추가</string>
+</resources>

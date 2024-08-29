@@ -1,30 +1,63 @@
 [versions]
+
+#project
+compile-sdk = "34"
+min-sdk = "28"
+target-sdk = "34"
+version-code = "1"
+versionName = "1.0.1"
+
 agp = "8.1.3"
 org-jetbrains-kotlin-android = "1.8.10"
-core-ktx = "1.9.0"
+coil = "2.6.0"
+core-ktx = "1.13.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-lifecycle-runtime-ktx = "2.7.0"
-activity-compose = "1.8.2"
-compose-bom = "2023.03.00"
+lifecycle-runtime-ktx = "2.8.4"
+activity-compose = "1.9.1"
+compose-bom = "2024.06.00"
 appcompat = "1.6.1"
-material = "1.11.0"
+material3 = "1.2.1"
+material = "1.12.0"
 org-jetbrains-kotlin-jvm = "1.8.10"
+splash = "1.0.1"
 spotless = "6.19.0"
 mockk = "1.13.10"
 kotlin = "1.8.0"
+okhttp = "4.12.0"
+retrofit = "2.9.0"
+hilt = "2.51.1"
+hilt-navigation-compose = "1.2.0"
+navigation = "2.7.7"
+javax-inject = "1"
+kotlin-serialization = "1.9.22"
+json-serialization = "1.6.3"
+flipper = "0.250.0"
+soloader = "0.10.5"
+retrofitConverter = "1.0.0"
+orbit = "8.0.0"
+datastore = "1.1.1"
+jsoup = "1.14.3"
+gms = "4.4.2"
+firebase-bom = "33.1.1"
+haze = "0.7.2"
+lottie = "6.4.1"
+paging = "3.3.0"
+paging-common = "3.1.1"
+exoplayer = "1.3.1"
+compose-webview = "0.31.3-beta"
+room = "2.6.1"
+gson = "2.10.1"
+
 
 [libraries]
 kotlin-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin" }
 kotlin-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlin" }
-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+lifecycle-compose-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 ui = { group = "androidx.compose.ui", name = "ui" }
@@ -33,9 +66,78 @@ ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-material3 = { group = "androidx.compose.material3", name = "material3" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3"}
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+flipper = { group = "com.facebook.flipper", name = "flipper", version.ref = "flipper" }
+soloader = { group = "com.facebook.soloader", name = "soloader", version.ref = "soloader" }
+flipper-network = { group = "com.facebook.flipper", name = "flipper-network-plugin", version.ref = "flipper" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+androidx-splash = { group = "androidx.core", name = "core-splashscreen", version.ref = "splash" }
+
+#test
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+
+#network
+okhttp = { module = "com.squareup.okhttp3:okhttp" }
+okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitConverter" }
+serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "json-serialization"}
+
+#hilt
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", name = "hilt-compiler", version.ref = "hilt" }
+hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
+
+lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+
+#orbit
+orbit-core = { group = "org.orbit-mvi", name = "orbit-core", version.ref = "orbit" }
+orbit-viewmodel = { group = "org.orbit-mvi", name = "orbit-viewmodel", version.ref = "orbit" }
+orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref = "orbit" }
+orbit-test = { group = "org.orbit-mvi", name = "orbit-test", version.ref = "orbit" }
+
+#image
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+#html
+jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
+
+#blur
+haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze"}
+
+#firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom"}
+
+#paging
+paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging"}
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging"}
+paging-common = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "paging-common"}
+
+#exoplayer
+exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "exoplayer"}
+exoplayer-dash = { group = "androidx.media3", name = "media3-exoplayer-dash", version.ref = "exoplayer"}
+exoplayer-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "exoplayer"}
+
+#room
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
+room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room"}
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
+
+#gson
+gson = { group = "com.google.code.gson", name ="gson", version.ref = "gson"}
+
+#webview
+compose-webview = { module = "com.google.accompanist:accompanist-webview", version.ref="compose-webview" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
@@ -43,6 +145,10 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 com-android-library = { id = "com.android.library", version.ref = "agp" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+google-gms-service = { id = "com.google.gms.google-services", version.ref = "gms" }
 
 [bundles]
-
+okhttp = ["okhttp", "okhttp-logging-interceptor"]

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_create_folder_hint">폴더명을 입력해주세요.</string>
+    <string name="home_create_folder_label">폴더명</string>
+    <string name="home_create_folder_helper">같은 이름의 폴더 있어요</string>
+    <string name="home_create_folder_save">저장</string>
+    <string name="home_create_folder_title">새 폴더 추가</string>
+    <string name="home_tutorial_title">링크를 간편하게 저장할 수 있는\n방법이에요</string>
+    <string name="home_tutorial_button">설정하기</string>
+    <string name="home_tutorial_cont_1">설정하기 버튼을 눌러 공유 메뉴를 열어주세요</string>
+    <string name="home_tutorial_cont_2">앱 리스트에서 더보기를 눌러요</string>
+    <string name="home_tutorial_cont_3">편집을 눌러 “Linkit”을 찾은 후 추가해주세요</string>
+    <string name="home_toast_remove_folder_complete">삭제 완료했어요.</string>
+</resources>
