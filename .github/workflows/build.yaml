@@ -11,8 +11,6 @@ jobs:
     secrets: inherit
 
   build:
-    env:
-      SEGMENT_DOWNLOAD_TIMEOUT_MINS: '3'
     needs: common_setup
     runs-on: ubuntu-latest
     steps:
