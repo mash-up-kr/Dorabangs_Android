@@ -11,13 +11,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Create Google Json file
-        run: cat /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json | base64
-
       - name: Putting Json data
         run: |
-          DATA=${{ secrets.GOOGLE_SERVICES_JSON }}
-          echo $DATA > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
+          DATA=${{ secrets.GOOGLE_SERVICES_JSON }} | base64 -d google-services.json
+          echo $DATA > /home/runner/work/Dorabangs_Android/Dor abangs_Android/app/google-services.json
 
       - name: Access SERVER_BASE_URL
         run: |
