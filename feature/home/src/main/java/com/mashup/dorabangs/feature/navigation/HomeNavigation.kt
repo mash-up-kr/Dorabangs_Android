@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.home.HomeRoute
 
 fun NavController.navigateToHome(
@@ -23,6 +24,7 @@ fun NavGraphBuilder.homeNavigation(
     navigateToCreateFolder: () -> Unit,
     navigateToHomeTutorial: () -> Unit,
     navigateToWebView: (String) -> Unit,
+    navigateToUnreadStorageDetail: (Folder) -> Unit,
 ) {
     composable(
         route = "${NavigationRoute.HomeScreen.route}/{isVisibleMovingBottomSheet}/{folderRemoveSuccess}",
@@ -43,6 +45,7 @@ fun NavGraphBuilder.homeNavigation(
             navigateToCreateFolder = navigateToCreateFolder,
             navigateToHomeTutorial = navigateToHomeTutorial,
             navigateToWebView = navigateToWebView,
+            navigateToUnreadStorageDetail = navigateToUnreadStorageDetail,
         )
     }
 }

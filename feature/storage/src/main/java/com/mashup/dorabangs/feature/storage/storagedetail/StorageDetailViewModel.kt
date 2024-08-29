@@ -462,4 +462,15 @@ class StorageDetailViewModel @Inject constructor(
         }
         if (isNavigate) postSideEffect(StorageDetailSideEffect.NavigateToFolderManage(itemId = state.currentClickPostId))
     }
+
+    fun updateIsUnread(isUnread: Boolean) = intent {
+        reduce { state.copy(isUnreadChecked = true) }
+        if (isUnread) {
+            changeSelectedTabIdx(UNREAD_TAB_INDEX)
+        }
+    }
+
+    companion object {
+        private const val UNREAD_TAB_INDEX = 1
+    }
 }
