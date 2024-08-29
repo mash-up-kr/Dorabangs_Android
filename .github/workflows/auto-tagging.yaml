@@ -20,6 +20,7 @@ jobs:
       - name: Get the latest tag
         id: get_latest_tag
         run: |
+          git fetch origin master
           git checkout master
           echo "LATEST_TAG_VERSION=$(git tag --sort=-v:refname | head -n 1)" >> $GITHUB_ENV
 
