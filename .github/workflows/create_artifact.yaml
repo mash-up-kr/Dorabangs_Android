@@ -15,8 +15,6 @@ jobs:
 
   upload_apk:
     needs: common_setup
-    env:
-      SEGMENT_DOWNLOAD_TIMEOUT_MINS: '3'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -58,8 +56,6 @@ jobs:
   upload_aab:
     needs: common_setup
     runs-on: ubuntu-latest
-    env:
-      SEGMENT_DOWNLOAD_TIMEOUT_MINS: '3'
     steps:
       - uses: actions/checkout@v4
       - name: set up JDK 18

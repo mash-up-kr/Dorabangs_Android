@@ -13,8 +13,8 @@
 | 🏗 Architecture | [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html), MVI |
 | 💉 DI (Android) | Hilt|
 | 🌊 Async | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) |
-| 🌐 Networking | [Retrofit](https://square.github.io/retrofit/),|
-| 😎 Test |jacoco|
+| 🌐 Networking | [Retrofit](https://square.github.io/retrofit/), OkhttpClient|
+| 😎 Test |Junit4|
 
 
 <br/><br/>

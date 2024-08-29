@@ -4,8 +4,6 @@ on: pull_request
 
 jobs:
   lint-check:
-    env:
-      SEGMENT_DOWNLOAD_TIMEOUT_MINS: '3'
     runs-on: ubuntu-latest
 
     steps:
