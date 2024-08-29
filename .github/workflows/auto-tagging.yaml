@@ -4,16 +4,25 @@ on:
   pull_request:
     branches:
       - master
+      - feature**
     types:
       - closed
+      - synchronize
 
 jobs:
   auto-tagging:
-    if: github.event.pull_request.merged == true
+#    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+      - name: Get the latest tag
+        id: get_latest_tag
+        run: echo "LATEST_TAG_VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_ENV
+
+      - name: Debug latest tag
+        run: echo "LATEST_TAG_VERSION=$LATEST_TAG_VERSION"
+
       - name: get latest tag
         run: |
           latest_tag_version=$(git tag --sort=-v:refname | head -n 1)
