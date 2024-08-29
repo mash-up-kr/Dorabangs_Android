@@ -20,7 +20,7 @@ jobs:
       - name: Get the latest tag
         id: get_latest_tag
         run: |
-          echo "branch is $(git branch)"
+          git checkout master
           echo "LATEST_TAG_VERSION=$(git tag --sort=-v:refname | head -n 1)" >> $GITHUB_ENV
 
       - name: Debug latest tag
