@@ -107,15 +107,17 @@ dependencies {
     implementation(platform(libs.firebase.bom))
 }
 
+/**
+ * 일단 defaultValue를 1로 주어, 익셉션시에 1로 세팅되겠지만,
+ * 앱은 못올릴 것 (1은 중복이라)
+ */
 fun getGitCommitCount(): Int {
-    return try {
+    return runCatching {
         val stdout = ByteArrayOutputStream()
         exec {
             commandLine = listOf("git", "rev-list", "--count", "HEAD")
             standardOutput = stdout
         }
         stdout.toString().trim().toInt()
-    } catch (e: Exception) {
-        1 // 예외가 발생할 경우 기본값으로 1을 반환
-    }
+    }.getOrDefault(1)
 }
