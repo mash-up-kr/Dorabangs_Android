@@ -106,7 +106,7 @@ jobs:
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: production
           userFraction: 1.0
-          serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
 
   post_github:
     needs: [ upload_apk, upload_aab ]
