@@ -105,7 +105,7 @@ jobs:
           packageName: com.mashup.dorabangs
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: production
-          userFraction: 1.0
+          userFraction: 1
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
 
   post_github:
