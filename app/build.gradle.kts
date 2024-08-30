@@ -1,3 +1,4 @@
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.application)
@@ -16,7 +17,7 @@ android {
         applicationId = "com.mashup.dorabangs"
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = libs.versions.version.code.get().toInt()
+        versionCode = GitUtil.getGitCommitCount(project)
         versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -44,6 +45,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            if (System.getenv("ci") == null) {
+                signingConfig = signingConfigs.getByName("debug")
+            }
         }
     }
     compileOptions {
