@@ -32,6 +32,8 @@ jobs:
 
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
+        env:
+          ci: true
 
       - name: sign apk
         id: sign_app
@@ -71,6 +73,8 @@ jobs:
 
       - name: Build with bundleRelease for aab
         run: ./gradlew bundleRelease
+        env:
+          ci: true
 
       - name: sign aab
         id: sign_app
