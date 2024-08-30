@@ -37,8 +37,18 @@ object DoraLineHeightTokens {
     val Caption3 = 22.sp
     val Caption2 = 22.sp
     val Caption1 = 22.sp
-    val S = 14.sp
+    val S = 21.sp
     val XS = 14.sp
+}
+
+object DoraLetterSpacingToken {
+    val Title = (-0.3).sp
+    val Base2 = (-0.3).sp
+    val Caption3 = (-0.3).sp
+    val Caption2 = (-0.3).sp
+    val Caption1 = (-0.3).sp
+    val S = (-0.1).sp
+    val XS = (-0.1).sp
 }
 
 object DoraTypoTokens {
@@ -137,6 +147,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W700,
         fontSize = DoraFontSizeTokens.Title,
         lineHeight = DoraLineHeightTokens.Title,
+        letterSpacing = DoraLetterSpacingToken.Title
     )
 
     val TitleMedium = TextStyle(
@@ -221,6 +232,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W700,
         fontSize = DoraFontSizeTokens.Base2,
         lineHeight = DoraLineHeightTokens.Base2,
+        letterSpacing = DoraLetterSpacingToken.Base2,
     )
 
     val base2Medium = TextStyle(
@@ -228,6 +240,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W500,
         fontSize = DoraFontSizeTokens.Base2,
         lineHeight = DoraLineHeightTokens.Base2,
+        letterSpacing = DoraLetterSpacingToken.Base2,
     )
 
     val base2Normal = TextStyle(
@@ -235,6 +248,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W400,
         fontSize = DoraFontSizeTokens.Base2,
         lineHeight = DoraLineHeightTokens.Base2,
+        letterSpacing = DoraLetterSpacingToken.Base2,
     )
 
     val caption3Bold = TextStyle(
@@ -242,6 +256,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W700,
         fontSize = DoraFontSizeTokens.Caption3,
         lineHeight = DoraLineHeightTokens.Caption3,
+        letterSpacing = DoraLetterSpacingToken.Caption3,
     )
 
     val caption3Medium = TextStyle(
@@ -249,6 +264,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W500,
         fontSize = DoraFontSizeTokens.Caption3,
         lineHeight = DoraLineHeightTokens.Caption3,
+        letterSpacing = DoraLetterSpacingToken.Caption3,
     )
 
     val caption3Normal = TextStyle(
@@ -256,6 +272,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W400,
         fontSize = DoraFontSizeTokens.Caption3,
         lineHeight = DoraLineHeightTokens.Caption3,
+        letterSpacing = DoraLetterSpacingToken.Caption3,
     )
 
     val caption2Bold = TextStyle(
@@ -263,6 +280,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W700,
         fontSize = DoraFontSizeTokens.Caption2,
         lineHeight = DoraLineHeightTokens.Caption2,
+        letterSpacing = DoraLetterSpacingToken.Caption2,
     )
 
     val caption2Medium = TextStyle(
@@ -270,6 +288,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W500,
         fontSize = DoraFontSizeTokens.Caption2,
         lineHeight = DoraLineHeightTokens.Caption2,
+        letterSpacing = DoraLetterSpacingToken.Caption2,
     )
 
     val caption2Normal = TextStyle(
@@ -277,6 +296,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W400,
         fontSize = DoraFontSizeTokens.Caption2,
         lineHeight = DoraLineHeightTokens.Caption2,
+        letterSpacing = DoraLetterSpacingToken.Caption2,
     )
 
     val caption1Bold = TextStyle(
@@ -284,6 +304,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W700,
         fontSize = DoraFontSizeTokens.Caption1,
         lineHeight = DoraLineHeightTokens.Caption1,
+        letterSpacing = DoraLetterSpacingToken.Caption1,
     )
 
     val caption1Medium = TextStyle(
@@ -291,6 +312,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W500,
         fontSize = DoraFontSizeTokens.Caption1,
         lineHeight = DoraLineHeightTokens.Caption1,
+        letterSpacing = DoraLetterSpacingToken.Caption1,
     )
 
     val caption1Normal = TextStyle(
@@ -298,6 +320,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W400,
         fontSize = DoraFontSizeTokens.Caption1,
         lineHeight = DoraLineHeightTokens.Caption1,
+        letterSpacing = DoraLetterSpacingToken.Caption1,
     )
 
     val SBold = TextStyle(
@@ -305,6 +328,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W700,
         fontSize = DoraFontSizeTokens.S,
         lineHeight = DoraLineHeightTokens.S,
+        letterSpacing = DoraLetterSpacingToken.S,
     )
 
     val SMedium = TextStyle(
@@ -312,6 +336,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W500,
         fontSize = DoraFontSizeTokens.S,
         lineHeight = DoraLineHeightTokens.S,
+        letterSpacing = DoraLetterSpacingToken.S,
     )
 
     val SNormal = TextStyle(
@@ -319,6 +344,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W400,
         fontSize = DoraFontSizeTokens.S,
         lineHeight = DoraLineHeightTokens.S,
+        letterSpacing = DoraLetterSpacingToken.S,
     )
 
     val XSBold = TextStyle(
@@ -326,6 +352,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W700,
         fontSize = DoraFontSizeTokens.XS,
         lineHeight = DoraLineHeightTokens.XS,
+        letterSpacing = DoraLetterSpacingToken.XS,
     )
 
     val XSMedium = TextStyle(
@@ -333,6 +360,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W500,
         fontSize = DoraFontSizeTokens.XS,
         lineHeight = DoraLineHeightTokens.XS,
+        letterSpacing = DoraLetterSpacingToken.XS,
     )
 
     val XSNormal = TextStyle(
@@ -340,5 +368,6 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W400,
         fontSize = DoraFontSizeTokens.XS,
         lineHeight = DoraLineHeightTokens.XS,
+        letterSpacing = DoraLetterSpacingToken.XS,
     )
 }
