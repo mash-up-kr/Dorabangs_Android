@@ -4,10 +4,8 @@ on:
   pull_request:
     branches:
       - master
-      - develop
     types:
-      - synchronize
-      - opened
+      - closed
 
 jobs:
   common_setup:
@@ -16,6 +14,7 @@ jobs:
 
   upload_apk:
     needs: common_setup
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -60,6 +59,7 @@ jobs:
 
   upload_aab:
     needs: common_setup
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -99,7 +99,7 @@ jobs:
           retention-days: 7
           overwrite: true
 
-      - name: deployment
+      - name: play store auto deployment
         uses: r0adkll/upload-google-play@v1
         with:
           packageName: com.mashup.dorabangs
