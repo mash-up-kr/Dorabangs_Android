@@ -5,20 +5,22 @@ import androidx.compose.ui.graphics.Color
 
 object DoraColorTokens {
     val P1 = Color(0xFFFFFFFF)
-    val G9 = Color(0xFF121212)
-    val G8 = Color(0xFF1F1F20)
-    val G7 = Color(0xFF353638)
-    val G6 = Color(0xFF4B4C4E)
-    val G5 = Color(0xFF6E7277)
-    val G4 = Color(0xFFADB5BD)
-    val G3 = Color(0xFFCDD1D9)
-    val G2 = Color(0xFFF0F3F7)
-    val G1 = Color(0xFFF4F6F8)
+    val G9 = Color(0xFF27292C)
+    val G8 = Color(0xFF2B2D34)
+    val G7 = Color(0xFF404449)
+    val G6 = Color(0xFF707276)
+    val G5 = Color(0xFF878E99)
+    val G4 = Color(0xFFC0C5CC)
+    val G3 = Color(0xFFE6E7EB)
+    val G2 = Color(0xFFF5F5F6)
+    val G1 = Color(0xFFFAFAFB)
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)
+    val SurfaceBlack = Color(0xFF27292C)
     val Alert = Color(0xFFFF5D47)
-    val Dimend = Color(0xB2121212)
-    val Primary = Color(0xFF7764FF)
+    val Dimend = Color(0x1212124D)
+    val Primary500 = Color(0xFF666FFF)
+    val Primary100 = Color(0xFFF6F6FF)
 }
 
 object DoraGradientToken {
@@ -37,16 +39,18 @@ object DoraGradientToken {
     )
     val Gradient3 = Brush.linearGradient(
         listOf(
-            Color(0xFFE2ECFF),
-            Color(0xFFF7F7FF),
-            Color(0xFFFFEAF4),
+            Color(0xFFEAF2FF),
+            Color(0xFFEDF1FF),
+            Color(0xFFEEEFFF),
+            Color(0xFFECEFFF),
         ),
     )
     val Gradient2 = Brush.linearGradient(
         listOf(
-            Color(0xFFF3FBFF),
-            Color(0xFFF5F5FF),
-            Color(0xFFF3FBFF),
+            Color(0xFFF6FBFF),
+            Color(0xFFF9FBFF),
+            Color(0xFFFBF9FF),
+            Color(0xFFF9F9FF),
         ),
     )
     val Gradient1 = Brush.linearGradient(
