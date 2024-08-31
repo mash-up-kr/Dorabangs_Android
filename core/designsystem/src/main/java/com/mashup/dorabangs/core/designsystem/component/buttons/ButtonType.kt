@@ -2,6 +2,8 @@ package com.mashup.dorabangs.core.designsystem.component.buttons
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import com.mashup.dorabangs.core.designsystem.theme.BtnMaxColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.BtnMaxRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -21,6 +23,27 @@ object DoraButtons : ButtonType {
         enabled = enabled,
         radius = BtnMaxRoundTokens.FullButtonWidthRadius,
         containerColor = BtnMaxColorTokens.ContainerColor1,
+        contentColor = BtnMaxColorTokens.ContentColor1,
+        disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
+        disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
+        onClickButton = onClickButton,
+    )
+
+    @Composable
+    override fun DoraBtnMaxFullWithTextStyle(
+        modifier: Modifier,
+        containerColor: Color,
+        buttonText: String,
+        enabled: Boolean,
+        textStyle: TextStyle,
+        onClickButton: () -> Unit
+    ) = DoraButton(
+        modifier = modifier,
+        buttonText = buttonText,
+        textStyle = textStyle,
+        enabled = enabled,
+        radius = BtnMaxRoundTokens.FullButtonWidthRadius,
+        containerColor = containerColor,
         contentColor = BtnMaxColorTokens.ContentColor1,
         disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
         disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
@@ -108,6 +131,16 @@ sealed interface ButtonType {
         modifier: Modifier,
         buttonText: String,
         enabled: Boolean,
+        onClickButton: () -> Unit,
+    )
+
+    @Composable
+    fun DoraBtnMaxFullWithTextStyle(
+        modifier: Modifier,
+        containerColor: Color,
+        buttonText: String,
+        enabled: Boolean,
+        textStyle: TextStyle,
         onClickButton: () -> Unit,
     )
 

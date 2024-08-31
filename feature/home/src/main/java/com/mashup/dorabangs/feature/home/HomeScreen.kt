@@ -53,6 +53,7 @@ import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
+import com.mashup.dorabangs.core.designsystem.component.divider.DoraDivider
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
@@ -167,7 +168,7 @@ fun HomeScreen(
                                         withStyle(SpanStyle(color = DoraColorTokens.Black)) {
                                             append(stringResource(id = R.string.home_carousel_classified_link_as_ai) + "\n")
                                         }
-                                        withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
+                                        withStyle(SpanStyle(color = DoraColorTokens.Primary500)) {
                                             append(
                                                 stringResource(
                                                     id = R.string.home_carousel_count,
@@ -188,7 +189,7 @@ fun HomeScreen(
                                         withStyle(SpanStyle(color = DoraColorTokens.Black)) {
                                             append(stringResource(id = R.string.home_carousel_not_read_yet) + "\n")
                                         }
-                                        withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
+                                        withStyle(SpanStyle(color = DoraColorTokens.Primary500)) {
                                             append(
                                                 stringResource(
                                                     id = R.string.home_carousel_count,
@@ -297,13 +298,7 @@ private fun LazyListScope.Feeds(
         )
 
         if (index != feeds.lastIndex) {
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxWidth()
-                    .height(0.5.dp)
-                    .background(DoraColorTokens.G2),
-            )
+            DoraDivider(modifier = Modifier.padding(horizontal = 20.dp))
         }
     }
 }
@@ -463,7 +458,7 @@ fun HomeCarouselPreview() {
                     withStyle(SpanStyle(color = DoraColorTokens.Black)) {
                         append("AI로 분류 링크가\n")
                     }
-                    withStyle(SpanStyle(color = DoraColorTokens.Primary)) {
+                    withStyle(SpanStyle(color = DoraColorTokens.Primary500)) {
                         append("375개 ")
                     }
                     withStyle(SpanStyle(color = DoraColorTokens.Black)) {

@@ -118,7 +118,7 @@ fun DoraFolderSelectableListItem(
                 modifier = Modifier.padding(start = 12.dp),
                 text = data.itemName,
                 style = DoraTypoTokens.caption3Normal,
-                color = if (index == 0) DoraColorTokens.Primary else DoraColorTokens.Black,
+                color = if (index == 0) DoraColorTokens.Primary500 else DoraColorTokens.Black,
             )
         }
         if (data.isSelected) {

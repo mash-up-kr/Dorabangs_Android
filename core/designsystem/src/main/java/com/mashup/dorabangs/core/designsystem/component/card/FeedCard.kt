@@ -155,7 +155,7 @@ fun FeedCardContent(
                     text = stringResource(id = R.string.feed_card_summarizing_content__title),
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .padding(start = 4.dp),
+                        .padding(start = 2.dp),
                     textAlign = TextAlign.Center,
                     style = DoraTypoTokens.SMedium,
                     color = DoraColorTokens.G9,
@@ -165,7 +165,7 @@ fun FeedCardContent(
             repeat(3) {
                 TextLoadingSkeleton(
                     primaryColor = DoraColorTokens.White,
-                    containerColor = DoraColorTokens.Primary,
+                    containerColor = DoraColorTokens.Primary500,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 4.dp)
@@ -175,7 +175,7 @@ fun FeedCardContent(
             Spacer(modifier = Modifier.height(8.dp))
             TextLoadingSkeleton(
                 primaryColor = DoraColorTokens.White,
-                containerColor = DoraColorTokens.Primary,
+                containerColor = DoraColorTokens.Primary500,
                 modifier = Modifier
                     .padding(vertical = 2.dp)
                     .width(172.dp)
@@ -192,7 +192,7 @@ fun FeedCardContent(
                     text = stringResource(id = R.string.feed_card_content_title),
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .padding(start = 4.dp),
+                        .padding(start = 2.dp),
                     textAlign = TextAlign.Center,
                     style = DoraTypoTokens.SMedium,
                     color = DoraColorTokens.G9,
@@ -204,7 +204,7 @@ fun FeedCardContent(
                 textAlign = TextAlign.Left,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
-                style = DoraTypoTokens.caption1Normal,
+                style = DoraTypoTokens.SNormal,
                 color = DoraColorTokens.G6,
             )
         }
@@ -213,20 +213,25 @@ fun FeedCardContent(
 }
 
 @Composable
-fun FeedCardKeyword(keywordList: List<String?>?) {
+fun FeedCardKeyword(
+    keywordList: List<String?>?,
+    modifier:Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier,
+        modifier = modifier,
     ) {
         keywordList?.forEach { keyword ->
             Box(
                 modifier = Modifier
+                    .height(26.dp)
                     .border(
-                        width = 0.5.dp,
+                        width = 1.dp,
                         shape = RectangleShape,
                         color = DoraColorTokens.G3,
                     )
                     .background(color = DoraColorTokens.P1)
                     .padding(vertical = 6.dp, horizontal = 8.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = "# $keyword",
@@ -248,19 +253,12 @@ fun FeedCardCategoryAndDayLabel(
 ) {
     Row(
         modifier = modifier.then(Modifier.wrapContentWidth()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = cardInfo.category.orEmpty(),
             style = DoraTypoTokens.XSNormal,
-            color = DoraColorTokens.G5,
-        )
-        Icon(
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(horizontal = 8.dp)
-                .size(2.dp),
-            painter = painterResource(id = R.drawable.ic_plus),
-            contentDescription = "categoryLabel",
+            color = DoraColorTokens.G6,
         )
         cardInfo.createdAt?.let { day ->
             if (day.isNotEmpty()) {
@@ -268,7 +266,7 @@ fun FeedCardCategoryAndDayLabel(
                 Text(
                     text = if (days == 0L) "오늘" else "${day.convertCreatedDate()}일 전",
                     style = DoraTypoTokens.XSNormal,
-                    color = DoraColorTokens.G5,
+                    color = DoraColorTokens.G4,
                 )
             }
         }
