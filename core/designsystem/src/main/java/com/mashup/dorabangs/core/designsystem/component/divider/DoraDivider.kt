@@ -11,6 +11,6 @@ fun DoraDivider(modifier: Modifier = Modifier) {
     HorizontalDivider(
         modifier = modifier,
         thickness = 1.dp,
-        color = DoraColorTokens.G2
+        color = DoraColorTokens.G2,
     )
 }

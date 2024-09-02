@@ -147,7 +147,7 @@ object DoraTypoTokens {
         fontWeight = FontWeight.W700,
         fontSize = DoraFontSizeTokens.Title,
         lineHeight = DoraLineHeightTokens.Title,
-        letterSpacing = DoraLetterSpacingToken.Title
+        letterSpacing = DoraLetterSpacingToken.Title,
     )
 
     val TitleMedium = TextStyle(

@@ -159,10 +159,10 @@ fun ClassificationCardItem(
             containerColor = DoraColorTokens.Primary100,
             buttonText = "${cardItem.category}(으)로 옮기기",
             textStyle = DoraTypoTokens.caption1Medium.copy(
-                color = DoraColorTokens.Primary500
+                color = DoraColorTokens.Primary500,
             ),
             enabled = true,
-            onClickButton = { onClickMoveButton(cardItem) }
+            onClickButton = { onClickMoveButton(cardItem) },
         )
 
         Spacer(modifier = Modifier.height(32.dp))

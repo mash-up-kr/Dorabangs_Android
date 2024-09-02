@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,7 +23,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,7 +48,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
-import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
@@ -57,6 +56,7 @@ import com.mashup.dorabangs.core.designsystem.component.divider.DoraDivider
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
+import com.mashup.dorabangs.core.designsystem.theme.BtnMaxRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
@@ -349,23 +349,25 @@ private fun HomeCarousel(
                         textAlign = TextAlign.Center,
                     )
 
-                    GradientButton(
-                        containerColor = DoraGradientToken.Gradient3,
-                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
-                        gradientModifier = Modifier.defaultMinSize(
-                            minWidth = ButtonDefaults.MinWidth,
-                            minHeight = ButtonDefaults.MinHeight,
+                    Button(
+                        colors = ButtonColors(
+                            containerColor = DoraColorTokens.G7,
+                            contentColor = DoraColorTokens.G1,
+                            disabledContainerColor = DoraColorTokens.G7,
+                            disabledContentColor = DoraColorTokens.G1,
                         ),
+                        shape = BtnMaxRoundTokens.SmallIconButtonRadius,
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
                         onClick = homeCarouselItems[page].onClickButton,
                     ) {
                         Text(
                             text = stringResource(id = R.string.home_carousel_checking_button),
-                            style = DoraTypoTokens.caption1Bold,
-                            color = DoraColorTokens.G7,
+                            style = DoraTypoTokens.caption1Medium,
+                            color = DoraColorTokens.G1,
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.ic_chevron_right_small_balck),
-                            tint = DoraColorTokens.G7,
+                            tint = DoraColorTokens.G1,
                             contentDescription = "",
                         )
                     }

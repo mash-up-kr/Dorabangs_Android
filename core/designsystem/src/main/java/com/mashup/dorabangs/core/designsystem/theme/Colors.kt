@@ -70,6 +70,7 @@ object BtnMaxColorTokens {
     val ContainerColor2 = DoraColorTokens.G1
     val ContentColor2 = DoraColorTokens.G9
     val Transparent = Color.Transparent
+    val ContainerColor3 = DoraColorTokens.G8
 }
 
 object DialogColorTokens {
