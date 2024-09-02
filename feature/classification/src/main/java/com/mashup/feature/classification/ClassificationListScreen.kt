@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.IconButton
@@ -113,8 +112,8 @@ fun ClassificationFolderMove(
         DoraButtons.DoraSmallConfirmBtn(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(horizontal = 30.dp, vertical = 8.dp)
-                .wrapContentWidth(),
+                .padding(horizontal = 24.dp, vertical = 6.dp)
+                .height(36.dp),
             buttonText = stringResource(id = R.string.ai_classification_all_move),
             onClickButton = onClickAllItemMoveButton,
         )

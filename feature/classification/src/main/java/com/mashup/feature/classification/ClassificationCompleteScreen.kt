@@ -38,8 +38,8 @@ fun ClassificationCompleteScreen(
         DoraButtons.DoraSmallConfirmBtn(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(horizontal = 30.dp, vertical = 8.dp)
-                .wrapContentWidth(),
+                .padding(horizontal = 24.dp, vertical = 6.dp)
+                .height(36.dp),
             buttonText = stringResource(id = R.string.ai_classification_navigate_home),
             onClickButton = { navigateToHome() },
         )
