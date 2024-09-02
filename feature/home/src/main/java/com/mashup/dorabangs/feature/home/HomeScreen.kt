@@ -350,6 +350,7 @@ private fun HomeCarousel(
                     )
 
                     Button(
+                        modifier = Modifier.height(32.dp),
                         colors = ButtonColors(
                             containerColor = DoraColorTokens.G7,
                             contentColor = DoraColorTokens.G1,
@@ -357,7 +358,7 @@ private fun HomeCarousel(
                             disabledContentColor = DoraColorTokens.G1,
                         ),
                         shape = BtnMaxRoundTokens.SmallIconButtonRadius,
-                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+                        contentPadding = PaddingValues(start = 16.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
                         onClick = homeCarouselItems[page].onClickButton,
                     ) {
                         Text(
