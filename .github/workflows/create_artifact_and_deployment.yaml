@@ -1,12 +1,11 @@
-name: create artifact
+name: create artifact and deployment
 on:
   workflow_dispatch:
   pull_request:
     branches:
       - master
     types:
-      - synchronize
-      - opened
+      - closed
 
 jobs:
   common_setup:
@@ -15,6 +14,7 @@ jobs:
 
   upload_apk:
     needs: common_setup
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,6 +59,7 @@ jobs:
 
   upload_aab:
     needs: common_setup
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -97,6 +98,14 @@ jobs:
           path: ./app/build/outputs/bundle/release
           retention-days: 7
           overwrite: true
+
+      - name: play store auto deployment
+        uses: r0adkll/upload-google-play@v1
+        with:
+          packageName: com.mashup.dorabangs
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          track: production
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
 
   post_github:
     needs: [ upload_apk, upload_aab ]
