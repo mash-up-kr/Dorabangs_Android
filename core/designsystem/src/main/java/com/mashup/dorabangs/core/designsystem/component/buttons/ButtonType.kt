@@ -79,7 +79,7 @@ object DoraButtons : ButtonType {
         textStyle = DoraTypoTokens.caption3Medium,
         enabled = true,
         radius = BtnMaxRoundTokens.SmallButtonWidthRadius,
-        containerColor = BtnMaxColorTokens.ContainerColor2,
+        containerColor = BtnMaxColorTokens.ContainerColor1_Off,
         contentColor = BtnMaxColorTokens.ContentColor2,
         disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
         disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
