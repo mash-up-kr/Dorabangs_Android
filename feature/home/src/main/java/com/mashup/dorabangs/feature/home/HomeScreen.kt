@@ -200,7 +200,7 @@ fun HomeScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(104.dp)
+                    .height(101.dp)
                     .hazeChild(
                         state = hazeState,
                         style = HazeStyle(blurRadius = 12.dp),
