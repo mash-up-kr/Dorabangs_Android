@@ -34,7 +34,8 @@ fun DoraWebView(
             modifier = Modifier.fillMaxWidth(),
             title = "",
             isTitleCenter = true,
-            onClickBackIcon = { navigateToPopBackStack() },
+            onClickBackIcon = navigateToPopBackStack,
+            isShowBottomDivider = true
         )
         WebView(
             state = state,

@@ -84,6 +84,7 @@ fun HomeCreateFolderScreen(
             title = stringResource(id = R.string.home_create_folder_title),
             isTitleCenter = true,
             onClickBackIcon = onClickBackIcon,
+            isShowBottomDivider = true,
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
         Column(

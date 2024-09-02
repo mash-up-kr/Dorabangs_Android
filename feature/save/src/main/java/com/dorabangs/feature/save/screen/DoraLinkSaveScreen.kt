@@ -38,6 +38,7 @@ fun DoraLinkSaveScreen(
             title = stringResource(id = R.string.link_save_title_text),
             isTitleCenter = true,
             onClickBackIcon = onClickBackIcon,
+            isShowBottomDivider = true,
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
         Column(

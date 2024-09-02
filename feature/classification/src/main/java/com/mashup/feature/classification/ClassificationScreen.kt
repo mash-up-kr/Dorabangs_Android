@@ -74,7 +74,8 @@ fun ClassificationScreen(
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(id = R.string.ai_classification_title),
             isTitleCenter = true,
-            onClickBackIcon = { onClickBackIcon() },
+            onClickBackIcon = onClickBackIcon,
+            isShowBottomDivider = false,
         )
         DoraChips(
             modifier = modifier.fillMaxWidth(),

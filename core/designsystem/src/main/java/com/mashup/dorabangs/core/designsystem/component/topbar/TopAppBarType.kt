@@ -45,6 +45,7 @@ object DoraTopBar : TopAppBarType {
         modifier: Modifier,
         title: String,
         isTitleCenter: Boolean,
+        isShowBottomDivider: Boolean,
         onClickBackIcon: () -> Unit,
     ) {
         DoraTopAppBar(
@@ -52,6 +53,7 @@ object DoraTopBar : TopAppBarType {
             title = title,
             isTitleCenter = isTitleCenter,
             isEnableBackNavigation = true,
+            isShowBottomDivider = isShowBottomDivider,
             onClickBackIcon = onClickBackIcon,
         )
     }
@@ -62,6 +64,7 @@ object DoraTopBar : TopAppBarType {
         title: String,
         actionIcon: Int,
         isTitleCenter: Boolean,
+        isShowBottomDivider: Boolean,
         onClickBackIcon: () -> Unit,
         onClickActonIcon: () -> Unit,
     ) {
@@ -71,6 +74,7 @@ object DoraTopBar : TopAppBarType {
             isTitleCenter = isTitleCenter,
             isEnableBackNavigation = true,
             actionIcon = actionIcon,
+            isShowBottomDivider = isShowBottomDivider,
             onClickBackIcon = onClickBackIcon,
             onClickActonIcon = onClickActonIcon,
         )
@@ -80,10 +84,12 @@ object DoraTopBar : TopAppBarType {
     override fun TitleTopAppBar(
         modifier: Modifier,
         title: String,
+        isShowBottomDivider: Boolean,
     ) {
         DoraTopAppBar(
             modifier = modifier.background(DoraColorTokens.White),
             title = title,
+            isShowBottomDivider = isShowBottomDivider,
             isTitleCenter = true,
         )
     }
@@ -103,6 +109,7 @@ sealed interface TopAppBarType {
         modifier: Modifier,
         title: String,
         isTitleCenter: Boolean,
+        isShowBottomDivider: Boolean,
         onClickBackIcon: () -> Unit,
     )
 
@@ -112,6 +119,7 @@ sealed interface TopAppBarType {
         title: String,
         actionIcon: Int,
         isTitleCenter: Boolean,
+        isShowBottomDivider: Boolean,
         onClickBackIcon: () -> Unit,
         onClickActonIcon: () -> Unit,
     )
@@ -120,5 +128,6 @@ sealed interface TopAppBarType {
     fun TitleTopAppBar(
         modifier: Modifier,
         title: String,
+        isShowBottomDivider: Boolean,
     )
 }
