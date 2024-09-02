@@ -78,12 +78,8 @@ fun ClassificationScreen(
         )
         DoraChips(
             modifier = modifier.fillMaxWidth(),
-            chipList = state.chipState.chipList.map {
-                // 여기만 타이틀에서 연예 3 과 같이 숫자 들고 있어서 이렇게 변경함;
-                it.copy(
-                    title = it.mergedTitle,
-                )
-            },
+            chipList = state.chipState.chipList,
+            isShowPostCount = true,
             selectedIndex = state.chipState.currentIndex,
             onClickChip = {
                 onClickChip(it) // UI Update

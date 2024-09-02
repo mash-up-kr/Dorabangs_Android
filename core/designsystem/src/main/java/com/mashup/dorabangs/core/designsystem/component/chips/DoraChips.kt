@@ -31,6 +31,7 @@ fun DoraChips(
     chipList: List<FeedUiModel.DoraChipUiModel>,
     modifier: Modifier = Modifier,
     selectedIndex: Int = 0,
+    isShowPostCount: Boolean = false,
     onClickChip: (Int) -> Unit = {},
 ) {
     LazyRow(
@@ -45,6 +46,7 @@ fun DoraChips(
             DoraChip(
                 doraChipUiModel = chipList[index],
                 isSelected = index == selectedIndex,
+                isShowPostCount = isShowPostCount,
                 onClickChip = { onClickChip(index) },
             )
         }
@@ -58,6 +60,7 @@ fun DoraChips(
 fun DoraChip(
     doraChipUiModel: FeedUiModel.DoraChipUiModel,
     modifier: Modifier = Modifier,
+    isShowPostCount: Boolean = false,
     isSelected: Boolean = false,
     onClickChip: () -> Unit = {},
 ) {
@@ -95,6 +98,14 @@ fun DoraChip(
             ),
             color = colorToken.OnContainerColor,
         )
+        if (isShowPostCount) {
+            Text(
+                modifier = Modifier.padding(start = 4.dp),
+                text = doraChipUiModel.postCount.toString(),
+                style = DoraTypoTokens.caption1Normal,
+                color = colorToken.OnContainerColor2
+            )
+        }
     }
 }
 
@@ -105,6 +116,8 @@ fun SelectedDoraChipPreview() {
         doraChipUiModel = FeedUiModel.DoraChipUiModel(
             title = "하이?",
         ),
+        isSelected = true,
+        isShowPostCount = true,
     )
 }
 
