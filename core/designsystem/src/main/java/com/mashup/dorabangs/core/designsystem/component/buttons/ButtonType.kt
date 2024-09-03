@@ -36,7 +36,7 @@ object DoraButtons : ButtonType {
         buttonText: String,
         enabled: Boolean,
         textStyle: TextStyle,
-        onClickButton: () -> Unit
+        onClickButton: () -> Unit,
     ) = DoraButton(
         modifier = modifier,
         buttonText = buttonText,

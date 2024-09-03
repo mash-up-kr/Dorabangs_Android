@@ -215,7 +215,7 @@ fun FeedCardContent(
 @Composable
 fun FeedCardKeyword(
     keywordList: List<String?>?,
-    modifier:Modifier = Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
@@ -253,7 +253,7 @@ fun FeedCardCategoryAndDayLabel(
 ) {
     Row(
         modifier = modifier.then(Modifier.wrapContentWidth()),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
             text = cardInfo.category.orEmpty(),

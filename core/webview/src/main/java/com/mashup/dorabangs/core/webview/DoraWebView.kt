@@ -35,7 +35,7 @@ fun DoraWebView(
             title = "",
             isTitleCenter = true,
             onClickBackIcon = navigateToPopBackStack,
-            isShowBottomDivider = true
+            isShowBottomDivider = true,
         )
         WebView(
             state = state,

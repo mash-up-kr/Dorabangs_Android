@@ -45,7 +45,10 @@ fun DoraChips(
             item {
                 Spacer(modifier = Modifier.width(20.dp))
             }
-            items(chipList.size) { index ->
+            items(
+                count = chipList.size,
+                contentType = { "DoraChip" },
+            ) { index ->
                 DoraChip(
                     doraChipUiModel = chipList[index],
                     isSelected = index == selectedIndex,
@@ -108,7 +111,7 @@ fun DoraChip(
                 modifier = Modifier.padding(start = 4.dp),
                 text = doraChipUiModel.postCount.toString(),
                 style = DoraTypoTokens.caption1Normal,
-                color = colorToken.OnContainerColor2
+                color = colorToken.OnContainerColor2,
             )
         }
     }

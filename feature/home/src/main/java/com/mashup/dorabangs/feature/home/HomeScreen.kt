@@ -276,7 +276,7 @@ private fun HomeCarousel(
     )
 
     Box(
-        modifier = modifier
+        modifier = modifier,
     ) {
         HorizontalPager(
             modifier = Modifier.background(
@@ -322,7 +322,7 @@ private fun HomeCarousel(
                         Text(
                             text = stringResource(id = R.string.home_carousel_checking_button),
                             style = DoraTypoTokens.caption1Medium,
-                            color = DoraColorTokens.White
+                            color = DoraColorTokens.White,
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.ic_chevron_right_small_white),
@@ -335,7 +335,7 @@ private fun HomeCarousel(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
         ) {
             Box(
                 modifier = Modifier
