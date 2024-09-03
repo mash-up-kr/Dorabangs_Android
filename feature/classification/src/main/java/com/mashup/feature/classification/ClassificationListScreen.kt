@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,8 +29,8 @@ import com.mashup.dorabangs.core.designsystem.component.buttons.GradientButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
-import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
-import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
+import com.mashup.dorabangs.core.designsystem.component.snackbar.DoraCloseButton
+import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclosev2.IC_CLOSE_BUTTON
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -96,8 +97,8 @@ fun ClassificationFolderMove(
             .background(DoraGradientToken.Gradient2)
             .fillMaxWidth()
             .padding(vertical = 32.dp, horizontal = 23.dp),
-
     ) {
+        Spacer(modifier = Modifier.height(12.dp))
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             text = selectedFolder,
@@ -111,11 +112,11 @@ fun ClassificationFolderMove(
             style = DoraTypoTokens.caption1Medium,
             color = DoraColorTokens.Black,
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         DoraButtons.DoraSmallConfirmBtn(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(horizontal = 30.dp, vertical = 8.dp)
+                .padding(start = 30.dp, end = 30.dp, bottom = 16.dp)
                 .wrapContentWidth(),
             buttonText = stringResource(id = R.string.ai_classification_all_move),
             onClickButton = onClickAllItemMoveButton,
@@ -148,11 +149,11 @@ fun ClassificationCardItem(
             onClick = { onClickDeleteButton(cardItem) },
         ) {
             Image(
-                imageVector = DoraIconClose.CloseCircle,
+                modifier = Modifier.fillMaxSize(),
+                imageVector = DoraCloseButton.IC_CLOSE_BUTTON,
                 contentDescription = "delete",
             )
         }
-        Spacer(modifier = Modifier.height(20.dp))
         FeedCard(cardInfo = cardItem, feedCardEntryPoint = FeedCardEntryPoint.AiClassification)
         GradientButton(
             modifier = Modifier
@@ -173,7 +174,7 @@ fun ClassificationCardItem(
                 ),
             )
         }
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         if (idx != lastIndex) {
             HorizontalDivider(
                 modifier = Modifier
@@ -181,7 +182,6 @@ fun ClassificationCardItem(
                     .padding(horizontal = 20.dp),
                 thickness = 0.5.dp,
             )
-            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }
