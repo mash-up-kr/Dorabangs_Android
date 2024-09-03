@@ -309,10 +309,9 @@ private fun HomeCarousel(
                         style = DoraTypoTokens.Subtitle2Bold,
                         textAlign = TextAlign.Center,
                     )
-
                     BannerButton(
                         containerColor = DoraColorTokens.G7,
-                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+                        contentPadding = PaddingValues(start = 16.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
                         gradientModifier = Modifier.defaultMinSize(
                             minWidth = ButtonDefaults.MinWidth,
                             minHeight = ButtonDefaults.MinHeight,
