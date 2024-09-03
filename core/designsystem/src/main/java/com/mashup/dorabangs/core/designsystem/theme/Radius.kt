@@ -7,6 +7,7 @@ object DoraRoundTokens {
     val Round99 = RoundedCornerShape(99.dp)
     val Round50 = RoundedCornerShape(50.dp)
     val Round24 = RoundedCornerShape(24.dp)
+    val Round20 = RoundedCornerShape(20.dp)
     val Round16 = RoundedCornerShape(16.dp)
     val Round12 = RoundedCornerShape(12.dp)
     val TopRound12 = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)

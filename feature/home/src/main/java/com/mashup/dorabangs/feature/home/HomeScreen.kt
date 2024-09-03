@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,8 +23,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,13 +40,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.buttons.BannerButton
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.chips.DoraChips
@@ -56,7 +53,6 @@ import com.mashup.dorabangs.core.designsystem.component.divider.DoraDivider
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
-import com.mashup.dorabangs.core.designsystem.theme.BtnMaxRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
@@ -112,15 +108,12 @@ fun HomeScreen(
                     HomeCarousel(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(1f),
+                            .padding(vertical = 16.dp, horizontal = 20.dp)
+                            .clip(DoraRoundTokens.Round20),
                         homeCarouselItems = listOf(
                             HomeCarouselItem(
                                 lottieRes = R.raw.unread,
-                                description = buildAnnotatedString {
-                                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                        append(stringResource(id = R.string.home_carousel_save_introduce))
-                                    }
-                                },
+                                description = stringResource(id = R.string.home_carousel_save_introduce),
                                 onClickButton = navigateToHomeTutorial,
                             ),
                         ),
@@ -164,58 +157,26 @@ fun HomeScreen(
                                 HomeCarouselItem(
                                     lottieRes = R.raw.ai,
                                     indicatorIcon = R.drawable.ic_ai_8dp,
-                                    description = buildAnnotatedString {
-                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                            append(stringResource(id = R.string.home_carousel_classified_link_as_ai) + "\n")
-                                        }
-                                        withStyle(SpanStyle(color = DoraColorTokens.Primary500)) {
-                                            append(
-                                                stringResource(
-                                                    id = R.string.home_carousel_count,
-                                                    state.aiClassificationCount,
-                                                ) + " ",
-                                            )
-                                        }
-                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                            append(stringResource(id = R.string.home_carousel_its_here))
-                                        }
-                                    },
+                                    description = stringResource(R.string.home_carousel_classified_link_as_ai, state.aiClassificationCount),
                                     onClickButton = navigateToClassification,
                                     isVisible = state.aiClassificationCount > 0,
                                 ),
                                 HomeCarouselItem(
                                     lottieRes = R.raw.unread,
-                                    description = buildAnnotatedString {
-                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                            append(stringResource(id = R.string.home_carousel_not_read_yet) + "\n")
-                                        }
-                                        withStyle(SpanStyle(color = DoraColorTokens.Primary500)) {
-                                            append(
-                                                stringResource(
-                                                    id = R.string.home_carousel_count,
-                                                    state.unReadPostCount,
-                                                ) + " ",
-                                            )
-                                        }
-                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                            append(stringResource(id = R.string.home_carousel_its_here))
-                                        }
-                                    },
+                                    description = stringResource(R.string.home_carousel_not_read_yet, state.unReadPostCount),
                                     onClickButton = navigateToUnreadStorageDetail,
                                     isVisible = state.unReadPostCount > 0,
                                 ),
                                 HomeCarouselItem(
                                     lottieRes = R.raw.tutorial,
-                                    description = buildAnnotatedString {
-                                        withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                                            append(stringResource(id = R.string.home_carousel_save_introduce))
-                                        }
-                                    },
+                                    description = stringResource(id = R.string.home_carousel_save_introduce),
                                     onClickButton = navigateToHomeTutorial,
                                 ),
                             ).filter { it.isVisible },
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp, horizontal = 20.dp)
+                                .clip(DoraRoundTokens.Round20),
                         )
                     }
                 }
@@ -239,7 +200,7 @@ fun HomeScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(104.dp)
+                    .height(101.dp)
                     .hazeChild(
                         state = hazeState,
                         style = HazeStyle(blurRadius = 12.dp),
@@ -314,28 +275,27 @@ private fun HomeCarousel(
         pageCount = { homeCarouselItems.size },
     )
 
-    Column(
+    Box(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         HorizontalPager(
             modifier = Modifier.background(
-                brush = DoraGradientToken.Gradient3,
+                brush = DoraGradientToken.Gradient2,
             ),
             state = pagerState,
         ) { page ->
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(340.dp),
+                    .height(334.dp),
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 LottieLoader(
                     lottieRes = homeCarouselItems[page].lottieRes,
                     modifier = Modifier
-                        .width(250.dp)
-                        .height(212.dp),
+                        .width(270.dp)
+                        .height(210.dp),
                 )
 
                 Column(
@@ -344,30 +304,27 @@ private fun HomeCarousel(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
+                        modifier = Modifier.height(56.dp),
                         text = homeCarouselItems[page].description,
                         style = DoraTypoTokens.Subtitle2Bold,
                         textAlign = TextAlign.Center,
                     )
-
-                    Button(
-                        colors = ButtonColors(
-                            containerColor = DoraColorTokens.G7,
-                            contentColor = DoraColorTokens.G1,
-                            disabledContainerColor = DoraColorTokens.G7,
-                            disabledContentColor = DoraColorTokens.G1,
+                    BannerButton(
+                        containerColor = DoraColorTokens.G7,
+                        contentPadding = PaddingValues(start = 16.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
+                        gradientModifier = Modifier.defaultMinSize(
+                            minWidth = ButtonDefaults.MinWidth,
+                            minHeight = ButtonDefaults.MinHeight,
                         ),
-                        shape = BtnMaxRoundTokens.SmallIconButtonRadius,
-                        contentPadding = PaddingValues(start = 16.dp, end = 12.dp, top = 5.5.dp, bottom = 5.5.dp),
                         onClick = homeCarouselItems[page].onClickButton,
                     ) {
                         Text(
                             text = stringResource(id = R.string.home_carousel_checking_button),
                             style = DoraTypoTokens.caption1Medium,
-                            color = DoraColorTokens.G1,
+                            color = DoraColorTokens.White,
                         )
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_chevron_right_small_balck),
-                            tint = DoraColorTokens.G1,
+                            painter = painterResource(id = R.drawable.ic_chevron_right_small_white),
                             contentDescription = "",
                         )
                     }
@@ -375,50 +332,55 @@ private fun HomeCarousel(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .background(
-                    brush = DoraGradientToken.Gradient1,
-                    shape = DoraRoundTokens.Round99,
-                ),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
         ) {
-            Row(
-                modifier = Modifier.padding(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalAlignment = Alignment.CenterVertically,
+            Box(
+                modifier = Modifier
+                    .padding(top = 20.dp, end = 20.dp)
+                    .background(
+                        brush = DoraGradientToken.Gradient3,
+                        shape = DoraRoundTokens.Round99,
+                    ),
             ) {
-                repeat(pagerState.pageCount) { index ->
-                    if (homeCarouselItems[index].indicatorIcon == null) {
-                        Box(
-                            modifier = Modifier
-                                .size(4.dp)
-                                .clip(CircleShape)
-                                .background(DoraColorTokens.G4)
-                                .thenIf(index == pagerState.currentPage) {
-                                    background(brush = DoraGradientToken.Gradient5)
-                                },
-                        )
-                    } else {
-                        if (index == pagerState.currentPage) {
-                            GradientIcon(
-                                painter = painterResource(
-                                    id = homeCarouselItems[index].indicatorIcon
-                                        ?: R.drawable.ic_empty,
-                                ),
-                                contentDescription = "",
-                                brushGradient = DoraGradientToken.Gradient5,
+                Row(
+                    modifier = Modifier.padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    repeat(pagerState.pageCount) { index ->
+                        if (homeCarouselItems[index].indicatorIcon == null) {
+                            Box(
+                                modifier = Modifier
+                                    .size(4.dp)
+                                    .clip(CircleShape)
+                                    .background(DoraColorTokens.G4)
+                                    .thenIf(index == pagerState.currentPage) {
+                                        background(color = DoraColorTokens.G7)
+                                    },
                             )
                         } else {
-                            Icon(
-                                painter = painterResource(
-                                    id = homeCarouselItems[index].indicatorIcon
-                                        ?: R.drawable.ic_empty,
-                                ),
-                                contentDescription = "",
-                                modifier = Modifier.size(8.dp),
-                                tint = DoraColorTokens.G4,
-                            )
+                            if (index == pagerState.currentPage) {
+                                Icon(
+                                    painter = painterResource(
+                                        id = homeCarouselItems[index].indicatorIcon
+                                            ?: R.drawable.ic_empty,
+                                    ),
+                                    contentDescription = "",
+                                    tint = DoraColorTokens.G7,
+                                )
+                            } else {
+                                Icon(
+                                    painter = painterResource(
+                                        id = homeCarouselItems[index].indicatorIcon
+                                            ?: R.drawable.ic_empty,
+                                    ),
+                                    contentDescription = "",
+                                    modifier = Modifier.size(8.dp),
+                                    tint = DoraColorTokens.G4,
+                                )
+                            }
                         }
                     }
                 }
@@ -456,17 +418,7 @@ fun HomeCarouselPreview() {
             HomeCarouselItem(
                 lottieRes = R.raw.ai,
                 indicatorIcon = R.drawable.ic_ai_8dp,
-                description = buildAnnotatedString {
-                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                        append("AI로 분류 링크가\n")
-                    }
-                    withStyle(SpanStyle(color = DoraColorTokens.Primary500)) {
-                        append("375개 ")
-                    }
-                    withStyle(SpanStyle(color = DoraColorTokens.Black)) {
-                        append("있어요")
-                    }
-                },
+                description = stringResource(R.string.home_carousel_classified_link_as_ai, 300),
                 onClickButton = {},
                 isVisible = true,
             ),

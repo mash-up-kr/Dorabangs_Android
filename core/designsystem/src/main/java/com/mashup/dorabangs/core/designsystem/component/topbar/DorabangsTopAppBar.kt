@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.divider.DoraDivider
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.TopBarColorTokens
 
@@ -27,6 +28,7 @@ fun DoraTopAppBar(
     isTitleCenter: Boolean = false,
     isEnableBackNavigation: Boolean = false,
     @DrawableRes actionIcon: Int? = null,
+    isShowBottomDivider: Boolean = false,
     onClickBackIcon: () -> Unit = {},
     onClickActonIcon: () -> Unit = {},
 ) {
@@ -39,7 +41,8 @@ fun DoraTopAppBar(
         val horizontalArrangement = if (isTitleCenter) Arrangement.Center else Arrangement.Start
         if (isTitleCenter && isEnableBackNavigation) {
             Icon(
-                modifier = Modifier.align(Alignment.CenterStart)
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
                     .padding(start = 20.dp)
                     .clickable { onClickBackIcon() },
                 painter = painterResource(id = R.drawable.ic_chevron_left_big_black),
@@ -48,14 +51,16 @@ fun DoraTopAppBar(
             Text(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(start = 16.dp),
+                    .padding(start = 8.dp),
                 text = title,
                 color = TopBarColorTokens.OnContainerColor,
                 style = DoraTypoTokens.base1Bold,
             )
         } else {
             Row(
-                modifier = Modifier.fillMaxWidth().align(Alignment.CenterStart),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterStart),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = horizontalArrangement,
             ) {
@@ -78,12 +83,16 @@ fun DoraTopAppBar(
         }
         actionIcon?.let { icon ->
             Icon(
-                modifier = Modifier.align(Alignment.CenterEnd)
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
                     .padding(end = 20.dp)
                     .clickable { onClickActonIcon() },
                 painter = painterResource(id = icon),
                 contentDescription = "action",
             )
+        }
+        if (isShowBottomDivider) {
+            DoraDivider(modifier = Modifier.align(Alignment.BottomCenter))
         }
     }
 }
@@ -105,6 +114,7 @@ fun PreviewBackNavigationTopBar() {
         modifier = Modifier.fillMaxWidth(),
         title = "Dorabangs",
         isTitleCenter = true,
+        isShowBottomDivider = true,
     ) {}
 }
 
@@ -118,6 +128,7 @@ fun PreviewBackWithActionIconTopBar() {
         onClickBackIcon = {},
         onClickActonIcon = {},
         isTitleCenter = true,
+        isShowBottomDivider = true,
     )
 }
 
@@ -127,5 +138,6 @@ fun PreviewTitleTopAppBar() {
     DoraTopBar.TitleTopAppBar(
         modifier = Modifier.fillMaxWidth(),
         title = "Dorabangs",
+        isShowBottomDivider = true,
     )
 }

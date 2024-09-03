@@ -16,20 +16,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
+import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 
 @Composable
-fun GradientButton(
+fun BannerButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     gradientModifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.shape,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
-    containerColor: Brush = Brush.verticalGradient(listOf(colors.containerColor, colors.containerColor)),
+    containerColor: Color = DoraColorTokens.G7,
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
@@ -49,11 +49,11 @@ fun GradientButton(
     ) {
         Box(
             modifier = gradientModifier
-                .background(brush = containerColor, shape = shape)
+                .background(color = containerColor, shape = shape)
                 .padding(contentPadding),
             contentAlignment = Alignment.Center,
         ) {
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 content()
             }
         }
