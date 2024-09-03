@@ -34,6 +34,7 @@ import androidx.paging.compose.itemKey
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCard
 import com.mashup.dorabangs.core.designsystem.component.card.FeedCardEntryPoint
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
+import com.mashup.dorabangs.core.designsystem.component.divider.DoraDivider
 import com.mashup.dorabangs.core.designsystem.component.util.LottieLoader
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -126,13 +127,7 @@ fun StorageDetailList(
                                 feedCardEntryPoint = FeedCardEntryPoint.StorageDetail,
                             )
                             if (idx != state.folderInfo.postCount - 1) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 20.dp)
-                                        .height(0.5.dp)
-                                        .background(DoraColorTokens.G2),
-                                )
+                                DoraDivider(modifier = Modifier.padding(horizontal = 20.dp))
                             }
                         }
                     }

@@ -107,7 +107,7 @@ object DoraBottomSheet : BottomSheetType {
                                         icon = R.drawable.ic_add_folder_purple,
                                         itemName = stringResource(id = R.string.moving_folder_dialog_add_folder),
                                         isSelected = false,
-                                        color = DoraColorTokens.Primary,
+                                        color = DoraColorTokens.Primary500,
                                     ),
                                     onClickItem = onClickCreateFolder,
                                     isLastItem = false,

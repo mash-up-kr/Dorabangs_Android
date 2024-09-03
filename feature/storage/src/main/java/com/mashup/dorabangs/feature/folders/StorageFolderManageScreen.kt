@@ -91,6 +91,7 @@ fun FolderManageScreen(
             title = stringResource(id = folderManageState.type.title),
             isTitleCenter = true,
             onClickBackIcon = onClickBackIcon,
+            isShowBottomDivider = true,
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
         Column(

@@ -84,7 +84,7 @@ fun Modifier.animatedGradient(
 @Composable
 fun TextLoadingSkeletonPreview() {
     TextLoadingSkeleton(
-        DoraColorTokens.Primary,
+        DoraColorTokens.Primary500,
         DoraColorTokens.White,
         modifier = Modifier
             .fillMaxWidth()

@@ -51,6 +51,7 @@ fun DoraLinkSaveSelectFolderScreen(
                 title = stringResource(id = R.string.link_save_title_text),
                 isTitleCenter = true,
                 onClickBackIcon = onClickBackIcon,
+                isShowBottomDivider = true,
             )
             DoraLinkSaveTitleAndLinkScreen(state = state)
             DoraSelectableFolderListItems(
