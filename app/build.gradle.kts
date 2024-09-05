@@ -55,7 +55,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_18
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
     kotlinOptions {
         jvmTarget = "18"
