@@ -17,7 +17,7 @@ android {
         applicationId = "com.mashup.dorabangs"
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = GitUtil.getGitCommitCount(project)
+        versionCode = getGitCommitCount()
         versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
