@@ -78,8 +78,8 @@ fun DoraFolderListItem(
         }
         Text(
             modifier = Modifier.thenIf(data.icon != null) {
-                    padding(start = 12.dp)
-                },
+                padding(start = 12.dp)
+            },
             text = data.itemName,
             style = data.textStyle,
             color = data.color,
@@ -96,18 +96,18 @@ fun DoraBottomSheetFolderItem(
 ) {
     Column {
         data?.let { item ->
-        Row(
-            modifier = modifier
-                .background(DoraColorTokens.White)
-                .thenIf(item.isSelected) {
-                    background(DoraColorTokens.G1)
-                }
-                .clickable { onClickItem() }
-                .height(52.dp)
-                .padding(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+            Row(
+                modifier = modifier
+                    .background(DoraColorTokens.White)
+                    .thenIf(item.isSelected) {
+                        background(DoraColorTokens.G1)
+                    }
+                    .clickable { onClickItem() }
+                    .height(52.dp)
+                    .padding(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 if (data.isSelected) {
                     DoraFolderListItem(
                         data = BottomSheetItemUIModel(
