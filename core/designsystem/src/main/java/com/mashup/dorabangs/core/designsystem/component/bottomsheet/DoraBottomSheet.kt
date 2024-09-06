@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -22,6 +21,7 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 fun DoraBaseBottomSheet(
     state: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     modifier: Modifier = Modifier,
+    dragHandler: @Composable (() -> Unit),
     containerColor: Color = BottomSheetColorTokens.MoreViewBackgroundColor,
     onDismissRequest: () -> Unit,
     content: @Composable ColumnScope.() -> Unit,
@@ -31,7 +31,7 @@ fun DoraBaseBottomSheet(
         modifier = modifier,
         containerColor = containerColor,
         shape = DoraRoundTokens.TopRound16,
-        dragHandle = { DoraDragHandle(Modifier.padding(top = 6.dp)) },
+        dragHandle = { dragHandler },
         onDismissRequest = onDismissRequest,
     ) {
         content()
@@ -39,7 +39,7 @@ fun DoraBaseBottomSheet(
 }
 
 @Composable
-private fun DoraDragHandle(
+fun DoraLightDragHandle(
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -47,7 +47,22 @@ private fun DoraDragHandle(
             .width(36.dp)
             .height(5.dp)
             .background(
-                color = BottomSheetColorTokens.HandleColor,
+                color = BottomSheetColorTokens.LightHandleColor,
+                shape = DoraRoundTokens.Round99,
+            ),
+    )
+}
+
+@Composable
+fun DoraDarkDragHandle(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .width(36.dp)
+            .height(5.dp)
+            .background(
+                color = BottomSheetColorTokens.DarkHandleColor,
                 shape = DoraRoundTokens.Round99,
             ),
     )

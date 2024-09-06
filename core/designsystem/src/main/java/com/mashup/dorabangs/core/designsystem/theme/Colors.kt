@@ -126,9 +126,10 @@ class ChipColorTokens(isSelected: Boolean) {
 }
 
 object BottomSheetColorTokens {
-    val MoreViewBackgroundColor = DoraColorTokens.G1
+    val MoreViewBackgroundColor = DoraColorTokens.G2
     val MovingFolderColor = DoraColorTokens.White
-    val HandleColor = DoraColorTokens.G2
+    val LightHandleColor = DoraColorTokens.G2
+    val DarkHandleColor = DoraColorTokens.G3
     val ItemColor = DoraColorTokens.White
     val DividerColor = DoraColorTokens.G3
 }
