@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHost
@@ -22,6 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,8 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconarrow.DoraIconArrow
 import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconarrow.RightArrow
-import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.CloseCircle
-import com.mashup.dorabangs.core.designsystem.component.snackbar.doraiconclose.DoraIconClose
 import com.mashup.dorabangs.core.designsystem.theme.ClipBoardColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -68,7 +67,8 @@ fun SnackBarContent(
         modifier = modifier
             .background(color = ClipBoardColorTokens.ContainerColor1)
             .padding(16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .shadow(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -76,39 +76,41 @@ fun SnackBarContent(
             modifier = Modifier.weight(1f),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = stringResource(id = R.string.snack_bar_title),
-                    maxLines = 2,
-                    style = DoraTypoTokens.caption1Medium,
-                    color = ClipBoardColorTokens.UrlLinkSubColor1,
-                )
-                Icon(
-                    imageVector = DoraIconArrow.RightArrow,
-                    tint = ClipBoardColorTokens.ArrowColor,
-                    contentDescription = null,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.snack_bar_title),
+                        maxLines = 2,
+                        style = DoraTypoTokens.caption1Normal,
+                        color = ClipBoardColorTokens.UrlLinkSubColor1,
+                    )
+                    Icon(
+                        imageVector = DoraIconArrow.RightArrow,
+                        tint = ClipBoardColorTokens.ArrowColor,
+                        contentDescription = null,
+                    )
+                }
+                IconButton(
+                    modifier = Modifier.size(24.dp),
+                    onClick = dismissAction,
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_x_gray),
+                        contentDescription = stringResource(id = R.string.snack_bar_cancel_description),
+                    )
+                }
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = text,
                 color = ClipBoardColorTokens.UrlLinkMainColor1,
-                style = DoraTypoTokens.caption3Bold,
+                style = DoraTypoTokens.caption1Normal,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-            )
-        }
-        Spacer(
-            modifier = Modifier.width(16.dp),
-        )
-        IconButton(
-            modifier = Modifier.size(24.dp),
-            onClick = dismissAction,
-        ) {
-            Image(
-                imageVector = DoraIconClose.CloseCircle,
-                contentDescription = stringResource(id = R.string.snack_bar_cancel_description),
             )
         }
     }
