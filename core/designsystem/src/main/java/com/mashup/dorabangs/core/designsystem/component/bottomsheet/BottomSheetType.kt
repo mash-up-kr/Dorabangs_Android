@@ -104,9 +104,11 @@ object DoraBottomSheet : BottomSheetType {
                                 DoraBottomSheetFolderItem(
                                     modifier = Modifier.fillMaxWidth(),
                                     data = SelectableBottomSheetItemUIModel(
-                                        icon = R.drawable.ic_add_folder_purple,
+                                        icon = null,
                                         itemName = stringResource(id = R.string.moving_folder_dialog_add_folder),
                                         isSelected = false,
+                                        textStyle = DoraTypoTokens.caption3Normal,
+                                        selectedTextStyle = DoraTypoTokens.caption3Bold,
                                         color = DoraColorTokens.Primary500,
                                     ),
                                     onClickItem = onClickCreateFolder,
