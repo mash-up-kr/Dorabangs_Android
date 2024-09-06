@@ -31,7 +31,7 @@ fun DoraBaseBottomSheet(
         modifier = modifier,
         containerColor = containerColor,
         shape = DoraRoundTokens.TopRound16,
-        dragHandle = { dragHandler },
+        dragHandle = dragHandler,
         onDismissRequest = onDismissRequest,
     ) {
         content()
