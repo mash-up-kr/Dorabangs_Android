@@ -19,7 +19,6 @@ jobs:
       - name: Access SERVER_BASE_URL
         run: |
           echo server_base_url=\"${{ secrets.SERVER_BASE_URL }}\" > local.properties
-        shell: bash
 
       - name: Upload setup artifacts
         uses: actions/upload-artifact@v4
