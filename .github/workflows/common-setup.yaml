@@ -18,12 +18,12 @@ jobs:
 
       - name: Access SERVER_BASE_URL
         run: |
-          echo server_base_url=${{ secrets.SERVER_BASE_URL }} > local.properties
+          echo server_base_url="${{ secrets.SERVER_BASE_URL }}" > local.properties
 
       - name: Upload setup artifacts
         uses: actions/upload-artifact@v4
         with:
           name: common-setup-files
           path: |
-            /home/runner/work/Dorabangs_Android/Dorabangs_Android/local.properties
-            /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
+            local.properties
+            google-services.json
