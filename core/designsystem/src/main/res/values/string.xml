@@ -25,10 +25,8 @@
     <string name="onboarding_screen_sub_title">1개 이상을 선택해주세요</string>
     <string name="onboarding_screen_complete_button">완료</string>
     <string name="onboarding_screen_ok_button">확인</string>
-    <string name="home_carousel_classified_link_as_ai">AI로 분류한 링크가</string>
-    <string name="home_carousel_not_read_yet">아직 읽지 않은 링크가</string>
-    <string name="home_carousel_count">%s개</string>
-    <string name="home_carousel_its_here">있어요</string>
+    <string name="home_carousel_classified_link_as_ai">AI로 분류한\n링크가 %s개 있어요</string>
+    <string name="home_carousel_not_read_yet">아직 읽지 않은\n링크가 %s개 있어요</string>
     <string name="home_carousel_save_introduce">3초만에 링크를 \n저장하는 방법이에요</string>
     <string name="home_toast_remove_folder_complete">삭제 완료했어요.</string>
 </resources>

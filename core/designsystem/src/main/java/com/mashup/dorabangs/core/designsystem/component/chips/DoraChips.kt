@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.divider.DoraDivider
 import com.mashup.dorabangs.core.designsystem.theme.ChipColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -31,26 +33,34 @@ fun DoraChips(
     chipList: List<FeedUiModel.DoraChipUiModel>,
     modifier: Modifier = Modifier,
     selectedIndex: Int = 0,
+    isShowPostCount: Boolean = false,
     onClickChip: (Int) -> Unit = {},
 ) {
-    LazyRow(
-        modifier = modifier
-            .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        item {
-            Spacer(modifier = Modifier.width(12.dp))
+    Column(modifier = modifier) {
+        LazyRow(
+            modifier = Modifier
+                .padding(top = 4.dp, bottom = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            item {
+                Spacer(modifier = Modifier.width(20.dp))
+            }
+            items(
+                count = chipList.size,
+                contentType = { "DoraChip" },
+            ) { index ->
+                DoraChip(
+                    doraChipUiModel = chipList[index],
+                    isSelected = index == selectedIndex,
+                    isShowPostCount = isShowPostCount,
+                    onClickChip = { onClickChip(index) },
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.width(20.dp))
+            }
         }
-        items(chipList.size) { index ->
-            DoraChip(
-                doraChipUiModel = chipList[index],
-                isSelected = index == selectedIndex,
-                onClickChip = { onClickChip(index) },
-            )
-        }
-        item {
-            Spacer(modifier = Modifier.width(12.dp))
-        }
+        DoraDivider()
     }
 }
 
@@ -58,6 +68,7 @@ fun DoraChips(
 fun DoraChip(
     doraChipUiModel: FeedUiModel.DoraChipUiModel,
     modifier: Modifier = Modifier,
+    isShowPostCount: Boolean = false,
     isSelected: Boolean = false,
     onClickChip: () -> Unit = {},
 ) {
@@ -95,6 +106,14 @@ fun DoraChip(
             ),
             color = colorToken.OnContainerColor,
         )
+        if (isShowPostCount) {
+            Text(
+                modifier = Modifier.padding(start = 4.dp),
+                text = doraChipUiModel.postCount.toString(),
+                style = DoraTypoTokens.caption1Normal,
+                color = colorToken.OnContainerColor2,
+            )
+        }
     }
 }
 
@@ -105,6 +124,8 @@ fun SelectedDoraChipPreview() {
         doraChipUiModel = FeedUiModel.DoraChipUiModel(
             title = "하이?",
         ),
+        isSelected = true,
+        isShowPostCount = true,
     )
 }
 

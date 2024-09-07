@@ -71,6 +71,7 @@ fun HomeTutorialScreen(
                 title = "",
                 isTitleCenter = true,
                 onClickBackIcon = onClickBackIcon,
+                isShowBottomDivider = true,
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(

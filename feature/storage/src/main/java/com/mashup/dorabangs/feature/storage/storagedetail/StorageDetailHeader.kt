@@ -214,6 +214,7 @@ fun StorageDetailTopBarByFolderType(
                 actionIcon = coreR.drawable.ic_more_black,
                 onClickBackIcon = onClickBackIcon,
                 onClickActonIcon = onClickActionIcon,
+                isShowBottomDivider = false,
             )
         }
         else -> {
@@ -222,6 +223,7 @@ fun StorageDetailTopBarByFolderType(
                 title = title,
                 isTitleCenter = true,
                 onClickBackIcon = onClickBackIcon,
+                isShowBottomDivider = false,
             )
         }
     }

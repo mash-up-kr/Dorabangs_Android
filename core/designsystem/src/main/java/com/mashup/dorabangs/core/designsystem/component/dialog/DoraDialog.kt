@@ -9,11 +9,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import com.mashup.dorabangs.core.designsystem.component.buttons.DoraButtons
 import com.mashup.dorabangs.core.designsystem.theme.DialogColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DialogRoundTokens
@@ -36,6 +38,7 @@ fun DoraDialog(
             properties = dialogProperties,
             onDismissRequest = onDisMissRequest,
         ) {
+            (LocalView.current.parent as DialogWindowProvider)?.window?.setDimAmount(0.3f)
             Column(
                 modifier = modifier
                     .background(
@@ -46,21 +49,20 @@ fun DoraDialog(
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 30.dp),
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
-                        modifier = Modifier.padding(top = 30.dp),
+                        modifier = Modifier.padding(top = 24.dp),
                         text = title,
-                        style = DoraTypoTokens.base1Bold,
+                        style = DoraTypoTokens.base2Bold,
                         color = DialogColorTokens.TitleColor,
                     )
                     Text(
-                        modifier = Modifier.padding(top = 8.dp),
+                        modifier = Modifier.padding(top = 4.dp),
                         text = content,
-                        style = DoraTypoTokens.caption3Medium,
+                        style = DoraTypoTokens.caption2Normal,
                         color = DialogColorTokens.ContentColor,
                         textAlign = TextAlign.Center,
                     )
@@ -69,7 +71,7 @@ fun DoraDialog(
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
                         .padding(bottom = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     DoraButtons.DoraMediumDismissBtn(
                         modifier = Modifier.weight(1f),
@@ -94,4 +96,5 @@ fun PreviewDoraDialog() = DoraDialog(
     content = "Text Field Text Field Text Field Text Field Text Field Text Field, Text Field Text Field Text Field",
     confirmBtnText = "버튼",
     disMissBtnText = "버튼",
+    isShowDialog = true,
 )

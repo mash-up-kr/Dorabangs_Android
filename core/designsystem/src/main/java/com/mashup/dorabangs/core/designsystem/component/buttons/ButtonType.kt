@@ -2,6 +2,8 @@ package com.mashup.dorabangs.core.designsystem.component.buttons
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import com.mashup.dorabangs.core.designsystem.theme.BtnMaxColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.BtnMaxRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
@@ -28,6 +30,27 @@ object DoraButtons : ButtonType {
     )
 
     @Composable
+    override fun DoraBtnMaxFullWithTextStyle(
+        modifier: Modifier,
+        containerColor: Color,
+        buttonText: String,
+        enabled: Boolean,
+        textStyle: TextStyle,
+        onClickButton: () -> Unit,
+    ) = DoraButton(
+        modifier = modifier,
+        buttonText = buttonText,
+        textStyle = textStyle,
+        enabled = enabled,
+        radius = BtnMaxRoundTokens.FullButtonWidthRadius,
+        containerColor = containerColor,
+        contentColor = BtnMaxColorTokens.ContentColor1,
+        disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
+        disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
+        onClickButton = onClickButton,
+    )
+
+    @Composable
     override fun DoraMediumConfirmBtn(
         modifier: Modifier,
         buttonText: String,
@@ -37,7 +60,7 @@ object DoraButtons : ButtonType {
         buttonText = buttonText,
         textStyle = DoraTypoTokens.caption3Medium,
         enabled = true,
-        radius = BtnMaxRoundTokens.MediumButtonWidthRadius,
+        radius = BtnMaxRoundTokens.SmallButtonWidthRadius,
         containerColor = BtnMaxColorTokens.ContainerColor1,
         contentColor = BtnMaxColorTokens.ContentColor1,
         disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
@@ -55,8 +78,8 @@ object DoraButtons : ButtonType {
         buttonText = buttonText,
         textStyle = DoraTypoTokens.caption3Medium,
         enabled = true,
-        radius = BtnMaxRoundTokens.MediumButtonWidthRadius,
-        containerColor = BtnMaxColorTokens.ContainerColor2,
+        radius = BtnMaxRoundTokens.SmallButtonWidthRadius,
+        containerColor = BtnMaxColorTokens.ContainerColor1_Off,
         contentColor = BtnMaxColorTokens.ContentColor2,
         disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
         disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
@@ -71,10 +94,10 @@ object DoraButtons : ButtonType {
     ) = DoraButton(
         modifier = modifier,
         buttonText = buttonText,
-        textStyle = DoraTypoTokens.caption3Medium,
+        textStyle = DoraTypoTokens.caption2Medium,
         enabled = true,
         radius = BtnMaxRoundTokens.FullButtonWidthRadius,
-        containerColor = BtnMaxColorTokens.ContainerColor1,
+        containerColor = BtnMaxColorTokens.ContainerColor3,
         contentColor = BtnMaxColorTokens.ContentColor1,
         disabledContainerColor = BtnMaxColorTokens.ContainerColor1_Off,
         disabledContentColor = BtnMaxColorTokens.ContentColor_1Off,
@@ -108,6 +131,16 @@ sealed interface ButtonType {
         modifier: Modifier,
         buttonText: String,
         enabled: Boolean,
+        onClickButton: () -> Unit,
+    )
+
+    @Composable
+    fun DoraBtnMaxFullWithTextStyle(
+        modifier: Modifier,
+        containerColor: Color,
+        buttonText: String,
+        enabled: Boolean,
+        textStyle: TextStyle,
         onClickButton: () -> Unit,
     )
 
