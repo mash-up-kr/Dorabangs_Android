@@ -33,15 +33,15 @@ jobs:
         with:
           name: common-setup-files
 
-      - name: print local.properties
-        run: |
-          cd /home/runner/work/Dorabangs_Android/Dorabangs_Android//data/build/generated/source/buildConfig/release/com/mashup/dorabangs/data
-          cat BuildConfig.java
-
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
         env:
           ci: true
+
+      - name: print local.properties
+        run: |
+          cd /home/runner/work/Dorabangs_Android/Dorabangs_Android//data/build/generated/source/buildConfig/release/com/mashup/dorabangs/data
+          cat BuildConfig.java
 
       - name: sign apk
         id: sign_app
