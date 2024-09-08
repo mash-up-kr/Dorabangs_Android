@@ -81,6 +81,14 @@ jobs:
         env:
           ci: true
 
+      - name: Echo bundle
+        run: |
+          cd app/build/outputs/bundle
+          ls
+          echo "절취선"
+          cd release
+          ls
+
       - name: sign aab
         id: sign_app
         uses: r0adkll/sign-android-release@v1.0.4
