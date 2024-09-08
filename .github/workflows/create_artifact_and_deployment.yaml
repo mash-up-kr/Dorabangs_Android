@@ -33,6 +33,31 @@ jobs:
         with:
           name: common-setup-files
 
+      - name: Find zip file
+        id: find_zip
+        run: |
+          # Find the first .zip file in the specified directory
+          zip_file=$(find /home/runner/work/Dorabangs_Android/Dorabangs_Android/ -name "*.zip" | head -n 1)
+          echo "Zip file found: $zip_file"
+          echo "::set-output name=zip_file::$zip_file"
+
+        # Unzip the found .zip file
+      - name: Unzip the artifact
+        run: |
+          unzip "${{ steps.find_zip.outputs.zip_file }}" -d /home/runner/work/Dorabangs_Android/Dorabangs_Android/
+
+      # List files in the unpacked folder and print contents
+      - name: List and print files
+        run: |
+          echo "Listing files in the unpacked directory:"
+          ls /home/runner/work/Dorabangs_Android/Dorabangs_Android/
+          
+          echo "Printing the contents of each file:"
+          for file in $(find /home/runner/work/Dorabangs_Android/Dorabangs_Android -type f); do
+            echo "---- $file ----"
+            cat "$file"
+          done
+
       - name: Build with assembleRelease for apk
         run: ./gradlew assembleRelease
         env:
@@ -80,14 +105,6 @@ jobs:
         run: ./gradlew bundleRelease
         env:
           ci: true
-
-      - name: Echo bundle
-        run: |
-          cd app/build/outputs/bundle
-          ls
-          echo "절취선"
-          cd release
-          ls
 
       - name: sign aab
         id: sign_app
