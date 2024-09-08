@@ -5,6 +5,7 @@ on:
     branches:
       - master
     types:
+      - opened
       - synchronize
       - closed
 
@@ -105,7 +106,7 @@ jobs:
         with:
           packageName: com.mashup.dorabangs
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: qa
+          track: internal
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
 
   post_github:
