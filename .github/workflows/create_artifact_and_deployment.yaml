@@ -60,7 +60,6 @@ jobs:
 
   upload_aab:
     needs: common_setup
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
