@@ -5,9 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,10 +23,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dorabangs.feature.save.DoraSaveState
+import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.LinkSaveColorTokens
-import com.mashup.dorabangs.core.designsystem.R as DR
 
 @Composable
 fun DoraLinkSaveTitleAndLinkScreen(
@@ -38,30 +36,20 @@ fun DoraLinkSaveTitleAndLinkScreen(
 ) {
     Row(
         modifier = modifier
-            .padding(all = 20.dp)
-            .height(88.dp)
-            .clip(DoraRoundTokens.Round12),
+            .background(color = LinkSaveColorTokens.LinkContainerBackgroundColor)
+            .height(120.dp)
+            .padding(20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        AsyncImage(
-            modifier = Modifier.size(size = 88.dp),
-            model = ImageRequest.Builder(context)
-                .data(state.thumbnailUrl)
-                .crossfade(false)
-                .build(),
-            error = painterResource(id = DR.drawable.default_thumbnail),
-            contentDescription = "url 썸네일",
-        )
         Column(
             modifier = Modifier
+                .weight(1f)
                 .fillMaxSize()
-                .background(color = LinkSaveColorTokens.LinkContainerBackgroundColor)
                 .padding(horizontal = 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                modifier = Modifier
-                    .fillMaxWidth(),
                 text = state.title,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 2,
@@ -69,20 +57,26 @@ fun DoraLinkSaveTitleAndLinkScreen(
                 color = LinkSaveColorTokens.TitleTextColor,
             )
 
-            Spacer(
-                modifier = Modifier.height(height = 4.dp),
-            )
-
             Text(
-                modifier = Modifier.fillMaxWidth(),
                 text = state.urlLink,
                 textAlign = TextAlign.Start,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = DoraTypoTokens.SMedium,
+                style = DoraTypoTokens.SNormal,
                 color = LinkSaveColorTokens.LinkTextColor,
             )
         }
+        AsyncImage(
+            modifier = Modifier
+                .size(size = 80.dp)
+                .clip(DoraRoundTokens.Round4),
+            model = ImageRequest.Builder(context)
+                .data(state.thumbnailUrl)
+                .crossfade(false)
+                .build(),
+            error = painterResource(id = R.drawable.default_thumbnail),
+            contentDescription = "url 썸네일",
+        )
     }
 }
 
