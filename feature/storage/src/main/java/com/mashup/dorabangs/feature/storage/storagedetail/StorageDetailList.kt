@@ -104,6 +104,7 @@ fun StorageDetailList(
                 if (!isLoading) {
                     item {
                         SortButtonRow(
+                            postCount = state.folderInfo.postCount,
                             isLatestSort = state.isLatestSort == StorageDetailSort.ASC,
                             onClickSortedIcon = onClickSortedIcon,
                         )
@@ -149,45 +150,56 @@ fun StorageDetailList(
 
 @Composable
 fun SortButtonRow(
+    postCount: Int,
+    modifier: Modifier = Modifier,
     items: List<StorageDetailSort> = listOf(StorageDetailSort.DESC, StorageDetailSort.ASC),
     isLatestSort: Boolean = false,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
     Row(
-        modifier =
-        Modifier
-            .fillMaxWidth()
-            .background(color = DoraColorTokens.White)
-            .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 14.dp),
-        horizontalArrangement = Arrangement.End,
+        modifier = modifier
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        items.forEachIndexed { index, item ->
-            Row(
-                modifier =
-                Modifier
-                    .align(Alignment.CenterVertically)
-                    .background(color = DoraColorTokens.White)
-                    .clickable { onClickSortedIcon(item) },
-            ) {
-                val icon = when (item) {
-                    StorageDetailSort.ASC -> if (isLatestSort) coreR.drawable.ic_arrow_down_active else coreR.drawable.ic_arrow_down_disabled
-                    StorageDetailSort.DESC -> if (isLatestSort) coreR.drawable.ic_arrow_up_disabled else coreR.drawable.ic_arrow_up_active
+        Text(
+            text = stringResource(coreR.string.storage_detail_post_count, postCount),
+            style = DoraTypoTokens.SMedium,
+            color = DoraColorTokens.G6,
+        )
+        Row(
+            modifier = Modifier
+                .background(color = DoraColorTokens.White),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            items.forEachIndexed { index, item ->
+                Row(
+                    modifier =
+                    Modifier
+                        .align(Alignment.CenterVertically)
+                        .background(color = DoraColorTokens.White)
+                        .clickable { onClickSortedIcon(item) },
+                ) {
+                    val icon = when (item) {
+                        StorageDetailSort.ASC -> if (isLatestSort) coreR.drawable.ic_arrow_down_active else coreR.drawable.ic_arrow_down_disabled
+                        StorageDetailSort.DESC -> if (isLatestSort) coreR.drawable.ic_arrow_up_disabled else coreR.drawable.ic_arrow_up_active
+                    }
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(id = icon),
+                        contentDescription = stringResource(id = item.btnName),
+                    )
+                    Spacer(modifier = Modifier.width(2.dp))
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        text = stringResource(id = item.btnName),
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        style = DoraTypoTokens.SMedium,
+                    )
                 }
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(id = icon),
-                    contentDescription = stringResource(id = item.btnName),
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    text = stringResource(id = item.btnName),
-                    textAlign = TextAlign.Center,
-                    color = Color.Black,
-                    style = DoraTypoTokens.caption1Medium,
-                )
             }
-            if (index != items.lastIndex) Spacer(modifier = Modifier.width(16.dp))
         }
     }
 }
@@ -195,5 +207,7 @@ fun SortButtonRow(
 @Preview
 @Composable
 fun PreviewSortRowButton() {
-    SortButtonRow()
+    SortButtonRow(
+        postCount = 0,
+    )
 }

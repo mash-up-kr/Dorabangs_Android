@@ -7,7 +7,6 @@ import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.LinkKeywordInfo
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.SavedLinkDetailInfo
-import com.mashup.dorabangs.core.designsystem.R as coreR
 
 fun SavedLinkDetailInfo.toUiModel(): FeedUiModel.FeedCardUiModel {
     return FeedUiModel.FeedCardUiModel(
@@ -74,7 +73,7 @@ fun List<Folder>.toSelectBottomSheetModel(folderId: String): List<SelectableBott
     return this.map { item ->
         SelectableBottomSheetItemUIModel(
             id = item.id.orEmpty(),
-            icon = coreR.drawable.ic_3d_folder_big,
+            icon = null,
             itemName = item.name,
             isSelected = item.id == folderId,
         )
