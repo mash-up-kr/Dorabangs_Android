@@ -80,9 +80,9 @@ object DialogColorTokens {
 }
 
 object ClipBoardColorTokens {
-    val ContainerColor1 = DoraColorTokens.G9
-    val UrlLinkMainColor1 = DoraColorTokens.White
-    val UrlLinkSubColor1 = DoraColorTokens.G3
+    val ContainerColor1 = DoraColorTokens.SurfaceBlack
+    val UrlLinkMainColor1 = DoraColorTokens.G4
+    val UrlLinkSubColor1 = DoraColorTokens.G1
     val ArrowColor = DoraColorTokens.G3
 }
 
@@ -103,8 +103,8 @@ object TextFieldHelperTextColorTokens {
 
 object LinkSaveColorTokens {
     val ContainerColor = DoraColorTokens.White
-    val TitleTextColor = DoraColorTokens.G9
-    val LinkTextColor = DoraColorTokens.G4
+    val TitleTextColor = DoraColorTokens.G8
+    val LinkTextColor = DoraColorTokens.G5
     val LinkContainerBackgroundColor = DoraColorTokens.G1
 }
 
@@ -126,9 +126,10 @@ class ChipColorTokens(isSelected: Boolean) {
 }
 
 object BottomSheetColorTokens {
-    val MoreViewBackgroundColor = DoraColorTokens.G1
+    val MoreViewBackgroundColor = DoraColorTokens.G2
     val MovingFolderColor = DoraColorTokens.White
-    val HandleColor = DoraColorTokens.G2
+    val LightHandleColor = DoraColorTokens.G2
+    val DarkHandleColor = DoraColorTokens.G3
     val ItemColor = DoraColorTokens.White
     val DividerColor = DoraColorTokens.G3
 }

@@ -4,10 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
@@ -15,16 +15,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.divider.DoraDivider
 import com.mashup.dorabangs.core.designsystem.component.util.thenIf
 import com.mashup.dorabangs.core.designsystem.theme.BottomSheetColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
-import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 
 @Composable
 fun DoraFolderListItems(
@@ -50,17 +49,12 @@ fun DoraFolderListItems(
                             shape = DoraRoundTokens.BottomRound12,
                         )
                     }
-                    .padding(16.dp),
+                    .height(52.dp)
+                    .padding(horizontal = 20.dp),
                 data = data,
             )
             if (index != items.lastIndex) {
-                HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    thickness = 0.5.dp,
-                    color = BottomSheetColorTokens.DividerColor,
-                )
+                DoraDivider(Modifier.fillMaxWidth())
             }
         }
     }
@@ -75,15 +69,19 @@ fun DoraFolderListItem(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Image(
-            painterResource(id = data.icon),
-            modifier = Modifier.size(24.dp),
-            contentDescription = "",
-        )
+        if (data.icon != null) {
+            Image(
+                painterResource(id = data.icon),
+                modifier = Modifier.size(24.dp),
+                contentDescription = "",
+            )
+        }
         Text(
-            modifier = Modifier.padding(start = 12.dp),
+            modifier = Modifier.thenIf(data.icon != null) {
+                padding(start = 12.dp)
+            },
             text = data.itemName,
-            style = DoraTypoTokens.caption3Normal,
+            style = data.textStyle,
             color = data.color,
         )
     }
@@ -94,33 +92,44 @@ fun DoraBottomSheetFolderItem(
     data: SelectableBottomSheetItemUIModel?,
     isLastItem: Boolean,
     modifier: Modifier = Modifier,
-    background: Color = BottomSheetColorTokens.MovingFolderColor,
     onClickItem: () -> Unit = {},
 ) {
     Column {
-        Row(
-            modifier = modifier
-                .background(background)
-                .clickable { onClickItem() }
-                .padding(vertical = 14.dp, horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            data?.let { item ->
-                DoraFolderListItem(
-                    data = BottomSheetItemUIModel(
-                        icon = data.icon,
-                        itemName = data.itemName,
-                        color = data.color,
-                    ),
-                )
+        data?.let { item ->
+            Row(
+                modifier = modifier
+                    .background(DoraColorTokens.White)
+                    .thenIf(item.isSelected) {
+                        background(DoraColorTokens.G1)
+                    }
+                    .clickable { onClickItem() }
+                    .height(52.dp)
+                    .padding(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 if (data.isSelected) {
+                    DoraFolderListItem(
+                        data = BottomSheetItemUIModel(
+                            icon = item.icon,
+                            itemName = data.itemName,
+                            color = data.color,
+                            textStyle = data.selectedTextStyle,
+                        ),
+                    )
                     Image(
                         painter = painterResource(id = R.drawable.ic_check),
                         contentDescription = "selectedIcon",
                     )
                 } else {
-                    Box(modifier = Modifier.size(24.dp))
+                    DoraFolderListItem(
+                        data = BottomSheetItemUIModel(
+                            icon = item.icon,
+                            itemName = data.itemName,
+                            color = data.color,
+                            textStyle = item.textStyle,
+                        ),
+                    )
                 }
             }
         }
@@ -154,7 +163,6 @@ fun PreviewDoraFolderListItem() {
     DoraBottomSheetFolderItem(
         modifier = Modifier.fillMaxWidth(),
         data = SelectableBottomSheetItemUIModel(
-            icon = R.drawable.ic_plus,
             itemName = "폴더이름",
             isSelected = true,
         ),

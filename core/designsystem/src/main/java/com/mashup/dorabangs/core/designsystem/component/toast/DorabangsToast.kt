@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
-import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens.caption3Bold
+import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens.caption2Normal
 import com.mashup.dorabangs.core.designsystem.theme.DorabangsTheme
 
 @Composable
@@ -55,8 +55,8 @@ fun ToastContent(
     Row(
         modifier = modifier
             .clip(shape = DoraRoundTokens.Round99)
-            .background(DoraColorTokens.G9)
-            .padding(all = 20.dp),
+            .background(DoraColorTokens.SurfaceBlack)
+            .padding(horizontal = 20.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -74,7 +74,7 @@ fun ToastContent(
         )
         Text(
             text = text,
-            style = caption3Bold,
+            style = caption2Normal,
             textAlign = TextAlign.Center,
             color = DoraColorTokens.G2,
         )

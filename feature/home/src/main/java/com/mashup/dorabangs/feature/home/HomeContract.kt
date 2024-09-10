@@ -5,7 +5,6 @@ import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.utils.isValidUrl
-import com.mashup.dorabangs.core.designsystem.R as coreR
 
 data class HomeState(
     val isLoading: Boolean = false,
@@ -37,7 +36,7 @@ data class HomeState(
             return this.map { item ->
                 SelectableBottomSheetItemUIModel(
                     id = item.id.orEmpty(),
-                    icon = coreR.drawable.ic_3d_folder_big,
+                    icon = null,
                     itemName = item.name,
                     isSelected = item.id == folderId,
                 )

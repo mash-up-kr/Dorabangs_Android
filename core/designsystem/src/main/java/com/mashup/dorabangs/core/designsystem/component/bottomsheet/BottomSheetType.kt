@@ -39,6 +39,7 @@ object DoraBottomSheet : BottomSheetType {
                 modifier = modifier,
                 containerColor = BottomSheetColorTokens.MoreViewBackgroundColor,
                 onDismissRequest = onDismissRequest,
+                dragHandler = { DoraDarkDragHandle(Modifier.padding(top = 12.dp)) },
             ) {
                 DoraFolderListItems(
                     modifier = Modifier
@@ -85,6 +86,7 @@ object DoraBottomSheet : BottomSheetType {
             DoraBaseBottomSheet(
                 modifier = modifier.heightIn(max = 441.dp),
                 containerColor = BottomSheetColorTokens.MovingFolderColor,
+                dragHandler = { DoraLightDragHandle(Modifier.padding(top = 12.dp)) },
                 onDismissRequest = onDismissRequest,
             ) {
                 Column {
@@ -94,9 +96,11 @@ object DoraBottomSheet : BottomSheetType {
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 16.dp),
+                                .padding(horizontal = 20.dp)
+                                .padding(bottom = 6.dp, top = 13.dp),
                             textAlign = TextAlign.Center,
                             text = stringResource(id = R.string.moving_folder_dialog_title),
+                            color = DoraColorTokens.G8,
                             style = DoraTypoTokens.base2Bold,
                         )
                         LazyColumn {
@@ -104,9 +108,11 @@ object DoraBottomSheet : BottomSheetType {
                                 DoraBottomSheetFolderItem(
                                     modifier = Modifier.fillMaxWidth(),
                                     data = SelectableBottomSheetItemUIModel(
-                                        icon = R.drawable.ic_add_folder_purple,
+                                        icon = null,
                                         itemName = stringResource(id = R.string.moving_folder_dialog_add_folder),
                                         isSelected = false,
+                                        textStyle = DoraTypoTokens.caption3Normal,
+                                        selectedTextStyle = DoraTypoTokens.caption3Bold,
                                         color = DoraColorTokens.Primary500,
                                     ),
                                     onClickItem = onClickCreateFolder,
