@@ -160,7 +160,7 @@ fun HomeScreen(
                                     indicatorIcon = R.drawable.ic_ai_8dp,
                                     description = stringResource(
                                         R.string.home_carousel_classified_link_as_ai,
-                                        state.aiClassificationCount
+                                        state.aiClassificationCount,
                                     ),
                                     onClickButton = navigateToClassification,
                                     isVisible = state.aiClassificationCount > 0,
@@ -169,7 +169,7 @@ fun HomeScreen(
                                     lottieRes = R.raw.unread,
                                     description = stringResource(
                                         R.string.home_carousel_not_read_yet,
-                                        state.unReadPostCount
+                                        state.unReadPostCount,
                                     ),
                                     onClickButton = navigateToUnreadStorageDetail,
                                     isVisible = state.unReadPostCount > 0,
@@ -243,12 +243,12 @@ fun HomeScreen(
                 .background(DoraColorTokens.SurfaceBlack)
                 .align(Alignment.BottomEnd)
                 .clickable(onClick = navigateSaveScreenWithoutLink),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 tint = DoraColorTokens.G3,
                 painter = painterResource(id = R.drawable.ic_fab_add),
-                contentDescription = ""
+                contentDescription = "",
             )
         }
     }
@@ -339,7 +339,7 @@ private fun HomeCarousel(
                             start = 16.dp,
                             end = 12.dp,
                             top = 8.dp,
-                            bottom = 8.dp
+                            bottom = 8.dp,
                         ),
                         gradientModifier = Modifier.defaultMinSize(
                             minWidth = ButtonDefaults.MinWidth,
