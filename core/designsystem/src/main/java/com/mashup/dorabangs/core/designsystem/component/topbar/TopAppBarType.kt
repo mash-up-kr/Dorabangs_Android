@@ -2,11 +2,9 @@ package com.mashup.dorabangs.core.designsystem.component.topbar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,16 +23,11 @@ object DoraTopBar : TopAppBarType {
     ) {
         Row(
             modifier = modifier.padding(horizontal = 20.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo_top_app_bar),
-                contentDescription = "",
-            )
-            Icon(
-                modifier = Modifier.clickable { onClickActonIcon.invoke() },
-                painter = painterResource(id = R.drawable.ic_add_link),
                 contentDescription = "",
             )
         }
