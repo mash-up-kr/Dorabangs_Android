@@ -189,7 +189,7 @@ class ClassificationViewModel @Inject constructor(
             intent {
                 reduce {
                     state.copy(
-                        chipState = ChipState(
+                        chipState = state.chipState.copy(
                             totalCount = chips.totalCounts,
                             chipList = chipList,
                         ),
@@ -208,7 +208,7 @@ class ClassificationViewModel @Inject constructor(
             intent {
                 reduce {
                     state.copy(
-                        chipState = ChipState(
+                        chipState = state.chipState.copy(
                             totalCount = chips.totalCounts,
                             chipList = chipList,
                         ),
