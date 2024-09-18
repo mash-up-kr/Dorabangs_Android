@@ -30,7 +30,6 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
-import kotlinx.coroutines.flow.filter
 
 @HiltViewModel
 class ClassificationViewModel @Inject constructor(
@@ -180,17 +179,28 @@ class ClassificationViewModel @Inject constructor(
     }
 
     fun moveSelectedItem(cardItem: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
-        val move = moveSinglePostUseCase.invoke(
-            postId = cardItem.postId,
-            suggestionFolderId = cardItem.folderId,
-        )
+        intent {
+            reduce {
+                state.copy(
+                    isLoading = true,
+                )
+            }
+            val move = moveSinglePostUseCase.invoke(
+                postId = cardItem.postId,
+                suggestionFolderId = cardItem.folderId,
+            )
 
-        if (move.isSuccess) {
-            val (chips, chipList) = updateChipList()
-            updateListScreenWithSingleItem(cardItem)
-            updateSeparator(chipList)
+            if (move.isSuccess) {
+                val (chips, chipList) = updateChipList()
+                val findCategory = chips.list.find { it.folderId == cardItem.folderId }
 
-            intent {
+                if (findCategory != null) {
+                    updateListScreenWithSingleItem(cardItem)
+                    updateSeparator(chipList)
+                } else {
+                    getInitialData()
+                }
+
                 reduce {
                     state.copy(
                         chipState = state.chipState.copy(
@@ -201,16 +211,35 @@ class ClassificationViewModel @Inject constructor(
                 }
             }
         }
+    }.invokeOnCompletion {
+        intent {
+            reduce {
+                state.copy(
+                    isLoading = false
+                )
+            }
+        }
     }
 
     fun deleteSelectedItem(cardItem: FeedUiModel.FeedCardUiModel) = viewModelScope.doraLaunch {
-        val delete = deletePostUseCase.invoke(cardItem.postId)
-        if (delete.isSuccess) {
-            val (chips, chipList) = updateChipList()
-            updateListScreenWithSingleItem(cardItem)
-            updateSeparator(chipList)
+        intent {
+            reduce {
+                state.copy(
+                    isLoading = true,
+                )
+            }
+            val delete = deletePostUseCase.invoke(cardItem.postId)
+            if (delete.isSuccess) {
+                val (chips, chipList) = updateChipList()
+                val findCategory = chips.list.find { it.folderId == cardItem.folderId }
 
-            intent {
+                if (findCategory != null) {
+                    updateListScreenWithSingleItem(cardItem)
+                    updateSeparator(chipList)
+                } else {
+                    getInitialData()
+                }
+
                 reduce {
                     state.copy(
                         chipState = state.chipState.copy(
@@ -219,6 +248,14 @@ class ClassificationViewModel @Inject constructor(
                         ),
                     )
                 }
+            }
+        }
+    }.invokeOnCompletion {
+        intent {
+            reduce {
+                state.copy(
+                    isLoading = false,
+                )
             }
         }
     }
