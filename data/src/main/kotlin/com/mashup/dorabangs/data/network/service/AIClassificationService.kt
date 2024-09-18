@@ -1,7 +1,6 @@
 package com.mashup.dorabangs.data.network.service
 
 import com.mashup.dorabangs.data.model.AIClassificationFoldersResponseModel
-import com.mashup.dorabangs.data.model.AIClassificationPostsResponseModel
 import com.mashup.dorabangs.data.model.AiClassificationMoveSinglePostRequestModel
 import com.mashup.dorabangs.data.model.classification.AIClassificationAIPostListResponseModel
 import retrofit2.http.Body

@@ -5,7 +5,6 @@ import com.mashup.dorabangs.data.datasource.remote.api.AIClassificationRemoteDat
 import com.mashup.dorabangs.data.model.classification.toPagingDomain
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
-import com.mashup.dorabangs.domain.model.AIClassificationPosts
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.repository.AIClassificationRepository

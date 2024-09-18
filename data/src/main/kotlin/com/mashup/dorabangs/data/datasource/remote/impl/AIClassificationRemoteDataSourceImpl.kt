@@ -6,7 +6,6 @@ import com.mashup.dorabangs.data.model.classification.AIClassificationAIPostList
 import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.network.service.AIClassificationService
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
-import com.mashup.dorabangs.domain.model.AIClassificationPosts
 import javax.inject.Inject
 
 class AIClassificationRemoteDataSourceImpl @Inject constructor(

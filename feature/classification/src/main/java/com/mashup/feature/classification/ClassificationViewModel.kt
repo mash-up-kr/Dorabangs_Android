@@ -215,7 +215,7 @@ class ClassificationViewModel @Inject constructor(
         intent {
             reduce {
                 state.copy(
-                    isLoading = false
+                    isLoading = false,
                 )
             }
         }
@@ -265,7 +265,9 @@ class ClassificationViewModel @Inject constructor(
             if (it is FeedUiModel.DoraChipUiModel) {
                 val updateItem = chipList.find { chip -> chip.id == it.folderId }
                 it.copy(postCount = updateItem?.postCount ?: it.postCount)
-            } else it
+            } else {
+                it
+            }
         }
     }
 
