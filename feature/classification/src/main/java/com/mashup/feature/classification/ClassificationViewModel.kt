@@ -30,6 +30,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
+import kotlinx.coroutines.flow.filter
 
 @HiltViewModel
 class ClassificationViewModel @Inject constructor(
@@ -112,50 +113,52 @@ class ClassificationViewModel @Inject constructor(
         }
     }
 
-    fun changeCategory(idx: Int) = intent {
-        val selectedFolderItem = state.chipState.chipList.getOrNull(idx)
-        val selectedFolderId = selectedFolderItem?.id.orEmpty()
-        val selectedFolderName = selectedFolderItem?.title.orEmpty()
+    fun changeCategory(idx: Int) = viewModelScope.doraLaunch {
+        intent {
+            val selectedFolderItem = state.chipState.chipList.getOrNull(idx)
+            val selectedFolderId = selectedFolderItem?.id.orEmpty()
+            val selectedFolderName = selectedFolderItem?.title.orEmpty()
 
-        getAIClassificationFolderListByIdUseCase.invoke(
-            folderId = selectedFolderId,
-            limit = LIMIT,
-            order = Sort.DESC,
-        ).map { pagedData ->
-            // chip create
-            pagedData.map {
-                val category =
-                    state.chipState.chipList.firstOrNull { chip -> chip.id == it.folderId }?.title.orEmpty()
-                it.toUiModel(category)
-            }
-        }.map {
-            // add seperator
-            it.insertSeparators { before, after ->
-                after?.let {
-                    if (before?.category != after.category) {
-                        FeedUiModel.DoraChipUiModel(
-                            id = selectedFolderId,
-                            mergedTitle = "",
-                            title = selectedFolderName,
-                            postCount = selectedFolderItem?.postCount?: 0,
-                            folderId = after.folderId,
-                            icon = null,
-                        )
-                    } else {
-                        null
+            getAIClassificationFolderListByIdUseCase.invoke(
+                folderId = selectedFolderId,
+                limit = LIMIT,
+                order = Sort.DESC,
+            ).map { pagedData ->
+                // chip create
+                pagedData.map {
+                    val category =
+                        state.chipState.chipList.firstOrNull { chip -> chip.id == it.folderId }?.title.orEmpty()
+                    it.toUiModel(category)
+                }
+            }.map {
+                // add seperator
+                it.insertSeparators { before, after ->
+                    after?.let {
+                        if (before?.category != after.category) {
+                            FeedUiModel.DoraChipUiModel(
+                                id = selectedFolderId,
+                                mergedTitle = "",
+                                title = selectedFolderName,
+                                postCount = selectedFolderItem?.postCount ?: 0,
+                                folderId = after.folderId,
+                                icon = null,
+                            )
+                        } else {
+                            null
+                        }
                     }
                 }
-            }
-        }.cachedIn(viewModelScope)
-            .let {
-                _paging.value = it.firstOrNull() ?: PagingData.empty()
-            }
+            }.cachedIn(viewModelScope)
+                .let {
+                    _paging.value = it.firstOrNull() ?: PagingData.empty()
+                }
 
-        reduce {
-            state.copy(
-                chipState = state.chipState.copy(currentIndex = idx),
-                selectedFolder = state.chipState.chipList.getOrNull(idx)?.title ?: "전체",
-            )
+            reduce {
+                state.copy(
+                    chipState = state.chipState.copy(currentIndex = idx),
+                    selectedFolder = state.chipState.chipList.getOrNull(idx)?.title ?: "전체",
+                )
+            }
         }
     }
 
@@ -185,6 +188,7 @@ class ClassificationViewModel @Inject constructor(
         if (move.isSuccess) {
             val (chips, chipList) = updateChipList()
             updateListScreenWithSingleItem(cardItem)
+            updateSeparator(chipList)
 
             intent {
                 reduce {
@@ -204,6 +208,7 @@ class ClassificationViewModel @Inject constructor(
         if (delete.isSuccess) {
             val (chips, chipList) = updateChipList()
             updateListScreenWithSingleItem(cardItem)
+            updateSeparator(chipList)
 
             intent {
                 reduce {
@@ -215,6 +220,15 @@ class ClassificationViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun updateSeparator(chipList: List<FeedUiModel.DoraChipUiModel>) {
+        _paging.value = _paging.value.map {
+            if (it is FeedUiModel.DoraChipUiModel) {
+                val updateItem = chipList.find { chip -> chip.id == it.folderId }
+                it.copy(postCount = updateItem?.postCount ?: it.postCount)
+            } else it
         }
     }
 
