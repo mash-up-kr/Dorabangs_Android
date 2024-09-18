@@ -155,7 +155,6 @@ class ClassificationViewModel @Inject constructor(
             reduce {
                 state.copy(
                     chipState = state.chipState.copy(currentIndex = idx),
-                    selectedFolder = state.chipState.chipList.getOrNull(idx)?.title ?: "전체",
                 )
             }
         }
