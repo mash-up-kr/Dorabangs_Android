@@ -23,7 +23,7 @@ interface AIClassificationRemoteDataSource {
         page: Int? = null,
         limit: Int? = null,
         order: String? = null,
-    ): AIClassificationPosts
+    ): AIClassificationAIPostListResponseModel
 
     suspend fun deletePostFromAIClassification(
         postId: String,

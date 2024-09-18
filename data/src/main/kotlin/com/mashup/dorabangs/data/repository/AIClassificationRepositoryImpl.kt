@@ -44,16 +44,19 @@ class AIClassificationRepositoryImpl @Inject constructor(
 
     override suspend fun getAIClassificationPostsByFolder(
         folderId: String,
-        page: Int?,
         limit: Int?,
         order: String?,
-    ): AIClassificationPosts =
-        remoteDataSource.getAIClassificationPostsByFolder(
-            folderId = folderId,
-            page = page,
-            limit = limit,
-            order = order,
-        )
+    ): Flow<PagingData<AIClassificationFeedPost>> =
+        doraPager(
+            apiExecutor = { page ->
+                remoteDataSource.getAIClassificationPostsByFolder(
+                    folderId = folderId,
+                    page = page,
+                    limit = limit,
+                    order = order,
+                ).toPagingDomain()
+            },
+        ).flow
 
     override suspend fun deletePostFromAIClassification(postId: String): DoraSampleResponse {
         return kotlin.runCatching {

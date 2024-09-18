@@ -38,13 +38,13 @@ class AIClassificationRemoteDataSourceImpl @Inject constructor(
         page: Int?,
         limit: Int?,
         order: String?,
-    ): AIClassificationPosts =
+    ): AIClassificationAIPostListResponseModel =
         service.getAIClassificationPostsByFolder(
             folderId = folderId,
             page = page,
             limit = limit,
             order = order,
-        ).toDomain()
+        )
 
     override suspend fun deletePostFromAIClassification(postId: String) =
         service.deletePostFromAIClassification(

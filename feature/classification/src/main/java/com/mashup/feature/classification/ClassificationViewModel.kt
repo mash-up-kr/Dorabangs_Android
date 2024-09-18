@@ -11,9 +11,11 @@ import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
 import com.mashup.dorabangs.domain.model.PostInfo
+import com.mashup.dorabangs.domain.model.Sort
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.usecase.aiclassification.DeletePostFromAIClassificationUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationFolderListUseCase
+import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationPostsByFolderUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationPostsUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.MoveAllPostsToRecommendedFolderUseCase
 import com.mashup.dorabangs.domain.usecase.aiclassification.MoveSinglePostToRecommendedFolderUseCase
@@ -33,6 +35,7 @@ import javax.inject.Inject
 class ClassificationViewModel @Inject constructor(
     private val getAIClassificationFolderListUseCase: GetAIClassificationFolderListUseCase,
     private val getAIClassificationPostsUseCase: GetAIClassificationPostsUseCase,
+    private val getAIClassificationFolderListByIdUseCase: GetAIClassificationPostsByFolderUseCase,
     private val deletePostUseCase: DeletePostFromAIClassificationUseCase,
     private val moveSinglePostUseCase: MoveSinglePostToRecommendedFolderUseCase,
     private val moveAllPostUseCase: MoveAllPostsToRecommendedFolderUseCase,
@@ -110,6 +113,44 @@ class ClassificationViewModel @Inject constructor(
     }
 
     fun changeCategory(idx: Int) = intent {
+        val selectedFolderItem = state.chipState.chipList.getOrNull(idx)
+        val selectedFolderId = selectedFolderItem?.id.orEmpty()
+        val selectedFolderName = selectedFolderItem?.title.orEmpty()
+
+        getAIClassificationFolderListByIdUseCase.invoke(
+            folderId = selectedFolderId,
+            limit = LIMIT,
+            order = Sort.DESC,
+        ).map { pagedData ->
+            // chip create
+            pagedData.map {
+                val category =
+                    state.chipState.chipList.firstOrNull { chip -> chip.id == it.folderId }?.title.orEmpty()
+                it.toUiModel(category)
+            }
+        }.map {
+            // add seperator
+            it.insertSeparators { before, after ->
+                after?.let {
+                    if (before?.category != after.category) {
+                        FeedUiModel.DoraChipUiModel(
+                            id = selectedFolderId,
+                            mergedTitle = "",
+                            title = selectedFolderName,
+                            postCount = selectedFolderItem?.postCount?: 0,
+                            folderId = after.folderId,
+                            icon = null,
+                        )
+                    } else {
+                        null
+                    }
+                }
+            }
+        }.cachedIn(viewModelScope)
+            .let {
+                _paging.value = it.firstOrNull() ?: PagingData.empty()
+            }
+
         reduce {
             state.copy(
                 chipState = state.chipState.copy(currentIndex = idx),

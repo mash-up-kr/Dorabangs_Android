@@ -22,10 +22,9 @@ interface AIClassificationRepository {
 
     suspend fun getAIClassificationPostsByFolder(
         folderId: String,
-        page: Int? = null,
         limit: Int? = null,
         order: String? = null,
-    ): AIClassificationPosts
+    ): Flow<PagingData<AIClassificationFeedPost>>
 
     suspend fun deletePostFromAIClassification(
         postId: String,

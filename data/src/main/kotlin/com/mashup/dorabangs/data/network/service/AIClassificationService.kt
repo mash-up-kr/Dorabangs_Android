@@ -40,7 +40,7 @@ interface AIClassificationService {
         @Query("page") page: Int? = null,
         @Query("limit") limit: Int? = null,
         @Query("order") order: String? = null,
-    ): AIClassificationPostsResponseModel
+    ): AIClassificationAIPostListResponseModel
 
     @DELETE("classification/posts/{postId}")
     suspend fun deletePostFromAIClassification(
