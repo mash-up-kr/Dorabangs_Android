@@ -166,9 +166,9 @@ class ClassificationViewModel @Inject constructor(
                 state.copy(isLoading = true)
             }
         }
-        val allMove = moveAllPostUseCase.invoke(suggestionFolderId = folderId)
+        val allMoveItem = moveAllPostUseCase.invoke(suggestionFolderId = folderId)
 
-        if (allMove.isSuccess) {
+        if (allMoveItem.isSuccess) {
             getInitialData()
         }
     }.invokeOnCompletion {
@@ -184,12 +184,12 @@ class ClassificationViewModel @Inject constructor(
                     isLoading = true,
                 )
             }
-            val move = moveSinglePostUseCase.invoke(
+            val moveItem = moveSinglePostUseCase.invoke(
                 postId = cardItem.postId,
                 suggestionFolderId = cardItem.folderId,
             )
 
-            if (move.isSuccess) {
+            if (moveItem.isSuccess) {
                 val (chips, chipList) = updateChipList()
                 val findCategory = chips.list.find { it.folderId == cardItem.folderId }
 
@@ -227,8 +227,8 @@ class ClassificationViewModel @Inject constructor(
                     isLoading = true,
                 )
             }
-            val delete = deletePostUseCase.invoke(cardItem.postId)
-            if (delete.isSuccess) {
+            val deleteItem = deletePostUseCase.invoke(cardItem.postId)
+            if (deleteItem.isSuccess) {
                 val (chips, chipList) = updateChipList()
                 val findCategory = chips.list.find { it.folderId == cardItem.folderId }
 
