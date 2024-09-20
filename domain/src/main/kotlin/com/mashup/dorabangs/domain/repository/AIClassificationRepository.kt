@@ -2,7 +2,6 @@ package com.mashup.dorabangs.domain.repository
 
 import androidx.paging.PagingData
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
-import com.mashup.dorabangs.domain.model.AIClassificationPosts
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import kotlinx.coroutines.flow.Flow
@@ -22,10 +21,9 @@ interface AIClassificationRepository {
 
     suspend fun getAIClassificationPostsByFolder(
         folderId: String,
-        page: Int? = null,
         limit: Int? = null,
         order: String? = null,
-    ): AIClassificationPosts
+    ): Flow<PagingData<AIClassificationFeedPost>>
 
     suspend fun deletePostFromAIClassification(
         postId: String,
