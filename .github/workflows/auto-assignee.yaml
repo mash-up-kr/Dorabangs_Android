@@ -1,0 +1,17 @@
+name: Auto Assignees
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  add-auto-assignees:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: add assignees
+        run: |
+          echo ${{ github.event.number }}
+
