@@ -4,7 +4,6 @@ on:
   pull_request:
     types:
       - opened
-      - synchronize
 
 jobs:
   add-auto-assignees:
@@ -13,8 +12,7 @@ jobs:
     steps:
       - name: add assignees
         run: |
-          echo ${{ github.event.number }}
-
-      - name: print name
-        run: |
-          echo ${{ github.actor }}
+          curl -X POST https://api.github.com/repos/mash-up-kr/Dorabangs_Android/issues/${{ github.event.number }}/assignees \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -d '{"assignees": ${{ github.actor }} }'
