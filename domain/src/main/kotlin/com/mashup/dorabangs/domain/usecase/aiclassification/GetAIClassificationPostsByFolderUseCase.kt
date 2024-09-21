@@ -10,13 +10,11 @@ class GetAIClassificationPostsByFolderUseCase @Inject constructor(
 
     suspend operator fun invoke(
         folderId: String,
-        page: Int? = null,
         limit: Int? = null,
         order: Sort? = null,
     ) =
         aiClassificationRepository.getAIClassificationPostsByFolder(
             folderId = folderId,
-            page = page,
             limit = limit,
             order = order?.query,
         )

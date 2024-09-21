@@ -34,6 +34,7 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix = ".debug"
             isDebuggable = true
             isMinifyEnabled = false
             buildConfigField("Boolean", "DEBUG_MODE", "true")

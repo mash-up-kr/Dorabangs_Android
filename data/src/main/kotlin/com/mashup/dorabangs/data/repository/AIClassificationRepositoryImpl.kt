@@ -5,7 +5,6 @@ import com.mashup.dorabangs.data.datasource.remote.api.AIClassificationRemoteDat
 import com.mashup.dorabangs.data.model.classification.toPagingDomain
 import com.mashup.dorabangs.data.utils.doraPager
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
-import com.mashup.dorabangs.domain.model.AIClassificationPosts
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.classification.AIClassificationFeedPost
 import com.mashup.dorabangs.domain.repository.AIClassificationRepository
@@ -44,16 +43,19 @@ class AIClassificationRepositoryImpl @Inject constructor(
 
     override suspend fun getAIClassificationPostsByFolder(
         folderId: String,
-        page: Int?,
         limit: Int?,
         order: String?,
-    ): AIClassificationPosts =
-        remoteDataSource.getAIClassificationPostsByFolder(
-            folderId = folderId,
-            page = page,
-            limit = limit,
-            order = order,
-        )
+    ): Flow<PagingData<AIClassificationFeedPost>> =
+        doraPager(
+            apiExecutor = { page ->
+                remoteDataSource.getAIClassificationPostsByFolder(
+                    folderId = folderId,
+                    page = page,
+                    limit = limit,
+                    order = order,
+                ).toPagingDomain()
+            },
+        ).flow
 
     override suspend fun deletePostFromAIClassification(postId: String): DoraSampleResponse {
         return kotlin.runCatching {
