@@ -14,7 +14,10 @@ jobs:
       - name: Putting Json data
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo "$GOOGLE_SERVICES_JSON" > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
+          GOOGLE_SERVICES_JSON_DEBUG: ${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}
+        run: |
+          echo "$GOOGLE_SERVICES_JSON" > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/release/google-services.json
+          echo "$GOOGLE_SERVICES_JSON_DEBUG" > /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
 
       - name: Access SERVER_BASE_URL
         run: |
@@ -27,3 +30,4 @@ jobs:
           path: |
             /home/runner/work/Dorabangs_Android/Dorabangs_Android/local.properties
             /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/google-services.json
+            /home/runner/work/Dorabangs_Android/Dorabangs_Android/app/release/google-services.json
