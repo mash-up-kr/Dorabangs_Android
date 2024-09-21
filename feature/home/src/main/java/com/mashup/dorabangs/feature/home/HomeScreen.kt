@@ -66,7 +66,6 @@ import dev.chrisbanes.haze.hazeChild
 @Composable
 fun HomeScreen(
     state: HomeState,
-    postsList: List<FeedUiModel.FeedCardUiModel>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
     onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
@@ -76,8 +75,8 @@ fun HomeScreen(
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
-    requestUpdate: (String) -> Unit = {},
     navigateToUnreadStorageDetail: () -> Unit = {},
+    requestUpdate: (String) -> Unit = {},
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -98,7 +97,7 @@ fun HomeScreen(
                         .align(Alignment.Center),
                 )
             }
-        } else if (postsList.isEmpty()) {
+        } else if (state.postList.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -189,7 +188,7 @@ fun HomeScreen(
                 }
 
                 Feeds(
-                    feeds = postsList,
+                    feeds = state.postList,
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
@@ -487,6 +486,5 @@ fun HomeScreenPreview() {
                 ),
             ),
         ),
-        postsList = postList,
     )
 }

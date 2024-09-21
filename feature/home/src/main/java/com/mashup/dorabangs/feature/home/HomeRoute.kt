@@ -124,7 +124,6 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
-            postsList = state.postList,
             scrollState = scrollState,
             onClickChip = { index ->
                 if (index != state.selectedIndex) {
