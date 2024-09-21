@@ -1,6 +1,9 @@
 name: Lint Check
 
-on: pull_request
+on:
+  pull_request:
+    types:
+      - closed
 
 jobs:
   lint-check:
