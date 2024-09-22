@@ -58,14 +58,11 @@ fun HomeRoute(
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
 
-    var prevFolderIndex by remember { mutableIntStateOf(0) }
-
-    LaunchedEffect(state.postList.size) {
-        if (state.selectedIndex != prevFolderIndex) {
-            scrollState.scrollToItem(viewModel.scrollCache[state.selectedIndex] ?: 0)
-            prevFolderIndex = state.selectedIndex
-        }
-    }
+    loadScrollCache(
+        state = state,
+        scrollState = scrollState,
+        scrollCache = viewModel.scrollCache,
+    )
 
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
         if (state.isNeedToRefreshOnStart) {
@@ -243,4 +240,20 @@ fun BoxScope.HomeSideEffectUI(
             .align(Alignment.BottomCenter)
             .padding(bottom = 20.dp),
     )
+}
+
+@Composable
+fun loadScrollCache(
+    state: HomeState,
+    scrollState: LazyListState,
+    scrollCache: Map<Int, Int>,
+) {
+    var prevFolderIndex by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(state.postList.size) {
+        if (state.selectedIndex != prevFolderIndex) {
+            scrollState.scrollToItem(scrollCache[state.selectedIndex] ?: 0)
+            prevFolderIndex = state.selectedIndex
+        }
+    }
 }
