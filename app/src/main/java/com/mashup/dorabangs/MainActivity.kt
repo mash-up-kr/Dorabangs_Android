@@ -35,18 +35,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
-
-        val userId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-        splashViewModel.checkUserToken(userId)
-
-        val url = intent.data?.path?.substring(1).orEmpty()
-
-        installSplashScreen().apply {
-            setKeepOnScreenCondition {
-                (splashViewModel.isSplashShow.value || splashViewModel.firstEntryScreen.value == FirstEntryScreen.Splash) &&
-                    url.isBlank()
-            }
-        }
+//
+//        val userId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+//        splashViewModel.checkUserToken(userId)
+//
+//        val url = intent.data?.path?.substring(1).orEmpty()
+//
+//        installSplashScreen().apply {
+//            setKeepOnScreenCondition {
+//                (splashViewModel.isSplashShow.value || splashViewModel.firstEntryScreen.value == FirstEntryScreen.Splash) &&
+//                    url.isBlank()
+//            }
+//        }
 
         setContent {
             val firstEntryScreen = splashViewModel.firstEntryScreen.collectAsState()
