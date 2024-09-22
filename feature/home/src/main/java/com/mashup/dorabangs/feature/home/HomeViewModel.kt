@@ -307,20 +307,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun loadMore(state: HomeState) = viewModelScope.doraLaunch {
-        if (state.isScrollLoading) {
-            return@doraLaunch
-        }
-
+    fun loadMore() = viewModelScope.doraLaunch {
         intent {
-            reduce { state.copy(isScrollLoading = true) }
+            if (state.isScrollLoading) {
+                return@intent
+            }
+
+            intent {
+                reduce { state.copy(isScrollLoading = true) }
+            }
+
+            val cacheKey = getCacheKey(state)
+            val pagingInfo = pagingInfoCache[cacheKey] ?: return@intent
+
+            if (pagingInfo.hasNext.not()) return@intent
+            loadPostList(cacheKey, pagingInfo)
         }
-
-        val cacheKey = getCacheKey(state)
-        val pagingInfo = pagingInfoCache[cacheKey] ?: return@doraLaunch
-
-        if (pagingInfo.hasNext.not()) return@doraLaunch
-        loadPostList(cacheKey, pagingInfo)
     }
 
     private suspend fun loadPostList(

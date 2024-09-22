@@ -5,12 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +48,7 @@ fun HomeRoute(
     navigateToSaveScreenWithoutLink: () -> Unit,
     navigateToUnreadStorageDetail: (Folder) -> Unit,
     modifier: Modifier = Modifier,
+    scrollState: LazyListState = rememberLazyListState(),
     isShowToast: Boolean = false,
     viewModel: HomeViewModel = hiltViewModel(),
     scope: CoroutineScope = rememberCoroutineScope(),
@@ -56,22 +57,8 @@ fun HomeRoute(
 
     val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
-    val scrollState = rememberLazyListState()
 
     var prevFolderIndex by remember { mutableIntStateOf(0) }
-
-    val reachedBottom: Boolean by remember {
-        derivedStateOf {
-            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
-            lastVisibleItem?.index != 0 && lastVisibleItem?.index == scrollState.layoutInfo.totalItemsCount - 5
-        }
-    }
-
-    LaunchedEffect(reachedBottom) {
-        if (reachedBottom && state.isScrollLoading.not()) {
-            viewModel.loadMore(state)
-        }
-    }
 
     LaunchedEffect(state.postList.size) {
         if (state.selectedIndex != prevFolderIndex) {
@@ -87,11 +74,11 @@ fun HomeRoute(
             viewModel.updateFolderList()
             viewModel.setIsNeedToRefreshOnStart(false)
         }
-    }
 
-    if (isShowToast && state.hasShowToastState.not()) {
-        viewModel.updateToastState("${state.changeFolderName}(으)로 이동했어요.")
-        viewModel.updateHasShowToast(true)
+        if (isShowToast && state.hasShowToastState.not()) {
+            viewModel.updateToastState("${state.changeFolderName}(으)로 이동했어요.")
+            viewModel.updateHasShowToast(true)
+        }
     }
 
     viewModel.collectSideEffect { sideEffect ->
@@ -139,6 +126,7 @@ fun HomeRoute(
                 viewModel.updateReadAt(cardInfo)
                 navigateToWebView(cardInfo.url)
             },
+            onReachedBottom = viewModel::loadMore,
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = {
                 navigateToSaveScreenWithoutLink()

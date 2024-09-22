@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -68,7 +67,8 @@ fun HomeScreen(
     state: HomeState,
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
-    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onReachedBottom: () -> Unit = {},
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
     onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
@@ -139,12 +139,13 @@ fun HomeScreen(
                 }
             }
         } else {
-            LazyColumn(
+            DoraInfinityLazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .haze(hazeState),
-                state = scrollState,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                scrollState = scrollState,
+                isLoadAvail = state.isScrollLoading.not(),
+                onReachedBottom = onReachedBottom,
             ) {
                 item {
                     Spacer(
