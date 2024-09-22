@@ -112,7 +112,7 @@ class HomeViewModel @Inject constructor(
             if (newState.clipBoardState.isValidUrl) {
                 reduce { newState }
                 postSideEffect(
-                    HomeSideEffect.ShowSnackBar(
+                    HomeSideEffect.ShowCopiedUrlSnackBar(
                         copiedText = newState.clipBoardState.copiedText,
                     ),
                 )

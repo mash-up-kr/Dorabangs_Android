@@ -55,7 +55,7 @@ fun HomeRoute(
 ) {
     val state by viewModel.collectAsState()
 
-    val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
+    val copiedUrlSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
 
     loadScrollCache(
@@ -80,9 +80,9 @@ fun HomeRoute(
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is HomeSideEffect.ShowSnackBar -> {
+            is HomeSideEffect.ShowCopiedUrlSnackBar -> {
                 scope.launch {
-                    snackBarHostState.showSnackbar(
+                    copiedUrlSnackBarHostState.showSnackbar(
                         message = sideEffect.copiedText,
                         duration = SnackbarDuration.Indefinite,
                     )
@@ -90,7 +90,7 @@ fun HomeRoute(
             }
 
             is HomeSideEffect.HideSnackBar -> {
-                snackBarHostState.currentSnackbarData?.dismiss()
+                copiedUrlSnackBarHostState.currentSnackbarData?.dismiss()
             }
 
             is HomeSideEffect.NavigateToCreateFolder -> {
@@ -141,7 +141,7 @@ fun HomeRoute(
         HomeSideEffectUI(
             state = state,
             viewModel = viewModel,
-            snackBarHostState = snackBarHostState,
+            snackBarHostState = copiedUrlSnackBarHostState,
             toastSnackBarHostState = toastSnackBarHostState,
             navigateToSaveScreenWithLink = navigateToSaveScreenWithLink,
         )
