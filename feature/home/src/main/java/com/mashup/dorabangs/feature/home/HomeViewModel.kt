@@ -340,7 +340,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateFavoriteItem(postId: String, isFavorite: Boolean) = viewModelScope.doraLaunch {
-        val post =postDataManager.getPost(postId) ?: return@doraLaunch
+        val post = postDataManager.getPost(postId) ?: return@doraLaunch
         if (post.isFavorite == isFavorite) return@doraLaunch
 
         updatePost(post.copy(isFavorite = isFavorite))
@@ -424,9 +424,11 @@ class HomeViewModel @Inject constructor(
 
                 postDataManager.apply {
                     updatePostCache(postId, changedPost)
-                    updatePostIdCache(beforeFolderId, getPostIdList(beforeFolderId)
-                        ?.toMutableList()?.filterNot { it == postId }
-                        ?: emptyList()
+                    updatePostIdCache(
+                        beforeFolderId,
+                        getPostIdList(beforeFolderId)
+                            ?.toMutableList()?.filterNot { it == postId }
+                            ?: emptyList(),
                     )
                     setMustRefreshData(folderId)
                 }

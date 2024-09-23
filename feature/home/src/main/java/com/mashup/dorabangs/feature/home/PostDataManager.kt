@@ -9,7 +9,7 @@ import com.mashup.dorabangs.feature.model.toUiModel
 import java.util.concurrent.ConcurrentHashMap
 
 class PostDataManager(
-    private val getPost: suspend (String, PagingInfo) -> Posts
+    private val getPost: suspend (String, PagingInfo) -> Posts,
 ) {
     private val pagingInfoCache = ConcurrentHashMap<String, PagingInfo>()
     private val postIdCache = ConcurrentHashMap<String, List<String>>()
