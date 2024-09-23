@@ -2,7 +2,6 @@ package com.mashup.dorabangs.data.datasource.remote.api
 
 import com.mashup.dorabangs.data.model.classification.AIClassificationAIPostListResponseModel
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
-import com.mashup.dorabangs.domain.model.AIClassificationPosts
 
 interface AIClassificationRemoteDataSource {
 
@@ -23,7 +22,7 @@ interface AIClassificationRemoteDataSource {
         page: Int? = null,
         limit: Int? = null,
         order: String? = null,
-    ): AIClassificationPosts
+    ): AIClassificationAIPostListResponseModel
 
     suspend fun deletePostFromAIClassification(
         postId: String,

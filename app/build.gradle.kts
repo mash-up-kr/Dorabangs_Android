@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.google.gms.service)
+    alias(libs.plugins.crashlytics)
 }
 
 android {
@@ -33,6 +34,7 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix = ".debug"
             isDebuggable = true
             isMinifyEnabled = false
             buildConfigField("Boolean", "DEBUG_MODE", "true")
@@ -104,4 +106,6 @@ dependencies {
 
     // Firebase
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 }

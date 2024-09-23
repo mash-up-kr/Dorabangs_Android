@@ -2,6 +2,7 @@ package com.mashup.dorabangs.feature.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -157,13 +158,19 @@ fun HomeScreen(
                                 HomeCarouselItem(
                                     lottieRes = R.raw.ai,
                                     indicatorIcon = R.drawable.ic_ai_8dp,
-                                    description = stringResource(R.string.home_carousel_classified_link_as_ai, state.aiClassificationCount),
+                                    description = stringResource(
+                                        R.string.home_carousel_classified_link_as_ai,
+                                        state.aiClassificationCount,
+                                    ),
                                     onClickButton = navigateToClassification,
                                     isVisible = state.aiClassificationCount > 0,
                                 ),
                                 HomeCarouselItem(
                                     lottieRes = R.raw.unread,
-                                    description = stringResource(R.string.home_carousel_not_read_yet, state.unReadPostCount),
+                                    description = stringResource(
+                                        R.string.home_carousel_not_read_yet,
+                                        state.unReadPostCount,
+                                    ),
                                     onClickButton = navigateToUnreadStorageDetail,
                                     isVisible = state.unReadPostCount > 0,
                                 ),
@@ -225,6 +232,23 @@ fun HomeScreen(
                 onClickChip = {
                     onClickChip(it)
                 },
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .padding(bottom = 20.dp, end = 20.dp)
+                .size(60.dp)
+                .clip(DoraRoundTokens.Round99)
+                .background(DoraColorTokens.SurfaceBlack)
+                .align(Alignment.BottomEnd)
+                .clickable(onClick = navigateSaveScreenWithoutLink),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                tint = DoraColorTokens.G3,
+                painter = painterResource(id = R.drawable.ic_fab_add),
+                contentDescription = "",
             )
         }
     }
@@ -311,7 +335,12 @@ private fun HomeCarousel(
                     )
                     BannerButton(
                         containerColor = DoraColorTokens.G7,
-                        contentPadding = PaddingValues(start = 16.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
+                        contentPadding = PaddingValues(
+                            start = 16.dp,
+                            end = 12.dp,
+                            top = 8.dp,
+                            bottom = 8.dp,
+                        ),
                         gradientModifier = Modifier.defaultMinSize(
                             minWidth = ButtonDefaults.MinWidth,
                             minHeight = ButtonDefaults.MinHeight,
