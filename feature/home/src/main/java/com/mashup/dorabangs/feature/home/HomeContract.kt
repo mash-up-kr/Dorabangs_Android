@@ -7,7 +7,7 @@ import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.utils.isValidUrl
 
 data class HomeState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isScrollLoading: Boolean = false,
     val clipBoardState: ClipBoardState = ClipBoardState(),
     val tapElements: List<FeedUiModel.DoraChipUiModel> = emptyList(),

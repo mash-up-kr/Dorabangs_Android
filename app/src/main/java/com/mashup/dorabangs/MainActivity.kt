@@ -11,19 +11,14 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
-import androidx.compose.runtime.collectAsState
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mashup.dorabangs.core.designsystem.theme.DorabangsTheme
 import com.mashup.dorabangs.navigation.DoraApp
 import com.mashup.dorabangs.splash.FirstEntryScreen
-import com.mashup.dorabangs.splash.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val splashViewModel: SplashViewModel by viewModels()
     private val overlayPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (!Settings.canDrawOverlays(this)) {
@@ -35,33 +30,25 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
-//
-//        val userId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-//        splashViewModel.checkUserToken(userId)
-//
-//        val url = intent.data?.path?.substring(1).orEmpty()
-//
-//        installSplashScreen().apply {
-//            setKeepOnScreenCondition {
-//                (splashViewModel.isSplashShow.value || splashViewModel.firstEntryScreen.value == FirstEntryScreen.Splash) &&
-//                    url.isBlank()
-//            }
-//        }
+
+        val firstEntryScreen = intent.getStringExtra("firstEntry")
+        val url = intent.data?.path?.substring(1).orEmpty()
 
         setContent {
-            val firstEntryScreen = splashViewModel.firstEntryScreen.collectAsState()
-            if (firstEntryScreen.value != FirstEntryScreen.Splash) {
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            firstEntryScreen?.let {
+                if (firstEntryScreen != FirstEntryScreen.Splash.name) {
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
-                DorabangsTheme {
-                    DoraApp(
-                        isFirstEntry = firstEntryScreen.value == FirstEntryScreen.Onboarding,
-                        hideKeyboardAction = {
-                            currentFocus?.let {
-                                imm?.hideSoftInputFromWindow(it.windowToken, 0)
-                            }
-                        },
-                    )
+                    DorabangsTheme {
+                        DoraApp(
+                            isFirstEntry = firstEntryScreen == FirstEntryScreen.Onboarding.name,
+                            hideKeyboardAction = {
+                                currentFocus?.let {
+                                    imm?.hideSoftInputFromWindow(it.windowToken, 0)
+                                }
+                            },
+                        )
+                    }
                 }
             }
         }
