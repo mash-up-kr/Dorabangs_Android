@@ -7,6 +7,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.UUID
+import com.mashup.dorabangs.core.designsystem.R as CR
 
 sealed interface FeedUiModel {
     val uuid: String
@@ -60,8 +61,21 @@ sealed interface FeedUiModel {
         val title: String = "",
         val postCount: Int = 0,
         val folderId: String = "",
-        @DrawableRes val icon: Int? = com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_small,
+        @DrawableRes val icon: Int? = CR.drawable.ic_3d_all_small,
     ) : FeedUiModel {
         override val uuid: String = UUID.randomUUID().toString()
+
+        companion object {
+            fun getDefaultModelList() = listOf(
+                DoraChipUiModel(
+                    title = "전체",
+                    icon = CR.drawable.ic_3d_all_small,
+                ),
+                DoraChipUiModel(
+                    title = "즐겨찾기",
+                    icon = CR.drawable.ic_3d_bookmark_small,
+                ),
+            )
+        }
     }
 }
