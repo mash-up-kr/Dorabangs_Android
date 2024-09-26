@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,10 +28,9 @@ fun DoraTopAppBar(
     title: String,
     isTitleCenter: Boolean = false,
     isEnableBackNavigation: Boolean = false,
-    @DrawableRes actionIcon: Int? = null,
+    actionIcon: @Composable BoxScope.() -> Unit = {},
     isShowBottomDivider: Boolean = false,
     onClickBackIcon: () -> Unit = {},
-    onClickActonIcon: () -> Unit = {},
 ) {
     val isHomeAppBar = isTitleCenter && !isEnableBackNavigation
     Box(
@@ -81,16 +81,8 @@ fun DoraTopAppBar(
                 )
             }
         }
-        actionIcon?.let { icon ->
-            Icon(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 20.dp)
-                    .clickable { onClickActonIcon() },
-                painter = painterResource(id = icon),
-                contentDescription = "action",
-            )
-        }
+        actionIcon()
+
         if (isShowBottomDivider) {
             DoraDivider(modifier = Modifier.align(Alignment.BottomCenter))
         }
@@ -124,9 +116,16 @@ fun PreviewBackWithActionIconTopBar() {
     DoraTopBar.BackWithActionIconTopBar(
         modifier = Modifier.fillMaxWidth(),
         title = "Dorabangs",
-        actionIcon = R.drawable.ic_plus,
+        actionIcon = {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 20.dp),
+                painter = painterResource(id = R.drawable.ic_more_gray),
+                contentDescription = "action",
+            )
+        },
         onClickBackIcon = {},
-        onClickActonIcon = {},
         isTitleCenter = true,
         isShowBottomDivider = true,
     )

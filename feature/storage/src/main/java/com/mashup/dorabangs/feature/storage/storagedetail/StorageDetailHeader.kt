@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -211,9 +212,17 @@ fun StorageDetailTopBarByFolderType(
                 modifier = Modifier.fillMaxWidth(),
                 title = title,
                 isTitleCenter = true,
-                actionIcon = coreR.drawable.ic_more_black,
+                actionIcon = {
+                    Icon(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 20.dp)
+                            .clickable { onClickActionIcon() },
+                        painter = painterResource(id = coreR.drawable.ic_more_black),
+                        contentDescription = "action",
+                    )
+                },
                 onClickBackIcon = onClickBackIcon,
-                onClickActonIcon = onClickActionIcon,
                 isShowBottomDivider = false,
             )
         }
