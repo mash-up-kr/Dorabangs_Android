@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.home.HomeRoute
 
@@ -23,7 +24,7 @@ fun NavGraphBuilder.homeNavigation(
     navigateToSaveScreenWithoutLink: () -> Unit,
     navigateToCreateFolder: () -> Unit,
     navigateToHomeTutorial: () -> Unit,
-    navigateToWebView: (String) -> Unit,
+    navigateToWebView: (FeedUiModel.FeedCardUiModel) -> Unit,
     navigateToUnreadStorageDetail: (Folder) -> Unit,
 ) {
     composable(

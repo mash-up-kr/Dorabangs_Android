@@ -1,8 +1,6 @@
-package com.mashup.dorabangs.core.webview
+package com.mashup.dorabangs.core.summary
 
-import android.content.ContentValues.TAG
 import android.net.Uri
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -15,17 +13,16 @@ import com.mashup.dorabangs.core.model.AISummaryUiModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-fun NavController.navigateToWebView(navOptions: NavOptions? = null, summaryUiModel: AISummaryUiModel?) {
+fun NavController.navigateToAISummary(navOptions: NavOptions? = null, summaryUiModel: AISummaryUiModel) {
     val summary = Uri.encode(Json.encodeToString(summaryUiModel))
-    navigate("${NavigationRoute.WebViewScreen.route}?summary=$summary", navOptions)
+    navigate("${NavigationRoute.AISummaryScreen.route}?summary=$summary", navOptions)
 }
 
-fun NavGraphBuilder.webViewNavigation(
+fun NavGraphBuilder.aiSummaryNavigation(
     navigateToPopBackStack: () -> Unit,
-    navigateToAISummary: (AISummaryUiModel) -> Unit,
 ) {
     composable(
-        route = "${NavigationRoute.WebViewScreen.route}?summary={summary}",
+        route = "${NavigationRoute.AISummaryScreen.route}?summary={summary}",
         arguments = listOf(
             navArgument(name = "summary") {
                 serializableNavType<AISummaryUiModel>()
@@ -33,12 +30,11 @@ fun NavGraphBuilder.webViewNavigation(
         ),
     ) { navBackStackEntry ->
         val aiSummary = navBackStackEntry.arguments?.bundleSerializable("summary") as AISummaryUiModel?
-        Log.d(TAG, "webViewNavigation: aiSummary$aiSummary")
-        aiSummary?.url?.let { url ->
-            DoraWebView(
-                url = url,
+
+        aiSummary?.let { summary ->
+            AISummaryRoute(
+                aiSummaryUiModel = summary,
                 navigateToPopBackStack = navigateToPopBackStack,
-                navigateToAISummary = { navigateToAISummary(aiSummary) },
             )
         }
     }

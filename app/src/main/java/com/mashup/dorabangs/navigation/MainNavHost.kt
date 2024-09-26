@@ -10,6 +10,9 @@ import com.dorabangs.feature.navigation.navigateToSaveLinkSelectFolder
 import com.dorabangs.feature.navigation.saveLinkNavigation
 import com.dorabangs.feature.navigation.saveLinkSelectFolder
 import com.mashup.core.navigation.NavigationRoute
+import com.mashup.dorabangs.core.model.AISummaryUiModel
+import com.mashup.dorabangs.core.summary.aiSummaryNavigation
+import com.mashup.dorabangs.core.summary.navigateToAISummary
 import com.mashup.dorabangs.core.webview.navigateToWebView
 import com.mashup.dorabangs.core.webview.webViewNavigation
 import com.mashup.dorabangs.feature.folders.model.FolderManageType
@@ -63,7 +66,14 @@ fun MainNavHost(
             },
             navigateToCreateFolder = { appState.navController.navigateToHomeCrateFolder() },
             navigateToHomeTutorial = { appState.navController.navigateToHomeTutorial() },
-            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
+            navigateToWebView = { cardInfo ->
+                val summaryUiModel = AISummaryUiModel(
+                    description = cardInfo.content,
+                    url = cardInfo.url,
+                    keywords = cardInfo.keywordList,
+                )
+                appState.navController.navigateToWebView(summaryUiModel = summaryUiModel)
+            },
             navigateToUnreadStorageDetail = { folder -> appState.navController.navigateToUnreadStorageDetail(folder) },
         )
         homeCreateFolderNavigation(
@@ -163,10 +173,14 @@ fun MainNavHost(
                 )
                 appState.navController.popBackStackWithClearFocus()
             },
-            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
+            navigateToWebView = { url ->
+                // appState.navController.navigateToWebView(url = url)
+            },
         )
         classificationNavigation(
-            navigateToWebView = { url -> appState.navController.navigateToWebView(url = url) },
+            navigateToWebView = { url ->
+                // appState.navController.navigateToWebView(url = url)
+            },
             onClickBackIcon = { appState.navController.popBackStackWithClearFocus() },
             navigateToHome = { appState.navController.popBackStackWithClearFocus() },
         )
@@ -192,6 +206,11 @@ fun MainNavHost(
             },
         )
         webViewNavigation(
+            navigateToPopBackStack = { appState.navController.popBackStackWithClearFocus() },
+            navigateToAISummary = { summary -> appState.navController.navigateToAISummary(summaryUiModel = summary) },
+        )
+
+        aiSummaryNavigation(
             navigateToPopBackStack = { appState.navController.popBackStackWithClearFocus() },
         )
     }

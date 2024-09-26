@@ -28,6 +28,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.bottomsheet.DoraBottomSheet
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.component.toast.DoraToast
 import com.mashup.dorabangs.domain.model.Folder
@@ -40,7 +41,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun HomeRoute(
     navigateToCreateFolder: () -> Unit,
     navigateToHomeTutorial: () -> Unit,
-    navigateToWebView: (String) -> Unit,
+    navigateToWebView: (FeedUiModel.FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
     isShowToast: Boolean = false,
     view: View = LocalView.current,
@@ -138,7 +139,7 @@ fun HomeRoute(
             onClickBookMarkButton = viewModel::updateFavoriteItem,
             onClickCardItem = { cardInfo ->
                 viewModel.updateReadAt(cardInfo)
-                navigateToWebView(cardInfo.url)
+                navigateToWebView(cardInfo)
             },
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = {
