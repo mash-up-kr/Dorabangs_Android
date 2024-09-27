@@ -144,7 +144,7 @@ fun HomeScreen(
                     .fillMaxSize()
                     .haze(hazeState),
                 scrollState = scrollState,
-                isLoadAvail = state.isScrollLoading.not(),
+                isLoadAvailable = state.isScrollLoading.not(),
                 onReachedBottom = onReachedBottom,
             ) {
                 item {

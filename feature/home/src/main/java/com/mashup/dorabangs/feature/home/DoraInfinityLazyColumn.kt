@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 fun DoraInfinityLazyColumn(
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
-    isLoadAvail: Boolean = true,
+    isLoadAvailable: Boolean = true,
     onReachedBottom: () -> Unit = {},
     content: LazyListScope.() -> Unit = {},
 ) {
@@ -28,7 +28,7 @@ fun DoraInfinityLazyColumn(
     }
 
     LaunchedEffect(reachedBottom) {
-        if (reachedBottom && isLoadAvail) {
+        if (reachedBottom && isLoadAvailable) {
             onReachedBottom.invoke()
         }
     }

@@ -58,7 +58,7 @@ fun HomeRoute(
     val copiedUrlSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
 
-    loadScrollCache(
+    LoadScrollCache(
         state = state,
         scrollState = scrollState,
         scrollCache = viewModel.scrollCache,
@@ -223,8 +223,8 @@ fun BoxScope.HomeSideEffectUI(
         isBtnEnable = state.selectedFolderId != state.changeFolderId,
         folderList = state.folderList.toSelectBottomSheetModel(
             state.changeFolderId.ifEmpty {
-                state.selectedFolderId.apply {
-                    updateSelectFolderId(this, "")
+                state.selectedFolderId.also {
+                    updateSelectFolderId(it, "")
                 }
             },
         ),
@@ -262,7 +262,7 @@ fun BoxScope.HomeSideEffectUI(
 }
 
 @Composable
-fun loadScrollCache(
+fun LoadScrollCache(
     state: HomeState,
     scrollState: LazyListState,
     scrollCache: Map<Int, Int>,

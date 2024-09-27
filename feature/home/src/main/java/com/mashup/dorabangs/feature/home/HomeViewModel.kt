@@ -8,10 +8,12 @@ import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
+import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderList
 import com.mashup.dorabangs.domain.model.FolderType
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.NewFolderNameList
+import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.model.Sort
 import com.mashup.dorabangs.domain.usecase.aiclassification.GetAIClassificationCountUseCase
@@ -65,9 +67,7 @@ class HomeViewModel @Inject constructor(
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
     val scrollCache = ConcurrentHashMap<Int, Int>()
-    private val postDataManager = PostDataManager { key, pagingInfo ->
-        getPosts(key, pagingInfo)
-    }
+    private val postDataManager = PostDataManager()
 
     init {
         viewModelScope.doraLaunch {
@@ -281,7 +281,7 @@ class HomeViewModel @Inject constructor(
             reduce { state.copy(isLoading = true, postList = emptyList()) }
 
             val cacheKey = cacheKey ?: getCacheKey(state)
-            val postList = postDataManager.fetchPostData(cacheKey, state.folderList)
+            val postList = fetchPostData(cacheKey, state.folderList)
 
             reduce { state.copy(postList = postList) }
         }.invokeOnCompletion {
@@ -297,12 +297,12 @@ class HomeViewModel @Inject constructor(
                 return@intent
             }
 
-            intent {
-                reduce { state.copy(isScrollLoading = true) }
-            }
+            reduce { state.copy(isScrollLoading = true) }
 
             val cacheKey = getCacheKey(state)
             loadPostList(cacheKey)
+
+            reduce { state.copy(isScrollLoading = false) }
         }
     }
 
@@ -311,8 +311,8 @@ class HomeViewModel @Inject constructor(
             if (postDataManager.getHasNext(cacheKey).not()) {
                 return@intent
             }
-            val newPostList = postDataManager.fetchRemotePostData(cacheKey, state.folderList)
-            reduce { state.copy(isScrollLoading = false, postList = state.postList + newPostList) }
+            val newPostList = fetchRemotePostData(cacheKey, state.folderList)
+            reduce { state.copy(postList = state.postList + newPostList) }
         }.invokeOnCompletion {
             intent {
                 reduce { state.copy(isLoading = false) }
@@ -549,5 +549,27 @@ class HomeViewModel @Inject constructor(
             val folderList = getFolderList().toList()
             reduce { state.copy(folderList = folderList) }
         }
+    }
+
+    private suspend fun fetchPostData(key: String, folderList: List<Folder>) =
+        postDataManager.getCachedPostData(key) ?: fetchRemotePostData(key, folderList)
+
+    private suspend fun fetchRemotePostData(key: String, folderList: List<Folder>): List<FeedCardUiModel> {
+        val pagingInfo = postDataManager.getPagingInfo(key)
+        val posts = getPosts(key, pagingInfo)
+        val feedCardList = posts.items.toUIModel(folderList)
+
+        postDataManager.apply {
+            updateNextPagingInfo(key, pagingInfo, posts.metaData.hasNext)
+            cacheFeedCardList(key, feedCardList)
+        }
+
+        return feedCardList
+    }
+
+    private fun List<Post>.toUIModel(folderList: List<Folder>) = this.map { post ->
+        val category =
+            folderList.firstOrNull { folder -> folder.id == post.folderId }?.name.orEmpty()
+        post.toUiModel(category)
     }
 }
