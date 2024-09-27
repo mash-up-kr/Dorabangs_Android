@@ -22,8 +22,6 @@ class SplashActivity : ComponentActivity() {
         val userId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         splashViewModel.checkUserToken(userId)
 
-        val url = intent.data?.path?.substring(1).orEmpty()
-
         setContent {
             SplashScreen()
 
@@ -31,6 +29,7 @@ class SplashActivity : ComponentActivity() {
             if (firstEntryScreen.value != FirstEntryScreen.Splash) {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("firstEntry", firstEntryScreen.value.name)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 startActivity(intent)
                 finish()
             }

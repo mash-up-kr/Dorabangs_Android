@@ -31,24 +31,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         checkPermission()
 
-        val firstEntryScreen = intent.getStringExtra("firstEntry")
-        val url = intent.data?.path?.substring(1).orEmpty()
+        val firstEntryScreen = intent.getStringExtra("firstEntry") ?: FirstEntryScreen.Onboarding.name
 
         setContent {
-            firstEntryScreen?.let {
-                if (firstEntryScreen != FirstEntryScreen.Splash.name) {
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            if (firstEntryScreen != FirstEntryScreen.Splash.name) {
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
-                    DorabangsTheme {
-                        DoraApp(
-                            isFirstEntry = firstEntryScreen == FirstEntryScreen.Onboarding.name,
-                            hideKeyboardAction = {
-                                currentFocus?.let {
-                                    imm?.hideSoftInputFromWindow(it.windowToken, 0)
-                                }
-                            },
-                        )
-                    }
+                DorabangsTheme {
+                    DoraApp(
+                        isFirstEntry = firstEntryScreen == FirstEntryScreen.Onboarding.name,
+                        hideKeyboardAction = {
+                            currentFocus?.let {
+                                imm?.hideSoftInputFromWindow(it.windowToken, 0)
+                            }
+                        },
+                    )
                 }
             }
         }
