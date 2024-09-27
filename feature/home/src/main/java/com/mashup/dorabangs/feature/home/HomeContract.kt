@@ -10,7 +10,7 @@ data class HomeState(
     val isLoading: Boolean = false,
     val isScrollLoading: Boolean = false,
     val clipBoardState: ClipBoardState = ClipBoardState(),
-    val tapElements: List<FeedUiModel.DoraChipUiModel> = emptyList(),
+    val tapElements: List<FeedUiModel.DoraChipUiModel> = FeedUiModel.DoraChipUiModel.getDefaultModelList(),
     val folderList: List<Folder> = listOf(),
     val selectedIndex: Int = 0,
     val selectedPostId: String = "",

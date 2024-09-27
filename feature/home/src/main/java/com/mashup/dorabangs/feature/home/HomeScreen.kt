@@ -93,6 +93,7 @@ fun HomeScreen(
             ) {
                 LottieLoader(
                     lottieRes = R.raw.spinner,
+                    iterations = Int.MAX_VALUE,
                     modifier = Modifier
                         .size(54.dp)
                         .align(Alignment.Center),

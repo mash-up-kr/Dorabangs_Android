@@ -2,6 +2,7 @@ package com.mashup.dorabangs.feature.storage.storagedetail.model
 
 import androidx.annotation.StringRes
 import com.mashup.dorabangs.core.designsystem.R
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.domain.model.FolderType
@@ -24,11 +25,20 @@ data class StorageDetailState(
     val isUnreadChecked: Boolean = false,
 ) {
     companion object {
-        fun getDefaultTabTitleList() = listOf(StorageDetailTab.ALL, StorageDetailTab.UNREAD)
+        fun getDefaultChipList() = listOf(
+            FeedUiModel.DoraChipUiModel(
+                title = StorageDetailTab.ALL.tabTitle,
+                icon = null,
+            ),
+            FeedUiModel.DoraChipUiModel(
+                title = StorageDetailTab.UNREAD.tabTitle,
+                icon = null,
+            ),
+        )
     }
 }
 data class TabInfo(
-    val tabTitleList: List<StorageDetailTab> = StorageDetailState.getDefaultTabTitleList(),
+    val tabTitleList: List<FeedUiModel.DoraChipUiModel> = StorageDetailState.getDefaultChipList(),
     val selectedTabIdx: Int = 0,
 )
 
