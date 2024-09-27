@@ -49,9 +49,6 @@ fun StorageDetailList(
     state: StorageDetailState,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    onClickBackIcon: () -> Unit,
-    onClickTabItem: (Int) -> Unit,
-    onClickActionIcon: () -> Unit,
     onClickMoreButton: (String) -> Unit,
     onClickBookMarkButton: (FeedUiModel.FeedCardUiModel, Boolean, Int) -> Unit,
     onClickPostItem: (FeedUiModel.FeedCardUiModel) -> Unit,
@@ -60,18 +57,9 @@ fun StorageDetailList(
     val isLoading = linksPagingList.loadState.refresh is LoadState.Loading
     if (linksPagingList.itemCount == 0) {
         Box {
-            Column {
-                StorageDetailExpandedHeader(
-                    state = state,
-                    onClickBackIcon = onClickBackIcon,
-                    onClickTabItem = onClickTabItem,
-                    onClickActionIcon = onClickActionIcon,
-                )
-                if (!isLoading) {
-                    StorageDetailEmpty(modifier = modifier)
-                }
-            }
-            if (isLoading) {
+            if (!isLoading) {
+                StorageDetailEmpty(modifier = modifier)
+            } else {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -93,14 +81,6 @@ fun StorageDetailList(
                 contentPadding = contentPadding,
                 modifier = modifier,
             ) {
-                item {
-                    StorageDetailExpandedHeader(
-                        state = state,
-                        onClickBackIcon = onClickBackIcon,
-                        onClickTabItem = onClickTabItem,
-                        onClickActionIcon = onClickActionIcon,
-                    )
-                }
                 if (!isLoading) {
                     item {
                         SortButtonRow(
@@ -156,51 +136,56 @@ fun SortButtonRow(
     isLatestSort: Boolean = false,
     onClickSortedIcon: (StorageDetailSort) -> Unit = {},
 ) {
-    Row(
-        modifier = modifier
-            .padding(horizontal = 20.dp, vertical = 10.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+    Column(
+        modifier = modifier.fillMaxWidth(),
     ) {
-        Text(
-            text = stringResource(coreR.string.storage_detail_post_count, postCount),
-            style = DoraTypoTokens.SMedium,
-            color = DoraColorTokens.G6,
-        )
         Row(
             modifier = Modifier
-                .background(color = DoraColorTokens.White),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(horizontal = 20.dp, vertical = 10.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            items.forEachIndexed { index, item ->
-                Row(
-                    modifier =
-                    Modifier
-                        .align(Alignment.CenterVertically)
-                        .background(color = DoraColorTokens.White)
-                        .clickable { onClickSortedIcon(item) },
-                ) {
-                    val icon = when (item) {
-                        StorageDetailSort.ASC -> if (isLatestSort) coreR.drawable.ic_arrow_down_active else coreR.drawable.ic_arrow_down_disabled
-                        StorageDetailSort.DESC -> if (isLatestSort) coreR.drawable.ic_arrow_up_disabled else coreR.drawable.ic_arrow_up_active
+            Text(
+                text = stringResource(coreR.string.storage_detail_post_count, postCount),
+                style = DoraTypoTokens.SMedium,
+                color = DoraColorTokens.G6,
+            )
+            Row(
+                modifier = Modifier
+                    .background(color = DoraColorTokens.White),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                items.forEachIndexed { index, item ->
+                    Row(
+                        modifier =
+                        Modifier
+                            .align(Alignment.CenterVertically)
+                            .background(color = DoraColorTokens.White)
+                            .clickable { onClickSortedIcon(item) },
+                    ) {
+                        val icon = when (item) {
+                            StorageDetailSort.ASC -> if (isLatestSort) coreR.drawable.ic_arrow_down_active else coreR.drawable.ic_arrow_down_disabled
+                            StorageDetailSort.DESC -> if (isLatestSort) coreR.drawable.ic_arrow_up_disabled else coreR.drawable.ic_arrow_up_active
+                        }
+                        Image(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(id = icon),
+                            contentDescription = stringResource(id = item.btnName),
+                        )
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            text = stringResource(id = item.btnName),
+                            textAlign = TextAlign.Center,
+                            color = Color.Black,
+                            style = DoraTypoTokens.SMedium,
+                        )
                     }
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(id = icon),
-                        contentDescription = stringResource(id = item.btnName),
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                    Text(
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        text = stringResource(id = item.btnName),
-                        textAlign = TextAlign.Center,
-                        color = Color.Black,
-                        style = DoraTypoTokens.SMedium,
-                    )
                 }
             }
         }
+        DoraDivider()
     }
 }
 
