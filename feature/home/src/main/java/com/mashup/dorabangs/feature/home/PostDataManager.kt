@@ -13,7 +13,6 @@ class PostDataManager {
         postIdCache[key]
             ?.mapNotNull { postId -> postDataCache[postId] }
 
-
     fun getPostIdList(key: String) = postIdCache[key].orEmpty()
 
     fun getPost(postId: String) = postDataCache[postId]

@@ -153,7 +153,7 @@ fun HomeRoute(
             moveFolder = viewModel::moveFolder,
             getLocalCopiedUrl = viewModel::getLocalCopiedUrl,
             setVisibleDialog = viewModel::setVisibleDialog,
-            showSnackBar = viewModel::showSnackBar
+            showSnackBar = viewModel::showSnackBar,
         )
     }
 }
@@ -172,7 +172,7 @@ fun BoxScope.HomeSideEffectUI(
     setVisibleMoreButtonBottomSheet: (Boolean) -> Unit,
     setVisibleMovingFolderBottomSheet: (Boolean, Boolean) -> Unit,
     setVisibleDialog: (Boolean) -> Unit,
-    getCustomFolderList : () -> Unit,
+    getCustomFolderList: () -> Unit,
     updateSelectFolderId: (String, String) -> Unit,
     deletePost: (String) -> Unit,
     moveFolder: (String, String, String) -> Unit,
