@@ -140,10 +140,20 @@ fun HomeRoute(
 
         HomeSideEffectUI(
             state = state,
-            viewModel = viewModel,
             snackBarHostState = copiedUrlSnackBarHostState,
             toastSnackBarHostState = toastSnackBarHostState,
             navigateToSaveScreenWithLink = navigateToSaveScreenWithLink,
+            setLocalCopiedUrl = viewModel::setLocalCopiedUrl,
+            hideSnackBar = viewModel::hideSnackBar,
+            setVisibleMoreButtonBottomSheet = viewModel::setVisibleMoreButtonBottomSheet,
+            setVisibleMovingFolderBottomSheet = viewModel::setVisibleMovingFolderBottomSheet,
+            getCustomFolderList = viewModel::getCustomFolderList,
+            updateSelectFolderId = viewModel::updateSelectFolderId,
+            deletePost = viewModel::deletePost,
+            moveFolder = viewModel::moveFolder,
+            getLocalCopiedUrl = viewModel::getLocalCopiedUrl,
+            setVisibleDialog = viewModel::setVisibleDialog,
+            showSnackBar = viewModel::showSnackBar
         )
     }
 }
@@ -151,10 +161,22 @@ fun HomeRoute(
 @Composable
 fun BoxScope.HomeSideEffectUI(
     state: HomeState,
-    viewModel: HomeViewModel,
     snackBarHostState: SnackbarHostState,
     toastSnackBarHostState: SnackbarHostState,
     navigateToSaveScreenWithLink: (String) -> Unit,
+
+    setLocalCopiedUrl: (String) -> Unit,
+    getLocalCopiedUrl: suspend () -> String?,
+    showSnackBar: (String) -> Unit,
+    hideSnackBar: () -> Unit,
+    setVisibleMoreButtonBottomSheet: (Boolean) -> Unit,
+    setVisibleMovingFolderBottomSheet: (Boolean, Boolean) -> Unit,
+    setVisibleDialog: (Boolean) -> Unit,
+    getCustomFolderList : () -> Unit,
+    updateSelectFolderId: (String, String) -> Unit,
+    deletePost: (String) -> Unit,
+    moveFolder: (String, String, String) -> Unit,
+
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
 ) {
@@ -162,20 +184,20 @@ fun BoxScope.HomeSideEffectUI(
         modifier = Modifier.align(Alignment.BottomCenter),
         text = state.clipBoardState.copiedText,
         onAction = { url ->
-            viewModel.setLocalCopiedUrl(url = url)
+            setLocalCopiedUrl(url)
             if (state.clipBoardState.isValidUrl) {
-                navigateToSaveScreenWithLink.invoke(url)
+                navigateToSaveScreenWithLink(url)
             }
         },
         snackBarHostState = snackBarHostState,
         view = view,
         clipboardManager = clipboardManager,
-        lastCopiedText = { viewModel.getLocalCopiedUrl().orEmpty() },
-        hideSnackBar = viewModel::hideSnackBar,
-        showSnackBarWithText = viewModel::showSnackBar,
+        lastCopiedText = { getLocalCopiedUrl().orEmpty() },
+        hideSnackBar = hideSnackBar,
+        showSnackBarWithText = showSnackBar,
         dismissAction = { url ->
-            viewModel.setLocalCopiedUrl(url = url)
-            viewModel.hideSnackBar()
+            setLocalCopiedUrl(url)
+            hideSnackBar()
         },
     )
 
@@ -185,14 +207,14 @@ fun BoxScope.HomeSideEffectUI(
         firstItemName = R.string.more_button_bottom_sheet_remove_link,
         secondItemName = R.string.more_button_bottom_sheet_moving_folder,
         onClickDeleteLinkButton = {
-            viewModel.setVisibleMoreButtonBottomSheet(false)
-            viewModel.setVisibleDialog(true)
+            setVisibleMoreButtonBottomSheet(false)
+            setVisibleDialog(true)
         },
         onClickMoveFolderButton = {
-            viewModel.setVisibleMoreButtonBottomSheet(false)
-            viewModel.getCustomFolderList()
+            setVisibleMoreButtonBottomSheet(false)
+            getCustomFolderList()
         },
-        onDismissRequest = { viewModel.setVisibleMoreButtonBottomSheet(false) },
+        onDismissRequest = { setVisibleMoreButtonBottomSheet(false) },
     )
 
     DoraBottomSheet.MovingFolderBottomSheet(
@@ -202,24 +224,21 @@ fun BoxScope.HomeSideEffectUI(
         folderList = state.folderList.toSelectBottomSheetModel(
             state.changeFolderId.ifEmpty {
                 state.selectedFolderId.apply {
-                    viewModel.updateSelectFolderId(this)
+                    updateSelectFolderId(this, "")
                 }
             },
         ),
         onDismissRequest = {
-            viewModel.updateSelectFolderId(state.selectedFolderId)
-            viewModel.setVisibleMovingFolderBottomSheet(false)
+            updateSelectFolderId(state.selectedFolderId, "")
+            setVisibleMovingFolderBottomSheet(false, false)
         },
         onClickCreateFolder = {
-            viewModel.setVisibleMovingFolderBottomSheet(
-                visible = false,
-                isNavigate = true,
-            )
+            setVisibleMovingFolderBottomSheet(false, true)
         },
         onClickMoveFolder = { selectFolder ->
-            selectFolder?.let { viewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName) }
+            selectFolder?.let { updateSelectFolderId(selectFolder.id, selectFolder.itemName) }
         },
-        onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId, state.changeFolderName) },
+        onClickCompleteButton = { moveFolder(state.selectedPostId, state.changeFolderId, state.changeFolderName) },
     )
 
     DoraDialog(
@@ -228,8 +247,8 @@ fun BoxScope.HomeSideEffectUI(
         content = stringResource(R.string.remove_dialog_content),
         confirmBtnText = stringResource(R.string.remove_dialog_confirm),
         disMissBtnText = stringResource(R.string.remove_dialog_cancil),
-        onDisMissRequest = { viewModel.setVisibleDialog(false) },
-        onClickConfirmBtn = { viewModel.deletePost(state.selectedPostId) },
+        onDisMissRequest = { setVisibleDialog(false) },
+        onClickConfirmBtn = { deletePost(state.selectedPostId) },
     )
 
     DoraToast(
