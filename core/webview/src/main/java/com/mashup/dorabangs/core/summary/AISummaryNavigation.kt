@@ -33,15 +33,15 @@ fun NavGraphBuilder.aiSummaryNavigation(
         enterTransition = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(250)
+                animationSpec = tween(250),
             )
         },
         exitTransition = {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(400)
+                animationSpec = tween(400),
             )
-        }
+        },
     ) { navBackStackEntry ->
         val aiSummary = navBackStackEntry.arguments?.bundleSerializable("summary") as AISummaryUiModel?
 

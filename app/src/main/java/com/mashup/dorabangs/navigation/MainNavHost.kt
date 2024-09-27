@@ -1,7 +1,5 @@
 package com.mashup.dorabangs.navigation
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -175,13 +173,23 @@ fun MainNavHost(
                 )
                 appState.navController.popBackStackWithClearFocus()
             },
-            navigateToWebView = { url ->
-                // appState.navController.navigateToWebView(url = url)
+            navigateToWebView = { cardInfo ->
+                val summaryUiModel = AISummaryUiModel(
+                    description = cardInfo.content,
+                    url = cardInfo.url,
+                    keywords = cardInfo.keywordList,
+                )
+                appState.navController.navigateToWebView(summaryUiModel = summaryUiModel)
             },
         )
         classificationNavigation(
-            navigateToWebView = { url ->
-                // appState.navController.navigateToWebView(url = url)
+            navigateToWebView = { cardInfo ->
+                val summaryUiModel = AISummaryUiModel(
+                    description = cardInfo.content,
+                    url = cardInfo.url,
+                    keywords = cardInfo.keywordList,
+                )
+                appState.navController.navigateToWebView(summaryUiModel = summaryUiModel)
             },
             onClickBackIcon = { appState.navController.popBackStackWithClearFocus() },
             navigateToHome = { appState.navController.popBackStackWithClearFocus() },
