@@ -111,7 +111,7 @@ fun AISummaryContent(
             color = DoraColorTokens.G7,
         )
         Spacer(modifier = Modifier.height(20.dp))
-        FeedCardKeyword(keywordList = aiSummaryUiModel.keywords)
+        FeedCardKeyword(keywordList = aiSummaryUiModel.keywords?.take(3))
     }
 }
 

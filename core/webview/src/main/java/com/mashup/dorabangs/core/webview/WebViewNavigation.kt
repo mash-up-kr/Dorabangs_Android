@@ -17,7 +17,7 @@ import kotlinx.serialization.json.Json
 
 fun NavController.navigateToWebView(navOptions: NavOptions? = null, summaryUiModel: AISummaryUiModel?) {
     val summary = Uri.encode(Json.encodeToString(summaryUiModel))
-    navigate("${NavigationRoute.WebViewScreen.route}?summary=$summary", navOptions)
+    navigate("${NavigationRoute.WebViewScreen.route}/summary=$summary", navOptions)
 }
 
 fun NavGraphBuilder.webViewNavigation(
@@ -25,15 +25,14 @@ fun NavGraphBuilder.webViewNavigation(
     navigateToAISummary: (AISummaryUiModel) -> Unit,
 ) {
     composable(
-        route = "${NavigationRoute.WebViewScreen.route}?summary={summary}",
+        route = "${NavigationRoute.WebViewScreen.route}/summary={summary}",
         arguments = listOf(
             navArgument(name = "summary") {
-                serializableNavType<AISummaryUiModel>()
+                type = serializableNavType<AISummaryUiModel>()
             },
         ),
     ) { navBackStackEntry ->
         val aiSummary = navBackStackEntry.arguments?.bundleSerializable("summary") as AISummaryUiModel?
-        Log.d(TAG, "webViewNavigation: aiSummary$aiSummary")
         aiSummary?.url?.let { url ->
             DoraWebView(
                 url = url,
