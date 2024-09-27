@@ -61,6 +61,7 @@ sealed interface FeedUiModel {
         val title: String = "",
         val postCount: Int = 0,
         val folderId: String = "",
+        val isAIGenerated: Boolean = false,
         @DrawableRes val icon: Int? = CR.drawable.ic_3d_all_small,
     ) : FeedUiModel {
         override val uuid: String = UUID.randomUUID().toString()

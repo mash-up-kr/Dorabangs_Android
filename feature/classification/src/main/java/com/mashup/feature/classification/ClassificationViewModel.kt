@@ -309,6 +309,7 @@ class ClassificationViewModel @Inject constructor(
                 title = it.folderName,
                 icon = it.icon,
                 postCount = it.postCount,
+                isAIGenerated = it.isAIGenerated,
             )
         }
     }

@@ -92,6 +92,9 @@ fun ClassificationScreen(
         if (state.chipState.totalCount == 0) {
             ClassificationCompleteScreen(navigateToHome = navigateToHome)
         } else {
+            if (state.chipState.chipList[state.chipState.currentIndex].isAIGenerated) {
+                ClassificationAIBanner()
+            }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
