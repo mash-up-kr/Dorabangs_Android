@@ -3,11 +3,6 @@ on:
   push:
     branches:
       - master
-  # 테스트용 pr type 추후에 제거 예정
-  pull_request:
-    types:
-      - opened
-      - synchronize
 permissions:
   contents: read
 jobs:
