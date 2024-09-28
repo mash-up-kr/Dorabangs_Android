@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
 import com.mashup.dorabangs.core.designsystem.theme.DorabangsTheme
+import com.mashup.dorabangs.core.designsystem.R as CR
 
 @Composable
 fun ClassificationAIBanner(
@@ -32,7 +33,7 @@ fun ClassificationAIBanner(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
-            painter = painterResource(id = com.mashup.dorabangs.core.designsystem.R.drawable.ic_3d_all_big),
+            painter = painterResource(id = CR.drawable.ic_ai_classification_star),
             contentDescription = null
         )
 

@@ -31,6 +31,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
+import com.mashup.dorabangs.core.designsystem.R as CR
 
 @HiltViewModel
 class ClassificationViewModel @Inject constructor(
@@ -308,7 +309,7 @@ class ClassificationViewModel @Inject constructor(
                 id = it.folderId,
                 mergedTitle = "${it.folderName} $postCount",
                 title = it.folderName,
-                icon = it.icon,
+                icon = if (it.isAIGenerated) CR.drawable.ic_ai_classification_star else it.icon,
                 postCount = it.postCount,
                 isAIGenerated = it.isAIGenerated,
             )
