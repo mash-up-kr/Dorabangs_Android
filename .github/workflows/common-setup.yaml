@@ -1,6 +1,10 @@
 name: Common Setup
 
-on: workflow_call
+on:
+  workflow_call:
+  pull_request:
+    types:
+      - closed
 
 jobs:
   setup:
