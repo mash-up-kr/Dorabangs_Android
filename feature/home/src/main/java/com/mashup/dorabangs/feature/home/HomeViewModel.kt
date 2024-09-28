@@ -83,9 +83,6 @@ class HomeViewModel @Inject constructor(
                     initialValue = "",
                 ).collect { urlLink -> setStateUrlLink(urlLink) }
             }
-            launch {
-                initFolderList()
-            }
         }
 
         setAIClassificationCount()
@@ -279,6 +276,10 @@ class HomeViewModel @Inject constructor(
     fun initPostList(cacheKey: String? = null) = viewModelScope.doraLaunch {
         intent {
             reduce { state.copy(isLoading = true, postList = emptyList()) }
+
+            if (state.folderList.isEmpty()) {
+                initFolderList()
+            }
 
             val cacheKey = cacheKey ?: getCacheKey(state)
             val postList = fetchPostData(cacheKey, state.folderList)
