@@ -22,7 +22,7 @@ import com.mashup.dorabangs.core.designsystem.R as CR
 
 @Composable
 fun ClassificationAIBanner(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -34,7 +34,7 @@ fun ClassificationAIBanner(
     ) {
         Image(
             painter = painterResource(id = CR.drawable.ic_ai_classification_star),
-            contentDescription = null
+            contentDescription = null,
         )
 
         Spacer(modifier = Modifier.width(6.dp))
