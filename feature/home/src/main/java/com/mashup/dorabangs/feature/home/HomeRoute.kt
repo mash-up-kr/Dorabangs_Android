@@ -124,7 +124,10 @@ fun HomeRoute(
                 navigateToWebView(cardInfo.url)
             },
             onReachedBottom = viewModel::loadMore,
-            navigateToClassification = navigateToClassification,
+            navigateToClassification = {
+                navigateToClassification.invoke()
+                viewModel.setIsNeedToRefreshOnStart(true)
+            },
             navigateSaveScreenWithoutLink = {
                 navigateToSaveScreenWithoutLink()
                 viewModel.setIsNeedToRefreshOnStart(true)
