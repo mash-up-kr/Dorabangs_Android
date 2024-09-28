@@ -4,8 +4,6 @@ on:
   workflow_dispatch:
   pull_request:
     branches: [ "feature**", "hotfix**", "release**", "develop**", "master" ]
-    types:
-      - closed
 
 jobs:
   common_setup:
