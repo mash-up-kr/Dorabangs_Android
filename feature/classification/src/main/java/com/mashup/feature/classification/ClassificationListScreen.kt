@@ -55,6 +55,9 @@ fun ClassificationListScreen(
             pagingList[idx]?.let { item ->
                 when (item) {
                     is FeedUiModel.DoraChipUiModel -> {
+                        if (item.isAIGenerated) {
+                            ClassificationAIBanner()
+                        }
                         ClassificationFolderMove(
                             selectedFolder = item.title,
                             onClickAllItemMoveButton = { onClickAllItemMoveButton(item.folderId) },
