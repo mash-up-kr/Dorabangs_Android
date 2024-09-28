@@ -3,8 +3,9 @@ package com.mashup.dorabangs.feature.home
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCardUiModel
 import com.mashup.dorabangs.feature.model.PagingInfo
 import java.util.concurrent.ConcurrentHashMap
+import javax.inject.Inject
 
-class PostDataManager {
+class PostDataManager @Inject constructor() {
     private val pagingInfoCache = ConcurrentHashMap<String, PagingInfo>()
     private val postIdCache = ConcurrentHashMap<String, List<String>>()
     private val postDataCache = ConcurrentHashMap<String, FeedCardUiModel>()

@@ -191,7 +191,7 @@ fun StorageDetailRoute(
                     storageDetailViewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName)
                 }
             },
-            isBtnEnable = state.folderInfo.folderId != state.changeClickFolderId,
+            isBtnEnabled = state.folderInfo.folderId != state.changeClickFolderId,
             onClickCompleteButton = {
                 storageDetailViewModel.moveFolder(
                     postId = state.currentClickPostId,

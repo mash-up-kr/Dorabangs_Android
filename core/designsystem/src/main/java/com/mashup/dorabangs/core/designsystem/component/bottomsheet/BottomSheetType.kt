@@ -75,7 +75,7 @@ object DoraBottomSheet : BottomSheetType {
     override fun MovingFolderBottomSheet(
         modifier: Modifier,
         isShowSheet: Boolean,
-        isBtnEnable: Boolean,
+        isBtnEnabled: Boolean,
         folderList: List<SelectableBottomSheetItemUIModel>,
         onDismissRequest: () -> Unit,
         onClickCreateFolder: () -> Unit,
@@ -145,7 +145,7 @@ object DoraBottomSheet : BottomSheetType {
                             modifier = Modifier
                                 .fillMaxWidth(),
                             buttonText = stringResource(id = R.string.moving_folder_bottom_sheet_complete),
-                            enabled = isBtnEnable,
+                            enabled = isBtnEnabled,
                             onClickButton = onClickCompleteButton,
                         )
                     }

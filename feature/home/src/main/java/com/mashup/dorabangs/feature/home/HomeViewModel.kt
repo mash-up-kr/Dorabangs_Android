@@ -48,6 +48,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
+    private val postDataManager: PostDataManager,
     private val getLastCopiedUrlUseCase: GetLastCopiedUrlUseCase,
     private val getFolderList: GetFolderListUseCase,
     private val getPostsPageUseCase: GetPostsPageUseCase,
@@ -67,7 +68,6 @@ class HomeViewModel @Inject constructor(
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
     val scrollCache = ConcurrentHashMap<Int, Int>()
-    private val postDataManager = PostDataManager()
 
     init {
         viewModelScope.doraLaunch {

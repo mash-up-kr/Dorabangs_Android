@@ -220,7 +220,7 @@ fun BoxScope.HomeSideEffectUI(
     DoraBottomSheet.MovingFolderBottomSheet(
         modifier = Modifier,
         isShowSheet = state.isShowMovingFolderSheet,
-        isBtnEnable = state.selectedFolderId != state.changeFolderId,
+        isBtnEnabled = state.selectedFolderId != state.changeFolderId,
         folderList = state.folderList.toSelectBottomSheetModel(
             state.changeFolderId.ifEmpty {
                 state.selectedFolderId.also {
