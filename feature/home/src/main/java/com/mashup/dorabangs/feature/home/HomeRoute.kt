@@ -2,14 +2,15 @@ package com.mashup.dorabangs.feature.home
 
 import android.view.View
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,7 @@ import com.mashup.dorabangs.core.designsystem.component.dialog.DoraDialog
 import com.mashup.dorabangs.core.designsystem.component.toast.DoraToast
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.home.HomeState.Companion.toSelectBottomSheetModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -41,44 +43,26 @@ fun HomeRoute(
     navigateToCreateFolder: () -> Unit,
     navigateToHomeTutorial: () -> Unit,
     navigateToWebView: (String) -> Unit,
+    navigateToClassification: () -> Unit,
+    navigateToSaveScreenWithLink: (String) -> Unit,
+    navigateToSaveScreenWithoutLink: () -> Unit,
+    navigateToUnreadStorageDetail: (Folder) -> Unit,
     modifier: Modifier = Modifier,
+    scrollState: LazyListState = rememberLazyListState(),
     isShowToast: Boolean = false,
-    view: View = LocalView.current,
-    clipboardManager: ClipboardManager = LocalClipboardManager.current,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToClassification: () -> Unit = {},
-    navigateToSaveScreenWithLink: (String) -> Unit = {},
-    navigateToSaveScreenWithoutLink: () -> Unit = {},
-    navigateToUnreadStorageDetail: (Folder) -> Unit = {},
+    scope: CoroutineScope = rememberCoroutineScope(),
 ) {
-    val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val state by viewModel.collectAsState()
-    val scope = rememberCoroutineScope()
+
+    val copiedUrlSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
 
-    val scrollState = rememberLazyListState()
-
-    var prevFolderIndex by remember { mutableIntStateOf(0) }
-
-    val reachedBottom: Boolean by remember {
-        derivedStateOf {
-            val lastVisibleItem = scrollState.layoutInfo.visibleItemsInfo.lastOrNull()
-            lastVisibleItem?.index != 0 && lastVisibleItem?.index == scrollState.layoutInfo.totalItemsCount - 5
-        }
-    }
-
-    LaunchedEffect(reachedBottom) {
-        if (reachedBottom && state.isScrollLoading.not()) {
-            viewModel.loadMore(state)
-        }
-    }
-
-    LaunchedEffect(state.postList.size) {
-        if (state.selectedIndex != prevFolderIndex) {
-            scrollState.scrollToItem(viewModel.scrollCache[state.selectedIndex] ?: 0)
-            prevFolderIndex = state.selectedIndex
-        }
-    }
+    LoadScrollCache(
+        state = state,
+        scrollState = scrollState,
+        scrollCache = viewModel.scrollCache,
+    )
 
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
         if (state.isNeedToRefreshOnStart) {
@@ -87,18 +71,18 @@ fun HomeRoute(
             viewModel.updateFolderList()
             viewModel.setIsNeedToRefreshOnStart(false)
         }
-    }
 
-    if (isShowToast && state.hasShowToastState.not()) {
-        viewModel.updateToastState("${state.changeFolderName}(으)로 이동했어요.")
-        viewModel.updateHasShowToast(true)
+        if (isShowToast && state.hasShowToastState.not()) {
+            viewModel.updateToastState("${state.changeFolderName}(으)로 이동했어요.")
+            viewModel.updateHasShowToast(true)
+        }
     }
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is HomeSideEffect.ShowSnackBar -> {
+            is HomeSideEffect.ShowCopiedUrlSnackBar -> {
                 scope.launch {
-                    snackBarHostState.showSnackbar(
+                    copiedUrlSnackBarHostState.showSnackbar(
                         message = sideEffect.copiedText,
                         duration = SnackbarDuration.Indefinite,
                     )
@@ -106,7 +90,7 @@ fun HomeRoute(
             }
 
             is HomeSideEffect.HideSnackBar -> {
-                snackBarHostState.currentSnackbarData?.dismiss()
+                copiedUrlSnackBarHostState.currentSnackbarData?.dismiss()
             }
 
             is HomeSideEffect.NavigateToCreateFolder -> {
@@ -124,7 +108,6 @@ fun HomeRoute(
         HomeScreen(
             state = state,
             modifier = modifier,
-            postsList = state.postList,
             scrollState = scrollState,
             onClickChip = { index ->
                 if (index != state.selectedIndex) {
@@ -140,6 +123,7 @@ fun HomeRoute(
                 viewModel.updateReadAt(cardInfo)
                 navigateToWebView(cardInfo.url)
             },
+            onReachedBottom = viewModel::loadMore,
             navigateToClassification = navigateToClassification,
             navigateSaveScreenWithoutLink = {
                 navigateToSaveScreenWithoutLink()
@@ -154,88 +138,141 @@ fun HomeRoute(
             requestUpdate = viewModel::updatePost,
         )
 
-        HomeDoraSnackBar(
-            modifier = Modifier
-                .align(Alignment.BottomCenter),
-            text = state.clipBoardState.copiedText,
-            onAction = { url ->
-                viewModel.setLocalCopiedUrl(url = url)
-                if (state.clipBoardState.isValidUrl) {
-                    navigateToSaveScreenWithLink.invoke(url)
+        HomeSideEffectUI(
+            state = state,
+            snackBarHostState = copiedUrlSnackBarHostState,
+            toastSnackBarHostState = toastSnackBarHostState,
+            navigateToSaveScreenWithLink = navigateToSaveScreenWithLink,
+            setLocalCopiedUrl = viewModel::setLocalCopiedUrl,
+            hideSnackBar = viewModel::hideSnackBar,
+            setVisibleMoreButtonBottomSheet = viewModel::setVisibleMoreButtonBottomSheet,
+            setVisibleMovingFolderBottomSheet = viewModel::setVisibleMovingFolderBottomSheet,
+            getCustomFolderList = viewModel::getCustomFolderList,
+            updateSelectFolderId = viewModel::updateSelectFolderId,
+            deletePost = viewModel::deletePost,
+            moveFolder = viewModel::moveFolder,
+            getLocalCopiedUrl = viewModel::getLocalCopiedUrl,
+            setVisibleDialog = viewModel::setVisibleDialog,
+            showSnackBar = viewModel::showSnackBar,
+        )
+    }
+}
+
+@Composable
+fun BoxScope.HomeSideEffectUI(
+    state: HomeState,
+    snackBarHostState: SnackbarHostState,
+    toastSnackBarHostState: SnackbarHostState,
+    navigateToSaveScreenWithLink: (String) -> Unit,
+
+    setLocalCopiedUrl: (String) -> Unit,
+    getLocalCopiedUrl: suspend () -> String?,
+    showSnackBar: (String) -> Unit,
+    hideSnackBar: () -> Unit,
+    setVisibleMoreButtonBottomSheet: (Boolean) -> Unit,
+    setVisibleMovingFolderBottomSheet: (Boolean, Boolean) -> Unit,
+    setVisibleDialog: (Boolean) -> Unit,
+    getCustomFolderList: () -> Unit,
+    updateSelectFolderId: (String, String) -> Unit,
+    deletePost: (String) -> Unit,
+    moveFolder: (String, String, String) -> Unit,
+
+    view: View = LocalView.current,
+    clipboardManager: ClipboardManager = LocalClipboardManager.current,
+) {
+    HomeDoraSnackBar(
+        modifier = Modifier.align(Alignment.BottomCenter),
+        text = state.clipBoardState.copiedText,
+        onAction = { url ->
+            setLocalCopiedUrl(url)
+            if (state.clipBoardState.isValidUrl) {
+                navigateToSaveScreenWithLink(url)
+            }
+        },
+        snackBarHostState = snackBarHostState,
+        view = view,
+        clipboardManager = clipboardManager,
+        lastCopiedText = { getLocalCopiedUrl().orEmpty() },
+        hideSnackBar = hideSnackBar,
+        showSnackBarWithText = showSnackBar,
+        dismissAction = { url ->
+            setLocalCopiedUrl(url)
+            hideSnackBar()
+        },
+    )
+
+    DoraBottomSheet.MoreButtonBottomSheet(
+        modifier = Modifier.height(320.dp),
+        isShowSheet = state.isShowMoreButtonSheet,
+        firstItemName = R.string.more_button_bottom_sheet_remove_link,
+        secondItemName = R.string.more_button_bottom_sheet_moving_folder,
+        onClickDeleteLinkButton = {
+            setVisibleMoreButtonBottomSheet(false)
+            setVisibleDialog(true)
+        },
+        onClickMoveFolderButton = {
+            setVisibleMoreButtonBottomSheet(false)
+            getCustomFolderList()
+        },
+        onDismissRequest = { setVisibleMoreButtonBottomSheet(false) },
+    )
+
+    DoraBottomSheet.MovingFolderBottomSheet(
+        modifier = Modifier,
+        isShowSheet = state.isShowMovingFolderSheet,
+        isBtnEnabled = state.selectedFolderId != state.changeFolderId,
+        folderList = state.folderList.toSelectBottomSheetModel(
+            state.changeFolderId.ifEmpty {
+                state.selectedFolderId.also {
+                    updateSelectFolderId(it, "")
                 }
             },
-            snackBarHostState = snackBarHostState,
-            view = view,
-            clipboardManager = clipboardManager,
-            lastCopiedText = { viewModel.getLocalCopiedUrl().orEmpty() },
-            hideSnackBar = viewModel::hideSnackBar,
-            showSnackBarWithText = viewModel::showSnackBar,
-            dismissAction = { url ->
-                viewModel.setLocalCopiedUrl(url = url)
-                viewModel.hideSnackBar()
-            },
-        )
+        ),
+        onDismissRequest = {
+            updateSelectFolderId(state.selectedFolderId, "")
+            setVisibleMovingFolderBottomSheet(false, false)
+        },
+        onClickCreateFolder = {
+            setVisibleMovingFolderBottomSheet(false, true)
+        },
+        onClickMoveFolder = { selectFolder ->
+            selectFolder?.let { updateSelectFolderId(selectFolder.id, selectFolder.itemName) }
+        },
+        onClickCompleteButton = { moveFolder(state.selectedPostId, state.changeFolderId, state.changeFolderName) },
+    )
 
-        DoraBottomSheet.MoreButtonBottomSheet(
-            modifier = Modifier.height(320.dp),
-            isShowSheet = state.isShowMoreButtonSheet,
-            firstItemName = R.string.more_button_bottom_sheet_remove_link,
-            secondItemName = R.string.more_button_bottom_sheet_moving_folder,
-            onClickDeleteLinkButton = {
-                viewModel.setVisibleMoreButtonBottomSheet(false)
-                viewModel.setVisibleDialog(true)
-            },
-            onClickMoveFolderButton = {
-                viewModel.setVisibleMoreButtonBottomSheet(false)
-                viewModel.getCustomFolderList()
-            },
-            onDismissRequest = { viewModel.setVisibleMoreButtonBottomSheet(false) },
-        )
+    DoraDialog(
+        isShowDialog = state.isShowDialog,
+        title = stringResource(R.string.remove_dialog_title),
+        content = stringResource(R.string.remove_dialog_content),
+        confirmBtnText = stringResource(R.string.remove_dialog_confirm),
+        disMissBtnText = stringResource(R.string.remove_dialog_cancil),
+        onDisMissRequest = { setVisibleDialog(false) },
+        onClickConfirmBtn = { deletePost(state.selectedPostId) },
+    )
 
-        DoraBottomSheet.MovingFolderBottomSheet(
-            modifier = modifier,
-            isShowSheet = state.isShowMovingFolderSheet,
-            folderList = state.folderList.toSelectBottomSheetModel(
-                state.changeFolderId.ifEmpty {
-                    val originFolder = state.selectedFolderId
-                    viewModel.updateSelectFolderId(originFolder)
-                    originFolder
-                },
-            ),
-            onDismissRequest = {
-                viewModel.updateSelectFolderId(state.selectedFolderId)
-                viewModel.setVisibleMovingFolderBottomSheet(false)
-            },
-            onClickCreateFolder = {
-                viewModel.setVisibleMovingFolderBottomSheet(
-                    visible = false,
-                    isNavigate = true,
-                )
-            },
-            onClickMoveFolder = { selectFolder ->
-                selectFolder?.let { viewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName) }
-            },
-            btnEnable = state.selectedFolderId != state.changeFolderId,
-            onClickCompleteButton = { viewModel.moveFolder(state.selectedPostId, state.changeFolderId, state.changeFolderName) },
-        )
+    DoraToast(
+        text = state.toastState.text,
+        toastStyle = state.toastState.toastStyle,
+        snackBarHostState = toastSnackBarHostState,
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(bottom = 20.dp),
+    )
+}
 
-        DoraDialog(
-            isShowDialog = state.isShowDialog,
-            title = stringResource(R.string.remove_dialog_title),
-            content = stringResource(R.string.remove_dialog_content),
-            confirmBtnText = stringResource(R.string.remove_dialog_confirm),
-            disMissBtnText = stringResource(R.string.remove_dialog_cancil),
-            onDisMissRequest = { viewModel.setVisibleDialog(false) },
-            onClickConfirmBtn = { viewModel.deletePost(state.selectedPostId) },
-        )
+@Composable
+fun LoadScrollCache(
+    state: HomeState,
+    scrollState: LazyListState,
+    scrollCache: Map<Int, Int>,
+) {
+    var prevFolderIndex by remember { mutableIntStateOf(0) }
 
-        DoraToast(
-            text = state.toastState.text,
-            toastStyle = state.toastState.toastStyle,
-            snackBarHostState = toastSnackBarHostState,
-            modifier = modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp),
-        )
+    LaunchedEffect(state.postList.size) {
+        if (state.selectedIndex != prevFolderIndex) {
+            scrollState.scrollToItem(scrollCache[state.selectedIndex] ?: 0)
+            prevFolderIndex = state.selectedIndex
+        }
     }
 }

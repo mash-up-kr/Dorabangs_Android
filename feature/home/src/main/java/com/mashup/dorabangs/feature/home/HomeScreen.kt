@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -66,18 +65,18 @@ import dev.chrisbanes.haze.hazeChild
 @Composable
 fun HomeScreen(
     state: HomeState,
-    postsList: List<FeedUiModel.FeedCardUiModel>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
-    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onReachedBottom: () -> Unit = {},
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
     onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
-    requestUpdate: (String) -> Unit = {},
     navigateToUnreadStorageDetail: () -> Unit = {},
+    requestUpdate: (String) -> Unit = {},
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -99,7 +98,7 @@ fun HomeScreen(
                         .align(Alignment.Center),
                 )
             }
-        } else if (postsList.isEmpty()) {
+        } else if (state.postList.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -141,12 +140,13 @@ fun HomeScreen(
                 }
             }
         } else {
-            LazyColumn(
+            DoraInfinityLazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .haze(hazeState),
-                state = scrollState,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                scrollState = scrollState,
+                isLoadAvailable = state.isScrollLoading.not(),
+                onReachedBottom = onReachedBottom,
             ) {
                 item {
                     Spacer(
@@ -190,7 +190,7 @@ fun HomeScreen(
                 }
 
                 Feeds(
-                    feeds = postsList,
+                    feeds = state.postList,
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
@@ -488,6 +488,5 @@ fun HomeScreenPreview() {
                 ),
             ),
         ),
-        postsList = postList,
     )
 }
