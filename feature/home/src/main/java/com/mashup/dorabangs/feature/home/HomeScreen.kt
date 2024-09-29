@@ -205,7 +205,7 @@ fun HomeScreen(
         }
 
         Column(
-            modifier = Modifier.background(DoraColorTokens.White)
+            modifier = Modifier.background(DoraColorTokens.White),
         ) {
             DoraTopBar.HomeTopBar(
                 modifier = Modifier
