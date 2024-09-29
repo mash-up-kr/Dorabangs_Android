@@ -467,15 +467,12 @@ fun HomeScreenPreview() {
             tapElements = listOf(
                 FeedUiModel.DoraChipUiModel(
                     title = "전체",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "즐겨찾기",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "나중에 읽을 링크",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "테스트",
