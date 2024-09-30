@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mashup.dorabangs.core.coroutine.doraLaunch
-import com.mashup.dorabangs.core.designsystem.R
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.DoraChipUiModel
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel.FeedCardUiModel
 import com.mashup.dorabangs.core.designsystem.component.toast.ToastStyle
@@ -171,23 +170,15 @@ class HomeViewModel @Inject constructor(
         intent {
             reduce {
                 state.copy(
-                    tapElements = folderList.mapIndexed { index, folder ->
+                    tapElements = folderList.map { folder ->
                         DoraChipUiModel(
                             id = folder.id.orEmpty(),
                             title = folder.name,
-                            icon = setDefaultFolderIcon(index),
                         )
                     },
                 )
             }
         }
-    }
-
-    private fun setDefaultFolderIcon(index: Int) = when (index) {
-        0 -> R.drawable.ic_3d_all_small
-        1 -> R.drawable.ic_3d_bookmark_small
-        2 -> R.drawable.ic_3d_pin_small
-        else -> null
     }
 
     private fun setTextHelperEnable(

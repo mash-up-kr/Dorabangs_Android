@@ -57,10 +57,6 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.haze
-import dev.chrisbanes.haze.hazeChild
 
 @Composable
 fun HomeScreen(
@@ -81,8 +77,6 @@ fun HomeScreen(
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        val hazeState = remember { HazeState() }
-
         if (state.isLoading) {
             Box(
                 modifier = Modifier
@@ -141,9 +135,7 @@ fun HomeScreen(
             }
         } else {
             DoraInfinityLazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .haze(hazeState),
+                modifier = Modifier.fillMaxSize(),
                 scrollState = scrollState,
                 isLoadAvailable = state.isScrollLoading.not(),
                 onReachedBottom = onReachedBottom,
@@ -208,15 +200,13 @@ fun HomeScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(101.dp)
-                    .hazeChild(
-                        state = hazeState,
-                        style = HazeStyle(blurRadius = 12.dp),
-                    ),
+                    .height(101.dp),
             )
         }
 
-        Column {
+        Column(
+            modifier = Modifier.background(DoraColorTokens.White),
+        ) {
             DoraTopBar.HomeTopBar(
                 modifier = Modifier
                     .height(48.dp)
@@ -467,15 +457,12 @@ fun HomeScreenPreview() {
             tapElements = listOf(
                 FeedUiModel.DoraChipUiModel(
                     title = "전체",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "즐겨찾기",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "나중에 읽을 링크",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "테스트",
