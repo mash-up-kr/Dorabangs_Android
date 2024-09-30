@@ -9,6 +9,7 @@ import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.mashup.dorabangs.core.coroutine.doraLaunch
 import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
+import com.mashup.dorabangs.domain.model.AIClassificationFolder
 import com.mashup.dorabangs.domain.model.AIClassificationFolders
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.model.Sort
@@ -30,6 +31,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
+import com.mashup.dorabangs.core.designsystem.R as CR
 
 @HiltViewModel
 class ClassificationViewModel @Inject constructor(
@@ -75,8 +77,7 @@ class ClassificationViewModel @Inject constructor(
                 order = DESC,
             ).map { pagedData ->
                 pagedData.map {
-                    val category =
-                        chips.list.firstOrNull { chip -> chip.folderId == it.folderId }?.folderName.orEmpty()
+                    val category = getFolder(chips.list, it.folderId)?.folderName.orEmpty()
                     it.toUiModel(category)
                 }
             }.map {
@@ -92,6 +93,7 @@ class ClassificationViewModel @Inject constructor(
                                     ?.postCount ?: 0,
                                 folderId = after.folderId,
                                 icon = null,
+                                isAIGenerated = getFolder(chips.list, after.folderId)?.isAIGenerated ?: false,
                             )
                         } else {
                             null
@@ -125,8 +127,7 @@ class ClassificationViewModel @Inject constructor(
             ).map { pagedData ->
                 // chip create
                 pagedData.map {
-                    val category =
-                        state.chipState.chipList.firstOrNull { chip -> chip.id == it.folderId }?.title.orEmpty()
+                    val category = getFolder(state.chipState.chipList, it.folderId)?.title.orEmpty()
                     it.toUiModel(category)
                 }
             }.map {
@@ -141,6 +142,7 @@ class ClassificationViewModel @Inject constructor(
                                 postCount = selectedFolderItem?.postCount ?: 0,
                                 folderId = after.folderId,
                                 icon = null,
+                                isAIGenerated = getFolder(state.chipState.chipList, after.folderId)?.isAIGenerated ?: false,
                             )
                         } else {
                             null
@@ -262,7 +264,7 @@ class ClassificationViewModel @Inject constructor(
     private fun updateSeparator(chipList: List<FeedUiModel.DoraChipUiModel>) {
         _paging.value = _paging.value.map {
             if (it is FeedUiModel.DoraChipUiModel) {
-                val updateItem = chipList.find { chip -> chip.id == it.folderId }
+                val updateItem = getFolder(chipList, it.folderId)
                 it.copy(postCount = updateItem?.postCount ?: it.postCount)
             } else {
                 it
@@ -307,8 +309,9 @@ class ClassificationViewModel @Inject constructor(
                 id = it.folderId,
                 mergedTitle = "${it.folderName} $postCount",
                 title = it.folderName,
-                icon = it.icon,
+                icon = if (it.isAIGenerated) CR.drawable.ic_ai_classification_star else it.icon,
                 postCount = it.postCount,
+                isAIGenerated = it.isAIGenerated,
             )
         }
     }
@@ -326,6 +329,9 @@ class ClassificationViewModel @Inject constructor(
             }
         }
     }
+
+    private fun getFolder(folders: List<AIClassificationFolder>, folderId: String) = folders.firstOrNull { folder -> folder.folderId == folderId }
+    private fun getFolder(folders: List<FeedUiModel.DoraChipUiModel>, folderId: String) = folders.firstOrNull { folder -> folder.id == folderId }
 }
 
 fun AIClassificationFeedPost.toUiModel(matchedCategory: String) = FeedUiModel.FeedCardUiModel(
