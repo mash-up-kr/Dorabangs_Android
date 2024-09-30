@@ -170,7 +170,7 @@ class HomeViewModel @Inject constructor(
         intent {
             reduce {
                 state.copy(
-                    tapElements = folderList.mapIndexed { _, folder ->
+                    tapElements = folderList.map { folder ->
                         DoraChipUiModel(
                             id = folder.id.orEmpty(),
                             title = folder.name,
