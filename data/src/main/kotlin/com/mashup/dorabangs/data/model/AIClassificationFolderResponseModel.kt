@@ -15,6 +15,7 @@ data class AIClassificationFolderResponseModel(
     val folderName: String,
     val postCount: Int,
     val folderId: String,
+    val isAIGenerated: Boolean,
 )
 
 fun AIClassificationFoldersResponseModel.toDomain() = AIClassificationFolders(
@@ -26,4 +27,5 @@ fun AIClassificationFolderResponseModel.toDomain() = AIClassificationFolder(
     folderId = this.folderId,
     folderName = this.folderName,
     postCount = this.postCount,
+    isAIGenerated = this.isAIGenerated,
 )
