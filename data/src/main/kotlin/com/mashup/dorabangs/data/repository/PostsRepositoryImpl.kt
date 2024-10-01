@@ -14,6 +14,7 @@ import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.pagingsource.PostRemoteMediator
 import com.mashup.dorabangs.data.utils.PAGING_SIZE
 import com.mashup.dorabangs.data.utils.doraPager
+import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.Post
@@ -53,7 +54,14 @@ class PostsRepositoryImpl @Inject constructor(
         postsRemoteDataSource.saveLink(link)
 
     override suspend fun getPost(postId: String) =
-        postsRemoteDataSource.getPost(postId).toDomain()
+        postsRemoteDataSource
+            .getPost(postId)
+            .toDomain()
+            .apply {
+                if (aiStatus == AIStatus.SUCCESS) {
+                    database.postDao().insertPost(toLocalEntity())
+                }
+            }
 
     override suspend fun patchPostInfo(postId: String, postInfo: PostInfo): DoraSampleResponse =
         runCatching {

@@ -40,6 +40,9 @@ interface PostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(posts: List<LocalPostItemEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPost(post: LocalPostItemEntity)
+
     /**
      * Post 아이템 삭제
      */
