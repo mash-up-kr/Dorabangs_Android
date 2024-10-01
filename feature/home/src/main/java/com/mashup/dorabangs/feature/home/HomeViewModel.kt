@@ -21,6 +21,7 @@ import com.mashup.dorabangs.domain.usecase.folder.GetFolderListUseCase
 import com.mashup.dorabangs.domain.usecase.folder.GetPostsFromFolderUseCase
 import com.mashup.dorabangs.domain.usecase.posts.ChangePostFolder
 import com.mashup.dorabangs.domain.usecase.posts.DeletePostUseCase
+import com.mashup.dorabangs.domain.usecase.posts.GetLocalPostsUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPostUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetPostsPageUseCase
 import com.mashup.dorabangs.domain.usecase.posts.GetUnReadPostsCountUseCase
@@ -63,6 +64,7 @@ class HomeViewModel @Inject constructor(
     private val changePostFolderUseCase: ChangePostFolder,
     private val patchPostInfoUseCase: PatchPostInfoUseCase,
     private val getPostUseCase: GetPostUseCase,
+    private val getLocalPostsUseCase: GetLocalPostsUseCase,
 ) : ViewModel(), ContainerHost<HomeState, HomeSideEffect> {
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -559,9 +561,25 @@ class HomeViewModel @Inject constructor(
         return feedCardList
     }
 
+    fun loadCachedPosts() = viewModelScope.doraLaunch {
+        intent {
+            val posts = getLocalPostsUseCase(LOCAL_CACHED_POSTS_COUNT)
+
+            if (state.folderList.isEmpty()) {
+                initFolderList()
+            }
+
+            reduce { state.copy(postList = posts.items.toUIModel(state.folderList)) }
+        }
+    }
+
     private fun List<Post>.toUIModel(folderList: List<Folder>) = this.map { post ->
         val category =
             folderList.firstOrNull { folder -> folder.id == post.folderId }?.name.orEmpty()
         post.toUiModel(category)
+    }
+
+    companion object {
+        private const val LOCAL_CACHED_POSTS_COUNT = 10
     }
 }

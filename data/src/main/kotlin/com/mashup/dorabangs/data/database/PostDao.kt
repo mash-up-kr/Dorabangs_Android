@@ -15,6 +15,9 @@ interface PostDao {
     @Query("SELECT * FROM localPostItemEntity")
     suspend fun getPostByPage(): List<LocalPostItemEntity>
 
+    @Query("SELECT * FROM localPostItemEntity ORDER BY createdAt DESC LIMIT :limit")
+    suspend fun getRecentPosts(limit: Int = 10): List<LocalPostItemEntity>
+
     @Query(
         """
     SELECT * FROM localPostItemEntity

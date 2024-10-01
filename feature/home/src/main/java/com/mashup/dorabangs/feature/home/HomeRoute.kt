@@ -64,6 +64,10 @@ fun HomeRoute(
         scrollCache = viewModel.scrollCache,
     )
 
+    LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
+        viewModel.loadCachedPosts()
+    }
+
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
         if (state.isNeedToRefreshOnStart) {
             viewModel.setAIClassificationCount()
@@ -166,20 +170,18 @@ fun BoxScope.HomeSideEffectUI(
     state: HomeState,
     snackBarHostState: SnackbarHostState,
     toastSnackBarHostState: SnackbarHostState,
-    navigateToSaveScreenWithLink: (String) -> Unit,
-
-    setLocalCopiedUrl: (String) -> Unit,
-    getLocalCopiedUrl: suspend () -> String?,
     showSnackBar: (String) -> Unit,
+    navigateToSaveScreenWithLink: (String) -> Unit,
     hideSnackBar: () -> Unit,
+    getLocalCopiedUrl: suspend () -> String?,
+    getCustomFolderList: () -> Unit,
+    setLocalCopiedUrl: (String) -> Unit,
     setVisibleMoreButtonBottomSheet: (Boolean) -> Unit,
     setVisibleMovingFolderBottomSheet: (Boolean, Boolean) -> Unit,
     setVisibleDialog: (Boolean) -> Unit,
-    getCustomFolderList: () -> Unit,
     updateSelectFolderId: (String, String) -> Unit,
     deletePost: (String) -> Unit,
     moveFolder: (String, String, String) -> Unit,
-
     view: View = LocalView.current,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
 ) {

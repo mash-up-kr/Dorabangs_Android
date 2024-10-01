@@ -19,6 +19,7 @@ import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.model.Posts
+import com.mashup.dorabangs.domain.model.PostsMetaData
 import com.mashup.dorabangs.domain.repository.PostsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -139,5 +140,15 @@ class PostsRepositoryImpl @Inject constructor(
             order = order,
             favorite = favorite,
             isRead = isRead,
-        ).toDomain()
+        )
+            .toDomain()
+            .apply {
+                val localPostItems = items.map { it.toLocalEntity() }
+                database.postDao().insertAll(localPostItems)
+            }
+
+    override suspend fun getLocalPosts(limit: Int) = Posts(
+        items = database.postDao().getRecentPosts(limit).map { it.toPost() },
+        metaData = PostsMetaData(),
+    )
 }
