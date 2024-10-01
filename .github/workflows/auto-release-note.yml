@@ -1,0 +1,17 @@
+name: auto create release note
+on:
+  push:
+    branches:
+      - master
+permissions:
+  contents: read
+jobs:
+  create-release-note:
+    permissions:
+      contents: write
+      pull-requests: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
