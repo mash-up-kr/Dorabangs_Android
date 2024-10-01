@@ -228,11 +228,10 @@ fun HomeScreen(
             )
         }
 
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomCenter),
         ) {
             Box(
                 modifier = Modifier
@@ -257,7 +256,7 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .height(36.dp)
                         .background(DoraColorTokens.SurfaceBlack),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         modifier = Modifier.padding(start = 20.dp),
