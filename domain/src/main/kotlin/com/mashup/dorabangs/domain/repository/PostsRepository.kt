@@ -56,4 +56,6 @@ interface PostsRepository {
         favorite: Boolean?,
         isRead: Boolean?,
     ): Posts
+
+    suspend fun getLocalPosts(limit: Int): Posts
 }

@@ -14,11 +14,13 @@ import com.mashup.dorabangs.data.model.toDomain
 import com.mashup.dorabangs.data.pagingsource.PostRemoteMediator
 import com.mashup.dorabangs.data.utils.PAGING_SIZE
 import com.mashup.dorabangs.data.utils.doraPager
+import com.mashup.dorabangs.domain.model.AIStatus
 import com.mashup.dorabangs.domain.model.DoraSampleResponse
 import com.mashup.dorabangs.domain.model.Link
 import com.mashup.dorabangs.domain.model.Post
 import com.mashup.dorabangs.domain.model.PostInfo
 import com.mashup.dorabangs.domain.model.Posts
+import com.mashup.dorabangs.domain.model.PostsMetaData
 import com.mashup.dorabangs.domain.repository.PostsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -52,7 +54,14 @@ class PostsRepositoryImpl @Inject constructor(
         postsRemoteDataSource.saveLink(link)
 
     override suspend fun getPost(postId: String) =
-        postsRemoteDataSource.getPost(postId).toDomain()
+        postsRemoteDataSource
+            .getPost(postId)
+            .toDomain()
+            .apply {
+                if (aiStatus == AIStatus.SUCCESS) {
+                    database.postDao().insertPost(toLocalEntity())
+                }
+            }
 
     override suspend fun patchPostInfo(postId: String, postInfo: PostInfo): DoraSampleResponse =
         runCatching {
@@ -139,5 +148,15 @@ class PostsRepositoryImpl @Inject constructor(
             order = order,
             favorite = favorite,
             isRead = isRead,
-        ).toDomain()
+        )
+            .toDomain()
+            .apply {
+                val localPostItems = items.map { it.toLocalEntity() }
+                database.postDao().insertAll(localPostItems)
+            }
+
+    override suspend fun getLocalPosts(limit: Int) = Posts(
+        items = database.postDao().getRecentPosts(limit).map { it.toPost() },
+        metaData = PostsMetaData(),
+    )
 }

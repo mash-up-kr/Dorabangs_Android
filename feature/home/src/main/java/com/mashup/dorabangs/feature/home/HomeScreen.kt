@@ -77,60 +77,62 @@ fun HomeScreen(
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        if (state.isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 104.dp)
-                    .align(Alignment.Center),
-            ) {
-                LottieLoader(
-                    lottieRes = R.raw.spinner,
-                    iterations = Int.MAX_VALUE,
+        if (state.postList.isEmpty()) {
+            if (state.isLoading) {
+                Box(
                     modifier = Modifier
-                        .size(54.dp)
+                        .fillMaxSize()
+                        .padding(top = 104.dp)
                         .align(Alignment.Center),
-                )
-            }
-        } else if (state.postList.isEmpty()) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Spacer(modifier = Modifier.height(104.dp))
-
-                if (state.selectedIndex == 0) {
-                    HomeCarousel(
+                ) {
+                    LottieLoader(
+                        lottieRes = R.raw.spinner,
+                        iterations = Int.MAX_VALUE,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp, horizontal = 20.dp)
-                            .clip(DoraRoundTokens.Round20),
-                        homeCarouselItems = listOf(
-                            HomeCarouselItem(
-                                lottieRes = R.raw.unread,
-                                description = stringResource(id = R.string.home_carousel_save_introduce),
-                                onClickButton = navigateToHomeTutorial,
-                            ),
-                        ),
+                            .size(54.dp)
+                            .align(Alignment.Center),
                     )
                 }
-
+            } else {
                 Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_empty),
-                        contentDescription = "",
-                        tint = Color.Unspecified,
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 12.dp),
-                        text = stringResource(id = R.string.home_empty_feed),
-                        style = DoraTypoTokens.caption3Medium,
-                        color = DoraColorTokens.G3,
-                    )
+                    Spacer(modifier = Modifier.height(104.dp))
+
+                    if (state.selectedIndex == 0) {
+                        HomeCarousel(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp, horizontal = 20.dp)
+                                .clip(DoraRoundTokens.Round20),
+                            homeCarouselItems = listOf(
+                                HomeCarouselItem(
+                                    lottieRes = R.raw.unread,
+                                    description = stringResource(id = R.string.home_carousel_save_introduce),
+                                    onClickButton = navigateToHomeTutorial,
+                                ),
+                            ),
+                        )
+                    }
+
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_empty),
+                            contentDescription = "",
+                            tint = Color.Unspecified,
+                        )
+                        Text(
+                            modifier = Modifier.padding(top = 12.dp),
+                            text = stringResource(id = R.string.home_empty_feed),
+                            style = DoraTypoTokens.caption3Medium,
+                            color = DoraColorTokens.G3,
+                        )
+                    }
                 }
             }
         } else {
@@ -226,21 +228,49 @@ fun HomeScreen(
             )
         }
 
-        Box(
+        Column(
             modifier = Modifier
-                .padding(bottom = 20.dp, end = 20.dp)
-                .size(60.dp)
-                .clip(DoraRoundTokens.Round99)
-                .background(DoraColorTokens.SurfaceBlack)
-                .align(Alignment.BottomEnd)
-                .clickable(onClick = navigateSaveScreenWithoutLink),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
         ) {
-            Icon(
-                tint = DoraColorTokens.G3,
-                painter = painterResource(id = R.drawable.ic_fab_add),
-                contentDescription = "",
-            )
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 20.dp, end = 20.dp)
+                    .size(60.dp)
+                    .clip(DoraRoundTokens.Round99)
+                    .background(DoraColorTokens.SurfaceBlack)
+                    .clickable(onClick = navigateSaveScreenWithoutLink)
+                    .align(Alignment.End),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    tint = DoraColorTokens.G3,
+                    painter = painterResource(id = R.drawable.ic_fab_add),
+                    contentDescription = "",
+                )
+            }
+
+            if (state.isLoading && state.postList.isNotEmpty()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(36.dp)
+                        .background(DoraColorTokens.SurfaceBlack),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 20.dp),
+                        text = "링크 불러오는 중",
+                        color = DoraColorTokens.G3,
+                        style = DoraTypoTokens.caption1Normal,
+                    )
+                    LottieLoader(
+                        modifier = Modifier.size(24.dp),
+                        lottieRes = R.raw.dot_loading,
+                        iterations = Int.MAX_VALUE,
+                    )
+                }
+            }
         }
     }
 }
