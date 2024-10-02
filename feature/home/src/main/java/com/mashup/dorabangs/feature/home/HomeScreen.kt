@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -58,32 +57,26 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.haze
-import dev.chrisbanes.haze.hazeChild
 
 @Composable
 fun HomeScreen(
     state: HomeState,
-    postsList: List<FeedUiModel.FeedCardUiModel>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
-    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onReachedBottom: () -> Unit = {},
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
     onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
-    requestUpdate: (String) -> Unit = {},
     navigateToUnreadStorageDetail: () -> Unit = {},
+    requestUpdate: (String) -> Unit = {},
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        val hazeState = remember { HazeState() }
-
         if (state.isLoading) {
             Box(
                 modifier = Modifier
@@ -99,7 +92,7 @@ fun HomeScreen(
                         .align(Alignment.Center),
                 )
             }
-        } else if (postsList.isEmpty()) {
+        } else if (state.postList.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -141,12 +134,11 @@ fun HomeScreen(
                 }
             }
         } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .haze(hazeState),
-                state = scrollState,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            DoraInfinityLazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                scrollState = scrollState,
+                isLoadAvailable = state.isScrollLoading.not(),
+                onReachedBottom = onReachedBottom,
             ) {
                 item {
                     Spacer(
@@ -190,7 +182,7 @@ fun HomeScreen(
                 }
 
                 Feeds(
-                    feeds = postsList,
+                    feeds = state.postList,
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
@@ -208,15 +200,13 @@ fun HomeScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(101.dp)
-                    .hazeChild(
-                        state = hazeState,
-                        style = HazeStyle(blurRadius = 12.dp),
-                    ),
+                    .height(101.dp),
             )
         }
 
-        Column {
+        Column(
+            modifier = Modifier.background(DoraColorTokens.White),
+        ) {
             DoraTopBar.HomeTopBar(
                 modifier = Modifier
                     .height(48.dp)
@@ -467,15 +457,12 @@ fun HomeScreenPreview() {
             tapElements = listOf(
                 FeedUiModel.DoraChipUiModel(
                     title = "전체",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "즐겨찾기",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "나중에 읽을 링크",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "테스트",
@@ -488,6 +475,5 @@ fun HomeScreenPreview() {
                 ),
             ),
         ),
-        postsList = postList,
     )
 }

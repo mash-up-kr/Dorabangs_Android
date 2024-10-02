@@ -5,4 +5,5 @@
     <string name="ai_classification_navigate_home">홈(으)로 이동</string>
     <string name="ai_classification_complete">분류한 링크를 모두 확인했어요!</string>
     <string name="ai_classification_chips_count">전체 %s</string>
+    <string name="ai_classification_ai_banner">AI가 추천하는 폴더입니다. 링크를 옮기면 폴더가 생성됩니다.</string>
 </resources>
