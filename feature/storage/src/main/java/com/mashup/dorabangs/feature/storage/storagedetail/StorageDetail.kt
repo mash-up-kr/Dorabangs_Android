@@ -46,7 +46,7 @@ fun StorageDetailRoute(
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: (Boolean) -> Unit,
-    navigateToWebView: (String) -> Unit,
+    navigateToWebView: (FeedUiModel.FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
     isChangedData: Boolean = false,
@@ -114,7 +114,7 @@ fun StorageDetailRoute(
             },
             onClickPostItem = { cardInfo ->
                 storageDetailViewModel.updateReadAt(cardInfo)
-                navigateToWebView(cardInfo.url)
+                navigateToWebView(cardInfo)
             },
         )
 

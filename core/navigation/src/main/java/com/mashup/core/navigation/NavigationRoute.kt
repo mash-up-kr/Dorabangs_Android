@@ -17,4 +17,5 @@ sealed class NavigationRoute(val route: String) {
     }
 
     object WebViewScreen : NavigationRoute("webView")
+    object AISummaryScreen : NavigationRoute("summary")
 }

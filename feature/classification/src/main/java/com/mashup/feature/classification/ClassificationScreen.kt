@@ -30,7 +30,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun ClassificationRoute(
     onClickBackIcon: () -> Unit,
     navigateToHome: () -> Unit,
-    navigateToWebView: (String) -> Unit,
+    navigateToWebView: (FeedUiModel.FeedCardUiModel) -> Unit,
     classificationViewModel: ClassificationViewModel = hiltViewModel(),
 ) {
     val state by classificationViewModel.collectAsState()
@@ -47,7 +47,7 @@ fun ClassificationRoute(
         navigateToHome = navigateToHome,
         onClickCardItem = { cardInfo ->
             classificationViewModel.updateReadAt(cardInfo)
-            navigateToWebView(cardInfo.url)
+            navigateToWebView(cardInfo)
         },
     )
 }

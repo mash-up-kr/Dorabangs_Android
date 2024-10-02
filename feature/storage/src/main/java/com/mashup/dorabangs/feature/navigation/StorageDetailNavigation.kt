@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import com.mashup.core.navigation.NavigationRoute
 import com.mashup.core.navigation.bundleSerializable
 import com.mashup.core.navigation.serializableNavType
+import com.mashup.dorabangs.core.designsystem.component.chips.FeedUiModel
 import com.mashup.dorabangs.domain.model.Folder
 import com.mashup.dorabangs.feature.storage.storagedetail.StorageDetailRoute
 import com.mashup.dorabangs.feature.storage.storagedetail.model.EditActionType
@@ -26,7 +27,7 @@ fun NavController.navigateToUnreadStorageDetail(folder: Folder) {
 
 fun NavGraphBuilder.storageDetailNavigation(
     onClickBackIcon: (Boolean) -> Unit,
-    navigateToWebView: (String) -> Unit,
+    navigateToWebView: (FeedUiModel.FeedCardUiModel) -> Unit,
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
 ) {

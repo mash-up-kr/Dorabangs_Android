@@ -3,6 +3,7 @@ package com.mashup.dorabangs.core.designsystem.component.topbar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -55,11 +56,10 @@ object DoraTopBar : TopAppBarType {
     override fun BackWithActionIconTopBar(
         modifier: Modifier,
         title: String,
-        actionIcon: Int,
+        actionIcon: @Composable BoxScope.() -> Unit,
         isTitleCenter: Boolean,
         isShowBottomDivider: Boolean,
         onClickBackIcon: () -> Unit,
-        onClickActonIcon: () -> Unit,
     ) {
         DoraTopAppBar(
             modifier = modifier.background(DoraColorTokens.White),
@@ -69,7 +69,6 @@ object DoraTopBar : TopAppBarType {
             actionIcon = actionIcon,
             isShowBottomDivider = isShowBottomDivider,
             onClickBackIcon = onClickBackIcon,
-            onClickActonIcon = onClickActonIcon,
         )
     }
 
@@ -110,11 +109,10 @@ sealed interface TopAppBarType {
     fun BackWithActionIconTopBar(
         modifier: Modifier,
         title: String,
-        actionIcon: Int,
+        actionIcon: @Composable BoxScope.() -> Unit,
         isTitleCenter: Boolean,
         isShowBottomDivider: Boolean,
         onClickBackIcon: () -> Unit,
-        onClickActonIcon: () -> Unit,
     )
 
     @Composable
