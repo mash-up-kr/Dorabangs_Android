@@ -1,6 +1,7 @@
 package com.mashup.dorabangs.feature.storage.storagedetail
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -8,7 +9,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,11 +16,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -40,9 +38,6 @@ import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import com.mashup.dorabangs.feature.storage.R as storageR
 
-val MinToolbarHeight = 96.dp
-val MaxToolbarHeight = 161.dp
-
 @Composable
 fun StorageDetailRoute(
     folderItem: Folder,
@@ -51,14 +46,13 @@ fun StorageDetailRoute(
     navigateToStorage: (Boolean) -> Unit,
     navigateToFolderManager: (String, EditActionType) -> Unit,
     onClickBackIcon: (Boolean) -> Unit,
-    navigateToWebView: (String) -> Unit,
+    navigateToWebView: (FeedUiModel.FeedCardUiModel) -> Unit,
     modifier: Modifier = Modifier,
     isVisibleBottomSheet: Boolean = false,
     isChangedData: Boolean = false,
     storageDetailViewModel: StorageDetailViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val overlapHeightPx = with(LocalDensity.current) { MaxToolbarHeight.toPx() - MinToolbarHeight.toPx() }
     val state by storageDetailViewModel.collectAsState()
     val toastSnackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val scope = rememberCoroutineScope()
@@ -90,13 +84,6 @@ fun StorageDetailRoute(
         storageDetailViewModel.setVisibleMovingFolderBottomSheet(isVisibleBottomSheet)
     }
 
-    val isCollapsed: Boolean by remember {
-        derivedStateOf {
-            val isFirstItemHidden = listState.firstVisibleItemScrollOffset > overlapHeightPx
-            isFirstItemHidden || listState.firstVisibleItemIndex > 0
-        }
-    }
-
     storageDetailViewModel.collectSideEffect { sideEffect ->
         handleSideEffect(
             sideEffect = sideEffect,
@@ -113,7 +100,6 @@ fun StorageDetailRoute(
             state = state,
             linksPagingList = linksPagingList,
             listState = listState,
-            isCollapsed = isCollapsed,
             onClickBackIcon = { onClickBackIcon(state.isChangeData) },
             onClickTabItem = storageDetailViewModel::changeSelectedTabIdx,
             onClickSortedIcon = storageDetailViewModel::clickFeedSort,
@@ -128,7 +114,7 @@ fun StorageDetailRoute(
             },
             onClickPostItem = { cardInfo ->
                 storageDetailViewModel.updateReadAt(cardInfo)
-                navigateToWebView(cardInfo.url)
+                navigateToWebView(cardInfo)
             },
         )
 
@@ -191,7 +177,7 @@ fun StorageDetailRoute(
                     storageDetailViewModel.updateSelectFolderId(selectFolder.id, selectFolder.itemName)
                 }
             },
-            btnEnable = state.folderInfo.folderId != state.changeClickFolderId,
+            isBtnEnabled = state.folderInfo.folderId != state.changeClickFolderId,
             onClickCompleteButton = {
                 storageDetailViewModel.moveFolder(
                     postId = state.currentClickPostId,
@@ -239,15 +225,14 @@ fun StorageDetailScreen(
     modifier: Modifier = Modifier,
     state: StorageDetailState = StorageDetailState(),
     listState: LazyListState = rememberLazyListState(),
-    isCollapsed: Boolean = false,
 ) {
-    Box(
+    Column(
         modifier = modifier,
     ) {
-        StorageDetailCollapsingHeader(
+        StorageDetailHeader(
             state = state,
-            modifier = Modifier.zIndex(2f),
-            isCollapsed = isCollapsed,
+            chipList = state.tabInfo.tabTitleList,
+            selectedTabIdx = state.tabInfo.selectedTabIdx,
             onClickBackIcon = onClickBackIcon,
             onClickTabItem = onClickTabItem,
             onClickActionIcon = onClickActionIcon,
@@ -256,11 +241,8 @@ fun StorageDetailScreen(
             listState = listState,
             linksPagingList = linksPagingList,
             state = state,
-            onClickBackIcon = onClickBackIcon,
             onClickSortedIcon = onClickSortedIcon,
-            onClickTabItem = onClickTabItem,
             onClickBookMarkButton = onClickBookMarkButton,
-            onClickActionIcon = onClickActionIcon,
             onClickMoreButton = onClickMoreButton,
             onClickPostItem = onClickPostItem,
 

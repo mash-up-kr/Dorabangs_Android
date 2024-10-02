@@ -1,6 +1,8 @@
-package com.mashup.dorabangs.core.webview
+package com.mashup.dorabangs.core.summary
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -13,29 +15,40 @@ import com.mashup.dorabangs.core.model.AISummaryUiModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-fun NavController.navigateToWebView(navOptions: NavOptions? = null, summaryUiModel: AISummaryUiModel?) {
+fun NavController.navigateToAISummary(navOptions: NavOptions? = null, summaryUiModel: AISummaryUiModel) {
     val summary = Uri.encode(Json.encodeToString(summaryUiModel))
-    navigate("${NavigationRoute.WebViewScreen.route}/summary=$summary", navOptions)
+    navigate("${NavigationRoute.AISummaryScreen.route}/summary=$summary", navOptions)
 }
 
-fun NavGraphBuilder.webViewNavigation(
+fun NavGraphBuilder.aiSummaryNavigation(
     navigateToPopBackStack: () -> Unit,
-    navigateToAISummary: (AISummaryUiModel) -> Unit,
 ) {
     composable(
-        route = "${NavigationRoute.WebViewScreen.route}/summary={summary}",
+        route = "${NavigationRoute.AISummaryScreen.route}/summary={summary}",
         arguments = listOf(
             navArgument(name = "summary") {
                 type = serializableNavType<AISummaryUiModel>()
             },
         ),
+        enterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(250),
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(400),
+            )
+        },
     ) { navBackStackEntry ->
         val aiSummary = navBackStackEntry.arguments?.bundleSerializable("summary") as AISummaryUiModel?
-        aiSummary?.url?.let { url ->
-            DoraWebView(
-                url = url,
+
+        aiSummary?.let { summary ->
+            AISummaryRoute(
+                aiSummaryUiModel = summary,
                 navigateToPopBackStack = navigateToPopBackStack,
-                navigateToAISummary = { navigateToAISummary(aiSummary) },
             )
         }
     }

@@ -70,9 +70,6 @@ dependencies {
     // Image
     implementation(libs.coil)
 
-    // Blur
-    implementation(libs.haze)
-
     // Paging
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)

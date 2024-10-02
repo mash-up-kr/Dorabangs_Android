@@ -10,11 +10,11 @@ import com.mashup.dorabangs.domain.usecase.user.GetUserAccessTokenUseCase
 import com.mashup.dorabangs.domain.usecase.user.RegisterUserUseCase
 import com.mashup.dorabangs.domain.usecase.user.SetUserAccessTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,19 +40,18 @@ class SplashViewModel @Inject constructor(
                     token
                 }.orEmpty()
 
-            withTimeout(SPLASH_SCREEN_TIME) {
-                if (userAccessToken.isNotEmpty()) {
-                    splashShowFlow.value = false
-                    _firstEntryScreen.value = if (getIsFirstEntryUseCase().firstOrNull() != false) FirstEntryScreen.Onboarding else FirstEntryScreen.Home
-                } else {
-                    // Todo :: 유저 토큰 가져오기 실패에 대한 처리 해줘야함 (Like 토스트 메시지)
-                }
+            if (userAccessToken.isNotEmpty()) {
+                delay(SPLASH_SCREEN_TIME)
+                splashShowFlow.value = false
+                _firstEntryScreen.value = if (getIsFirstEntryUseCase().firstOrNull() != false) FirstEntryScreen.Onboarding else FirstEntryScreen.Home
+            } else {
+                // Todo :: 유저 토큰 가져오기 실패에 대한 처리 해줘야함 (Like 토스트 메시지)
             }
         }
     }
 
     companion object {
-        private const val SPLASH_SCREEN_TIME = 1000L
+        private const val SPLASH_SCREEN_TIME = 3000L
     }
 }
 

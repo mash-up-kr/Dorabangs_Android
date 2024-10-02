@@ -61,6 +61,7 @@ fun LinksFromFolderResponseModel.toDomainModel() =
                 thumbnailImgUrl = it.thumbnailImgUrl,
                 aiStatus = it.aiStatus.toDomain(),
                 readAt = it.readAt,
+                keywords = it.keywords?.map { keyword -> keyword.toDomain() },
             )
         },
     )

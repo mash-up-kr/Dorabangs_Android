@@ -7,20 +7,25 @@ import android.view.WindowManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.web.AccompanistWebChromeClient
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 import com.mashup.dorabangs.core.designsystem.component.topbar.DoraTopBar
+import com.mashup.dorabangs.core.summary.AISummaryTopButton
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun DoraWebView(
     url: String,
     navigateToPopBackStack: () -> Unit,
+    navigateToAISummary: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state = rememberWebViewState(url)
@@ -30,12 +35,20 @@ fun DoraWebView(
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
-        DoraTopBar.BackNavigationTopBar(
+        DoraTopBar.BackWithActionIconTopBar(
             modifier = Modifier.fillMaxWidth(),
             title = "",
             isTitleCenter = true,
             onClickBackIcon = navigateToPopBackStack,
             isShowBottomDivider = true,
+            actionIcon = {
+                AISummaryTopButton(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 20.dp),
+                    onClickSummary = navigateToAISummary,
+                )
+            },
         )
         WebView(
             state = state,

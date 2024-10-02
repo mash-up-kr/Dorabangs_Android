@@ -11,5 +11,6 @@ data class AIClassificationFolder(
     val folderName: String,
     val postCount: Int,
     val folderId: String,
+    val isAIGenerated: Boolean,
     @DrawableRes val icon: Int? = null,
 )

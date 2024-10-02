@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -58,94 +57,90 @@ import com.mashup.dorabangs.core.designsystem.theme.DoraColorTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraGradientToken
 import com.mashup.dorabangs.core.designsystem.theme.DoraRoundTokens
 import com.mashup.dorabangs.core.designsystem.theme.DoraTypoTokens
-import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.haze
-import dev.chrisbanes.haze.hazeChild
 
 @Composable
 fun HomeScreen(
     state: HomeState,
-    postsList: List<FeedUiModel.FeedCardUiModel>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
-    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit,
+    onReachedBottom: () -> Unit = {},
+    onClickCardItem: (FeedUiModel.FeedCardUiModel) -> Unit = {},
     onClickChip: (Int) -> Unit = {},
     onClickMoreButton: (String, String) -> Unit = { _, _ -> },
     onClickBookMarkButton: (String, Boolean) -> Unit = { _, _ -> },
     navigateToClassification: () -> Unit = {},
     navigateSaveScreenWithoutLink: () -> Unit = {},
     navigateToHomeTutorial: () -> Unit = {},
-    requestUpdate: (String) -> Unit = {},
     navigateToUnreadStorageDetail: () -> Unit = {},
+    requestUpdate: (String) -> Unit = {},
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        val hazeState = remember { HazeState() }
-
-        if (state.isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 104.dp)
-                    .align(Alignment.Center),
-            ) {
-                LottieLoader(
-                    lottieRes = R.raw.spinner,
+        if (state.postList.isEmpty()) {
+            if (state.isLoading) {
+                Box(
                     modifier = Modifier
-                        .size(54.dp)
+                        .fillMaxSize()
+                        .padding(top = 104.dp)
                         .align(Alignment.Center),
-                )
-            }
-        } else if (postsList.isEmpty()) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Spacer(modifier = Modifier.height(104.dp))
-
-                if (state.selectedIndex == 0) {
-                    HomeCarousel(
+                ) {
+                    LottieLoader(
+                        lottieRes = R.raw.spinner,
+                        iterations = Int.MAX_VALUE,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp, horizontal = 20.dp)
-                            .clip(DoraRoundTokens.Round20),
-                        homeCarouselItems = listOf(
-                            HomeCarouselItem(
-                                lottieRes = R.raw.unread,
-                                description = stringResource(id = R.string.home_carousel_save_introduce),
-                                onClickButton = navigateToHomeTutorial,
-                            ),
-                        ),
+                            .size(54.dp)
+                            .align(Alignment.Center),
                     )
                 }
-
+            } else {
                 Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_empty),
-                        contentDescription = "",
-                        tint = Color.Unspecified,
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 12.dp),
-                        text = stringResource(id = R.string.home_empty_feed),
-                        style = DoraTypoTokens.caption3Medium,
-                        color = DoraColorTokens.G3,
-                    )
+                    Spacer(modifier = Modifier.height(104.dp))
+
+                    if (state.selectedIndex == 0) {
+                        HomeCarousel(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp, horizontal = 20.dp)
+                                .clip(DoraRoundTokens.Round20),
+                            homeCarouselItems = listOf(
+                                HomeCarouselItem(
+                                    lottieRes = R.raw.unread,
+                                    description = stringResource(id = R.string.home_carousel_save_introduce),
+                                    onClickButton = navigateToHomeTutorial,
+                                ),
+                            ),
+                        )
+                    }
+
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_empty),
+                            contentDescription = "",
+                            tint = Color.Unspecified,
+                        )
+                        Text(
+                            modifier = Modifier.padding(top = 12.dp),
+                            text = stringResource(id = R.string.home_empty_feed),
+                            style = DoraTypoTokens.caption3Medium,
+                            color = DoraColorTokens.G3,
+                        )
+                    }
                 }
             }
         } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .haze(hazeState),
-                state = scrollState,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            DoraInfinityLazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                scrollState = scrollState,
+                isLoadAvailable = state.isScrollLoading.not(),
+                onReachedBottom = onReachedBottom,
             ) {
                 item {
                     Spacer(
@@ -189,7 +184,7 @@ fun HomeScreen(
                 }
 
                 Feeds(
-                    feeds = postsList,
+                    feeds = state.postList,
                     onClickMoreButton = { postId, folderId ->
                         onClickMoreButton(postId, folderId)
                     },
@@ -207,15 +202,13 @@ fun HomeScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(101.dp)
-                    .hazeChild(
-                        state = hazeState,
-                        style = HazeStyle(blurRadius = 12.dp),
-                    ),
+                    .height(101.dp),
             )
         }
 
-        Column {
+        Column(
+            modifier = Modifier.background(DoraColorTokens.White),
+        ) {
             DoraTopBar.HomeTopBar(
                 modifier = Modifier
                     .height(48.dp)
@@ -235,21 +228,49 @@ fun HomeScreen(
             )
         }
 
-        Box(
+        Column(
             modifier = Modifier
-                .padding(bottom = 20.dp, end = 20.dp)
-                .size(60.dp)
-                .clip(DoraRoundTokens.Round99)
-                .background(DoraColorTokens.SurfaceBlack)
-                .align(Alignment.BottomEnd)
-                .clickable(onClick = navigateSaveScreenWithoutLink),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
         ) {
-            Icon(
-                tint = DoraColorTokens.G3,
-                painter = painterResource(id = R.drawable.ic_fab_add),
-                contentDescription = "",
-            )
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 20.dp, end = 20.dp)
+                    .size(60.dp)
+                    .clip(DoraRoundTokens.Round99)
+                    .background(DoraColorTokens.SurfaceBlack)
+                    .clickable(onClick = navigateSaveScreenWithoutLink)
+                    .align(Alignment.End),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    tint = DoraColorTokens.G3,
+                    painter = painterResource(id = R.drawable.ic_fab_add),
+                    contentDescription = "",
+                )
+            }
+
+            if (state.isLoading && state.postList.isNotEmpty()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(36.dp)
+                        .background(DoraColorTokens.SurfaceBlack),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 20.dp),
+                        text = "링크 불러오는 중",
+                        color = DoraColorTokens.G3,
+                        style = DoraTypoTokens.caption1Normal,
+                    )
+                    LottieLoader(
+                        modifier = Modifier.size(24.dp),
+                        lottieRes = R.raw.dot_loading,
+                        iterations = Int.MAX_VALUE,
+                    )
+                }
+            }
         }
     }
 }
@@ -466,15 +487,12 @@ fun HomeScreenPreview() {
             tapElements = listOf(
                 FeedUiModel.DoraChipUiModel(
                     title = "전체",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "즐겨찾기",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "나중에 읽을 링크",
-                    icon = R.drawable.ic_plus,
                 ),
                 FeedUiModel.DoraChipUiModel(
                     title = "테스트",
@@ -487,6 +505,5 @@ fun HomeScreenPreview() {
                 ),
             ),
         ),
-        postsList = postList,
     )
 }
