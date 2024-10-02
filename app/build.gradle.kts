@@ -86,7 +86,6 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.kotlin.android)
     implementation(libs.kotlin.core)
-    implementation(libs.androidx.splash)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
