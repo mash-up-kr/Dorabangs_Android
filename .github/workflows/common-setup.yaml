@@ -1,6 +1,9 @@
 name: Common Setup
 
 on:
+  pull_request:
+    branches-ignore:
+      - 'test**'
   push:
     paths-ignore:
       - 'README.md'
