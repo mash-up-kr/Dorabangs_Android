@@ -1,11 +1,10 @@
 name: Lint Check
 
 on:
-  pull_request:
   push:
     paths-ignore:
-      - './README.md'
-      - './.all-contributorsrc'
+      - 'README.md'
+      - '.all-contributorsrc'
 
 jobs:
   lint-check:
