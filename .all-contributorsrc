@@ -16,7 +16,9 @@
         "design",
         "code",
         "infra",
-        "projectManagement"
+        "projectManagement",
+        "test",
+        "review"
       ]
     }
   ],
