@@ -48,25 +48,4 @@
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-        <td><B>안석주<B></td>
-        <td><B>유호현<B></td>
-        <td><B>백다연<B></td>
-    </tr>
-    <tr align="center">
-        <td>
-            <img src="https://github.com/Ahn-seokjoo.png?size=120">
-            <br>
-            <a href="https://github.com/Ahn-seokjoo"><I>Ahn-seokjoo</I></a>
-        </td>
-        <td>
-            <img src="https://github.com/fbghgus123.png?size=120">
-            <br>
-            <a href="https://github.com/fbghgus123"><I>fbghgus123</I></a>
-        </td>
-        <td>
-            <img src="https://github.com/ddyeon.png?size=120">
-            <br>
-            <a href="https://github.com/ddyeon"><I>ddyeon</I></a>
-        </td>
-    </tr>
 </table>
