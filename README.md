@@ -1,4 +1,7 @@
 # Dorabangs_Android
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## 서비스 소개
 
@@ -30,6 +33,21 @@
 ## Contributors
 <table>
     <tr align="center">
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ahn-seokjoo"><img src="https://avatars.githubusercontent.com/u/67602108?v=4?s=100" width="100px;" alt="Ahn-SeokJoo"/><br /><sub><b>Ahn-SeokJoo</b></sub></a><br /><a href="#design-Ahn-seokjoo" title="Design">🎨</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
         <td><B>안석주<B></td>
         <td><B>유호현<B></td>
         <td><B>백다연<B></td>
