@@ -19,9 +19,7 @@
 | 🌐 Networking | [Retrofit](https://square.github.io/retrofit/), OkhttpClient|
 | 😎 Test |Junit4|
 
-
 <br/><br/>
-
 
 ## Architecture
 
