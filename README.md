@@ -32,7 +32,7 @@
 
 ## Contributors
 
-check emoji ([emoji key](https://allcontributors.org/docs/en/emoji-key)):=
+check emoji plz([emoji key](https://allcontributors.org/docs/en/emoji-key)):=
 
 <table>
     <tr align="center">
