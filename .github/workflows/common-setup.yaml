@@ -1,11 +1,13 @@
 name: Common Setup
 
 on:
-  workflow_call:
   push:
     paths-ignore:
       - 'README.md'
       - '.all-contributorsrc'
+
+  workflow_call:
+    inputs: {}
 
 jobs:
   setup:
