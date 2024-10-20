@@ -40,7 +40,7 @@ check emoji ([emoji key](https://allcontributors.org/docs/en/emoji-key)):=
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ahn-seokjoo"><img src="https://avatars.githubusercontent.com/u/67602108?v=4?s=100" width="100px;" alt="Ahn-SeokJoo"/><br /><sub><b>Ahn-SeokJoo</b></sub></a><br /><a href="#design-Ahn-seokjoo" title="Design">🎨</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/commits?author=Ahn-seokjoo" title="Code">💻</a> <a href="#infra-Ahn-seokjoo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ahn-seokjoo"><img src="https://avatars.githubusercontent.com/u/67602108?v=4?s=100" width="100px;" alt="Ahn-SeokJoo"/><br /><sub><b>Ahn-SeokJoo</b></sub></a><br /><a href="#design-Ahn-seokjoo" title="Design">🎨</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/commits?author=Ahn-seokjoo" title="Code">💻</a> <a href="#infra-Ahn-seokjoo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#projectManagement-Ahn-seokjoo" title="Project Management">📆</a></td>
     </tr>
   </tbody>
 </table>
