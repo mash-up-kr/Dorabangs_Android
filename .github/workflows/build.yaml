@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   pull_request:
     branches: [ "feature**", "hotfix**", "release**", "develop**", "master" ]
+    paths-ignore:
+      - 'README.md'
+      - '.all-contributorsrc'
 
 jobs:
   common_setup:
