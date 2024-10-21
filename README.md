@@ -1,6 +1,6 @@
 # Dorabangs_Android
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## 서비스 소개
@@ -42,6 +42,7 @@ check emoji ([emoji key](https://allcontributors.org/docs/en/emoji-key)):=
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ahn-seokjoo"><img src="https://avatars.githubusercontent.com/u/67602108?v=4?s=100" width="100px;" alt="Ahn-SeokJoo"/><br /><sub><b>Ahn-SeokJoo</b></sub></a><br /><a href="#design-Ahn-seokjoo" title="Design">🎨</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/commits?author=Ahn-seokjoo" title="Code">💻</a> <a href="#infra-Ahn-seokjoo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#projectManagement-Ahn-seokjoo" title="Project Management">📆</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/commits?author=Ahn-seokjoo" title="Tests">⚠️</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/pulls?q=is%3Apr+reviewed-by%3AAhn-seokjoo" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ddyeon"><img src="https://avatars.githubusercontent.com/u/53086454?v=4?s=100" width="100px;" alt="DAYEON BAEK"/><br /><sub><b>DAYEON BAEK</b></sub></a><br /><a href="https://github.com/mash-up-kr/Dorabangs_Android/commits?author=ddyeon" title="Tests">⚠️</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/pulls?q=is%3Apr+reviewed-by%3Addyeon" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/commits?author=ddyeon" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fbghgus123"><img src="https://avatars.githubusercontent.com/u/74997185?v=4?s=100" width="100px;" alt="fbghgus123"/><br /><sub><b>fbghgus123</b></sub></a><br /><a href="#design-fbghgus123" title="Design">🎨</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/commits?author=fbghgus123" title="Code">💻</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/pulls?q=is%3Apr+reviewed-by%3Afbghgus123" title="Reviewed Pull Requests">👀</a></td>
     </tr>
   </tbody>
 </table>
