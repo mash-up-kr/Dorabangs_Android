@@ -1,6 +1,6 @@
 # Dorabangs_Android
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## 서비스 소개
@@ -41,6 +41,7 @@ check emoji ([emoji key](https://allcontributors.org/docs/en/emoji-key)):=
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ahn-seokjoo"><img src="https://avatars.githubusercontent.com/u/67602108?v=4?s=100" width="100px;" alt="Ahn-SeokJoo"/><br /><sub><b>Ahn-SeokJoo</b></sub></a><br /><a href="#design-Ahn-seokjoo" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ddyeon"><img src="https://avatars.githubusercontent.com/u/53086454?v=4?s=100" width="100px;" alt="DAYEON BAEK"/><br /><sub><b>DAYEON BAEK</b></sub></a><br /><a href="https://github.com/mash-up-kr/Dorabangs_Android/commits?author=ddyeon" title="Tests">⚠️</a> <a href="https://github.com/mash-up-kr/Dorabangs_Android/pulls?q=is%3Apr+reviewed-by%3Addyeon" title="Reviewed Pull Requests">👀</a></td>
     </tr>
   </tbody>
 </table>
