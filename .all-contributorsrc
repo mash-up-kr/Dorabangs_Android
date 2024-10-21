@@ -15,6 +15,16 @@
       "contributions": [
         "design"
       ]
+    },
+    {
+      "login": "ddyeon",
+      "name": "DAYEON BAEK",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53086454?v=4",
+      "profile": "https://github.com/ddyeon",
+      "contributions": [
+        "test",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
